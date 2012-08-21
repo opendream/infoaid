@@ -1,0 +1,34 @@
+tignore for Grails 2.0
+
+*.iws
+*Db.properties
+*Db.script
+.settings
+eclipse
+stacktrace.log
+target
+/plugins
+/web-app/plugins
+/web-app/WEB-INF/classes
+
+# IDE
+.classpath
+.project
+.settings
+/*.launch
+/*.tmproj
+
+# project release file
+*.war
+
+# kate file
+*.*~
+*.kate-swp
+
+
+.DS_Store
+
+target-eclipse
+
+# lib dir
+lib/*
