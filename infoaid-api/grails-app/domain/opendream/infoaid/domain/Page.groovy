@@ -8,6 +8,8 @@ class Page {
     Date lastUpdated
     Location location
 
+    static hasMany = [posts:Post]
+
     static constraints = {
         lat nullable:true
         lng nullable:true

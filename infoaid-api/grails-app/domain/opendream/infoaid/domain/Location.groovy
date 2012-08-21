@@ -4,7 +4,7 @@ class Location {
     String region
     String province
     String district
-    String subdistrict
+    String subDistrict
     String label
     String lat
     String lng
