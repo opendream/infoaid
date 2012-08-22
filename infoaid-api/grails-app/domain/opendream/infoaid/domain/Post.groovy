@@ -9,7 +9,8 @@ class Post {
 
     static hasMany = [comments:Comment]
 
+    static belongsTo = [page:Page]
+
     static constraints = {
-        lastActived blank: false
     }
 }
