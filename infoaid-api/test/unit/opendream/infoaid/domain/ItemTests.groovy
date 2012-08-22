@@ -37,7 +37,7 @@ class ItemTests extends DomainTestTemplate {
         mockForConstraintsTests(Item)
 
         def item = new Item()
-
+        
         verifyPass(item, 'quantity')
     }
 }

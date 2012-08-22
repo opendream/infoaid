@@ -10,6 +10,5 @@ class Item {
 
     static constraints = {
         name blank: false
-        quantity nullable: false
     }
 }

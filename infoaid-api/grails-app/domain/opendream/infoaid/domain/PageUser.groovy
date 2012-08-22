@@ -6,10 +6,20 @@ class PageUser implements Serializable {
 
 	Page page
 	Users user
+	Relation relation
 
     static constraints = {
     	page blank: false
     	user blank: false
+    	relation inList: Relation.list()
+    }
+
+    public enum Relation {
+    	OWNER,
+    	MEMBER
+    	static list() {
+    		[OWNER,MEMBER]
+    	}
     }
 
     int hashCode() {
@@ -19,5 +29,5 @@ class PageUser implements Serializable {
 		builder.toHashCode()
 	}
 
-	
+
 }
