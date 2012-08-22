@@ -9,9 +9,27 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
 @TestFor(Comment)
-class CommentTests {
+class CommentTests extends DomainTestTemplate {
 
-    void testSomething() {
-       fail "Implement me"
+    def requiredProperties() {
+        ['message', 'dateCreated', 'lastUpdated']
+    }
+
+    def domainClass() {
+        Comment.class
+    }
+
+    void testValidateMessage() {
+        mockForConstraintsTests(Comment)
+
+        def comment = new Comment()
+
+        verifyNotNull(comment, 'message')
+
+        comment.message = ''
+        verifyNotBlank(comment, 'message')
+
+        comment.message = 'commentMessage'
+        verifyPass(comment, 'message')
     }
 }

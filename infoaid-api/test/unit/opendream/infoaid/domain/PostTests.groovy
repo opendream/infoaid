@@ -12,10 +12,21 @@ import org.junit.*
 class PostTests extends DomainTestTemplate {
 
     def requiredProperties() {
-        ['dateCreated', 'lastUpdated']
+        ['dateCreated', 'lastUpdated', 'lastActived', 'createdBy', 'updatedBy']
     }
 
     def domainClass() {
         Post.class
+    }
+
+    void testValidateLastActived() {
+        mockForConstraintsTests(Post)
+
+        def post = new Post()
+
+        verifyNotNull(post, 'lastActived')
+
+        post.lastActived = new Date()
+        verifyPass(post, 'lastActived')
     }
 }

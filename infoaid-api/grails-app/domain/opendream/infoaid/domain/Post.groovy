@@ -4,10 +4,12 @@ class Post {
     Date dateCreated
     Date lastUpdated
     Date lastActived
+    String createdBy
+    String updatedBy
 
     static hasMany = [comments:Comment]
 
     static constraints = {
-        lastActived nullable: true
+        lastActived blank: false
     }
 }

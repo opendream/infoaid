@@ -25,6 +25,12 @@ class ItemTests extends DomainTestTemplate {
         def item = new Item()
 
         verifyNotNull(item, 'name')
+
+        item.name = ''
+        verifyNotBlank(item, 'name')
+
+        item.name = 'itemName'
+        verifyPass(item, 'name')
     }
 
     void testValidateQuantity() {

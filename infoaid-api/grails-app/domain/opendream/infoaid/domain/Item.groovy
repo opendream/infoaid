@@ -9,7 +9,7 @@ class Item {
     static hasMany = [needs:Need]
 
     static constraints = {
-        name nullable: false
+        name blank: false
         quantity nullable: false
     }
 }

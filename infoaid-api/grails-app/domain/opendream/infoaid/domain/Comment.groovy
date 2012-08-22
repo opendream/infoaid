@@ -2,13 +2,13 @@ package opendream.infoaid.domain
 
 class Comment {
 
-	String message
-	Date dateCreated
+    String message
+    Date dateCreated
     Date lastUpdated
 
-    static belongsTo = [member:Member]
+    static belongsTo = [post:Post]
 
     static constraints = {
-    	message blank: false
+        message blank: false
     }
 }
