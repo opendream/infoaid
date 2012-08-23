@@ -7,8 +7,6 @@ class Post {
     String createdBy
     String updatedBy
 
-
-
     static hasMany = [comments:Comment]
 
     static belongsTo = [page:Page]
