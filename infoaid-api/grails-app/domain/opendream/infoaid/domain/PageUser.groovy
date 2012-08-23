@@ -22,12 +22,23 @@ class PageUser implements Serializable {
     	}
     }
 
+    static PageUser createPage(Users user, Page page, Relation relation = Relation.OWNER, boolean flush = false) {
+        new PageUser(user: user, page: page, relation: relation).save(flush: flush, insert: true)
+    }
+
+    static PageUser joinPage(Users user, Page page, Relation relation = Relation.MEMBER, boolean flush = false) {
+        new PageUser(user: user, page: page, relation: relation).save(flush: flush, insert: true)
+    }
+
+    static PageUser leavePage(Users user, Page page) {
+        def pageUser = PageUser.findByPageAndUser(page, user)
+        pageUser.delete()
+    }
+
     int hashCode() {
-		def builder = new HashCodeBuilder()
-		if (user) builder.append(user.id)
-		if (role) builder.append(role.id)
-		builder.toHashCode()
-	}
-
-
+        def builder = new HashCodeBuilder()
+        if (user) builder.append(user.id)
+        if (page) builder.append(page.id)
+        builder.toHashCode()
+    }
 }

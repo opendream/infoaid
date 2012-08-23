@@ -14,5 +14,11 @@ class Users {
     static constraints = {
         username blank: false, unique: true
         password blank: false
+        email nullable: true
+        telNo nullable: true
+    }
+
+    def getPages() {
+        PageUser.findAllByUser(this).collect { it.name }
     }
 }
