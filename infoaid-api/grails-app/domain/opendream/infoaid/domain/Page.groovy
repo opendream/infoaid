@@ -1,6 +1,8 @@
 package opendream.infoaid.domain
 
 class Page {
+    def slugGeneratorService
+
     String name
     String lat
     String lng
@@ -8,8 +10,10 @@ class Page {
     Date lastUpdated
     Location location
     Status status = Status.ACTIVE
+    String slug = ""
 
     static hasMany = [posts:Post]
+    static transients = ['slugGeneratorService']
 
     static constraints = {
         lat nullable:true
@@ -29,5 +33,15 @@ class Page {
 
     def getUsers() {
         PageUser.findAllByPage(this).collect { [user: it.user, relation: it.relation] }
+    }
+
+    def beforeInsert() {
+        this.slug = slugGeneratorService.generateSlug(this.class, "slug", name)
+    }
+
+    def beforeUpdate() {
+        if (isDirty('name')) {
+            this.slug = slugGeneratorService.generateSlug(this.class, "slug", name)
+        }
     }
 }
