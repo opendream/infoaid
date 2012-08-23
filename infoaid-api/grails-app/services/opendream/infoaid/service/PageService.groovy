@@ -5,6 +5,7 @@ import opendream.infoaid.domain.Post
 import opendream.infoaid.domain.Comment
 import opendream.infoaid.domain.PageUser
 import opendream.infoaid.domain.Users
+import opendream.infoaid.domain.Need
 
 class PageService {
 
@@ -72,7 +73,9 @@ class PageService {
     	def comment = new Comment(message: message, dateCreated: commentDate)
     	post.addToComments(comment)
     	post.lastActived = commentDate
-    	post.save()
+    	if(!post.save()) {
+            return false
+        }
     }
 
     def createPage(userId, name, lat, lng, location) {
@@ -106,12 +109,40 @@ class PageService {
         def page = Page.get(pageId)
 
         page.users.each {
-            println it.relation
             if((it.user == user) && (it.relation == PageUser.Relation.OWNER)) {
                 page.status = Page.Status.INACTIVE
-                page.save()
+                if(!page.save()) {
+                    return false
+                }
             }
         }
-        
     }
+
+    def getAllNeeds(pageId) {
+        def page = Page.get(pageId)
+        def needs = Need.findAllByPageAndStatus(page, Post.Status.ACTIVE)
+        [needs: needs, totalNeeds: needs.size()]
+    }
+
+    def getLimitNeeds(pageId) {
+
+    }
+
+    def getMembers(pageId) {
+        def page = Page.get(pageId)
+
+        page.users
+    }
+
+    def createNeed(pageId, message) {
+        def page = Page.get(pageId)
+        def date = new Date()
+        def need = new Need(lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: message, quantity: 10)
+        page.addToPosts(need)
+        if(!page.save()) {
+            return false
+        }
+    }
+
+
 }

@@ -4,7 +4,6 @@ class Item {
     Date dateCreated
     Date lastUpdated
     String name
-    Integer quantity = 0
 
     static hasMany = [needs:Need]
 
