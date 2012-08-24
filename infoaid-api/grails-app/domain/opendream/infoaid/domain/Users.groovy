@@ -18,8 +18,8 @@ class Users {
         telNo nullable: true
     }
 
-    def getPages() {
-        PageUser.findAllByUser(this).collect { it.name }
+    List getPages() {
+        PageUser.findAllByUser(this).collect { it.page } as List
     }
     
     /*
