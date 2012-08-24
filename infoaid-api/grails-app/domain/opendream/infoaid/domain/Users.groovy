@@ -21,4 +21,20 @@ class Users {
     def getPages() {
         PageUser.findAllByUser(this).collect { it.name }
     }
+    
+    /*
+    def beforeInsert() {
+        encodePassword()
+    }
+
+    def beforeUpdate() {
+        if (isDirty('password')) {
+            encodePassword()
+        }
+    }
+    
+    protected void encodePassword() {
+        password = springSecurityService.encodePassword(password)
+    }
+    */
 }
