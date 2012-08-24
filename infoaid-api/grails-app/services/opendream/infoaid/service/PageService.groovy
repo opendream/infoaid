@@ -18,12 +18,9 @@ class PageService {
     	def pageInfo = Page.get(pageId)
     }
 
-    def getPosts(pageId, offset) {
+    def getPosts(pageId, offset, max) {
 
-    	def posts = Post.createCriteria().list() {
-    		maxResults(10)
-    		firstResult(offset)
-    		order('lastActived', 'desc')
+    	def posts = Post.createCriteria().list(max: max, sort: 'lastActived', order: 'desc', offset: offset) {
     		page {
     			idEq(pageId)	
     		}
@@ -33,13 +30,13 @@ class PageService {
 
         posts.each {
 
-            def comment = getLimitComments(it.id)
+            def comment = getLimitComments(it.id, 3)
 
             resultList << [id: it.id, dateCreated: it.dateCreated, createdBy: it.createdBy, lastUpdated: it.lastUpdated, lastActived: it.lastActived, updateBy: it.updatedBy, comment: comment]
 
         }
 
-    	[posts: resultList]
+    	[posts: resultList, totalPosts: posts.totalCount]
     }
 
     def getComments(postId) {
@@ -54,9 +51,9 @@ class PageService {
     	[comments: comments, totalComments: comments.size()]
     }
 
-    def getLimitComments(postId) {
+    def getLimitComments(postId, max) {
 
-        def comments = Comment.createCriteria().list(max: 3) {
+        def comments = Comment.createCriteria().list(max: max) {
             post {
                 idEq(postId)
             }
@@ -85,7 +82,7 @@ class PageService {
             return false
         }
         def user = Users.get(userId)
-        def pageUser = PageUser.createPage(user, page)
+        PageUser.createPage(user, page)
 
     }
 
@@ -94,14 +91,14 @@ class PageService {
         def user = Users.get(userId)
         def page = Page.get(pageId)
 
-        def pageUser = PageUser.joinPage(user, page)
+        PageUser.joinPage(user, page)
     }
 
     def leavePage(userId, pageId) {
         def user = Users.get(userId)
         def page = Page.get(pageId)
 
-        def pageUser = PageUser.leavePage(user, page)
+        PageUser.leavePage(user, page)
     }
 
     def inactivePage(userId, pageId) {
@@ -121,16 +118,17 @@ class PageService {
     def getAllNeeds(pageId) {
         def page = Page.get(pageId)
         def needs = Need.findAllByPageAndStatus(page, Post.Status.ACTIVE)
+
         [needs: needs, totalNeeds: needs.size()]
     }
 
     def getLimitNeeds(pageId, max) {
         def page = Page.get(pageId)
         def needs = Need.createCriteria().list(max: max) {
-            page {
-                eq('id', pageId)
-            }
+            eq('status', Post.Status.ACTIVE)
+            eq('page', page)
         }
+
         [needs: needs, totalNeeds: needs.totalCount]
     }
 

@@ -1,7 +1,5 @@
 package opendream.infoaid.service
 
-
-
 import grails.test.mixin.*
 import org.junit.*
 
@@ -56,16 +54,15 @@ class PageServiceTests {
     }
 
     void testGetPosts() {
-        def results = service.getPosts(1, 0)
+        def results = service.getPosts(1, 0, 10)
         assert results.posts.size() == 10
+        assert results.totalPosts == 22
         assert results.posts.getAt(0).createdBy == 'yo19'
-
-
     }
 
     void testGetComments() {
         def comment = new Comment(message: "my comment11")
-        def resultsPost = service.getPosts(1,0)
+        def resultsPost = service.getPosts(1, 0, 10)
         def firstResultPost = resultsPost.posts.getAt(0)
 
         service.postComment(firstResultPost.id, "my comment11")
@@ -85,14 +82,14 @@ class PageServiceTests {
     }
 
     void testGetLimitComments() {
-        def resultsPost = service.getPosts(1,0)
+        def resultsPost = service.getPosts(1, 0, 10)
         def firstResultPost = resultsPost.posts.getAt(0)
 
         10.times {
             service.postComment(firstResultPost.id, "my comment"+it)
         }
 
-        def resultsLimitComment = service.getLimitComments(firstResultPost.id)
+        def resultsLimitComment = service.getLimitComments(firstResultPost.id, 3)
 
         assert resultsLimitComment.totalComments == 10
 
@@ -101,7 +98,7 @@ class PageServiceTests {
 
     void testPostComment() {
         def message = "abcdefg"
-        def resultsPost = service.getPosts(1,0)
+        def resultsPost = service.getPosts(1, 0, 10)
         def post = resultsPost.posts.getAt(0)
         def previousActived = post.lastActived
         service.postComment(post.id, message)
@@ -215,14 +212,15 @@ class PageServiceTests {
         def newNeed3 = new Need(lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'need3', quantity: 10)
 
         def page = Page.get(1)
+        def page2 = Page.get(2)
         page.addToPosts(newNeed)
         page.addToPosts(newNeed2)
-        page.addToPosts(newNeed3)
+        page2.addToPosts(newNeed3)
         page.save()
 
         def results = service.getLimitNeeds(page.id, 2)
         assert results.needs.size() == 2
-        assert results.totalNeeds == 3
+        assert results.totalNeeds == 2
     }
 
     void testCreateNeed() {
