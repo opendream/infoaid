@@ -36,12 +36,16 @@ class Page {
     }
 
     def beforeInsert() {
-        this.slug = slugGeneratorService.generateSlug(this.class, "slug", name)
+        generateSlug()
     }
 
     def beforeUpdate() {
         if (isDirty('name')) {
-            this.slug = slugGeneratorService.generateSlug(this.class, "slug", name)
+            generateSlug()
         }
+    }
+
+    protected void generateSlug() {
+        this.slug = slugGeneratorService.generateSlug(this.class, "slug", name)
     }
 }

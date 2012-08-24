@@ -124,8 +124,14 @@ class PageService {
         [needs: needs, totalNeeds: needs.size()]
     }
 
-    def getLimitNeeds(pageId) {
-
+    def getLimitNeeds(pageId, max) {
+        def page = Page.get(pageId)
+        def needs = Need.createCriteria().list(max: max) {
+            page {
+                eq('id', pageId)
+            }
+        }
+        [needs: needs, totalNeeds: needs.totalCount]
     }
 
     def getMembers(pageId) {

@@ -22,11 +22,15 @@ class PageServiceTests {
 
     @Before
     void setup() {
+        Page.metaClass.generateSlug = {-> 'slug'}
+        Page.metaClass.isDirty = {name -> false}
         date = new Date()-19
         def date2 = new Date()-20
         
         def page = new Page(name: "page1", lat: "page1", lng: "page1", dateCreated: date, lastUpdated: date)
+        
         def page2 = new Page(name: "page2", lat: "page2", lng: "page2", dateCreated: date, lastUpdated: date)
+        
         def post = new Post(dateCreated: date, lastUpdated: date, lastActived: date, createdBy: 'nut', updatedBy: 'boy')
         def post2 = new Post(dateCreated: date, lastUpdated: date, lastActived: date2, createdBy: 'yo', updatedBy: 'boy')
         page.addToPosts(post)
@@ -39,6 +43,8 @@ class PageServiceTests {
         page.save()
         page2.save()
     }
+
+
 
     void testGetInfo() {
 
@@ -201,6 +207,22 @@ class PageServiceTests {
 
         results = service.getAllNeeds(page.id)
         assert results.totalNeeds == 1
+    }
+
+    void testGetLimitNeeds() {
+        def newNeed = new Need(lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'need1', quantity: 10)
+        def newNeed2 = new Need(lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'need2', quantity: 10)
+        def newNeed3 = new Need(lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'need3', quantity: 10)
+
+        def page = Page.get(1)
+        page.addToPosts(newNeed)
+        page.addToPosts(newNeed2)
+        page.addToPosts(newNeed3)
+        page.save()
+
+        def results = service.getLimitNeeds(page.id, 2)
+        assert results.needs.size() == 2
+        assert results.totalNeeds == 3
     }
 
     void testCreateNeed() {
