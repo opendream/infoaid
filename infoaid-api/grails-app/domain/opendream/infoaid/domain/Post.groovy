@@ -23,4 +23,13 @@ class Post {
     static constraints = {
         status inList: Status.list()
     }
+    
+    def getPreviewComments() {
+        def previewComments = Comment.createCriteria().list(max: 3) {
+            eq('post', this)
+        }
+
+        return previewComments
+    }
+    
 }

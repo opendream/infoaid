@@ -54,10 +54,13 @@ class PageServiceTests {
     }
 
     void testGetPosts() {
+        service.postComment(1, 'asd')
+
         def results = service.getPosts(1, 0, 10)
         assert results.posts.size() == 10
         assert results.totalPosts == 22
-        assert results.posts.getAt(0).createdBy == 'yo19'
+        assert results.posts.getAt(0).createdBy == 'nut'
+        assert results.posts[0].getPreviewComments().message[0] == 'asd'
     }
 
     void testGetComments() {

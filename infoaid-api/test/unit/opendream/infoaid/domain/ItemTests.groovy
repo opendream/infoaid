@@ -12,7 +12,7 @@ import org.junit.*
 class ItemTests extends DomainTestTemplate {
 
     def requiredProperties() {
-        ['dateCreated', 'lastUpdated', 'name', 'quantity']
+        ['dateCreated', 'lastUpdated', 'name']
     }
 
     def domainClass() {
@@ -31,13 +31,5 @@ class ItemTests extends DomainTestTemplate {
 
         item.name = 'itemName'
         verifyPass(item, 'name')
-    }
-
-    void testValidateQuantity() {
-        mockForConstraintsTests(Item)
-
-        def item = new Item()
-        
-        verifyPass(item, 'quantity')
     }
 }

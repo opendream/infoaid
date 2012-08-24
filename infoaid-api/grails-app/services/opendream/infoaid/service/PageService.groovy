@@ -25,18 +25,8 @@ class PageService {
     			idEq(pageId)	
     		}
     	}
-
-        def resultList = []
-
-        posts.each {
-
-            def comment = getLimitComments(it.id, 3)
-
-            resultList << [id: it.id, dateCreated: it.dateCreated, createdBy: it.createdBy, lastUpdated: it.lastUpdated, lastActived: it.lastActived, updateBy: it.updatedBy, comment: comment]
-
-        }
-
-    	[posts: resultList, totalPosts: posts.totalCount]
+        
+    	[posts: posts, totalPosts: posts.totalCount]
     }
 
     def getComments(postId) {
