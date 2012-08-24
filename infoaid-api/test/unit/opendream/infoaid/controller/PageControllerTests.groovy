@@ -14,30 +14,35 @@ import opendream.infoaid.service.PageService
 @Mock([Page, PageService])
 class PageControllerTests {
     def pageService
+    def date
 
-    void testInfo() {
-        def date = new Date()
-        def dateStr = date.toString()
+    @Before
+    void setup() {
+        date = new Date()
         Page.metaClass.generateSlug = {-> 'slug'}
         Page.metaClass.isDirty = {name -> false}
 
-        new Page(id: 1, name: "page", lat: "111", lng: "222", dateCreated: date, lastUpdated: date).save()
+        new Page(name: "page", lat: "111", lng: "222", dateCreated: date, lastUpdated: date).save()
         pageService = mockFor(PageService)
 
-        pageService.demand.getInfo(1..2) {id -> Page.get(id)}
+        pageService.demand.getInfo(1..1) {id -> Page.get(id)}
 
         controller.pageService = pageService.createMock()
+    }
+
+    void testInfo() {
+        
         params.pageId = 1
         def dateFormat = "yyyy-MM-dd HH:mm"
         def expectResponse = """{"id":1,"name":"page","lat":"111","lng":"222","dateCreated":"${date.format(dateFormat)}","lastUpdated":"${date.format(dateFormat)}"}"""
         controller.info()
 
         assert expectResponse == response.text
-
-        params.pageId = 2
-        controller.info()
-        assert response.text == null
     }
 
-    
+    void testEmptyInfo() {
+        params.pageId = 2
+        controller.info()
+        assert response.text == '{}'
+    }
 }
