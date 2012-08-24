@@ -24,7 +24,7 @@ class SlugGeneratorTests {
     void testPageSlug() {
         def date = new Date()
         assert 1 == Page.count()
-        def page = Page.get(1)
+        def page = Page.findByName('ตำบล เวียง')
         assert 'ตำบล-เวียง' == page.slug
 
         20.times {
