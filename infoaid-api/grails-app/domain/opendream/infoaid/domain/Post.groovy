@@ -1,12 +1,14 @@
 package opendream.infoaid.domain
 
 class Post {
+    String message
     Date dateCreated
     Date lastUpdated
     Date lastActived
     String createdBy
     String updatedBy
     Status status = Status.ACTIVE
+    Page page
 
     public enum Status {
         ACTIVE,
@@ -18,10 +20,9 @@ class Post {
 
     static hasMany = [comments:Comment]
 
-    static belongsTo = [page:Page]
-
     static constraints = {
         status inList: Status.list()
+        message blank: false
     }
     
     def getPreviewComments() {

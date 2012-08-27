@@ -10,17 +10,21 @@ import opendream.infoaid.domain.Location
 import opendream.infoaid.domain.PageUser
 import opendream.infoaid.domain.Users
 import opendream.infoaid.domain.Need
+import opendream.infoaid.domain.MessagePost
+import opendream.infoaid.domain.Item
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 @TestFor(PageService)
-@Mock([Page, Post, Comment, Location, PageUser, Users, Need])
+@Mock([Page, Post, Comment, Location, PageUser, Users, Need, MessagePost, Item])
 class PageServiceTests {
     def date
+    def number = 0
 
     @Before
     void setup() {
-        Page.metaClass.generateSlug = {-> 'slug'}
+
+        Page.metaClass.generateSlug = {-> delegate.slug = ""+(number++)}
         Page.metaClass.isDirty = {name -> false}
         date = new Date()-19
         def date2 = new Date()-20
@@ -29,24 +33,26 @@ class PageServiceTests {
         
         def page2 = new Page(name: "page2", lat: "page2", lng: "page2", dateCreated: date, lastUpdated: date)
         
-        def post = new Post(dateCreated: date, lastUpdated: date, lastActived: date, createdBy: 'nut', updatedBy: 'boy')
-        def post2 = new Post(dateCreated: date, lastUpdated: date, lastActived: date2, createdBy: 'yo', updatedBy: 'boy')
+        def post = new Post(message: 'post1',dateCreated: date, lastUpdated: date, 
+            lastActived: date, createdBy: 'nut', updatedBy: 'boy')
+
+        def post2 = new Post(message: 'post2', dateCreated: date, lastUpdated: date, 
+            lastActived: date2, createdBy: 'yo', updatedBy: 'boy')
         page.addToPosts(post)
         page.addToPosts(post2)
 
         20.times {
-            def post3 = new Post(dateCreated: date, lastUpdated: date, lastActived: date2+it, createdBy: 'yo'+it, updatedBy: 'boy')
+            def post3 = new Post(message: 'post'+it, dateCreated: date, lastUpdated: date, 
+                lastActived: date2+it, createdBy: 'yo'+it, updatedBy: 'boy')
             page.addToPosts(post3)
         }
         page.save()
         page2.save()
     }
 
-
-
     void testGetInfo() {
 
-        def info = service.getInfo(1)
+        def info = service.getInfo(0)
         
         assert info.name == 'page1'
         assert info.lat == 'page1'
@@ -54,18 +60,16 @@ class PageServiceTests {
     }
 
     void testGetPosts() {
-        service.postComment(1, 'asd')
 
-        def results = service.getPosts(1, 0, 10)
+        def results = service.getPosts("0", 0, 10)
         assert results.posts.size() == 10
         assert results.totalPosts == 22
-        assert results.posts.getAt(0).createdBy == 'nut'
-        assert results.posts[0].getPreviewComments().message[0] == 'asd'
+        assert results.posts.getAt(0).createdBy == 'yo19'
     }
 
     void testGetComments() {
         def comment = new Comment(message: "my comment11")
-        def resultsPost = service.getPosts(1, 0, 10)
+        def resultsPost = service.getPosts("0", 0, 10)
         def firstResultPost = resultsPost.posts.getAt(0)
 
         service.postComment(firstResultPost.id, "my comment11")
@@ -85,7 +89,7 @@ class PageServiceTests {
     }
 
     void testGetLimitComments() {
-        def resultsPost = service.getPosts(1, 0, 10)
+        def resultsPost = service.getPosts("0", 0, 10)
         def firstResultPost = resultsPost.posts.getAt(0)
 
         10.times {
@@ -101,7 +105,7 @@ class PageServiceTests {
 
     void testPostComment() {
         def message = "abcdefg"
-        def resultsPost = service.getPosts(1, 0, 10)
+        def resultsPost = service.getPosts("0", 0, 10)
         def post = resultsPost.posts.getAt(0)
         def previousActived = post.lastActived
         service.postComment(post.id, message)
@@ -157,41 +161,14 @@ class PageServiceTests {
     }
 
     void testGetMembers() {
-        def user = new Users(username: 'admin', password: 'password', firstname: 'thawatchai', lastname: 'jong')
-        user.save()
-        def user2 = new Users(username: 'admin2', password: 'password2', firstname: 'jong', lastname: 'thawatchai')
-        user2.save()
-
-        def name1 = 'testCreatePage1'
-        def lat1 = 'lat1'
-        def lng1 = 'lng1'
-        def location = new Location(region: 'region1', province: 'province1', district: 'subDistrict1', label: 'label1')
-
-        def name2 = 'testCreatePage2'
-        def lat2 = 'lat2'
-        def lng2 = 'lng2'
-
-        service.createPage(user.id, name1, lat1, lng1, location)
-        service.createPage(user.id, name2, lat2, lng2, null)
-        service.createPage(user2.id, name2, lat2, lng2, null)
-
-        def page = Page.get(3)
-
-        def member = service.getMembers(page.id)
-        assert member.size() == 1
-        assert member[0].user == user
-
-        service.joinPage(user2.id, page.id)
-        member = service.getMembers(page.id)
-
-        assert member.size() == 2
-        assert member[0].user == user
-        assert member[1].user == user2
+        def member = service.getMembers(0)
+        assert member.size() == 0
     }
 
     void testGetAllNeeds() {
-        def newNeed = new Need(lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'message', quantity: 10)
-        def newNeed2 = new Need(lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'message', quantity: 10)
+        def item = new Item(name: 'item')
+        def newNeed = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'message', quantity: 10)
+        def newNeed2 = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'message', quantity: 10)
 
         def page = Page.get(1)
         page.addToPosts(newNeed)
@@ -210,9 +187,10 @@ class PageServiceTests {
     }
 
     void testGetLimitNeeds() {
-        def newNeed = new Need(lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'need1', quantity: 10)
-        def newNeed2 = new Need(lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'need2', quantity: 10)
-        def newNeed3 = new Need(lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'need3', quantity: 10)
+        def item = new Item(name: 'item')
+        def newNeed = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'need1', quantity: 10)
+        def newNeed2 = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'need2', quantity: 10)
+        def newNeed3 = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'need3', quantity: 10)
 
         def page = Page.get(1)
         def page2 = Page.get(2)
@@ -241,6 +219,14 @@ class PageServiceTests {
     void testCreateMessagePost() {
         def page = Page.get(1)
         def message = 'hello new message'
+
+        assert page.posts.size() == 22
+
+        service.createMessagePost(page.id, message)
+        page = Page.get(1)
+        assert page.posts.size() == 23
     }
+
+
 
 }

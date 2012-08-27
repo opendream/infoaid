@@ -6,6 +6,7 @@ import opendream.infoaid.domain.Comment
 import opendream.infoaid.domain.PageUser
 import opendream.infoaid.domain.Users
 import opendream.infoaid.domain.Need
+import opendream.infoaid.domain.MessagePost
 
 class PageService {
 
@@ -13,16 +14,16 @@ class PageService {
 
     }
 
-    def getInfo(pageId) {
+    def getInfo(slug) {
 
-    	def pageInfo = Page.get(pageId)
+    	def pageInfo = Page.findBySlug(slug)
     }
 
-    def getPosts(pageId, offset, max) {
-
+    def getPosts(slug, offset, max) {
     	def posts = Post.createCriteria().list(max: max, sort: 'lastActived', order: 'desc', offset: offset) {
+            eq('status', Post.Status.ACTIVE)
     		page {
-    			idEq(pageId)	
+                eq('slug', slug)
     		}
     	}
         
@@ -122,9 +123,8 @@ class PageService {
         [needs: needs, totalNeeds: needs.totalCount]
     }
 
-    def getMembers(pageId) {
-        def page = Page.get(pageId)
-
+    def getMembers(slug) {
+        def page = Page.findBySlug(slug)
         page.users
     }
 
@@ -133,6 +133,16 @@ class PageService {
         def date = new Date()
         def need = new Need(lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: message, quantity: 10)
         page.addToPosts(need)
+        if(!page.save()) {
+            return false
+        }
+    }
+
+    def createMessagePost(pageId, message) {
+        def page = Page.get(pageId)
+        def date = new Date()
+        def messagePost = new MessagePost(lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: message)
+        page.addToPosts(messagePost)
         if(!page.save()) {
             return false
         }

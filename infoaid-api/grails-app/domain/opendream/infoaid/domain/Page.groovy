@@ -21,6 +21,7 @@ class Page {
         location nullable:true, unique:false
         name unique:true
         status inList: Status.list()
+        slug unique: true
     }
 
     public enum Status {

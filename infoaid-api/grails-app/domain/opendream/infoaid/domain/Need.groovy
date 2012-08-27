@@ -1,11 +1,16 @@
 package opendream.infoaid.domain
 
 class Need extends Post {
+
     Date expiredDate
-    String message
     Integer quantity = 0
+    Item item
 
     static constraints = {
         quantity nullable: false
+    }
+
+    def beforeInsert() {
+        this.message = "${item.name} $quantity"
     }
 }
