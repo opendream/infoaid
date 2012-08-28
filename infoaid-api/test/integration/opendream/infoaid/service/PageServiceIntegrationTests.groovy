@@ -13,9 +13,6 @@ class PageServiceIntegrationTests {
 
     @Before
     void setup() {
-
-        Page.metaClass.generateSlug = {-> delegate.slug = ""+(number++)}
-        Page.metaClass.isDirty = {name -> false}
         date = new Date()-19
         def date2 = new Date()-20
 
