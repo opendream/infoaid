@@ -36,6 +36,11 @@ class PageUser implements Serializable {
         pageUser.delete()
     }
 
+    static PageUser get(long userId, long pageId) {
+        PageUser.find 'from PageUser where user.id=:userId and page.id=:pageId',
+            [userId: userId, pageId: pageId]
+    }
+
     int hashCode() {
         def builder = new HashCodeBuilder()
         if (user) builder.append(user.id)
