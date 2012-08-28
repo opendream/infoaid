@@ -59,6 +59,10 @@ class PageService {
         def user = Users.get(userId)
     	def commentDate = new Date()
     	def post = Post.get(postId)
+
+        def pageUser = PageUser.findByUserAndPage(user, post.page)
+        pageUser.conversation++
+        pageUser.save()
     	def comment = new Comment(message: message, dateCreated: commentDate)
     	post.addToComments(comment)
     	post.lastActived = commentDate
@@ -129,8 +133,21 @@ class PageService {
         page.users
     }
 
-    def createNeed(pageId, message) {
-        def page = Page.get(pageId)
+    def getTopMembers(slug) {
+        def page = Page.findBySlug(slug)
+        def pageUsers = PageUser.createCriteria().list(sort: 'conversation', order: 'desc', max: 5) {
+            eq('page', page)
+        }
+
+        pageUsers.user
+    }
+
+    def createNeed(userId, slug, message) {
+        def user = Users.get(userId)
+        def page = Page.findBySlug(slug)
+        def pageUser = PageUser.findByUserAndPage(user, page)
+        pageUser.conversation++
+        pageUser.save()
         def date = new Date()
         def need = new Need(lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: message, quantity: 10)
         page.addToPosts(need)
@@ -139,8 +156,12 @@ class PageService {
         }
     }
 
-    def createMessagePost(pageId, message) {
-        def page = Page.get(pageId)
+    def createMessagePost(userId, slug, message) {
+        def user = Users.get(userId)
+        def page = Page.findBySlug(slug)
+        def pageUser = PageUser.findByUserAndPage(user, page)
+        pageUser.conversation++
+        pageUser.save()
         def date = new Date()
         def messagePost = new MessagePost(lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: message)
         page.addToPosts(messagePost)

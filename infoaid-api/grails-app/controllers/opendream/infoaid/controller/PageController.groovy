@@ -47,6 +47,22 @@ class PageController {
         render members as JSON
     }
 
+    def topMember() {
+        def results = pageService.getTopMembers(params.slug)
+        def topMembers = results.collect {
+            [   
+                id: it.user.id,
+                username: it.user.username,
+                firstname: it.user.firstname,
+                lastname: it.user.lastname,
+                email: it.user.email,
+                telNo: it.user.telNo,
+                relation: it.relation.toString()
+            ]
+        }
+        render topMembers as JSON
+    }
+
     def status() {
         def ret = [:]
         def results = pageService.getPosts(params.slug, params.offset, params.max)
