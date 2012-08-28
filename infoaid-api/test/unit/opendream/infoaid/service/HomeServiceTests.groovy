@@ -17,7 +17,7 @@ import org.junit.*
 @Mock([Page, Post, PageUser, Users])
 class HomeServiceTests {
     def user
-    def follower
+    def follower    
 
     @Before
     void setUp() {
@@ -74,7 +74,8 @@ class HomeServiceTests {
 
         // update firstPost
         firstPost.lastActived = new Date() 
-        firstPost.save()
+        page1.addToPosts(firstPost)
+        page1.save(fulsh:true)        
     }
 
     void testGetFeedByLastActived() {
