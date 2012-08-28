@@ -9,6 +9,7 @@ class Post {
     String updatedBy
     Status status = Status.ACTIVE
     Page page
+    Integer conversation = 0
 
     public enum Status {
         ACTIVE,
@@ -22,7 +23,11 @@ class Post {
 
     static constraints = {
         status inList: Status.list()
-        message blank: false
+        message blank: false        
+    }
+
+    static mapping = {
+        sort lastActived: "desc"
     }
     
     def getPreviewComments() {
