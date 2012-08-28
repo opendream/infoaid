@@ -7,7 +7,7 @@ class PageUser implements Serializable {
 	Page page
 	Users user
 	Relation relation
-    //Integer participation = 0
+    Integer conversation = 0
 
     static constraints = {
     	page blank: false
