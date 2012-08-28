@@ -5,13 +5,17 @@ fixture {
         ausasi(Page, 
                 name: 'ausasi',
                 lat: '13.7516899108887',
-                lng: '100.491882324219'
+                lng: '100.491882324219',
+                household: 123,
+                population: 456
             )
 
         ausatara(Page, 
                 name: 'ausatara',
                 lat: '13.7445802688599',
-                lng: '100.498977661133'
+                lng: '100.498977661133',
+                household: 124,
+                population: 556
             )
     }
 }
