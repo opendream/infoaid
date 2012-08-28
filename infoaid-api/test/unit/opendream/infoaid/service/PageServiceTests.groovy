@@ -29,6 +29,9 @@ class PageServiceTests {
         date = new Date()-19
         def date2 = new Date()-20
         
+        def user1 = new Users(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
+        def user2 = new Users(username: "nut2", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save()
+
         def page = new Page(name: "page1", lat: "page1", lng: "page1", dateCreated: date, lastUpdated: date)
         
         def page2 = new Page(name: "page2", lat: "page2", lng: "page2", dateCreated: date, lastUpdated: date)
@@ -72,10 +75,10 @@ class PageServiceTests {
         def resultsPost = service.getPosts("0", 0, 10)
         def firstResultPost = resultsPost.posts.getAt(0)
 
-        service.postComment(firstResultPost.id, "my comment11")
+        service.postComment(1, firstResultPost.id, "my comment11")
         
         10.times {
-            service.postComment(firstResultPost.id, "my comment"+it)
+            service.postComment(1, firstResultPost.id, "my comment"+it)
         }
 
         def comment11 = Comment.findByMessage('my comment11')
@@ -93,7 +96,7 @@ class PageServiceTests {
         def firstResultPost = resultsPost.posts.getAt(0)
 
         10.times {
-            service.postComment(firstResultPost.id, "my comment"+it)
+            service.postComment(1, firstResultPost.id, "my comment"+it)
         }
 
         def resultsLimitComment = service.getLimitComments(firstResultPost.id, 3)
@@ -108,7 +111,7 @@ class PageServiceTests {
         def resultsPost = service.getPosts("0", 0, 10)
         def post = resultsPost.posts.getAt(0)
         def previousActived = post.lastActived
-        service.postComment(post.id, message)
+        service.postComment(1, post.id, message)
 
         def updatedPost = Post.get(post.id)
         assert updatedPost.lastActived > previousActived

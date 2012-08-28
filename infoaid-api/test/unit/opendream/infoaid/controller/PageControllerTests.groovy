@@ -9,11 +9,12 @@ import opendream.infoaid.service.PageService
 import opendream.infoaid.domain.Post
 import opendream.infoaid.domain.Item
 import opendream.infoaid.domain.Need
+import opendream.infoaid.domain.Comment
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(PageController)
-@Mock([Page, PageService, Users, PageUser, Post, Item, Need])
+@Mock([Page, PageService, Users, PageUser, Post, Item, Need, Comment])
 class PageControllerTests {
     def pageService
     def date
@@ -34,6 +35,11 @@ class PageControllerTests {
         def post2 = new Post(dateCreated: date, lastUpdated: date, lastActived: date+1, createdBy: 'nut', updatedBy: 'boy')
         page1.addToPosts(post)
         page1.addToPosts(post2)
+
+        def comment = new Comment(message: 'comment1')
+        def comment2 = new Comment(message: 'comment2')
+        post.addToComments(comment)
+        post.addToComments(comment2)
 
         def item = new Item(name: 'item').save()
         def newNeed = new Need(item: item, lastActived: date+2, createdBy: 'nut', updatedBy: 'nut', 
@@ -56,6 +62,18 @@ class PageControllerTests {
         
         def expectResponse = """{"id":1,"name":"page","lat":"111","lng":"222","dateCreated":"${date.format(dateFormat)}","lastUpdated":"${date.format(dateFormat)}"}"""
         controller.info()
+
+        assert expectResponse == response.text
+    }
+
+    void testMap() {
+        pageService.demand.getInfo(1..1) {slug -> Page.findBySlug(slug)}
+        controller.pageService = pageService.createMock()
+
+        params.slug = 'slug'
+        controller.map()
+        println response.text
+        def expectResponse = """{"id":1,"name":"page","lat":"111","lng":"222"}"""
 
         assert expectResponse == response.text
     }
@@ -89,9 +107,8 @@ class PageControllerTests {
         params.offset = 0
         params.max = 10
         controller.status()
-
-        def expectResponse = ''
-        assert expectResponse == ''
+        def expectResponse = """{"posts":[{"message":"item 10","dateCreated":"${date.format(dateFormat)}","comment":[]},{"message":"item 10","dateCreated":"${date.format(dateFormat)}","comment":[]},{"message":null,"dateCreated":"${date.format(dateFormat)}","comment":[]},{"message":null,"dateCreated":"${date.format(dateFormat)}","comment":["comment1","comment2"]}],"totalPosts":4}"""
+        assert expectResponse == response.text
     }
 
     void testEmptyInfo() {

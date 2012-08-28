@@ -54,8 +54,9 @@ class PageService {
         [comments: comments, totalComments: comments.totalCount]
     }
 
-    def postComment(postId, message) {
+    def postComment(userId, postId, message) {
 
+        def user = Users.get(userId)
     	def commentDate = new Date()
     	def post = Post.get(postId)
     	def comment = new Comment(message: message, dateCreated: commentDate)
