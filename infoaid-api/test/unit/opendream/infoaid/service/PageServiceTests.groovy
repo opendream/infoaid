@@ -29,9 +29,11 @@ class PageServiceTests {
         date = new Date()-19
         def date2 = new Date()-20
         
-        def page = new Page(name: "page1", lat: "page1", lng: "page1", dateCreated: date, lastUpdated: date)
+        def page = new Page(name: "page1", lat: "page1", lng: "page1", 
+            dateCreated: date, lastUpdated: date)
         
-        def page2 = new Page(name: "page2", lat: "page2", lng: "page2", dateCreated: date, lastUpdated: date)
+        def page2 = new Page(name: "page2", lat: "page2", lng: "page2", 
+            dateCreated: date, lastUpdated: date)
         
         def post = new Post(message: 'post1',dateCreated: date, lastUpdated: date, 
             lastActived: date, createdBy: 'nut', updatedBy: 'boy')
@@ -112,6 +114,7 @@ class PageServiceTests {
 
         def updatedPost = Post.get(post.id)
         assert updatedPost.lastActived > previousActived
+        assert updatedPost.conversation == 1
 
         def newComment = service.getComments(updatedPost.id).comments.last().message
         assert newComment == message
