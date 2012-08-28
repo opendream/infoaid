@@ -19,15 +19,22 @@ class PageService {
     	def pageInfo = Page.findBySlug(slug)
     }
 
-    def getPosts(slug, offset, max) {
-    	def posts = Post.createCriteria().list(max: max, sort: 'lastActived', order: 'desc', offset: offset) {
-            eq('status', Post.Status.ACTIVE)
-    		page {
-                eq('slug', slug)
-    		}
-    	}
-        
-    	[posts: posts, totalPosts: posts.totalCount]
+    def getPosts(slug, offset = 0, max = 10, order = 'lastActived desc') {
+    	Post.findAll ("from Post where status =:status and page.slug =:slug \
+                        order by $order",
+                        [status: Post.Status.ACTIVE, slug: slug, max: max, offset: offset])
+    }
+
+    def getTopPost(slug, offset) {
+        def max = 10 // config file
+        def order = 'conversation desc, lastActived desc' // config file
+        getPosts(slug, offset, max, order)        
+    }
+
+    def getRecentPost(slug, offset) {
+        def max = 10 // config file
+        def order = 'lastActived desc' // config file
+        getPosts(slug, offset, max, order)        
     }
 
     def getComments(postId) {
@@ -61,7 +68,9 @@ class PageService {
     	def comment = new Comment(message: message, dateCreated: commentDate)
     	post.addToComments(comment)
     	post.lastActived = commentDate
-    	if(!post.save()) {
+        post.conversation++
+
+        if(!post.save()) {
             return false
         }
     }
