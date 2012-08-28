@@ -4,6 +4,7 @@ import static org.junit.Assert.*
 import org.junit.*
 
 import opendream.infoaid.domain.*
+import opendream.infoaid.domain.PageUser.Relation
 
 class PageServiceIntegrationTests {
     def pageService
@@ -17,6 +18,11 @@ class PageServiceIntegrationTests {
         Page.metaClass.isDirty = {name -> false}
         date = new Date()-19
         def date2 = new Date()-20
+
+         def user1 = new Users(username: "nut", password: "nut", firstname: 'firstname', 
+            lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
+        def user2 = new Users(username: "nut2", password: "nut2", firstname: 'firstname2', 
+            lastname: 'lastname2').save()
         
         def page = new Page(name: "page1", lat: "page1", lng: "page1", 
             dateCreated: date, lastUpdated: date, lastActived: date)
@@ -41,6 +47,7 @@ class PageServiceIntegrationTests {
         page.save()
         page2.save()
     
+        PageUser.createPage(user1, page, Relation.OWNER)
     }
 
     @After
@@ -59,7 +66,8 @@ class PageServiceIntegrationTests {
     @Test
     void testGetTopPost() {
         def post = Post.findByMessage('post1')
-        pageService.postComment(post.id, "my comment for top posts")
+        def user = Users.findByUsername("nut")
+        pageService.postComment(user.id, post.id, "my comment for top posts")
                 
         def page = Page.findByName("page1")
         def posts = pageService.getTopPost(page.slug, 0)
@@ -83,11 +91,12 @@ class PageServiceIntegrationTests {
         def page = Page.findByName("page1")
         def posts = pageService.getPosts(page.slug, 0, 10)
         def firstResultPost = posts[0]
+        def user = Users.findByUsername("nut")
 
-        pageService.postComment(firstResultPost.id, "my comment11")
+        pageService.postComment(user.id, firstResultPost.id, "my comment11")
         
         10.times {
-            pageService.postComment(firstResultPost.id, "my comment"+it)
+            pageService.postComment(user.id, firstResultPost.id, "my comment"+it)
         }
 
         def comment11 = Comment.findByMessage('my comment11')
@@ -106,7 +115,8 @@ class PageServiceIntegrationTests {
         def posts = pageService.getPosts(page.slug, 0, 10)
         def post = posts.getAt(0)
         def previousActived = post.lastActived
-        pageService.postComment(post.id, message)
+        def user = Users.findByUsername("nut")
+        pageService.postComment(user.id, post.id, message)
 
         def updatedPost = Post.get(post.id)
         assert updatedPost.lastActived > previousActived
@@ -121,9 +131,10 @@ class PageServiceIntegrationTests {
         def page = Page.findByName("page1")
         def posts = pageService.getPosts(page.slug, 0, 10)
         def firstResultPost = posts.getAt(0)
+        def user = Users.findByUsername("nut")
 
         10.times {
-            pageService.postComment(firstResultPost.id, "my comment"+it)
+            pageService.postComment(user.id, firstResultPost.id, "my comment"+it)
         }
 
         def resultsLimitComment = pageService.getLimitComments(firstResultPost.id, 3)
