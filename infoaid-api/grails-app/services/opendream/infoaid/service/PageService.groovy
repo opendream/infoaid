@@ -62,8 +62,7 @@ class PageService {
         def user = Users.get(userId)
     	def commentDate = new Date()
     	def post = Post.get(postId)
-
-        def pageUser = PageUser.findByUserAndPage(user, post.page)
+        def pageUser = PageUser.get(user.id, post.page.id)
         pageUser.conversation++
         pageUser.save()
     	def comment = new Comment(message: message, dateCreated: commentDate)
