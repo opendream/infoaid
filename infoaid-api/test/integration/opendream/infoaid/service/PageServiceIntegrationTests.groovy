@@ -49,11 +49,20 @@ class PageServiceIntegrationTests {
     }
 
     @Test
+    void testGetPosts() {
+        def page = Page.findByName("page1")
+        def posts = pageService.getPosts(page.slug, 0, 10) // default recent post
+        assert posts.size() == 10
+        assert posts.getAt(0).createdBy == 'yo19'
+    }
+
+    @Test
     void testGetTopPost() {
         def post = Post.findByMessage('post1')
         pageService.postComment(post.id, "my comment for top posts")
                 
-        def posts = pageService.getTopPost('0', 0)
+        def page = Page.findByName("page1")
+        def posts = pageService.getTopPost(page.slug, 0)
         
         assert posts.size() == 10
         assert posts[0].message == 'post1'
@@ -62,10 +71,65 @@ class PageServiceIntegrationTests {
     @Test
     void testGetRecentPost() {
         def page = Page.findByName("page1")
-        assert 22 == Post.count
         def posts = pageService.getRecentPost(page.slug, 0)
         
         assert posts.size() == 10
         assert posts[0].createdBy == 'yo19'
+    }
+
+    @Test
+    void testGetComments() {
+        def comment = new Comment(message: "my comment11")
+        def page = Page.findByName("page1")
+        def posts = pageService.getPosts(page.slug, 0, 10)
+        def firstResultPost = posts[0]
+
+        pageService.postComment(firstResultPost.id, "my comment11")
+        
+        10.times {
+            pageService.postComment(firstResultPost.id, "my comment"+it)
+        }
+
+        def comment11 = Comment.findByMessage('my comment11')
+
+        def resultsComment = pageService.getComments(firstResultPost.id)
+
+        assert resultsComment.totalComments == 11
+        assert resultsComment.comments[0].message == 'my comment11'
+        assert resultsComment.comments[0].dateCreated.time == comment11.dateCreated.time
+    }
+
+    @Test
+    void testPostComment() {
+        def message = "abcdefg"
+        def page = Page.findByName("page1")
+        def posts = pageService.getPosts(page.slug, 0, 10)
+        def post = posts.getAt(0)
+        def previousActived = post.lastActived
+        pageService.postComment(post.id, message)
+
+        def updatedPost = Post.get(post.id)
+        assert updatedPost.lastActived > previousActived
+        assert updatedPost.conversation == 1
+
+        def newComment = pageService.getComments(updatedPost.id).comments.last().message
+        assert newComment == message
+    }
+
+    @Test
+    void testGetLimitComments() {
+        def page = Page.findByName("page1")
+        def posts = pageService.getPosts(page.slug, 0, 10)
+        def firstResultPost = posts.getAt(0)
+
+        10.times {
+            pageService.postComment(firstResultPost.id, "my comment"+it)
+        }
+
+        def resultsLimitComment = pageService.getLimitComments(firstResultPost.id, 3)
+
+        assert resultsLimitComment.totalComments == 10
+
+        assert resultsLimitComment.comments.last().message == "my comment2"
     }
 }

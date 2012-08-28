@@ -59,66 +59,7 @@ class PageServiceTests {
         assert info.name == 'page1'
         assert info.lat == 'page1'
         assert info.lng == 'page1'
-    }
-
-    void testGetPosts() {
-
-        def results = service.getPosts("0", 0, 10)
-        assert results.posts.size() == 10
-        assert results.totalPosts == 22
-        assert results.posts.getAt(0).createdBy == 'yo19'
-    }
-
-    void testGetComments() {
-        def comment = new Comment(message: "my comment11")
-        def resultsPost = service.getPosts("0", 0, 10)
-        def firstResultPost = resultsPost.posts.getAt(0)
-
-        service.postComment(firstResultPost.id, "my comment11")
-        
-        10.times {
-            service.postComment(firstResultPost.id, "my comment"+it)
-        }
-
-        def comment11 = Comment.findByMessage('my comment11')
-
-        def resultsComment = service.getComments(firstResultPost.id)
-
-        assert resultsComment.totalComments == 11
-
-        assert resultsComment.comments.getAt(0).dateCreated == comment11.dateCreated
-
-    }
-
-    void testGetLimitComments() {
-        def resultsPost = service.getPosts("0", 0, 10)
-        def firstResultPost = resultsPost.posts.getAt(0)
-
-        10.times {
-            service.postComment(firstResultPost.id, "my comment"+it)
-        }
-
-        def resultsLimitComment = service.getLimitComments(firstResultPost.id, 3)
-
-        assert resultsLimitComment.totalComments == 10
-
-        assert resultsLimitComment.comments.last().message == "my comment2"
-    }
-
-    void testPostComment() {
-        def message = "abcdefg"
-        def resultsPost = service.getPosts("0", 0, 10)
-        def post = resultsPost.posts.getAt(0)
-        def previousActived = post.lastActived
-        service.postComment(post.id, message)
-
-        def updatedPost = Post.get(post.id)
-        assert updatedPost.lastActived > previousActived
-        assert updatedPost.conversation == 1
-
-        def newComment = service.getComments(updatedPost.id).comments.last().message
-        assert newComment == message
-    }
+    }      
 
     void testCreatePageJoinPageLeavePageInactivePage() {
         def user = new Users(username: 'admin', password: 'password', firstname: 'thawatchai', lastname: 'jong')
@@ -139,7 +80,7 @@ class PageServiceTests {
         service.createPage(user.id, name2, lat2, lng2, null)
         service.createPage(user2.id, name2, lat2, lng2, null)
 
-        assert Page.list().size() == 4
+        assert Page.count() == 4
 
         def page = Page.get(3)
         assert page.location == location
