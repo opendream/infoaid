@@ -10,10 +10,6 @@ import opendream.infoaid.domain.MessagePost
 
 class PageService {
 
-    def serviceMethod() {
-
-    }
-
     def getInfo(slug) {
 
     	def pageInfo = Page.findBySlug(slug)
@@ -70,7 +66,7 @@ class PageService {
     	post.lastActived = commentDate
         post.conversation++
 
-        if(!post.save()) {
+        if(!post.save(flush:true)) {
             return false
         }
     }
