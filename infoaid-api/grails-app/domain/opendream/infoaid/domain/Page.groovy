@@ -11,6 +11,8 @@ class Page {
     Location location
     Status status = Status.ACTIVE
     String slug = ""
+    Integer household
+    Integer population
 
     static hasMany = [posts:Post]
     static transients = ['slugGeneratorService']
@@ -22,6 +24,8 @@ class Page {
         name unique:true
         status inList: Status.list()
         slug unique: true
+        household nullable:true
+        population nullable:true
     }
 
     public enum Status {
