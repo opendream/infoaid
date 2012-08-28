@@ -21,7 +21,7 @@ class Page {
         lat nullable:true
         lng nullable:true
         location nullable:true, unique:false
-        name unique:true
+        name unique:true, nullable: false
         status inList: Status.list()
         slug unique: true
         household nullable:true
