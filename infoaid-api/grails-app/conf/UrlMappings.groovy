@@ -15,6 +15,8 @@ class UrlMappings {
         "/$slug/limitNeed/$limit"(controller: "page", action: "limitNeed")
         "/$slug/about"(controller: "page", action: "about")
         "/$slug/join_us/$userId"(controller: "page", action: "joinUs")
+        "/home/recent-post"(controller: "home", action: "recentPost")
+        "/home/top-post"(controller: "home", action: "topPost")
 		"/"(view:"/index")
 		"500"(view:'/error')
 	}
