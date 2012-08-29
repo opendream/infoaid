@@ -159,9 +159,9 @@ class PageServiceTests {
 
     void testGetLimitNeeds() {
         def item = new Item(name: 'item')
-        def newNeed = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'need1', quantity: 10)
-        def newNeed2 = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'need2', quantity: 10)
-        def newNeed3 = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'need3', quantity: 10)
+        def newNeed = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, quantity: 10)
+        def newNeed2 = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, quantity: 10)
+        def newNeed3 = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, quantity: 10)
 
         def page = Page.get(1)
         page.addToPosts(newNeed)

@@ -66,7 +66,7 @@ class PageController {
     def status() {
         def ret = [:]
         def results = pageService.getPosts(params.slug, params.offset, params.max)
-        ret.posts = results.posts.collect{
+        ret.posts = results.posts.collect {
             [
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
@@ -77,8 +77,40 @@ class PageController {
         render ret as JSON
     }
 
-    def needs() {
-        def needs = pageService.getNeeds()
+    def need() {
+        def ret = [:]
+        def results = pageService.getAllNeeds(params.slug)
+        ret.needs = results.needs.collect {
+            [
+                message: it.message,
+                dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
+                createdBy: it.createdBy,
+                expiredDate: it.expiredDate.format('yyyy-MM-dd HH:mm'),
+                quantity: it.quantity,
+                item: it.item.name
+            ]
+        }
+        ret.totalNeeds = results.totalNeeds
+        render ret as JSON
+    }
+
+    def limitNeed() {
+        def ret = [:]
+        def limit = params.limit ?: 5
+        def results = pageService.getLimitNeeds(params.slug, limit)
+        println results.needs
+        ret.needs = results.needs.collect {
+            [
+                message: it.message,
+                dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
+                createdBy: it.createdBy,
+                expiredDate: it.expiredDate.format('yyyy-MM-dd HH:mm'),
+                quantity: it.quantity,
+                item: it.item.name
+            ]
+        }
+        ret.totalNeeds = results.totalNeeds
+        render ret as JSON
     }
 
     def about() {

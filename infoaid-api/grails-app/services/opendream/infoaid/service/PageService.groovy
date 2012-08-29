@@ -124,7 +124,7 @@ class PageService {
 
     def getLimitNeeds(slug, max) {
         def page = Page.findBySlug(slug)
-        def needs = Need.createCriteria().list(max: max) {
+        def needs = Need.createCriteria().list(max: max, sort: 'dateCreated', order: 'desc') {
             eq('status', Post.Status.ACTIVE)
             eq('page', page)
         }

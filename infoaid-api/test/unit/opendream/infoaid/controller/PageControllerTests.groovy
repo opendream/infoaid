@@ -45,9 +45,9 @@ class PageControllerTests {
 
         def item = new Item(name: 'item').save()
         def newNeed = new Need(item: item, lastActived: date+2, createdBy: 'nut', updatedBy: 'nut', 
-            expiredDate: date, message: 'need1', quantity: 10)
+            expiredDate: date, quantity: 10)
         def newNeed2 = new Need(item: item,lastActived: date+3, createdBy: 'nut', updatedBy: 'nut', 
-            expiredDate: date, message: 'need2', quantity: 10)
+            expiredDate: date, quantity: 10)
         page1.addToPosts(newNeed)
         page1.addToPosts(newNeed2)
         page1.save()
@@ -142,6 +142,45 @@ class PageControllerTests {
         params.slug = 'abc'
         controller.info()
         assert response.text == '{}'
+    }
+
+    void testNeed() {
+        pageService.demand.getAllNeeds(1..1) {slug -> 
+            def page = Page.findBySlug(slug)
+            def needs = Need.findAllByPageAndStatus(page, Post.Status.ACTIVE)
+
+            [needs: needs, totalNeeds: needs.size()]
+        }
+
+        controller.pageService = pageService.createMock()
+
+        params.slug = 'slug'
+        controller.need()
+
+        def expectResponse = """{"needs":[{"message":"item 10","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":10,"item":"item"},{"message":"item 10","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":10,"item":"item"}],"totalNeeds":2}"""
+        assert expectResponse == response.text
+    }
+
+    void testLimitNeed() {
+        pageService.demand.getLimitNeeds(1..1) {slug, max -> 
+            def page = Page.findBySlug(slug)
+            def needs = Need.createCriteria().list(max: max, sort: 'dateCreated', order: 'desc') {
+                eq('status', Post.Status.ACTIVE)
+                eq('page', page)
+            }
+
+            [needs: needs, totalNeeds: needs.totalCount]
+        }
+
+        controller.pageService = pageService.createMock()
+
+        params.slug = 'slug'
+        params.limit = 1
+        controller.limitNeed()
+
+        def expectResponse = """{"needs":[{"message":"item 10","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":10,"item":"item"}],"totalNeeds":2}"""
+        println response.text
+        assert expectResponse == response.text
     }
 
     void testAbout() {
