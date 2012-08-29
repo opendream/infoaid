@@ -64,17 +64,31 @@ class PageController {
     }
 
     def status() {
-        def ret = [:]
-        def results = pageService.getPosts(params.slug, params.offset, params.max)
-        ret.posts = results.posts.collect {
+        def posts = pageService.getPosts(params.slug, params.offset, params.max)
+        
+        posts = posts.collect{
             [
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
-                comment: it.previewComments.message
+                comments: it.previewComments.message
             ]
         }
-        ret.totalPosts = results.totalPosts
-        render ret as JSON
+        //ret.totalPosts = results.totalPosts
+        render posts as JSON
+    }
+
+    def topPost() {
+        def posts = pageService.getTopPost(params.slug, params.offset)
+        
+        posts = posts.collect{
+            [
+                message: it.message,
+                dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
+                comments: it.previewComments.message
+            ]
+        }
+        //ret.totalPosts = results.totalPosts
+        render posts as JSON
     }
 
     def need() {
