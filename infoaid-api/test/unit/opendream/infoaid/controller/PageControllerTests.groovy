@@ -253,7 +253,7 @@ class PageControllerTests {
     }
 
     void testCreatePage() {
-        assert 1 == Page.count()
+        assert 2 == Page.count()
 
         pageService.demand.createPage(1..1) { userId, name, lat, lng, location, household, population, about -> 
             def page = new Page(name: name, lat: lat, lng: lng, location: location).save()
@@ -272,12 +272,12 @@ class PageControllerTests {
         params.about = null
         controller.createPage()
 
-        assert 2 == Page.count()
-        assert 3 == PageUser.count()
+        assert 3 == Page.count()
+        assert 4 == PageUser.count()
     }
 
     void testLeavePage() {
-        assert 2 == PageUser.count()
+        assert 3 == PageUser.count()
 
         pageService.demand.leavePage(1..1) { userId, slug -> 
             def user = Users.get(userId)
@@ -288,10 +288,10 @@ class PageControllerTests {
         controller.pageService = pageService.createMock()
 
         params.userId = 1
-        params.slug = 'slug'
+        params.slug = 'page-slug'
         controller.leavePage()
 
-        assert 1 == PageUser.count()
+        assert 2 == PageUser.count()
     }
 
     void testPostComment() {
@@ -340,7 +340,7 @@ class PageControllerTests {
             Page.findAllByStatus(Page.Status.ACTIVE)
         }
 
-        pageService.demand.getLimitNeeds(1..2) {slug, max -> 
+        pageService.demand.getLimitNeeds(1..3) {slug, max -> 
             def page = Page.findBySlug(slug)
             def needs = Need.createCriteria().list(max: max, sort: 'dateCreated', order: 'desc') {
                 eq('status', Post.Status.ACTIVE)
@@ -354,9 +354,9 @@ class PageControllerTests {
 
         controller.summaryInfo()
 
-        assert 2 == response.json['totalPages']
+        assert 3 == response.json['totalPages']
         assert '111' == response.json['pages'][0].lat
-        def expectResponse = """{"pages":[{"name":"page","lat":"111","lng":"222","needs":[{"message":"item 10","quantity":10},{"message":"item 9","quantity":9}]},{"name":"page2","lat":"latPage2","lng":"lngPage2","needs":[]}],"totalPages":2}"""
+        def expectResponse = """{"pages":[{"name":"page","lat":"111","lng":"222","needs":[{"message":"item 10","quantity":10},{"message":"item 9","quantity":9}]},{"name":"second-page","lat":"11122","lng":"1234","needs":[]},{"name":"page2","lat":"latPage2","lng":"lngPage2","needs":[]}],"totalPages":3}"""
         assert expectResponse == response.text
     }
 }
