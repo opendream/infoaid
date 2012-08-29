@@ -4,21 +4,17 @@ import opendream.infoaid.domain.Post
 
 class HomeService {
 
-    def getFeedByLastActived(user, offset = 0, max = 10) {
-
-        /*def posts = Post.createCriteria().list() {            
-            in(page, user.pages)            
-            order('lastActived', 'desc')
-        }*/
-        
-        
+    def getFeedByRecentPost(user, offset = 0, max = 10) {
         def posts = Post.findAll(max: max, sort:"lastActived", order : 'desc', offset: offset) {
             page in user.pages
-        }
+        }        
+        posts
+    }
 
-        //posts = query.list()        
-
-        //[posts: posts, totalPosts: posts.totalCount]
+    def getFeedByTopPost(user, offset = 0, max = 10) {
+        def posts = Post.findAll(max: max, sort:"conversation", order : 'desc', offset: offset) {
+            page in user.pages
+        }        
         posts
     }
 }
