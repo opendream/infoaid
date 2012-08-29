@@ -79,9 +79,9 @@ class PageServiceTests {
         def lat2 = 'lat2'
         def lng2 = 'lng2'
 
-        service.createPage(user.id, name1, lat1, lng1, location)
-        service.createPage(user.id, name2, lat2, lng2, null)
-        service.createPage(user2.id, name2, lat2, lng2, null) // error because page name is exists
+        service.createPage(user.id, name1, lat1, lng1, location, null, null, null)
+        service.createPage(user.id, name2, lat2, lng2, null, null, null, null)
+        service.createPage(user2.id, name2, lat2, lng2, null, null, null, null) // error because page name is exists
 
         assert Page.count() == 4
 
@@ -210,4 +210,20 @@ class PageServiceTests {
         assert about == 'this is page 1'
     }
 
+    void testGetSummaryInfo() {
+        def item = new Item(name: 'item')
+        def newNeed = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', 
+            expiredDate: date, message: 'message', quantity: 10)
+        def newNeed2 = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', 
+            expiredDate: date, message: 'message', quantity: 10)
+
+        def page = Page.get(1)
+        page.addToPosts(newNeed)
+        page.addToPosts(newNeed2)
+        page.save()
+
+        def summaryInfo = service.getSummaryInfo()
+
+        assert summaryInfo.size() == 2 
+    }
 }

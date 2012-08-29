@@ -95,8 +95,8 @@ class PageControllerTests {
         params.slug = 'page-slug'
         controller.member()
 
-        def expectResponse = """[{"id":1,"username":"nut","firstname":"firstname","lastname":"lastname","email":null,"telNo":null,"relation":"OWNER"},{"id":2,"username":"nut2","firstname":"firstname2","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"}]"""
-        assert expectResponse == response.text
+        assert response.json['members'].size() == 2
+        assert 'nut' == response.json['members'][0].username        
     }
 
     void testTopMember() {
@@ -120,9 +120,8 @@ class PageControllerTests {
 
         params.slug = 'page-slug'
         controller.topMember()
-
-        def expectResponse = """[{"id":6,"username":"nut6","firstname":"firstname6","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"},{"id":5,"username":"nut5","firstname":"firstname5","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"},{"id":4,"username":"nut4","firstname":"firstname4","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"},{"id":3,"username":"nut3","firstname":"firstname3","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"},{"id":2,"username":"nut2","firstname":"firstname2","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"}]"""
-        assert expectResponse == response.text
+        assert response.json['topMembers'].size() == 5
+        assert 'nut6' == response.json['topMembers'][0].username
     }
 
     void testStatus() {
@@ -251,5 +250,113 @@ class PageControllerTests {
         assert 'item 10' == response.json[0].message
         assert 'item 9' == response.json[1].message
         assert 'first post' == response.json[3].message
+    }
+
+    void testCreatePage() {
+        assert 1 == Page.count()
+
+        pageService.demand.createPage(1..1) { userId, name, lat, lng, location, household, population, about -> 
+            def page = new Page(name: name, lat: lat, lng: lng, location: location).save()
+            def user = Users.get(userId)
+            new PageUser(user: user, page: page, relation: PageUser.Relation.OWNER).save()
+        }
+        controller.pageService = pageService.createMock()
+
+        params.userId = 1
+        params.name = 'my page'
+        params.lat = 'my lat'
+        params.lng = 'my lng'
+        params.location = null
+        params.household = null
+        params.population = null
+        params.about = null
+        controller.createPage()
+
+        assert 2 == Page.count()
+        assert 3 == PageUser.count()
+    }
+
+    void testLeavePage() {
+        assert 2 == PageUser.count()
+
+        pageService.demand.leavePage(1..1) { userId, slug -> 
+            def user = Users.get(userId)
+            def page = Page.findBySlug(slug)
+            def pageUser = PageUser.findByPageAndUser(page, user)
+            pageUser.delete()
+        }
+        controller.pageService = pageService.createMock()
+
+        params.userId = 1
+        params.slug = 'slug'
+        controller.leavePage()
+
+        assert 1 == PageUser.count()
+    }
+
+    void testPostComment() {
+        def thisPost = Post.get(1)
+        assert thisPost.conversation == 0
+        assert 2 == Comment.count()
+        pageService.demand.postComment(1..1) { userId, postId, message -> 
+            def user = Users.get(userId)
+            def commentDate = new Date()
+            def post = Post.get(postId)
+            
+            def comment = new Comment(message: message, dateCreated: commentDate)
+            post.addToComments(comment)
+            post.lastActived = commentDate
+            post.conversation++
+
+            if(!post.save(flush:true)) {
+                return false
+            }
+
+            def pageUser = PageUser.findByPageAndUser(post.page, user)
+            pageUser.conversation++
+            pageUser.save()
+            
+        }
+
+        controller.pageService = pageService.createMock()
+
+        params.message = 'this is my comment'
+        params.postId = 1
+        params.userId = 1
+        controller.postComment()
+        def user = Users.get(1)
+        def post = Post.get(1)
+        def pageUser = PageUser.findByPageAndUser(post.page, user)
+
+        thisPost = Post.get(1)
+        assert pageUser.conversation == 2
+        assert thisPost.conversation == 1
+        assert 3 == Comment.count()
+    }
+
+    void testSummaryInfo() {
+        def page2 = new Page(name: "page2", lat: "latPage2", lng: "lngPage2", dateCreated: date, lastUpdated: date, slug: 'slug2', about: 'this is page 2').save()
+        pageService.demand.getSummaryInfo(1..1) { -> 
+            Page.findAllByStatus(Page.Status.ACTIVE)
+        }
+
+        pageService.demand.getLimitNeeds(1..2) {slug, max -> 
+            def page = Page.findBySlug(slug)
+            def needs = Need.createCriteria().list(max: max, sort: 'dateCreated', order: 'desc') {
+                eq('status', Post.Status.ACTIVE)
+                eq('page', page)
+            }
+
+            [needs: needs, totalNeeds: needs.totalCount]
+        }
+
+        controller.pageService = pageService.createMock()
+
+        controller.summaryInfo()
+
+        assert 2 == response.json['totalPages']
+        assert '111' == response.json['pages'][0].lat
+        def expectResponse = """{"pages":[{"name":"page","lat":"111","lng":"222","needs":[{"message":"item 10","quantity":10},{"message":"item 9","quantity":9}]},{"name":"page2","lat":"latPage2","lng":"lngPage2","needs":[]}],"totalPages":2}"""
+        assert expectResponse == response.text
     }
 }

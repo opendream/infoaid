@@ -31,9 +31,9 @@ class PageController {
     }
 
     def member() {
+        def ret = [:]
         def results = pageService.getMembers(params.slug)
-        def members
-        members = results.collect{
+        ret.members = results.collect{
             [
                 id: it.user.id,
                 username: it.user.username,
@@ -44,12 +44,14 @@ class PageController {
                 relation: it.relation.toString()
             ]
         }
-        render members as JSON
+        ret.totalMembers = results.size()
+        render ret as JSON
     }
 
     def topMember() {
+        def ret = [:]
         def results = pageService.getTopMembers(params.slug)
-        def topMembers = results.collect {
+        ret.topMembers = results.collect {
             [   
                 id: it.user.id,
                 username: it.user.username,
@@ -60,7 +62,8 @@ class PageController {
                 relation: it.relation.toString()
             ]
         }
-        render topMembers as JSON
+        ret.totalTopMembers = results.size()
+        render ret as JSON
     }
 
     def status() {
@@ -138,5 +141,64 @@ class PageController {
         } else {
             pageService.joinPage(userId, params.slug)
         }
+    }
+
+    def createPage() {
+        def userId = params.userId
+        def name = params.name
+        def lat = params.lat
+        def lng = params.lng
+        def household = params.household
+        def population = params.population
+        def about = params.about
+        def location = params.location
+
+        if(!userId || !name) {
+            return
+        } else {
+            pageService.createPage(userId, name, lat, lng, location, household, population, about)
+        }
+    }
+
+    def leavePage() {
+        def userId = params.userId
+        def slug = params.slug
+        if(!userId || !slug) {
+            return
+        } else {
+            pageService.leavePage(userId, slug)
+        }
+    }
+
+    def postComment(){
+        def userId = params.userId
+        def postId = params.postId
+        def message = params.message
+
+        if(userId && postId && message) {
+            pageService.postComment(userId, postId, message)
+        }
+    }
+
+    def summaryInfo() {
+        def ret = [:]
+        def pages = pageService.getSummaryInfo()
+        ret.pages = pages.collect {
+            [
+                name: it.name,
+                lat: it.lat,
+                lng: it.lng,
+                needs: pageService.getLimitNeeds(it.slug, 5).needs.collect {
+                    [
+                        message: it.message,
+                        quantity: it.quantity
+                    ]
+                }
+
+            ]
+        }
+        ret.totalPages = pages.size()
+        
+        render ret as JSON
     }
 }
