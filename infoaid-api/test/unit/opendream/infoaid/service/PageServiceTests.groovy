@@ -210,4 +210,20 @@ class PageServiceTests {
         assert about == 'this is page 1'
     }
 
+    void testGetSummaryInfo() {
+        def item = new Item(name: 'item')
+        def newNeed = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', 
+            expiredDate: date, message: 'message', quantity: 10)
+        def newNeed2 = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', 
+            expiredDate: date, message: 'message', quantity: 10)
+
+        def page = Page.get(1)
+        page.addToPosts(newNeed)
+        page.addToPosts(newNeed2)
+        page.save()
+
+        def summaryInfo = service.getSummaryInfo()
+
+        assert summaryInfo.size() == 2 
+    }
 }

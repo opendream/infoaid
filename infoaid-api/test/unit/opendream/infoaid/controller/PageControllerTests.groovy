@@ -111,7 +111,7 @@ class PageControllerTests {
 
         params.slug = 'slug'
         controller.topMember()
-
+        
         def expectResponse = """[{"id":6,"username":"nut6","firstname":"firstname6","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"},{"id":5,"username":"nut5","firstname":"firstname5","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"},{"id":4,"username":"nut4","firstname":"firstname4","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"},{"id":3,"username":"nut3","firstname":"firstname3","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"},{"id":2,"username":"nut2","firstname":"firstname2","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"}]"""
         assert expectResponse == response.text
     }
@@ -212,5 +212,29 @@ class PageControllerTests {
         testPage = Page.findBySlug('slug')
         assert 3 == testPage.users.size()
         assert PageUser.Relation.MEMBER == testPage.users.last().relation
+    }
+
+    void testSummaryInfo() {
+        def page2 = new Page(name: "page2", lat: "latPage2", lng: "lngPage2", dateCreated: date, lastUpdated: date, slug: 'slug2', about: 'this is page 2').save()
+        pageService.demand.getSummaryInfo(1..1) { -> 
+            Page.findAllByStatus(Page.Status.ACTIVE)
+        }
+
+        pageService.demand.getLimitNeeds(1..2) {slug, max -> 
+            def page = Page.findBySlug(slug)
+            def needs = Need.createCriteria().list(max: max, sort: 'dateCreated', order: 'desc') {
+                eq('status', Post.Status.ACTIVE)
+                eq('page', page)
+            }
+
+            [needs: needs, totalNeeds: needs.totalCount]
+        }
+
+        controller.pageService = pageService.createMock()
+
+        controller.summaryInfo()
+
+        def expectResponse = """{"pages":[{"name":"page","lat":"111","lng":"222","needs":[{"message":"item 10","quantity":10},{"message":"item 10","quantity":10}]},{"name":"page2","lat":"latPage2","lng":"lngPage2","needs":[]}],"totalPages":2}"""
+        assert expectResponse == response.text
     }
 }

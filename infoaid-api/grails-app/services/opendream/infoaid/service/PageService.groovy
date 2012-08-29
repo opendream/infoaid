@@ -179,4 +179,7 @@ class PageService {
         page.about
     }
 
+    def getSummaryInfo() {
+        Page.findAllByStatus(Page.Status.ACTIVE)
+    }
 }

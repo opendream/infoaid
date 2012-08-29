@@ -48,8 +48,9 @@ class PageController {
     }
 
     def topMember() {
+        def ret = [:]
         def results = pageService.getTopMembers(params.slug)
-        def topMembers = results.collect {
+        ret.topMembers = results.collect {
             [   
                 id: it.user.id,
                 username: it.user.username,
@@ -60,7 +61,8 @@ class PageController {
                 relation: it.relation.toString()
             ]
         }
-        render topMembers as JSON
+        ret.totalTopMembers = results.size()
+        render ret as JSON
     }
 
     def status() {
@@ -124,5 +126,27 @@ class PageController {
         } else {
             pageService.joinPage(userId, params.slug)
         }
+    }
+
+    def summaryInfo() {
+        def ret = [:]
+        def pages = pageService.getSummaryInfo()
+        ret.pages = pages.collect {
+            [
+                name: it.name,
+                lat: it.lat,
+                lng: it.lng,
+                needs: pageService.getLimitNeeds(it.slug, 5).needs.collect {
+                    [
+                        message: it.message,
+                        quantity: it.quantity
+                    ]
+                }
+
+            ]
+        }
+        ret.totalPages = pages.size()
+        
+        render ret as JSON
     }
 }
