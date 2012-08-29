@@ -247,6 +247,48 @@ class PageControllerTests {
         assert 'first post' == response.json[3].message
     }
 
+    void testCreatePage() {
+        assert 1 == Page.count()
+
+        pageService.demand.createPage(1..1) { userId, name, lat, lng, location, household, population, about -> 
+            def page = new Page(name: name, lat: lat, lng: lng, location: location).save()
+            def user = Users.get(userId)
+            new PageUser(user: user, page: page, relation: PageUser.Relation.OWNER).save()
+        }
+        controller.pageService = pageService.createMock()
+
+        params.userId = 1
+        params.name = 'my page'
+        params.lat = 'my lat'
+        params.lng = 'my lng'
+        params.location = null
+        params.household = null
+        params.population = null
+        params.about = null
+        controller.createPage()
+
+        assert 2 == Page.count()
+        assert 3 == PageUser.count()
+    }
+
+    void testLeavePage() {
+        assert 2 == PageUser.count()
+
+        pageService.demand.leavePage(1..1) { userId, slug -> 
+            def user = Users.get(userId)
+            def page = Page.findBySlug(slug)
+            def pageUser = PageUser.findByPageAndUser(page, user)
+            pageUser.delete()
+        }
+        controller.pageService = pageService.createMock()
+
+        params.userId = 1
+        params.slug = 'slug'
+        controller.leavePage()
+
+        assert 1 == PageUser.count()
+    }
+
     void testSummaryInfo() {
         def page2 = new Page(name: "page2", lat: "latPage2", lng: "lngPage2", dateCreated: date, lastUpdated: date, slug: 'slug2', about: 'this is page 2').save()
         pageService.demand.getSummaryInfo(1..1) { -> 
@@ -266,7 +308,7 @@ class PageControllerTests {
         controller.pageService = pageService.createMock()
 
         controller.summaryInfo()
-        
+
         assert 2 == response.json['totalPages']
         assert '111' == response.json['pages'][0].lat
         def expectResponse = """{"pages":[{"name":"page","lat":"111","lng":"222","needs":[{"message":"item 10","quantity":10},{"message":"item 9","quantity":9}]},{"name":"page2","lat":"latPage2","lng":"lngPage2","needs":[]}],"totalPages":2}"""

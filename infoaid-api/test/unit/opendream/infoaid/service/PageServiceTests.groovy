@@ -79,9 +79,9 @@ class PageServiceTests {
         def lat2 = 'lat2'
         def lng2 = 'lng2'
 
-        service.createPage(user.id, name1, lat1, lng1, location)
-        service.createPage(user.id, name2, lat2, lng2, null)
-        service.createPage(user2.id, name2, lat2, lng2, null) // error because page name is exists
+        service.createPage(user.id, name1, lat1, lng1, location, null, null, null)
+        service.createPage(user.id, name2, lat2, lng2, null, null, null, null)
+        service.createPage(user2.id, name2, lat2, lng2, null, null, null, null) // error because page name is exists
 
         assert Page.count() == 4
 

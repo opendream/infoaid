@@ -143,6 +143,33 @@ class PageController {
         }
     }
 
+    def createPage() {
+        def userId = params.userId
+        def name = params.name
+        def lat = params.lat
+        def lng = params.lng
+        def household = params.household
+        def population = params.population
+        def about = params.about
+        def location = params.location
+
+        if(!userId || !name) {
+            return
+        } else {
+            pageService.createPage(userId, name, lat, lng, location, household, population, about)
+        }
+    }
+
+    def leavePage() {
+        def userId = params.userId
+        def slug = params.slug
+        if(!userId || !slug) {
+            return
+        } else {
+            pageService.leavePage(userId, slug)
+        }
+    }
+
     def summaryInfo() {
         def ret = [:]
         def pages = pageService.getSummaryInfo()

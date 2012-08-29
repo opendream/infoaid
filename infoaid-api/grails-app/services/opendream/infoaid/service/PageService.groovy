@@ -75,7 +75,7 @@ class PageService {
         }
     }
 
-    def createPage(userId, name, lat, lng, location) {
+    def createPage(userId, name, lat, lng, location, household, population, about) {
 
         def page = new Page(name: name, lat: lat, lng: lng, location: location)
         if(!page.save()) {
