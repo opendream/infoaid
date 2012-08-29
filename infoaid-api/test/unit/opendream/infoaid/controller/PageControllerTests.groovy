@@ -90,8 +90,8 @@ class PageControllerTests {
         params.slug = 'slug'
         controller.member()
 
-        def expectResponse = """[{"id":1,"username":"nut","firstname":"firstname","lastname":"lastname","email":null,"telNo":null,"relation":"OWNER"},{"id":2,"username":"nut2","firstname":"firstname2","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"}]"""
-        assert expectResponse == response.text
+        assert response.json['members'].size() == 2
+        assert 'nut' == response.json['members'][0].username        
     }
 
     void testTopMember() {
@@ -115,9 +115,8 @@ class PageControllerTests {
 
         params.slug = 'slug'
         controller.topMember()
-        
-        def expectResponse = """[{"id":6,"username":"nut6","firstname":"firstname6","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"},{"id":5,"username":"nut5","firstname":"firstname5","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"},{"id":4,"username":"nut4","firstname":"firstname4","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"},{"id":3,"username":"nut3","firstname":"firstname3","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"},{"id":2,"username":"nut2","firstname":"firstname2","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"}]"""
-        assert expectResponse == response.text
+        assert response.json['topMembers'].size() == 5
+        assert 'nut6' == response.json['topMembers'][0].username
     }
 
     void testStatus() {
@@ -267,8 +266,10 @@ class PageControllerTests {
         controller.pageService = pageService.createMock()
 
         controller.summaryInfo()
-
-        def expectResponse = """{"pages":[{"name":"page","lat":"111","lng":"222","needs":[{"message":"item 10","quantity":10},{"message":"item 10","quantity":10}]},{"name":"page2","lat":"latPage2","lng":"lngPage2","needs":[]}],"totalPages":2}"""
+        
+        assert 2 == response.json['totalPages']
+        assert '111' == response.json['pages'][0].lat
+        def expectResponse = """{"pages":[{"name":"page","lat":"111","lng":"222","needs":[{"message":"item 10","quantity":10},{"message":"item 9","quantity":9}]},{"name":"page2","lat":"latPage2","lng":"lngPage2","needs":[]}],"totalPages":2}"""
         assert expectResponse == response.text
     }
 }

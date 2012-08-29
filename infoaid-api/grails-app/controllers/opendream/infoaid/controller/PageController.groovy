@@ -31,9 +31,9 @@ class PageController {
     }
 
     def member() {
+        def ret = [:]
         def results = pageService.getMembers(params.slug)
-        def members
-        members = results.collect{
+        ret.members = results.collect{
             [
                 id: it.user.id,
                 username: it.user.username,
@@ -44,7 +44,8 @@ class PageController {
                 relation: it.relation.toString()
             ]
         }
-        render members as JSON
+        ret.totalMembers = results.size()
+        render ret as JSON
     }
 
     def topMember() {
