@@ -8,7 +8,8 @@ class UrlMappings {
 		}
         "/$slug/info"(controller: "page", action: "info")
         "/$slug/members"(controller: "page", action: "member")  
-        "/$slug/status"(controller: "page", action: "status")
+        "/$slug/status"(controller: "page", action: "status") // default by recent posts
+        "/$slug/top-post"(controller: "page", action: "topPost")
         "/$slug/map"(controller: "page", action: "map")
         "/$slug/need"(controller: "page", action: "need")
         "/$slug/limitNeed/$limit"(controller: "page", action: "limitNeed")
