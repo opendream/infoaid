@@ -25,7 +25,7 @@ class PageControllerTests {
         Page.metaClass.generateSlug = {-> 'slug'}
         Page.metaClass.isDirty = {name -> false}
 
-        def page1 = new Page(name: "page", lat: "111", lng: "222", dateCreated: date, lastUpdated: date, slug: 'slug').save()
+        def page1 = new Page(name: "page", lat: "111", lng: "222", dateCreated: date, lastUpdated: date, slug: 'slug', about: 'this is page 1').save()
         def user1 = new Users(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
         def user2 = new Users(username: "nut2", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save()
         
@@ -142,5 +142,16 @@ class PageControllerTests {
         params.slug = 'abc'
         controller.info()
         assert response.text == '{}'
+    }
+
+    void testAbout() {
+        pageService.demand.getAbout(1..1) {slug -> Page.findBySlug(slug).about}
+        controller.pageService = pageService.createMock()
+
+        params.slug = 'slug'
+        controller.about()
+
+        def expectResponse = 'this is page 1'
+        assert expectResponse == response.text
     }
 }

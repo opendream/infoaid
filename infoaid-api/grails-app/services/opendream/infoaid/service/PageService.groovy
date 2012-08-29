@@ -86,24 +86,24 @@ class PageService {
 
     }
 
-    def joinPage(userId, pageId) {
+    def joinPage(userId, slug) {
 
         def user = Users.get(userId)
-        def page = Page.get(pageId)
+        def page = Page.findBySlug(slug)
 
         PageUser.joinPage(user, page)
     }
 
-    def leavePage(userId, pageId) {
+    def leavePage(userId, slug) {
         def user = Users.get(userId)
-        def page = Page.get(pageId)
+        def page = Page.findBySlug(slug)
 
         PageUser.leavePage(user, page)
     }
 
-    def inactivePage(userId, pageId) {
+    def inactivePage(userId, slug) {
         def user = Users.get(userId)
-        def page = Page.get(pageId)
+        def page = Page.findBySlug(slug)
 
         page.users.each {
             if((it.user == user) && (it.relation == PageUser.Relation.OWNER)) {
@@ -115,15 +115,15 @@ class PageService {
         }
     }
 
-    def getAllNeeds(pageId) {
-        def page = Page.get(pageId)
+    def getAllNeeds(slug) {
+        def page = Page.findBySlug(slug)
         def needs = Need.findAllByPageAndStatus(page, Post.Status.ACTIVE)
 
         [needs: needs, totalNeeds: needs.size()]
     }
 
-    def getLimitNeeds(pageId, max) {
-        def page = Page.get(pageId)
+    def getLimitNeeds(slug, max) {
+        def page = Page.findBySlug(slug)
         def needs = Need.createCriteria().list(max: max) {
             eq('status', Post.Status.ACTIVE)
             eq('page', page)
@@ -174,5 +174,9 @@ class PageService {
         }
     }
 
+    def getAbout(slug) {
+        def page = Page.findBySlug(slug)
+        page.about
+    }
 
 }

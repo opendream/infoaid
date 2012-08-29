@@ -80,4 +80,9 @@ class PageController {
     def needs() {
         def needs = pageService.getNeeds()
     }
+
+    def about() {
+        def result = pageService.getAbout(params.slug)
+        render result
+    }
 }

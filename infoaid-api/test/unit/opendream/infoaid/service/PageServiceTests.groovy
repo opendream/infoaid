@@ -30,7 +30,7 @@ class PageServiceTests {
         def date2 = new Date()-20
         
         def page = new Page(name: "page1", lat: "page1", lng: "page1", 
-            dateCreated: date, lastUpdated: date)
+            dateCreated: date, lastUpdated: date, about: 'this is page 1')
         def user1 = new Users(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
         def user2 = new Users(username: "nut2", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save()
         
@@ -81,11 +81,13 @@ class PageServiceTests {
 
         service.createPage(user.id, name1, lat1, lng1, location)
         service.createPage(user.id, name2, lat2, lng2, null)
-        service.createPage(user2.id, name2, lat2, lng2, null)
+        service.createPage(user2.id, name2, lat2, lng2, null) // error because page name is exists
 
         assert Page.count() == 4
 
         def page = Page.get(3)
+        page.slug = "tmpSlug"
+        page.save()
         assert page.location == location
 
         def page2 = Page.get(4)
@@ -96,14 +98,14 @@ class PageServiceTests {
         assert pageUser.user != user2
         assert pageUser.relation == PageUser.Relation.OWNER
 
-        service.joinPage(user2.id, page.id)
+        service.joinPage(user2.id, "tmpSlug")
         assert page.users.size() == 2
 
-        service.inactivePage(user.id, page.id)
+        service.inactivePage(user.id, "tmpSlug")
         def pageStatus = Page.get(page.id).status
         assert pageStatus == Page.Status.INACTIVE
 
-        service.leavePage(user2.id, page.id)
+        service.leavePage(user2.id, "tmpSlug")
         assert page.users.size() == 1
     }
 
@@ -143,7 +145,7 @@ class PageServiceTests {
         page.addToPosts(newNeed)
         page.addToPosts(newNeed2)
         page.save()
-        def results = service.getAllNeeds(page.id)
+        def results = service.getAllNeeds('0')
         assert results.totalNeeds == 2
 
         page = Page.get(1)
@@ -151,7 +153,7 @@ class PageServiceTests {
         page.addToPosts(newNeed2)
         page.save()
 
-        results = service.getAllNeeds(page.id)
+        results = service.getAllNeeds('0')
         assert results.totalNeeds == 1
     }
 
@@ -162,13 +164,11 @@ class PageServiceTests {
         def newNeed3 = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'need3', quantity: 10)
 
         def page = Page.get(1)
-        def page2 = Page.get(2)
         page.addToPosts(newNeed)
         page.addToPosts(newNeed2)
-        page2.addToPosts(newNeed3)
         page.save()
 
-        def results = service.getLimitNeeds(page.id, 2)
+        def results = service.getLimitNeeds('0', 2)
         assert results.needs.size() == 2
         assert results.totalNeeds == 2
     }
@@ -205,6 +205,9 @@ class PageServiceTests {
         assert page.posts.size() == 23
     }
 
-
+    void testGetAbout() {
+        def about = service.getAbout("0") // slug = 0
+        assert about == 'this is page 1'
+    }
 
 }
