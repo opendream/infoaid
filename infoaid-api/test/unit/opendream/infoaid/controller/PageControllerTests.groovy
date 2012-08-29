@@ -33,10 +33,12 @@ class PageControllerTests {
         new PageUser(page: page1, user: user2, relation: PageUser.Relation.MEMBER, conversation: 2).save()
         
         
-        def post = new Post(dateCreated: date, lastUpdated: date, lastActived: date, createdBy: 'nut', updatedBy: 'boy')
-        def post2 = new Post(dateCreated: date, lastUpdated: date, lastActived: date+1, createdBy: 'nut', updatedBy: 'boy')
+        def post = new Post(message: 'first post', dateCreated: date, lastUpdated: date, lastActived: date, createdBy: 'nut', updatedBy: 'boy')
+        def post2 = new Post(message: 'second post', dateCreated: date, lastUpdated: date, lastActived: date+1, createdBy: 'nut', updatedBy: 'boy')
         page1.addToPosts(post)
+        page1.save()
         page1.addToPosts(post2)
+        page1.save()
 
         def comment = new Comment(message: 'comment1')
         def comment2 = new Comment(message: 'comment2')
@@ -45,10 +47,12 @@ class PageControllerTests {
 
         def item = new Item(name: 'item').save()
         def newNeed = new Need(item: item, lastActived: date+2, createdBy: 'nut', updatedBy: 'nut', 
-            expiredDate: date, quantity: 10)
+            expiredDate: date, message: 'need1', quantity: 9)
+
         def newNeed2 = new Need(item: item,lastActived: date+3, createdBy: 'nut', updatedBy: 'nut', 
             expiredDate: date, quantity: 10)
         page1.addToPosts(newNeed)
+        page1.save()
         page1.addToPosts(newNeed2)
         page1.save()
 
@@ -118,15 +122,15 @@ class PageControllerTests {
 
     void testStatus() {
         pageService.demand.getPosts(1..1) {slug, offset, max -> 
-            Page.findBySlug('slug').users
             def posts = Post.createCriteria().list(max: max, sort: 'lastActived', order: 'desc', offset: offset) {
                 eq('status', Post.Status.ACTIVE)
                 page {
                     eq('slug', slug)
                 }
             }
-
-            [posts: posts, totalPosts: posts.totalCount]
+            posts
+            //[posts: posts, totalPosts: posts.totalCount]
+            //getData()
         }
         controller.pageService = pageService.createMock()
 
@@ -134,8 +138,10 @@ class PageControllerTests {
         params.offset = 0
         params.max = 10
         controller.status()
-        def expectResponse = """{"posts":[{"message":"item 10","dateCreated":"${date.format(dateFormat)}","comment":[]},{"message":"item 10","dateCreated":"${date.format(dateFormat)}","comment":[]},{"message":null,"dateCreated":"${date.format(dateFormat)}","comment":[]},{"message":null,"dateCreated":"${date.format(dateFormat)}","comment":["comment1","comment2"]}],"totalPosts":4}"""
-        assert expectResponse == response.text
+        //def expectResponse = """{"posts":[{"message":"item 10","dateCreated":"${date.format(dateFormat)}","comments":[]},{"message":"item 10","dateCreated":"${date.format(dateFormat)}","comments":[]},{"message":null,"dateCreated":"${date.format(dateFormat)}","comments":[]},{"message":null,"dateCreated":"${date.format(dateFormat)}","comments":["comment1","comment2"]}],"totalPosts":4}"""
+        //assert expectResponse == response.text
+        assert 4 == response.json.size()
+        assert 'item 10' == response.json[0].message
     }
 
     void testEmptyInfo() {
@@ -157,7 +163,7 @@ class PageControllerTests {
         params.slug = 'slug'
         controller.need()
 
-        def expectResponse = """{"needs":[{"message":"item 10","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":10,"item":"item"},{"message":"item 10","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":10,"item":"item"}],"totalNeeds":2}"""
+        def expectResponse = """{"needs":[{"message":"item 9","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":9,"item":"item"},{"message":"item 10","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":10,"item":"item"}],"totalNeeds":2}"""
         assert expectResponse == response.text
     }
 
@@ -212,5 +218,33 @@ class PageControllerTests {
         testPage = Page.findBySlug('slug')
         assert 3 == testPage.users.size()
         assert PageUser.Relation.MEMBER == testPage.users.last().relation
+    }    
+
+    void testTopPost() {
+        def postlist = Post.list()
+        4.times {
+            postlist[it].conversation = it
+            postlist[it].save()
+        }
+
+        pageService.demand.getTopPost(1..1) { slug, offset -> 
+            def posts = Post.createCriteria().list(max: 10, sort: 'conversation', order: 'desc', offset: offset) {
+                eq('status', Post.Status.ACTIVE)
+                page {
+                    eq('slug', slug)
+                }
+            }
+            posts            
+        }
+        controller.pageService = pageService.createMock()
+
+        params.slug = 'slug'
+        params.offset = 0
+        controller.topPost()
+        
+        assert 4 == response.json.size()
+        assert 'item 10' == response.json[0].message
+        assert 'item 9' == response.json[1].message
+        assert 'first post' == response.json[3].message
     }
 }
