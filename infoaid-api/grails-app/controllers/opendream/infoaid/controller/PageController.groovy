@@ -170,6 +170,16 @@ class PageController {
         }
     }
 
+    def postComment(){
+        def userId = params.userId
+        def postId = params.postId
+        def message = params.message
+
+        if(userId && postId && message) {
+            pageService.postComment(userId, postId, message)
+        }
+    }
+
     def summaryInfo() {
         def ret = [:]
         def pages = pageService.getSummaryInfo()

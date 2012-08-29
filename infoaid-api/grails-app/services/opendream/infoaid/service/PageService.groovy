@@ -62,9 +62,7 @@ class PageService {
         def user = Users.get(userId)
     	def commentDate = new Date()
     	def post = Post.get(postId)
-        def pageUser = PageUser.get(user.id, post.page.id)
-        pageUser.conversation++
-        pageUser.save()
+        
     	def comment = new Comment(message: message, dateCreated: commentDate)
     	post.addToComments(comment)
     	post.lastActived = commentDate
@@ -73,6 +71,10 @@ class PageService {
         if(!post.save(flush:true)) {
             return false
         }
+
+        def pageUser = PageUser.get(user.id, post.page.id)
+        pageUser.conversation++
+        pageUser.save()
     }
 
     def createPage(userId, name, lat, lng, location, household, population, about) {

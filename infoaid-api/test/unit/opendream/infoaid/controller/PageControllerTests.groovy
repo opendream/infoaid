@@ -289,6 +289,46 @@ class PageControllerTests {
         assert 1 == PageUser.count()
     }
 
+    void testPostComment() {
+        def thisPost = Post.get(1)
+        assert thisPost.conversation == 0
+        assert 2 == Comment.count()
+        pageService.demand.postComment(1..1) { userId, postId, message -> 
+            def user = Users.get(userId)
+            def commentDate = new Date()
+            def post = Post.get(postId)
+            
+            def comment = new Comment(message: message, dateCreated: commentDate)
+            post.addToComments(comment)
+            post.lastActived = commentDate
+            post.conversation++
+
+            if(!post.save(flush:true)) {
+                return false
+            }
+
+            def pageUser = PageUser.findByPageAndUser(post.page, user)
+            pageUser.conversation++
+            pageUser.save()
+            
+        }
+
+        controller.pageService = pageService.createMock()
+
+        params.message = 'this is my comment'
+        params.postId = 1
+        params.userId = 1
+        controller.postComment()
+        def user = Users.get(1)
+        def post = Post.get(1)
+        def pageUser = PageUser.findByPageAndUser(post.page, user)
+
+        thisPost = Post.get(1)
+        assert pageUser.conversation == 2
+        assert thisPost.conversation == 1
+        assert 3 == Comment.count()
+    }
+
     void testSummaryInfo() {
         def page2 = new Page(name: "page2", lat: "latPage2", lng: "lngPage2", dateCreated: date, lastUpdated: date, slug: 'slug2', about: 'this is page 2').save()
         pageService.demand.getSummaryInfo(1..1) { -> 
