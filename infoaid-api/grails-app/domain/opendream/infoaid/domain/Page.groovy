@@ -13,6 +13,7 @@ class Page {
     String slug = ""
     Integer household
     Integer population
+    String about
 
     static hasMany = [posts:Post]
     static transients = ['slugGeneratorService']
@@ -26,6 +27,7 @@ class Page {
         slug unique: true
         household nullable:true
         population nullable:true
+        about maxSize: 500, nullable: true
     }
 
     public enum Status {
