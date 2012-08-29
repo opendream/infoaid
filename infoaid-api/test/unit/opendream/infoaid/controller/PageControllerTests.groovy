@@ -22,49 +22,54 @@ class PageControllerTests {
     @Before
     void setup() {
         date = new Date()
-        Page.metaClass.generateSlug = {-> 'slug'}
+        Page.metaClass.generateSlug = {-> delegate.slug = delegate.name+"-slug"}
         Page.metaClass.isDirty = {name -> false}
+        pageService = mockFor(PageService)
 
-        def page1 = new Page(name: "page", lat: "111", lng: "222", dateCreated: date, lastUpdated: date, slug: 'slug', about: 'this is page 1').save()
         def user1 = new Users(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
         def user2 = new Users(username: "nut2", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save()
+
+        def page1 = new Page(name: "page", lat: "111", lng: "222", dateCreated: date, lastUpdated: date, slug: 'slug', about: 'this is page 1').save()
+        def secondPage = new Page(name: "second-page", lat: "11122", lng: "1234", dateCreated: date, lastUpdated: date, slug: 'slug', about: 'this is 2nd page').save()
+               
         
-        new PageUser(page: page1, user: user1, relation: PageUser.Relation.OWNER, conversation: 1).save()
-        new PageUser(page: page1, user: user2, relation: PageUser.Relation.MEMBER, conversation: 2).save()
-        
-        
-        def post = new Post(message: 'first post', dateCreated: date, lastUpdated: date, lastActived: date, createdBy: 'nut', updatedBy: 'boy')
-        def post2 = new Post(message: 'second post', dateCreated: date, lastUpdated: date, lastActived: date+1, createdBy: 'nut', updatedBy: 'boy')
-        page1.addToPosts(post)
+        def firstPost = new Post(message: 'first post', dateCreated: date, lastUpdated: date, lastActived: date, createdBy: 'nut', updatedBy: 'boy')
+        def secondPost = new Post(message: 'second post', dateCreated: date, lastUpdated: date, lastActived: date+1, createdBy: 'nut', updatedBy: 'boy')
+        page1.addToPosts(firstPost)
         page1.save()
-        page1.addToPosts(post2)
+        page1.addToPosts(secondPost)
         page1.save()
 
         def comment = new Comment(message: 'comment1')
         def comment2 = new Comment(message: 'comment2')
-        post.addToComments(comment)
-        post.addToComments(comment2)
+        firstPost.addToComments(comment)
+        firstPost.addToComments(comment2)
 
         def item = new Item(name: 'item').save()
-        def newNeed = new Need(item: item, lastActived: date+2, createdBy: 'nut', updatedBy: 'nut', 
+        def firstNeed = new Need(item: item, lastActived: date+2, createdBy: 'nut', updatedBy: 'nut', 
             expiredDate: date, message: 'need1', quantity: 9)
 
-        def newNeed2 = new Need(item: item,lastActived: date+3, createdBy: 'nut', updatedBy: 'nut', 
+        def secondNeed = new Need(item: item,lastActived: date+3, createdBy: 'nut', updatedBy: 'nut', 
             expiredDate: date, quantity: 10)
-        page1.addToPosts(newNeed)
+        page1.addToPosts(firstNeed)
         page1.save()
-        page1.addToPosts(newNeed2)
+        page1.addToPosts(secondNeed)
         page1.save()
 
-        pageService = mockFor(PageService)
+        def fifthPost = new Post(message: 'fifth post', dateCreated: date, lastUpdated: date, lastActived: date+1, createdBy: 'nut', updatedBy: 'boy')
+        secondPage.addToPosts(fifthPost)
+        secondPage.save()
 
+        new PageUser(page: page1, user: user1, relation: PageUser.Relation.OWNER, conversation: 1).save()
+        new PageUser(page: page1, user: user2, relation: PageUser.Relation.MEMBER, conversation: 2).save()
+        new PageUser(page: secondPage, user: user1, relation: PageUser.Relation.OWNER, conversation: 1).save()
     }
 
     void testInfo() {
         pageService.demand.getInfo(1..1) {slug -> Page.findBySlug(slug)}
         controller.pageService = pageService.createMock()
 
-        params.slug = 'slug'
+        params.slug = 'page-slug'
         
         def expectResponse = """{"id":1,"name":"page","lat":"111","lng":"222","dateCreated":"${date.format(dateFormat)}","lastUpdated":"${date.format(dateFormat)}"}"""
         controller.info()
@@ -76,7 +81,7 @@ class PageControllerTests {
         pageService.demand.getInfo(1..1) {slug -> Page.findBySlug(slug)}
         controller.pageService = pageService.createMock()
 
-        params.slug = 'slug'
+        params.slug = 'page-slug'
         controller.map()
         def expectResponse = """{"id":1,"name":"page","lat":"111","lng":"222"}"""
 
@@ -84,10 +89,10 @@ class PageControllerTests {
     }
 
     void testMember() {
-        pageService.demand.getMembers(1..1) {slug -> Page.findBySlug('slug').users}
+        pageService.demand.getMembers(1..1) {slug -> Page.findBySlug(slug).users}
         controller.pageService = pageService.createMock()
 
-        params.slug = 'slug'
+        params.slug = 'page-slug'
         controller.member()
 
         def expectResponse = """[{"id":1,"username":"nut","firstname":"firstname","lastname":"lastname","email":null,"telNo":null,"relation":"OWNER"},{"id":2,"username":"nut2","firstname":"firstname2","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"}]"""
@@ -113,7 +118,7 @@ class PageControllerTests {
         }
         controller.pageService = pageService.createMock()
 
-        params.slug = 'slug'
+        params.slug = 'page-slug'
         controller.topMember()
 
         def expectResponse = """[{"id":6,"username":"nut6","firstname":"firstname6","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"},{"id":5,"username":"nut5","firstname":"firstname5","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"},{"id":4,"username":"nut4","firstname":"firstname4","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"},{"id":3,"username":"nut3","firstname":"firstname3","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"},{"id":2,"username":"nut2","firstname":"firstname2","lastname":"lastname2","email":null,"telNo":null,"relation":"MEMBER"}]"""
@@ -134,7 +139,7 @@ class PageControllerTests {
         }
         controller.pageService = pageService.createMock()
 
-        params.slug = 'slug'
+        params.slug = 'page-slug'
         params.offset = 0
         params.max = 10
         controller.status()
@@ -160,7 +165,7 @@ class PageControllerTests {
 
         controller.pageService = pageService.createMock()
 
-        params.slug = 'slug'
+        params.slug = 'page-slug'
         controller.need()
 
         def expectResponse = """{"needs":[{"message":"item 9","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":9,"item":"item"},{"message":"item 10","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":10,"item":"item"}],"totalNeeds":2}"""
@@ -180,7 +185,7 @@ class PageControllerTests {
 
         controller.pageService = pageService.createMock()
 
-        params.slug = 'slug'
+        params.slug = 'page-slug'
         params.limit = 1
         controller.limitNeed()
 
@@ -192,7 +197,7 @@ class PageControllerTests {
         pageService.demand.getAbout(1..1) {slug -> Page.findBySlug(slug).about}
         controller.pageService = pageService.createMock()
 
-        params.slug = 'slug'
+        params.slug = 'page-slug'
         controller.about()
 
         def expectResponse = 'this is page 1'
@@ -201,7 +206,7 @@ class PageControllerTests {
 
     void testJoinUs() {
         def user3 = new Users(username: "nut3", password: "nut3", firstname: 'firstname3', lastname: 'lastname3').save(flush: true)
-        def testPage = Page.findBySlug('slug')
+        def testPage = Page.findBySlug('page-slug')
         assert 2 == testPage.users.size()
         pageService.demand.joinPage(1..1) {userId, slug -> 
             def user = Users.get(userId)
@@ -211,11 +216,11 @@ class PageControllerTests {
         controller.pageService = pageService.createMock()
 
         params.userId = 3
-        params.slug = 'slug'
+        params.slug = 'page-slug'
 
         controller.joinUs()
 
-        testPage = Page.findBySlug('slug')
+        testPage = Page.findBySlug('page-slug')
         assert 3 == testPage.users.size()
         assert PageUser.Relation.MEMBER == testPage.users.last().relation
     }    
@@ -238,7 +243,7 @@ class PageControllerTests {
         }
         controller.pageService = pageService.createMock()
 
-        params.slug = 'slug'
+        params.slug = 'page-slug'
         params.offset = 0
         controller.topPost()
         

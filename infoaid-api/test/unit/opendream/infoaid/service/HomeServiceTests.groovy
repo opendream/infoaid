@@ -51,24 +51,24 @@ class HomeServiceTests {
 
 
         // mock post (12 posts)
-        def firstPost = new Post(dateCreated: date, lastUpdated: date, 
-            lastActived: new Date(), createdBy: 'nut 1 post', updatedBy: 'boy')
+        def firstPost = new Post(message:'first Post', dateCreated: date, lastUpdated: date, 
+            lastActived: new Date(), createdBy: 'nut', updatedBy: 'boy', conversation:0)
         page1.addToPosts(firstPost)
         4.times {
-            page1.addToPosts(new Post(dateCreated: date, lastUpdated: date, 
-            lastActived: new Date(), createdBy: "nut $it", updatedBy: 'boy'))
+            page1.addToPosts(new Post(message:"first Post sub$it", dateCreated: date, lastUpdated: date, 
+            lastActived: new Date(), createdBy: "nut", updatedBy: 'boy', conversation:20+it))
         }
         page1.save()
 
         4.times {
-            page2.addToPosts(new Post(dateCreated: date, lastUpdated: date, 
-            lastActived: new Date(), createdBy: 'nut', updatedBy: 'boy'))
+            page2.addToPosts(new Post(message:"second Post$it", dateCreated: date, lastUpdated: date, 
+            lastActived: new Date(), createdBy: 'nut', updatedBy: 'boy', conversation:10+it))
         }
         page2.save()
 
         3.times {
-            page3.addToPosts(new Post(dateCreated: date, lastUpdated: date, 
-            lastActived: new Date(), createdBy: "nut3 $it", updatedBy: 'boy'))
+            page3.addToPosts(new Post(message:"third Post$it", dateCreated: date, lastUpdated: date, 
+            lastActived: new Date(), createdBy: "nut", updatedBy: 'boy', conversation:1+it))
         }
         page3.save()   
 
@@ -78,25 +78,38 @@ class HomeServiceTests {
         page1.save(fulsh:true)        
     }
 
-    void testGetFeedByLastActived() {
+    void testGetFeedByRecentPost() {
         assert 2 == Users.count()
         assert 3 == Page.count()
         assert 5 == PageUser.count()
         assert 12 == Post.count()
 
-        def userPostResults = service.getFeedByLastActived(user)
-        def followerPostResults = service.getFeedByLastActived(follower)
+        def userPostResults = service.getFeedByRecentPost(user)
+        def followerPostResults = service.getFeedByRecentPost(follower)
         assert 10 == userPostResults.size()
         assert 8 == followerPostResults.size()
 
-        assert "nut 1 post" == userPostResults[0].createdBy
-        assert "nut3 2" == userPostResults[1].createdBy
+        assert 'first Post' == userPostResults[0].message
+        assert "third Post2" == userPostResults[1].message
         assert "page1" == userPostResults[0].page.name
 
         // test with offset and max
-        userPostResults = service.getFeedByLastActived(user, 1, 9)
+        userPostResults = service.getFeedByRecentPost(user, 1, 9)
         assert 9 == userPostResults.size()
-        assert "nut3 2" == userPostResults[0].createdBy
+        assert "third Post2" == userPostResults[0].message
         assert "page3" == userPostResults[0].page.name
+    }
+
+    void testGetHomeFeedByTopPost() {
+        def userPostResults = service.getFeedByTopPost(user)
+        def followerPostResults = service.getFeedByTopPost(follower)
+        assert 10 == userPostResults.size()
+        assert 8 == followerPostResults.size()
+
+        assert "first Post sub3" == userPostResults[0].message
+        assert "first Post sub2" == userPostResults[1].message
+        assert "page1" == userPostResults[0].page.name
+        assert "page3" == userPostResults[9].page.name
+        assert "third Post1" == userPostResults[9].message
     }
 }
