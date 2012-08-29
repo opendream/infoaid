@@ -13,6 +13,7 @@ class UrlMappings {
         "/$slug/need"(controller: "page", action: "need")
         "/$slug/limitNeed/$limit"(controller: "page", action: "limitNeed")
         "/$slug/about"(controller: "page", action: "about")
+        "/$slug/join_us/$userId"(controller: "page", action: "joinUs")
 		"/"(view:"/index")
 		"500"(view:'/error')
 	}

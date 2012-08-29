@@ -98,7 +98,6 @@ class PageController {
         def ret = [:]
         def limit = params.limit ?: 5
         def results = pageService.getLimitNeeds(params.slug, limit)
-        println results.needs
         ret.needs = results.needs.collect {
             [
                 message: it.message,
@@ -116,5 +115,14 @@ class PageController {
     def about() {
         def result = pageService.getAbout(params.slug)
         render result
+    }
+
+    def joinUs() {
+        def userId = params.userId
+        if(!userId) {
+            return
+        } else {
+            pageService.joinPage(userId, params.slug)
+        }
     }
 }

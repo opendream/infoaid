@@ -179,7 +179,6 @@ class PageControllerTests {
         controller.limitNeed()
 
         def expectResponse = """{"needs":[{"message":"item 10","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":10,"item":"item"}],"totalNeeds":2}"""
-        println response.text
         assert expectResponse == response.text
     }
 
@@ -192,5 +191,26 @@ class PageControllerTests {
 
         def expectResponse = 'this is page 1'
         assert expectResponse == response.text
+    }
+
+    void testJoinUs() {
+        def user3 = new Users(username: "nut3", password: "nut3", firstname: 'firstname3', lastname: 'lastname3').save(flush: true)
+        def testPage = Page.findBySlug('slug')
+        assert 2 == testPage.users.size()
+        pageService.demand.joinPage(1..1) {userId, slug -> 
+            def user = Users.get(userId)
+            def page = Page.findBySlug(slug)
+            new PageUser(user: user, page: page, relation: PageUser.Relation.MEMBER).save(flush: true)
+        }
+        controller.pageService = pageService.createMock()
+
+        params.userId = 3
+        params.slug = 'slug'
+
+        controller.joinUs()
+
+        testPage = Page.findBySlug('slug')
+        assert 3 == testPage.users.size()
+        assert PageUser.Relation.MEMBER == testPage.users.last().relation
     }
 }
