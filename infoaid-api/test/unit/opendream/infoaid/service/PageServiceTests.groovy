@@ -226,4 +226,33 @@ class PageServiceTests {
 
         assert summaryInfo.size() == 2 
     }
+
+    void testUpdatePage() {
+        def data = [
+            name: 'newNamePage1',
+            lat: 'newLatPage1'
+        ]
+        service.updatePage("0", data)
+
+        def page = Page.findBySlug("0")
+        assert page.name == 'newNamePage1'
+        assert page.lng == 'page1'
+
+        data = [
+            name: 'newNewNamePage1',
+            version: -1
+        ]
+        service.updatePage("0", data) // version is less than
+
+        assert page.name == 'newNamePage1'
+    }
+
+    void testDisablePage() {
+        def page = Page.findBySlug("0")
+        assert page.status == Page.Status.ACTIVE
+        service.disablePage("0")
+
+        page = Page.findBySlug("0")
+        assert page.status == Page.Status.INACTIVE
+    }
 }

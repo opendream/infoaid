@@ -201,4 +201,15 @@ class PageController {
         
         render ret as JSON
     }
+
+    def updatePage() {
+        def slug = params.slug
+
+        pageService.updatePage(slug, params)
+    }
+
+    def disablePage() {
+        def slug = params.slug
+        pageService.disablePage(slug)
+    }
 }

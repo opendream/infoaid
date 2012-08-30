@@ -29,8 +29,8 @@ class PageControllerTests {
         def user1 = new Users(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
         def user2 = new Users(username: "nut2", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save()
 
-        def page1 = new Page(name: "page", lat: "111", lng: "222", dateCreated: date, lastUpdated: date, slug: 'slug', about: 'this is page 1').save()
-        def secondPage = new Page(name: "second-page", lat: "11122", lng: "1234", dateCreated: date, lastUpdated: date, slug: 'slug', about: 'this is 2nd page').save()
+        def page1 = new Page(name: "page", lat: "111", lng: "222", dateCreated: date, lastUpdated: date, about: 'this is page 1').save()
+        def secondPage = new Page(name: "second-page", lat: "11122", lng: "1234", dateCreated: date, lastUpdated: date, about: 'this is 2nd page').save()
                
         
         def firstPost = new Post(message: 'first post', dateCreated: date, lastUpdated: date, lastActived: date, createdBy: 'nut', updatedBy: 'boy')
@@ -358,5 +358,35 @@ class PageControllerTests {
         assert '111' == response.json['pages'][0].lat
         def expectResponse = """{"pages":[{"name":"page","lat":"111","lng":"222","needs":[{"message":"item 10","quantity":10},{"message":"item 9","quantity":9}]},{"name":"second-page","lat":"11122","lng":"1234","needs":[]},{"name":"page2","lat":"latPage2","lng":"lngPage2","needs":[]}],"totalPages":3}"""
         assert expectResponse == response.text
+    }
+
+    void testUpdatePage() {
+        def page = Page.findBySlug("page-slug")
+
+        params.slug = 'page-slug'
+        params.version = page.version
+        params.name = 'newNamePage1'
+        controller.updatePage()
+
+        
+
+        assert page.name == 'newNamePage1'
+
+        params.version = page.version - 1
+        params.name = 'newNewNamePage1'
+        controller.updatePage()
+        page = Page.findBySlug("page-slug")
+        assert page.name == 'newNamePage1'
+    }
+
+    void testDisablePage() {
+        def page = Page.findBySlug('page-slug')
+        assert page.status == Page.Status.ACTIVE
+        params.slug = 'page-slug'
+
+        controller.disablePage()
+        page = Page.findBySlug('page-slug')
+
+        assert page.status == Page.Status.INACTIVE
     }
 }

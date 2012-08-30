@@ -184,4 +184,34 @@ class PageService {
     def getSummaryInfo() {
         Page.findAllByStatus(Page.Status.ACTIVE)
     }
+
+    def updatePage(slug, data) {
+        def page = Page.findBySlug(slug)
+        if(!page) {
+            return
+        }
+        if(data.version) {
+            def version = data.version.toLong()
+            if (page.version > version) {
+                page.errors.rejectValue("version", "default.optimistic.locking.failure")
+                return "Another user has updated this Page while you were editing"
+            }
+        }
+        page.properties['name', 'lat', 'lng', 'location', 'status', 'household', 'population', 'about', 'version'] = data
+        if(!page.save()) {
+            return
+        }
+    }
+
+    def disablePage(slug) {
+        def page = Page.findBySlug(slug)
+        if(!page) {
+            return
+        }
+
+        page.status = Page.Status.INACTIVE
+        if(!page.save()) {
+            return
+        }
+    }
 }
