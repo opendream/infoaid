@@ -1,9 +1,9 @@
 package opendream.infoaid.controller
 import opendream.infoaid.domain.Item
 
-
-import org.junit.*
 import grails.test.mixin.*
+import org.junit.*
+
 
 @TestFor(ItemController)
 @Mock(Item)
@@ -11,15 +11,15 @@ class ItemControllerTests {
 
     @Before
     void setup() {
-        def item1 = new Item(name: 'item1Name').save()
+        def item1 = new Item(name: 'item1Name').save(flush: true)
     }
 
     void testList() {
 
         def model = controller.list()
 
-        assert model.itemInstanceList.size() == 0
-        assert model.itemInstanceTotal == 0
+        assert model.itemInstanceList.size() == 1
+        assert model.itemInstanceTotal == 1
     }
 
     void testCreateItem() {
@@ -39,7 +39,7 @@ class ItemControllerTests {
     }
 
     void testShow() {
-        def item = new Item(params)
+        def item = Item.get(1)
 
         params.id = item.id
 

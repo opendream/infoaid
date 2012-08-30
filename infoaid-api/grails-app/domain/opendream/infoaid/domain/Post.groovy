@@ -23,7 +23,7 @@ class Post {
 
     static constraints = {
         status inList: Status.list()
-        message blank: false, nullable: false       
+        message blank: false, nullable: false
     }
 
     static mapping = {

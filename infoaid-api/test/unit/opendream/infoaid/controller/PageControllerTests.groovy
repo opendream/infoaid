@@ -8,6 +8,7 @@ import opendream.infoaid.domain.PageUser
 import opendream.infoaid.service.PageService
 import opendream.infoaid.domain.Post
 import opendream.infoaid.domain.Item
+import opendream.infoaid.domain.Item.Status
 import opendream.infoaid.domain.Need
 import opendream.infoaid.domain.Comment
 /**
@@ -47,7 +48,7 @@ class PageControllerTests {
         firstPost.addToComments(comment)
         firstPost.addToComments(comment2)
 
-        def item = new Item(name: 'item').save()
+        def item = new Item(name: 'item', status: Status.ACTIVE).save()
         def firstNeed = new Need(item: item, lastActived: date+2, createdBy: 'nut', updatedBy: 'nut', 
             expiredDate: date, message: 'need1', quantity: 9)
 

@@ -9,6 +9,6 @@ class Comment {
     static belongsTo = [post:Post]
 
     static constraints = {
-        message blank: false
+        message blank: false, nullable: false
     }
 }

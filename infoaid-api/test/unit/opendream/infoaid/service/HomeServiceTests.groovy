@@ -56,23 +56,27 @@ class HomeServiceTests {
         def firstPost = new Post(message:'first Post', dateCreated: date, lastUpdated: date, 
             lastActived: new Date(), createdBy: 'nut', updatedBy: 'boy', conversation:0)
         page1.addToPosts(firstPost)
+        page1.save(flush: true)
         4.times {
             page1.addToPosts(new Post(message:"first Post sub$it", dateCreated: date, lastUpdated: date, 
             lastActived: new Date(), createdBy: "nut", updatedBy: 'boy', conversation:20+it))
+            page1.save(flush: true)
         }
-        page1.save()
+        
 
         4.times {
             page2.addToPosts(new Post(message:"second Post$it", dateCreated: date, lastUpdated: date, 
             lastActived: new Date(), createdBy: 'nut', updatedBy: 'boy', conversation:10+it))
+            page2.save(flush: true)
         }
-        page2.save()
+        
 
         3.times {
             page3.addToPosts(new Post(message:"third Post$it", dateCreated: date, lastUpdated: date, 
             lastActived: new Date(), createdBy: "nut", updatedBy: 'boy', conversation:1+it))
+            page3.save(flush: true)
         }
-        page3.save()   
+        
 
         // update firstPost
         firstPost.lastActived = new Date() 

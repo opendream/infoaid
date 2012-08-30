@@ -4,7 +4,7 @@ class Item {
     Date dateCreated
     Date lastUpdated
     String name
-    Status status
+    Status status = Status.ACTIVE
 
     static hasMany = [needs:Need]
 

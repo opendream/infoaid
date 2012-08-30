@@ -1,6 +1,6 @@
 package opendream.infoaid.controller
 
-import org.springframework.dao.DataIntegrityViolationException
+//import org.springframework.dao.DataIntegrityViolationException
 import opendream.infoaid.domain.Item
 import grails.converters.JSON
 
@@ -17,7 +17,7 @@ class ItemController {
         if(params.name) {
             def item = new Item(params)
             if (!item.save()) {
-                def errorMessage = "Can't save this item ${params.name}"
+                def errorMessage = [message: "Can't save this item ${params.name}"]
                 log.error(item.errors)
                 render errorMessage as JSON
             }
