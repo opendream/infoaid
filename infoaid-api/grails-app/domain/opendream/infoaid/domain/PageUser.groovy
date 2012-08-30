@@ -5,7 +5,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder
 class PageUser implements Serializable {
 
 	Page page
-	Users user
+	User user
 	Relation relation
     Integer conversation = 0
 
@@ -23,15 +23,15 @@ class PageUser implements Serializable {
     	}
     }
 
-    static PageUser createPage(Users user, Page page, Relation relation = Relation.OWNER, boolean flush = false) {
+    static PageUser createPage(User user, Page page, Relation relation = Relation.OWNER, boolean flush = false) {
         new PageUser(user: user, page: page, relation: relation).save(flush: flush, insert: true)
     }
 
-    static PageUser joinPage(Users user, Page page, Relation relation = Relation.MEMBER, boolean flush = false) {
+    static PageUser joinPage(User user, Page page, Relation relation = Relation.MEMBER, boolean flush = false) {
         new PageUser(user: user, page: page, relation: relation).save(flush: flush, insert: true)
     }
 
-    static PageUser leavePage(Users user, Page page) {
+    static PageUser leavePage(User user, Page page) {
         def pageUser = PageUser.findByPageAndUser(page, user)
         pageUser.delete()
     }

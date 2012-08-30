@@ -16,9 +16,9 @@ class PageServiceIntegrationTests {
         date = new Date()-19
         def date2 = new Date()-20
 
-         def user1 = new Users(username: "nut", password: "nut", firstname: 'firstname', 
+         def user1 = new User(username: "nut", password: "nut", firstname: 'firstname', 
             lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
-        def user2 = new Users(username: "nut2", password: "nut2", firstname: 'firstname2', 
+        def user2 = new User(username: "nut2", password: "nut2", firstname: 'firstname2', 
             lastname: 'lastname2').save()
         
         def page = new Page(name: "page1", lat: "page1", lng: "page1", 
@@ -63,7 +63,7 @@ class PageServiceIntegrationTests {
     @Test
     void testGetTopPost() {
         def post = Post.findByMessage('post1')
-        def user = Users.findByUsername("nut")
+        def user = User.findByUsername("nut")
         pageService.postComment(user.id, post.id, "my comment for top posts")
                 
         def page = Page.findByName("page1")
@@ -88,7 +88,7 @@ class PageServiceIntegrationTests {
         def page = Page.findByName("page1")
         def posts = pageService.getPosts(page.slug, 0, 10)
         def firstResultPost = posts[0]
-        def user = Users.findByUsername("nut")
+        def user = User.findByUsername("nut")
 
         pageService.postComment(user.id, firstResultPost.id, "my comment11")
         
@@ -112,7 +112,7 @@ class PageServiceIntegrationTests {
         def posts = pageService.getPosts(page.slug, 0, 10)
         def post = posts.getAt(0)
         def previousActived = post.lastActived
-        def user = Users.findByUsername("nut")
+        def user = User.findByUsername("nut")
         pageService.postComment(user.id, post.id, message)
 
         def updatedPost = Post.get(post.id)
@@ -128,7 +128,7 @@ class PageServiceIntegrationTests {
         def page = Page.findByName("page1")
         def posts = pageService.getPosts(page.slug, 0, 10)
         def firstResultPost = posts.getAt(0)
-        def user = Users.findByUsername("nut")
+        def user = User.findByUsername("nut")
 
         10.times {
             pageService.postComment(user.id, firstResultPost.id, "my comment"+it)
