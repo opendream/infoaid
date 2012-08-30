@@ -68,7 +68,7 @@ class ItemController {
         itemInstance.properties = params
 
         if (!itemInstance.save(flush: true)) {
-            def errorMessage = "Can't update this item ${itemInstance.name}"
+            def errorMessage = [message: "Can't update this item ${itemInstance.name}"]
             render errorMessage as JSON
             return
         }
@@ -77,14 +77,14 @@ class ItemController {
     def disableItem(long id) {
         def item = Item.get(id)
         if(!item) {
-            def errorMessage = "Item not found"
+            def errorMessage = [message: "Item not found"]
             render errorMessage as JSON
             return
         }
 
         item.status = Item.Status.INACTIVE
         if(!item.save()) {
-            def errorMessage = "Can't disable this item ${item.name}"
+            def errorMessage = [message: "Can't disable this item ${item.name}"]
             log.error(item.errors)
             render errorMessage as JSON
             return

@@ -10,9 +10,18 @@ class Location {
     String lng
     Date dateCreated
     Date lastUpdated
+    Status status = Status.ACTIVE
 
     static constraints = {
         lat nullable: true
         lng nullable: true
+    }
+
+    public enum Status {
+        ACTIVE,
+        INACTIVE
+        static list() {
+            [ACTIVE,INACTIVE]
+        }
     }
 }
