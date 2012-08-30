@@ -29,11 +29,11 @@ class HomeServiceTests {
 
         // mock user
         user = new User(username: 'admin', password: 'password', 
-            firstname: 'thawatchai', lastname: 'jong')
+            firstname: 'thawatchai', lastname: 'jong', dateCreated: date, lastUpdated: date)
         user.save(flush:true)
 
         follower = new User(username: 'follower', password: 'password', 
-            firstname: 'nut', lastname: 'tong')
+            firstname: 'nut', lastname: 'tong', dateCreated: date, lastUpdated: date)
         follower.save(flush:true)
 
         // mock page
