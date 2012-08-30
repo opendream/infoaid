@@ -89,3 +89,10 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 }
+
+// Added by the Spring Security Core plugin:
+grails.plugins.springsecurity.userLookup.userDomainClassName = 'opendream.infoaid.domain.User'
+grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'opendream.infoaid.domain.UserRole'
+grails.plugins.springsecurity.authority.className = 'opendream.infoaid.domain.Role'
+grails.plugins.springsecurity.requestMap.className = 'opendream.infoaid.domain.Requestmap'
+grails.plugins.springsecurity.securityConfigType = 'Requestmap'
