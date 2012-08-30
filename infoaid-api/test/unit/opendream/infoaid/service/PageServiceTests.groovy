@@ -8,7 +8,7 @@ import opendream.infoaid.domain.Post
 import opendream.infoaid.domain.Comment
 import opendream.infoaid.domain.Location
 import opendream.infoaid.domain.PageUser
-import opendream.infoaid.domain.Users
+import opendream.infoaid.domain.User
 import opendream.infoaid.domain.Need
 import opendream.infoaid.domain.MessagePost
 import opendream.infoaid.domain.Item
@@ -16,7 +16,7 @@ import opendream.infoaid.domain.Item
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 @TestFor(PageService)
-@Mock([Page, Post, Comment, Location, PageUser, Users, Need, MessagePost, Item])
+@Mock([Page, Post, Comment, Location, PageUser, User, Need, MessagePost, Item])
 class PageServiceTests {
     def date
     def number = 0
@@ -26,13 +26,15 @@ class PageServiceTests {
 
         Page.metaClass.generateSlug = {-> delegate.slug = ""+(number++)}
         Page.metaClass.isDirty = {name -> false}
+        User.metaClass.encodePassword = { -> 'password'}
+        User.metaClass.isDirty = {password -> false}
         date = new Date()-19
         def date2 = new Date()-20
         
         def page = new Page(name: "page1", lat: "page1", lng: "page1", 
             dateCreated: date, lastUpdated: date, about: 'this is page 1')
-        def user1 = new Users(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
-        def user2 = new Users(username: "nut2", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save()
+        def user1 = new User(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
+        def user2 = new User(username: "nut2", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save()
         
         def page2 = new Page(name: "page2", lat: "page2", lng: "page2", 
             dateCreated: date, lastUpdated: date)
@@ -65,9 +67,9 @@ class PageServiceTests {
 
 
     void testCreatePageJoinPageLeavePageInactivePage() {
-        def user = new Users(username: 'admin', password: 'password', firstname: 'thawatchai', lastname: 'jong')
+        def user = new User(username: 'admin', password: 'password', firstname: 'thawatchai', lastname: 'jong')
         user.save()
-        def user2 = new Users(username: 'admin2', password: 'password2', firstname: 'jong', lastname: 'thawatchai')
+        def user2 = new User(username: 'admin2', password: 'password2', firstname: 'jong', lastname: 'thawatchai')
         user2.save()
 
         def name1 = 'testCreatePage1'
@@ -116,12 +118,12 @@ class PageServiceTests {
 
     void testGetTopMembers() {
         def page = Page.get(1)
-        def user1 = Users.get(1)
-        def user2 = Users.get(2)
-        def user3 = new Users(username: "nut3", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save(flush: true)
-        def user4 = new Users(username: "nut4", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save(flush: true)
-        def user5 = new Users(username: "nut5", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save(flush: true)
-        def user6 = new Users(username: "nut6", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save(flush: true)
+        def user1 = User.get(1)
+        def user2 = User.get(2)
+        def user3 = new User(username: "nut3", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save(flush: true)
+        def user4 = new User(username: "nut4", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save(flush: true)
+        def user5 = new User(username: "nut5", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save(flush: true)
+        def user6 = new User(username: "nut6", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save(flush: true)
 
         new PageUser(page: page, user: user1, relation: PageUser.Relation.MEMBER, conversation: 1).save(flush: true)
         new PageUser(page: page, user: user2, relation: PageUser.Relation.MEMBER, conversation: 2).save(flush: true)
@@ -176,7 +178,7 @@ class PageServiceTests {
     void testCreateNeed() {
         def page = Page.get(1)
         def message = 'hello new need'
-        def user1 = Users.get(1)
+        def user1 = User.get(1)
         assert page.posts.size() == 22
         def pageUser = new PageUser(page: page, user: user1, relation: PageUser.Relation.MEMBER).save(flush: true)
 
@@ -192,7 +194,7 @@ class PageServiceTests {
     void testCreateMessagePost() {
         def page = Page.get(1)
         def message = 'hello new message'
-        def user1 = Users.get(1)
+        def user1 = User.get(1)
         assert page.posts.size() == 22
 
         def pageUser = new PageUser(page: page, user: user1, relation: PageUser.Relation.MEMBER).save(flush: true)

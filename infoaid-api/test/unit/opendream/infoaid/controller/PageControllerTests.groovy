@@ -3,7 +3,7 @@ package opendream.infoaid.controller
 import grails.test.mixin.*
 import org.junit.*
 import opendream.infoaid.domain.Page
-import opendream.infoaid.domain.Users
+import opendream.infoaid.domain.User
 import opendream.infoaid.domain.PageUser
 import opendream.infoaid.service.PageService
 import opendream.infoaid.domain.Post
@@ -14,7 +14,7 @@ import opendream.infoaid.domain.Comment
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(PageController)
-@Mock([Page, PageService, Users, PageUser, Post, Item, Need, Comment])
+@Mock([Page, PageService, User, PageUser, Post, Item, Need, Comment])
 class PageControllerTests {
     def pageService
     def date
@@ -24,10 +24,12 @@ class PageControllerTests {
         date = new Date()
         Page.metaClass.generateSlug = {-> delegate.slug = delegate.name+"-slug"}
         Page.metaClass.isDirty = {name -> false}
+        User.metaClass.encodePassword = { -> 'password'}
+        User.metaClass.isDirty = {password -> false}
         pageService = mockFor(PageService)
 
-        def user1 = new Users(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
-        def user2 = new Users(username: "nut2", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save()
+        def user1 = new User(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
+        def user2 = new User(username: "nut2", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save()
 
         def page1 = new Page(name: "page", lat: "111", lng: "222", dateCreated: date, lastUpdated: date, about: 'this is page 1').save()
         def secondPage = new Page(name: "second-page", lat: "11122", lng: "1234", dateCreated: date, lastUpdated: date, about: 'this is 2nd page').save()
@@ -101,10 +103,10 @@ class PageControllerTests {
 
     void testTopMember() {
         def page1 = Page.get(1)
-        def user3 = new Users(username: "nut3", password: "nut3", firstname: 'firstname3', lastname: 'lastname2').save()
-        def user4 = new Users(username: "nut4", password: "nut4", firstname: 'firstname4', lastname: 'lastname2').save()
-        def user5 = new Users(username: "nut5", password: "nut5", firstname: 'firstname5', lastname: 'lastname2').save()
-        def user6 = new Users(username: "nut6", password: "nut6", firstname: 'firstname6', lastname: 'lastname2').save()
+        def user3 = new User(username: "nut3", password: "nut3", firstname: 'firstname3', lastname: 'lastname2').save()
+        def user4 = new User(username: "nut4", password: "nut4", firstname: 'firstname4', lastname: 'lastname2').save()
+        def user5 = new User(username: "nut5", password: "nut5", firstname: 'firstname5', lastname: 'lastname2').save()
+        def user6 = new User(username: "nut6", password: "nut6", firstname: 'firstname6', lastname: 'lastname2').save()
         new PageUser(page: page1, user: user3, relation: PageUser.Relation.MEMBER, conversation: 3).save()
         new PageUser(page: page1, user: user4, relation: PageUser.Relation.MEMBER, conversation: 4).save()
         new PageUser(page: page1, user: user5, relation: PageUser.Relation.MEMBER, conversation: 5).save()
@@ -204,11 +206,11 @@ class PageControllerTests {
     }
 
     void testJoinUs() {
-        def user3 = new Users(username: "nut3", password: "nut3", firstname: 'firstname3', lastname: 'lastname3').save(flush: true)
+        def user3 = new User(username: "nut3", password: "nut3", firstname: 'firstname3', lastname: 'lastname3').save(flush: true)
         def testPage = Page.findBySlug('page-slug')
         assert 2 == testPage.users.size()
         pageService.demand.joinPage(1..1) {userId, slug -> 
-            def user = Users.get(userId)
+            def user = User.get(userId)
             def page = Page.findBySlug(slug)
             new PageUser(user: user, page: page, relation: PageUser.Relation.MEMBER).save(flush: true)
         }
@@ -257,7 +259,7 @@ class PageControllerTests {
 
         pageService.demand.createPage(1..1) { userId, name, lat, lng, location, household, population, about -> 
             def page = new Page(name: name, lat: lat, lng: lng, location: location).save()
-            def user = Users.get(userId)
+            def user = User.get(userId)
             new PageUser(user: user, page: page, relation: PageUser.Relation.OWNER).save()
         }
         controller.pageService = pageService.createMock()
@@ -280,7 +282,7 @@ class PageControllerTests {
         assert 3 == PageUser.count()
 
         pageService.demand.leavePage(1..1) { userId, slug -> 
-            def user = Users.get(userId)
+            def user = User.get(userId)
             def page = Page.findBySlug(slug)
             def pageUser = PageUser.findByPageAndUser(page, user)
             pageUser.delete()
@@ -299,7 +301,7 @@ class PageControllerTests {
         assert thisPost.conversation == 0
         assert 2 == Comment.count()
         pageService.demand.postComment(1..1) { userId, postId, message -> 
-            def user = Users.get(userId)
+            def user = User.get(userId)
             def commentDate = new Date()
             def post = Post.get(postId)
             
@@ -324,7 +326,7 @@ class PageControllerTests {
         params.postId = 1
         params.userId = 1
         controller.postComment()
-        def user = Users.get(1)
+        def user = User.get(1)
         def post = Post.get(1)
         def pageUser = PageUser.findByPageAndUser(post.page, user)
 
