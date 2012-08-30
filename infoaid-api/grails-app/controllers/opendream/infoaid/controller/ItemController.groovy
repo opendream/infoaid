@@ -10,7 +10,17 @@ class ItemController {
 
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [itemInstanceList: Item.list(params), itemInstanceTotal: Item.count()]
+        def items = Item.list(params)
+        def ret = [:]
+        ret.items = items.collect {
+            [
+                name: it.name,
+                status: it.status.toString(),
+                dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm')
+            ]
+        }
+        ret.totalItems = items.size()
+        render ret as JSON
     }
 
     def createItem() {
@@ -20,19 +30,24 @@ class ItemController {
                 def errorMessage = [message: "Can't save this item ${params.name}"]
                 log.error(item.errors)
                 render errorMessage as JSON
+                return
             }
         }
     }
 
     def show(Long id) {
-        def itemInstance = Item.get(id)
-        if (!itemInstance) {
-            def errorMessage = "Item not Found"
+        def item = Item.get(id)
+        if (!item) {
+            def errorMessage = [message: "Item not Found"]
             render errorMessage as JSON
             return
         }
 
-        [itemInstance: itemInstance]
+        def ret = [:]
+        ret.name = item.name
+        ret.status = item.status.toString()
+        ret.dateCreated = item.dateCreated.format('yyyy-MM-dd HH:mm')
+        render ret as JSON
     }
 
     def update(Long id, Long version) {        

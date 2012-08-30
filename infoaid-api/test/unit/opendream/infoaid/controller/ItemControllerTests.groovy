@@ -12,30 +12,30 @@ class ItemControllerTests {
     @Before
     void setup() {
         def item1 = new Item(name: 'item1Name').save(flush: true)
+        def item2 = new Item(name: 'item2Name').save(flush: true)
     }
 
     void testList() {
 
         def model = controller.list()
-
-        assert model.itemInstanceList.size() == 1
-        assert model.itemInstanceTotal == 1
+        assert response.json['totalItems'] == 2
+        assert response.json['items'][0].name == 'item1Name'
     }
 
     void testCreateItem() {
-        assert Item.count() == 1
+        assert Item.count() == 2
 
         params.name = 'item1Name'
         controller.createItem()
-        assert Item.count() == 1
+        assert Item.count() == 2
 
         params.name = ''
         controller.createItem()
-        assert Item.count() == 1
-
-        params.name = 'item2Name'
-        controller.createItem()
         assert Item.count() == 2
+
+        params.name = 'item3Name'
+        controller.createItem()
+        assert Item.count() == 3
     }
 
     void testShow() {
@@ -45,7 +45,8 @@ class ItemControllerTests {
 
         def model = controller.show()
 
-        assert model.itemInstance == item
+        assert 'item1Name' == response.json['name']
+
     }
 
     void testUpdate() {
