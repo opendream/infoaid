@@ -13,13 +13,19 @@ hibernate {
 environments {
     development {
         dataSource {
-            dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
+            /*dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
             url="jdbc:mysql://localhost:3306/infoaid?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8"
             pooled = true
             driverClassName = "com.mysql.jdbc.Driver"
             dialect = "org.hibernate.dialect.MySQLInnoDBDialect"
             username = "root"
-            password = "password"            
+            password = "password"*/ 
+            driverClassName = "org.postgresql.Driver"
+            dialect = net.sf.hibernate.dialect.PostgreSQLDialect
+            dbCreate = "update"
+            url="jdbc:postgresql://localhost:5432/infoaid"
+            username = "infoaid"
+            password = "infoaid"           
         }
     }
     test {

@@ -5,7 +5,7 @@ import opendream.infoaid.domain.Page
 import opendream.infoaid.domain.PageUser
 import opendream.infoaid.domain.PageUser.Relation
 import opendream.infoaid.domain.Post
-import opendream.infoaid.domain.Users
+import opendream.infoaid.domain.User
 import opendream.infoaid.service.*
 
 import grails.test.mixin.*
@@ -15,7 +15,7 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(HomeController)
-@Mock([Page, Post, PageUser, Users])
+@Mock([Page, Post, PageUser, User])
 class HomeControllerTests {
     def user
     def follower
@@ -26,14 +26,16 @@ class HomeControllerTests {
         homeService = mockFor(HomeService)
         Page.metaClass.generateSlug = {-> 'slug'}
         Page.metaClass.isDirty = {name -> false}
+        User.metaClass.encodePassword = { -> 'password'}
+        User.metaClass.isDirty = {password -> false}
         def date = new Date() - 1
 
         // mock user
-        user = new Users(username: 'admin', password: 'password', 
+        user = new User(username: 'admin', password: 'password', 
             firstname: 'thawatchai', lastname: 'jong')
         user.save(flush:true)
 
-        follower = new Users(username: 'follower', password: 'password', 
+        follower = new User(username: 'follower', password: 'password', 
             firstname: 'nut', lastname: 'tong')
         follower.save(flush:true)
 

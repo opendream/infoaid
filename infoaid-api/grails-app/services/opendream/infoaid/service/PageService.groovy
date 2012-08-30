@@ -4,7 +4,7 @@ import opendream.infoaid.domain.Page
 import opendream.infoaid.domain.Post
 import opendream.infoaid.domain.Comment
 import opendream.infoaid.domain.PageUser
-import opendream.infoaid.domain.Users
+import opendream.infoaid.domain.User
 import opendream.infoaid.domain.Need
 import opendream.infoaid.domain.MessagePost
 
@@ -59,7 +59,7 @@ class PageService {
 
     def postComment(userId, postId, message) {
 
-        def user = Users.get(userId)
+        def user = User.get(userId)
     	def commentDate = new Date()
     	def post = Post.get(postId)
         
@@ -83,28 +83,28 @@ class PageService {
         if(!page.save()) {
             return false
         }
-        def user = Users.get(userId)
+        def user = User.get(userId)
         PageUser.createPage(user, page)
 
     }
 
     def joinPage(userId, slug) {
 
-        def user = Users.get(userId)
+        def user = User.get(userId)
         def page = Page.findBySlug(slug)
 
         PageUser.joinPage(user, page)
     }
 
     def leavePage(userId, slug) {
-        def user = Users.get(userId)
+        def user = User.get(userId)
         def page = Page.findBySlug(slug)
 
         PageUser.leavePage(user, page)
     }
 
     def inactivePage(userId, slug) {
-        def user = Users.get(userId)
+        def user = User.get(userId)
         def page = Page.findBySlug(slug)
 
         page.users.each {
@@ -141,15 +141,15 @@ class PageService {
 
     def getTopMembers(slug) {
         def page = Page.findBySlug(slug)
-        def pageUsers = PageUser.createCriteria().list(sort: 'conversation', order: 'desc', max: 5) {
+        def pageUser = PageUser.createCriteria().list(sort: 'conversation', order: 'desc', max: 5) {
             eq('page', page)
         }
 
-        pageUsers.user
+        pageUser.user
     }
 
     def createNeed(userId, slug, message) {
-        def user = Users.get(userId)
+        def user = User.get(userId)
         def page = Page.findBySlug(slug)
         def pageUser = PageUser.findByUserAndPage(user, page)
         pageUser.conversation++
@@ -163,7 +163,7 @@ class PageService {
     }
 
     def createMessagePost(userId, slug, message) {
-        def user = Users.get(userId)
+        def user = User.get(userId)
         def page = Page.findBySlug(slug)
         def pageUser = PageUser.findByUserAndPage(user, page)
         pageUser.conversation++
