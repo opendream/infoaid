@@ -18,4 +18,15 @@ class UserService {
         def user = User.get(userId)
         [username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email]
     }
+
+    def updateBasicInfo(userparams) {
+        def user = User.get(userparams.id)
+        user.properties['username', 'firstname', 'lastname', 'email'] = userparams
+        if(!user.save()) {
+            log.error user.errors
+            throw RuntimeException("${user.errors}")
+        }
+        user
+    }
+
 }
