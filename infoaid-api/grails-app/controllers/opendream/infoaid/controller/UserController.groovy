@@ -14,4 +14,9 @@ class UserController {
             render resp as JSON
         }
     }
+
+    def showBasicInfo() {
+        def result = userService.getBasicInfo(params.userId)
+        render result as JSON
+    }
 }
