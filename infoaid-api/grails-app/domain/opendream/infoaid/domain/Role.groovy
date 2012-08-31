@@ -3,6 +3,7 @@ package opendream.infoaid.domain
 class Role {
 
 	String authority
+	Status status = Status.ACTIVE
 
 	static mapping = {
 		cache true
@@ -11,4 +12,12 @@ class Role {
 	static constraints = {
 		authority blank: false, unique: true
 	}
+
+	public enum Status {
+        ACTIVE,
+        INACTIVE
+        static list() {
+            [ACTIVE,INACTIVE]
+        }
+    }
 }
