@@ -17,7 +17,7 @@ class UserService {
 
     def getBasicInfo(userId) {
         def user = User.get(userId)
-        [username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email]
+        [username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, telNo:user.telNo]
     }
 
     def updateBasicInfo(updateparmas) {
@@ -27,7 +27,7 @@ class UserService {
             log.error user.errors
             throw RuntimeException("${user.errors}")
         }
-        user
+        [username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, telNo:user.telNo]
     }
 
     def updatePassword(updateparmas) {
