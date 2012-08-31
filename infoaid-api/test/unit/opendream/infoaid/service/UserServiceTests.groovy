@@ -49,14 +49,15 @@ class UserServiceTests {
 
     void testUpdateBasicInfo() {
         def user = User.findByUsername('admin')
-        def updateUser = [id:user.id, username: 'admin', 
-            firstname: 'thawatchai', lastname: 'jong', email:'boyone@opendream.co.th']
+        def updateUser = [id:user.id, username: 'admin', firstname: 'thawatchai', 
+        lastname: 'jong', email:'boyone@opendream.co.th', telNo:'12345678']
         
         def result = service.updateBasicInfo(updateUser)
         assert 'admin' == result.username
         assert 'thawatchai' == result.firstname
         assert 'jong' == result.lastname
-        assert 'boyone@opendream.co.th' == result.email        
+        assert 'boyone@opendream.co.th' == result.email 
+        assert '12345678' == result.telNo      
     }
 
     void testUpdateBasicInfoFail() {
@@ -67,4 +68,6 @@ class UserServiceTests {
             service.updateBasicInfo(updateUser)
         }
     }
+
+
 }
