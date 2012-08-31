@@ -110,4 +110,17 @@ class UserControllerTests {
         assert 'can not update user info' == response.json.message
         assert 'admin' == response.json.user.username
     }
+
+    void testUpdatePassword() {
+        userService.demand.updatePassword(1..1) { updateparams -> [message: "password is updated"]}
+        controller.userService = userService.createMock()
+
+        params.id = user.id
+        params.oldpassword = 'password'
+        params.newPassword = 'new-password'
+        params.comfirmedPassword = 'new-password'
+        controller.updatePassword()
+        assert 1 == User.count()
+        assert 'password is updated' == response.json.message
+    }
 }
