@@ -11,34 +11,37 @@ import org.junit.*
 @TestFor(UserService)
 @Mock([User])
 class UserServiceTests {
+    def user
+
     @Before
     void setup() {
-        User.metaClass.encodePassword = { -> 'password'}
-        User.metaClass.isDirty = {password -> false}
+        User.metaClass.encodePassword = { -> delegate.password = delegate.password+'password'}
+        User.metaClass.isDirty = {password -> true}
 
-        new User(username: 'admin', password: 'password', 
+        user = new User(username: 'admin', password: 'password', 
             firstname: 'thawatchai', lastname: 'jong', dateCreated: new Date(), 
             lastUpdated: new Date()).save(flush:true)
+
+        service.springSecurityService = [encodePassword: {pwd -> pwd?pwd+'password':''}]
     }
 
     void testCreate() {
-        def user = [username: "nut", password: "nut", firstname: 'firstname', 
+        def userparams = [username: "nut", password: "nut", firstname: 'firstname', 
         lastname: 'lastname', dateCreated: new Date(), lastUpdated: new Date()]
-        service.create(user)
+        service.create(userparams)
         assert 2 == User.count()
         assert 'nut' == User.findByUsername('nut').username
     }
 
     void testCreateFail() {
-        def user = [username: "", password: "nut", firstname: 'firstname', 
+        def userparams = [username: "", password: "nut", firstname: 'firstname', 
         lastname: 'lastname', dateCreated: new Date(), lastUpdated: new Date()]
         shouldFail(RuntimeException) {
-            service.create(user)
+            service.create(userparams)
         }
     }
 
     void testGetBasicInfo() {
-        def user = User.findByUsername('admin')
         def result = service.getBasicInfo(user.id)
 
         assert 'admin' == result.username
@@ -48,11 +51,10 @@ class UserServiceTests {
     }
 
     void testUpdateBasicInfo() {
-        def user = User.findByUsername('admin')
-        def updateUser = [id:user.id, username: 'admin', firstname: 'thawatchai', 
+        def updateparmas = [id:user.id, username: 'admin', firstname: 'thawatchai', 
         lastname: 'jong', email:'boyone@opendream.co.th', telNo:'12345678']
         
-        def result = service.updateBasicInfo(updateUser)
+        def result = service.updateBasicInfo(updateparmas)
         assert 'admin' == result.username
         assert 'thawatchai' == result.firstname
         assert 'jong' == result.lastname
@@ -61,13 +63,42 @@ class UserServiceTests {
     }
 
     void testUpdateBasicInfoFail() {
-        def user = User.findByUsername('admin')
-        def updateUser = [id:user.id, username: '', 
+        def updateparmas = [id:user.id, username: '', 
             firstname: 'thawatchai', lastname: 'jong', email:'boyone@opendream.co.th']
         shouldFail(RuntimeException) {
-            service.updateBasicInfo(updateUser)
+            service.updateBasicInfo(updateparmas)
         }
     }
 
+    void testUpdatePassword() {        
+        def updateparmas = [id:user.id, oldpassword: 'password', 
+            newPassword: 'new-password', comfirmedPassword: 'new-password']
+        def result = service.updatePassword(updateparmas)        
+        assert "password is updated" == result.message
 
+        def updateuser = User.get(user.id)
+        assert "new-passwordpassword" == updateuser.password
+    }
+
+    void testUpdatePasswordWithWrongOldPassword() {
+        def updateparmas = [id:user.id, oldpassword: 'passwordx', 
+            newPassword: 'new-password', comfirmedPassword: 'new-password']
+        def result = service.updatePassword(updateparmas)        
+        assert "wrong password" == result.message
+    }
+
+    void testUpdatePasswordWithWrongNewPassword() {
+        def updateparmas = [id:user.id, oldpassword: 'password', 
+            newPassword: 'new-password', comfirmedPassword: 'new-passwordx']
+        def result = service.updatePassword(updateparmas)        
+        assert "password confirmation miss match" == result.message
+    }
+
+    void testUpdatePasswordFail() {
+        def updateparmas = [id:user.id, oldpassword: 'password', 
+            newPassword: '', comfirmedPassword: '']
+        shouldFail(RuntimeException) {    
+            service.updatePassword(updateparmas)
+        }
+    }
 }
