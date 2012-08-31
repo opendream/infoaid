@@ -68,11 +68,32 @@ class UserControllerTests {
                                                             lastname:user.lastname, email:user.email] } 
         controller.userService = userService.createMock()
 
-        params.userId = user.id
+        params.id = user.id
         controller.showBasicInfo()
 
         assert 1 == User.count()
         assert 'admin' == response.json.username
         assert 'jong' == response.json.lastname
     }
+
+    void testUpdateBasicInfo() {
+        userService.demand.updateBasicInfo(1..1) { updateparams -> [username:updateparams.username, firstname:updateparams.firstname, 
+                                                    lastname:updateparams.lastname, email:updateparams.email, telNo:updateparams.telNo]}
+        controller.userService = userService.createMock()
+
+        params.id = user.id
+        params.username = 'admin'
+        params.firstname = 'thawatchai'
+        params.lastname = 'jong' 
+        params.email = 'boyone@opendream.co.th'
+        params.telNo = '12345678'
+        controller.updateBasicInfo() 
+
+        assert 1 == User.count()
+        assert 'admin' == response.json.username
+        assert 'jong' == response.json.lastname
+        assert 'boyone@opendream.co.th' == response.json.email
+    }
+
+    
 }
