@@ -1,5 +1,8 @@
 package opendream.infoaid.controller
 
+import opendream.infoaid.domain.Page
+import opendream.infoaid.domain.PageUser
+import opendream.infoaid.domain.PageUser.Relation
 import opendream.infoaid.domain.User
 import opendream.infoaid.service.UserService
 
@@ -10,7 +13,7 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(UserController)
-@Mock([User])
+@Mock([User, Page, PageUser])
 class UserControllerTests {
     def user
     def userService
@@ -19,10 +22,24 @@ class UserControllerTests {
     void setup() {
         User.metaClass.encodePassword = { -> delegate.password = delegate.password+'password'}
         User.metaClass.isDirty = {password -> true}
+        Page.metaClass.generateSlug = {-> 'slug'}
 
         user = new User(username: 'admin', password: 'password', 
             firstname: 'thawatchai', lastname: 'jong', dateCreated: new Date(), 
             lastUpdated: new Date()).save(flush:true)
+
+        // mock page
+        def date = new Date()
+        def page1 = new Page(name: "page1", lat: "page1", 
+            lng: "page1", dateCreated: date, lastUpdated: date).save()
+        def page2 = new Page(name: "page2", lat: "page2", 
+            lng: "page2", dateCreated: date, lastUpdated: date).save()
+        def page3 = new Page(name: "page3", lat: "page3", 
+            lng: "page3", dateCreated: date, lastUpdated: date).save()
+
+        PageUser.createPage(user, page1, Relation.OWNER)
+        PageUser.createPage(user, page2, Relation.OWNER)
+        PageUser.createPage(user, page3, Relation.MEMBER)
         
         userService = mockFor(UserService)
         //controller.userService = [create: { mockparams -> def newuser = new User()
@@ -162,5 +179,13 @@ class UserControllerTests {
         assert 'can not update password' == response.json.message
         assert 'password' == response.json.user.oldpassword
         assert user.id == response.json.user.id
+    }
+
+    void testGetPages() {
+        params.id = user.id
+        controller.getPages()
+
+        assert 3 == response.json.size()
+        assert 'page1' == response.json[0].name
     }
 }
