@@ -6,18 +6,18 @@ class UrlMappings {
 				// apply constraints here
 			}
 		}
-        "/$slug/about"(controller: "page", action: "about")
-        "/$slug/info"(controller: "page", action: "info")
-        "/$slug/join_us/$userId"(controller: "page", action: "joinUs")
-        "/$slug/leavePage"(controller: "page", action: "leavePage")
-        "/$slug/limitNeed/$limit"(controller: "page", action: "limitNeed")
-        "/$slug/map"(controller: "page", action: "map")
-        "/$slug/members"(controller: "page", action: "member")  
-        "/$slug/need"(controller: "page", action: "need")
-        "/$slug/postComment"(controller: "page", action: "postComment")
-        "/$slug/status"(controller: "page", action: "status") // default by recent posts
-        "/$slug/topMembers"(controller: "page", action: "topMember")
-        "/createPage"(controller: "page", action: "createPage")
+        "page/$slug/about"(controller: "page", action: "about")
+        "page/$slug/info"(controller: "page", action: "info")
+        "page/$slug/join_us/$userId"(controller: "page", action: "joinUs")
+        "page/$slug/leavePage"(controller: "page", action: "leavePage")
+        "page/$slug/limitNeed/$limit"(controller: "page", action: "limitNeed")
+        "page/$slug/map"(controller: "page", action: "map")
+        "page/$slug/members"(controller: "page", action: "member")  
+        "page/$slug/need"(controller: "page", action: "need")
+        "page/$slug/postComment"(controller: "page", action: "postComment")
+        "page/$slug/status"(controller: "page", action: "status") // default by recent posts
+        "page/$slug/topMembers"(controller: "page", action: "topMember")
+        "page/createPage"(controller: "page", action: "createPage")
         "/home/recent-post"(controller: "home", action: "recentPost")
         "/home/top-post"(controller: "home", action: "topPost")
         "/main/info"(controller: "page", action: "summaryInfo")
