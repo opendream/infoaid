@@ -95,5 +95,19 @@ class UserControllerTests {
         assert 'boyone@opendream.co.th' == response.json.email
     }
 
-    
+    void testUpdateBasicInfoFail() {
+        controller.userService = [create: { updateBasicInfo -> throw RuntimeException("errors") }]
+
+        params.id = user.id
+        params.username = 'admin'
+        params.firstname = 'thawatchai'
+        params.lastname = 'jong' 
+        params.email = 'boyone@opendream.co.th'
+        params.telNo = '12345678'
+        controller.updateBasicInfo() 
+
+        assert 1 == User.count()
+        assert 'can not update user info' == response.json.message
+        assert 'admin' == response.json.user.username
+    }
 }
