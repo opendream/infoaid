@@ -21,12 +21,18 @@ class UserController {
     }
 
     def updateBasicInfo() {
+        def result
         try {
-            def result = userService.updateBasicInfo(params)
+            result = userService.updateBasicInfo(params)
             render result as JSON
         } catch (e) {
-            def resp = [message: 'can not update user info', user: params]
-            render resp as JSON
+            result = [message: 'can not update user info', user: params]
+            render result as JSON
         }
+    }
+
+    def updatePassword() {
+        def  result = userService.updatePassword(params)
+        render result as JSON
     }
 }
