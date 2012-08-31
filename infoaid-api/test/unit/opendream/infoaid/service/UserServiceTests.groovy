@@ -15,13 +15,17 @@ class UserServiceTests {
     void setup() {
         User.metaClass.encodePassword = { -> 'password'}
         User.metaClass.isDirty = {password -> false}
+
+        new User(username: 'admin', password: 'password', 
+            firstname: 'thawatchai', lastname: 'jong', dateCreated: new Date(), 
+            lastUpdated: new Date()).save(flush:true)
     }
 
     void testCreate() {
         def user = [username: "nut", password: "nut", firstname: 'firstname', 
         lastname: 'lastname', dateCreated: new Date(), lastUpdated: new Date()]
         service.create(user)
-        assert 1 == User.count()
+        assert 2 == User.count()
         assert 'nut' == User.findByUsername('nut').username
     }
 
@@ -33,4 +37,13 @@ class UserServiceTests {
         }
     }
 
+    void testGetBasicInfo() {
+        def user = User.findByUsername('admin')
+        def result = service.getBasicInfo(user.id)
+
+        assert 'admin' == result.username
+        assert 'thawatchai' == result.firstname
+        assert 'jong' == result.lastname
+        assert null == result.email
+    }
 }
