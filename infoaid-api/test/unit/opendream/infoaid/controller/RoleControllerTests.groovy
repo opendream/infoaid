@@ -25,9 +25,17 @@ class RoleControllerTests {
     void testCreateRole() {
         assert Role.count() == 2
 
+        params.authority = 'role1Authority'
+        controller.createRole()
+        assert Role.count() == 2
+
         params.authority = 'role3Authority'
         controller.createRole()
         assert Role.count() == 3
+
+        def role = Role.get(3)
+        assert role.authority == 'role3Authority'
+        assert role.status == Role.Status.ACTIVE
     }
 
     void testShow() {
@@ -37,7 +45,6 @@ class RoleControllerTests {
 
         controller.show()
         assert 'role1Authority' == response.json['authority']
-
     }
 
     void testUpdate() {
@@ -58,6 +65,14 @@ class RoleControllerTests {
 
         role = Role.findById(role.id)
         assert 'newRole1Authority' == role.authority
+
+        params.id = role.id
+        params.version = 50
+        params.authority = 'newNewRole1Authority'
+        controller.update()
+
+        role = Role.findById(role.id)
+        assert 'newNewRole1Authority' == role.authority
     }
     
     void testDisableRole() {
