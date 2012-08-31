@@ -21,7 +21,12 @@ class UserController {
     }
 
     def updateBasicInfo() {
-        def result = userService.updateBasicInfo(params)
-        render result as JSON
+        try {
+            def result = userService.updateBasicInfo(params)
+            render result as JSON
+        } catch (e) {
+            def resp = [message: 'can not update user info', user: params]
+            render resp as JSON
+        }
     }
 }
