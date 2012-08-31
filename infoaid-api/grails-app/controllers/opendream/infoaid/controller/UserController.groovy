@@ -1,5 +1,7 @@
 package opendream.infoaid.controller
 
+import opendream.infoaid.domain.User
+
 import grails.converters.JSON
 
 class UserController {
@@ -40,5 +42,10 @@ class UserController {
             result = [message: 'can not update password', user: params]
             render result as JSON
         }
+    }
+
+    def getPages() {
+        def user = User.get(params.id)
+        render user.getPages() as JSON
     }
 }
