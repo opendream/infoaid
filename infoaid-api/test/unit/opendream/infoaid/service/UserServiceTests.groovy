@@ -46,4 +46,25 @@ class UserServiceTests {
         assert 'jong' == result.lastname
         assert null == result.email
     }
+
+    void testUpdateBasicInfo() {
+        def user = User.findByUsername('admin')
+        def updateUser = [id:user.id, username: 'admin', 
+            firstname: 'thawatchai', lastname: 'jong', email:'boyone@opendream.co.th']
+        
+        def result = service.updateBasicInfo(updateUser)
+        assert 'admin' == result.username
+        assert 'thawatchai' == result.firstname
+        assert 'jong' == result.lastname
+        assert 'boyone@opendream.co.th' == result.email        
+    }
+
+    void testUpdateBasicInfoFail() {
+        def user = User.findByUsername('admin')
+        def updateUser = [id:user.id, username: '', 
+            firstname: 'thawatchai', lastname: 'jong', email:'boyone@opendream.co.th']
+        shouldFail(RuntimeException) {
+            service.updateBasicInfo(updateUser)
+        }
+    }
 }
