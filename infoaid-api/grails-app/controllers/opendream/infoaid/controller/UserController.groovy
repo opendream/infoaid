@@ -32,7 +32,13 @@ class UserController {
     }
 
     def updatePassword() {
-        def  result = userService.updatePassword(params)
-        render result as JSON
+        def  result
+        try {
+            result = userService.updatePassword(params)
+            render result as JSON
+        } catch (e) {
+            result = [message: 'can not update password', user: params]
+            render result as JSON
+        }
     }
 }
