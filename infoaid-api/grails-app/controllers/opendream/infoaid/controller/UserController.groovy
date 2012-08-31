@@ -1,6 +1,17 @@
 package opendream.infoaid.controller
 
-class UserController {
+import grails.converters.JSON
 
-    def index() { }
+class UserController {
+    def userService
+
+    def create() {
+        try { 
+            def user = userService.create(params)
+            render user as JSON
+        } catch (e) {
+            def resp = [message: 'can not create new user', user: params]
+            render resp as JSON
+        }
+    }
 }
