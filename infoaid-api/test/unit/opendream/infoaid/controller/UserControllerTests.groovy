@@ -123,4 +123,44 @@ class UserControllerTests {
         assert 1 == User.count()
         assert 'password is updated' == response.json.message
     }
+
+    void testUpdatePasswordFailWithWrongOldPassword() {
+        userService.demand.updatePassword(1..1) { updateparams -> [message: "wrong password"]}
+        controller.userService = userService.createMock()
+
+        params.id = user.id
+        params.oldpassword = 'password'
+        params.newPassword = 'new-password'
+        params.comfirmedPassword = 'new-password'
+        controller.updatePassword()
+        assert 1 == User.count()
+        assert 'wrong password' == response.json.message
+    }
+
+    void testUpdatePasswordWithWrongNewPassword() {
+        userService.demand.updatePassword(1..1) { updateparams -> [message: "password confirmation miss match"]}
+        controller.userService = userService.createMock()
+
+        params.id = user.id
+        params.oldpassword = 'password'
+        params.newPassword = 'new-password'
+        params.comfirmedPassword = 'new-password'
+        controller.updatePassword()
+        assert 1 == User.count()
+        assert 'password confirmation miss match' == response.json.message
+    }
+
+    void testUpdatePasswordFail() {
+        controller.userService = [updatePassword: { updateBasicInfo -> throw RuntimeException("errors") }]
+
+        params.id = user.id
+        params.oldpassword = 'password'
+        params.newPassword = 'new-password'
+        params.comfirmedPassword = 'new-password'
+        controller.updatePassword()
+        assert 1 == User.count()
+        assert 'can not update password' == response.json.message
+        assert 'password' == response.json.user.oldpassword
+        assert user.id == response.json.user.id
+    }
 }
