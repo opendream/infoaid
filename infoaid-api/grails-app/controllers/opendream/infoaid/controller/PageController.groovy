@@ -211,6 +211,9 @@ class PageController {
 
     def disablePage() {
         def slug = params.slug
-        pageService.disablePage(slug)
+        def page = pageService.disablePage(slug)
+        def ret = [status:1, page:[slug:page.slug, name:page.name, 
+                    lat: page.lat, lng: page.lng, status:page.status.toString()]]
+        render ret as JSON
     }
 }
