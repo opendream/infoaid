@@ -202,8 +202,7 @@ class PageControllerTests {
         params.slug = 'page-slug'
         controller.about()
 
-        def expectResponse = 'this is page 1'
-        assert expectResponse == response.text
+        assert 'this is page 1' == response.json.about
     }
 
     void testJoinUs() {
@@ -390,6 +389,8 @@ class PageControllerTests {
         controller.disablePage()
         page = Page.findBySlug('page-slug')
 
-        assert page.status == Page.Status.INACTIVE
+        assert 1 == response.json.status
+        assert 'page-slug' == response.json.page.slug
+        assert 'INACTIVE' == response.json.page.status
     }
 }
