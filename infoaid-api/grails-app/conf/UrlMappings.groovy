@@ -24,6 +24,10 @@ class UrlMappings {
         "/home/recent-post"(controller: "home", action: "recentPost")
         "/home/top-post"(controller: "home", action: "topPost")
         "/main/info"(controller: "page", action: "summaryInfo")
+        "/user/create"(controller: "user", action: "create")
+        "/user/basicInfo"(controller: "user"){ action = [GET:"showBasicInfo", PUT:"updateBasicInfo"] }
+        "/user/joining"(controller: "user", action: "getPages")
+        "/user/password"(controller: "user"){ action = [PUT:"updatePassword"] }
         "/"(view:"/index")
         "500"(view:'/error')
         }
