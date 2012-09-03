@@ -205,13 +205,14 @@ class PageService {
 
     def disablePage(slug) {
         def page = Page.findBySlug(slug)
-        if(!page) {
+        if(!page) { // page not found
             return
         }
 
         page.status = Page.Status.INACTIVE
-        if(!page.save()) {
+        if(!page.save()) { // process not complete
             return
         }
+        page
     }
 }
