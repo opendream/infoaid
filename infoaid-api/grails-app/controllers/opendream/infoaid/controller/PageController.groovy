@@ -131,7 +131,8 @@ class PageController {
 
     def about() {
         def result = pageService.getAbout(params.slug)
-        render result
+        def about = [about:result]
+        render about as JSON
     }
 
     def joinUs() {
