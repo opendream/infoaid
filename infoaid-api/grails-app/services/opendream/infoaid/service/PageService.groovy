@@ -78,9 +78,9 @@ class PageService {
     }
 
     def createPage(userId, name, lat, lng, location, household, population, about) {
-
         def page = new Page(name: name, lat: lat, lng: lng, location: location)
         if(!page.save()) {
+            //throw new RuntimeException("can not save new page")
             return false
         }
         def user = User.get(userId)
@@ -99,8 +99,12 @@ class PageService {
     def leavePage(userId, slug) {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
-
-        PageUser.leavePage(user, page)
+        try {
+            PageUser.leavePage(user, page)
+        } catch (e) {
+            log.error e
+            throw e
+        }
     }
 
     def inactivePage(userId, slug) {
