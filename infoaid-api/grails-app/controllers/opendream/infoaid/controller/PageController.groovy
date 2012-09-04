@@ -24,7 +24,7 @@ class PageController {
         def ret = [:]
         def map = pageService.getInfo(params.slug)
         if(map) {
-            ret = [id: map.id, name: map.name, lat: map.lat, lng: map.lng]
+            ret = [status:1, id: map.id, name: map.name, lat: map.lat, lng: map.lng]
         }
 
         render ret as JSON
@@ -33,6 +33,7 @@ class PageController {
     def member() {
         def ret = [:]
         def results = pageService.getMembers(params.slug)
+        ret.status = 1
         ret.members = results.collect{
             [
                 id: it.user.id,
@@ -126,6 +127,7 @@ class PageController {
             ]
         }
         ret.totalNeeds = results.totalNeeds
+        ret.status = 1
         render ret as JSON
     }
 
@@ -136,12 +138,16 @@ class PageController {
     }
 
     def joinUs() {
+        def ret
         def userId = params.userId
         if(!userId) {
             return
         } else {
-            pageService.joinPage(userId, params.slug)
-        }
+            def pageuser = pageService.joinPage(userId, params.slug)
+            ret = [user: pageuser.user.username, page: pageuser.page.name, 
+                    pageSlug: pageuser.page.slug, relation: pageuser.relation.toString()]
+        } 
+        render ret as JSON       
     }
 
     def createPage() {
@@ -164,11 +170,15 @@ class PageController {
     def leavePage() {
         def userId = params.userId
         def slug = params.slug
+        def ret
         if(!userId || !slug) {
-            return
+            ret = [status: 0, message: "user id: ${userId} could not be left from page: ${slug}"]
+            render ret as JSON
         } else {
             pageService.leavePage(userId, slug)
-        }
+            ret = [status: 1, message: "user id: ${userId} left from page: ${slug}"]
+            render ret as JSON
+        }        
     }
 
     def postComment(){
