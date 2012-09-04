@@ -86,7 +86,7 @@ class PageControllerTests {
 
         params.slug = 'page-slug'
         controller.map()
-        def expectResponse = """{"id":1,"name":"page","lat":"111","lng":"222"}"""
+        def expectResponse = """{"status":1,"id":1,"name":"page","lat":"111","lng":"222"}"""
 
         assert expectResponse == response.text
     }
@@ -99,7 +99,8 @@ class PageControllerTests {
         controller.member()
 
         assert response.json['members'].size() == 2
-        assert 'nut' == response.json['members'][0].username        
+        assert 'nut' == response.json['members'][0].username 
+        assert 1 == response.json.status   
     }
 
     void testTopMember() {
@@ -191,7 +192,7 @@ class PageControllerTests {
         params.limit = 1
         controller.limitNeed()
 
-        def expectResponse = """{"needs":[{"message":"item 10","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":10,"item":"item"}],"totalNeeds":2}"""
+        def expectResponse = """{"needs":[{"message":"item 10","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":10,"item":"item"}],"totalNeeds":2,"status":1}"""
         assert expectResponse == response.text
     }
 
@@ -224,6 +225,10 @@ class PageControllerTests {
         testPage = Page.findBySlug('page-slug')
         assert 3 == testPage.users.size()
         assert PageUser.Relation.MEMBER == testPage.users.last().relation
+        assert "nut3" == response.json.user
+        assert "page" == response.json.page
+        assert "page-slug" == response.json.pageSlug
+        assert "MEMBER" == response.json.relation
     }    
 
     void testTopPost() {
@@ -294,6 +299,9 @@ class PageControllerTests {
         controller.leavePage()
 
         assert 2 == PageUser.count()
+
+        assert 1 == response.json.status
+        assert "user id: 1 left from page: page-slug" == response.json.message
     }
 
     void testPostComment() {
