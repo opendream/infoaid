@@ -99,8 +99,6 @@ class RoleControllerTests {
 
             if (roleParams.version != null) {
                 if (role.version > roleParams.version) {
-                    println role.version
-                    println roleParams.version
                     throw new RuntimeException("${role.errors}")
                     return
                 }
