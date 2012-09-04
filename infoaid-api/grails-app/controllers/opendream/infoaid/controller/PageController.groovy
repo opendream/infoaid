@@ -98,6 +98,7 @@ class PageController {
     def need() {
         def ret = [:]
         def results = pageService.getAllNeeds(params.slug)
+        ret.status = 1
         ret.needs = results.needs.collect {
             [
                 message: it.message,
@@ -159,11 +160,19 @@ class PageController {
         def population = params.population
         def about = params.about
         def location = params.location
+        def ret = [:]
 
         if(!userId || !name) {
-            return
+            ret = [status:0, message: "user id: ${userId} could not create page: ${name}",
+                    lat: lat, lng: lng, household: household, population: population,
+                    about: about, location: location]
+            render ret as JSON
         } else {
-            pageService.createPage(userId, name, lat, lng, location, household, population, about)
+            def result = pageService.createPage(userId, name, lat, lng, location, household, population, about)
+            ret = [status:1, message: "user id: ${userId} created page: ${name}", userId: userId, 
+                    name:result.name, lat: result.lat, lng: result.lng, household: result.household, 
+                    population: result.population, about: result.about, location: result.location]
+            render ret as JSON
         }
     }
 
