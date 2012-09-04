@@ -171,7 +171,7 @@ class PageControllerTests {
         params.slug = 'page-slug'
         controller.need()
 
-        def expectResponse = """{"needs":[{"message":"item 9","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":9,"item":"item"},{"message":"item 10","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":10,"item":"item"}],"totalNeeds":2}"""
+        def expectResponse = """{"status":1,"needs":[{"message":"item 9","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":9,"item":"item"},{"message":"item 10","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":10,"item":"item"}],"totalNeeds":2}"""
         assert expectResponse == response.text
     }
 
@@ -263,9 +263,11 @@ class PageControllerTests {
         assert 2 == Page.count()
 
         pageService.demand.createPage(1..1) { userId, name, lat, lng, location, household, population, about -> 
-            def page = new Page(name: name, lat: lat, lng: lng, location: location).save()
+            def page = new Page(name: name, lat: lat, lng: lng, location: location,
+            household: household, population: population, about: about).save()
             def user = User.get(userId)
             new PageUser(user: user, page: page, relation: PageUser.Relation.OWNER).save()
+            page
         }
         controller.pageService = pageService.createMock()
 
@@ -274,13 +276,22 @@ class PageControllerTests {
         params.lat = 'my lat'
         params.lng = 'my lng'
         params.location = null
-        params.household = null
-        params.population = null
-        params.about = null
+        params.household = 100
+        params.population = 300
+        params.about = 'about body'
         controller.createPage()
 
         assert 3 == Page.count()
         assert 4 == PageUser.count()
+
+        assert 1 = response.json.status
+        assert 1 == response.json.userId
+        assert 'my page' == response.json.name
+        assert 'my lat' == response.json.lat
+        assert 'my lng' == response.json.lng
+        assert 100 == response.json.household
+        assert 300 == response.json.population
+        assert 'about body' == response.json.about
     }
 
     void testLeavePage() {
