@@ -81,7 +81,21 @@ class PageController {
     }
 
     def topPost() {
-        def posts = pageService.getTopPost(params.slug, params.offset)
+        def posts = pageService.getTopPost(params.slug)
+        
+        posts = posts.collect{
+            [
+                message: it.message,
+                dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
+                comments: it.previewComments.message
+            ]
+        }
+        //ret.totalPosts = results.totalPosts
+        render posts as JSON
+    }
+
+    def recentPost() {
+        def posts = pageService.getRecentPost(params.slug)
         
         posts = posts.collect{
             [

@@ -15,22 +15,41 @@ class PageService {
     	def pageInfo = Page.findBySlug(slug)
     }
 
-    def getPosts(slug, offset = 0, max = 10, order = 'lastActived desc') {
-    	Post.findAll ("from Post where status =:status and page.slug =:slug \
-                        order by $order",
-                        [status: Post.Status.ACTIVE, slug: slug, max: max, offset: offset])
+    def getPosts(slug, fromId, toId, since, until, type = null) {
+        def max = 10
+        
+        def posts = Post.createCriteria().list() {
+            eq('status', Post.Status.ACTIVE)
+            page {
+                eq('slug', slug)    
+            }
+            maxResults(max)
+            if(fromId) {
+                ge('id', fromId)
+            }
+            if(toId) {
+                le('id', toId)
+            }
+            if(since) {
+                ge('dateCreated', since)
+            }
+            if(until) {
+                le('dateCreated', until)
+            }
+            if(type == 'top') {
+                order('conversation', 'desc')
+            } else {
+                order('lastActived', 'desc')
+            }
+        }
     }
 
-    def getTopPost(slug, offset) {
-        def max = 10 // config file
-        def order = 'conversation desc, lastActived desc' // config file
-        getPosts(slug, offset, max, order)        
+    def getTopPost(slug) {
+        getPosts(slug, null, null, null, null, 'top')
     }
 
-    def getRecentPost(slug, offset) {
-        def max = 10 // config file
-        def order = 'lastActived desc' // config file
-        getPosts(slug, offset, max, order)        
+    def getRecentPost(slug) {
+        getPosts(slug, null, null, null, null, 'recent')        
     }
 
     def getComments(postId, fromId, toId, since, until) {
