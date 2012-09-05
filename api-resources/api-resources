@@ -1,0 +1,384 @@
+Errors message
+{"status":0,"message":"upto locale"}
+
+
+Resource URL
+http://localhost:8080/infoaid-api/page/$slug/about
+
+Paramters
+$slug 
+example value: กรุงเทพมหานคร-หนองจอก-หนองจอก
+
+response [json]
+
+Example Request
+http://localhost:8080/infoaid-api/page/กรุงเทพมหานคร-หนองจอก-หนองจอก/about
+Example Response
+{"status":1,"about":"hello infoaid first page!"}
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/page/$slug/disable_page
+
+Paramters
+$slug 
+example value: กรุงเทพมหานคร-หนองจอก-หนองจอก
+
+response [json]
+
+Example Request
+http://localhost:8080/infoaid-api/page/กรุงเทพมหานคร-หนองจอก-หนองจอก/disable_page
+Example Response
+{"status":1,"page":{"slug":"กรุงเทพมหานคร-หนองจอก-หนองจอก","name":"กรุงเทพมหานคร หนองจอก หนองจอก","lat":"13.8725204467773","lng":"100.873893737793","status":"INACTIVE"}}
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/page/$slug/info
+
+Paramters
+$slug 
+example value: กรุงเทพมหานคร-หนองจอก-หนองจอก
+
+response [json]
+
+Example Request
+http://localhost:8080/infoaid-api/page/กรุงเทพมหานคร-หนองจอก-หนองจอก/info
+Example Response
+{"status":1,"id":7421,"name":"กรุงเทพมหานคร หนองจอก คลองสิบ","lat":"13.9137096405029","lng":"100.824531555176","dateCreated":"2012-08-28 10:56","lastUpdated":"2012-08-28 10:56"}
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/page/$slug/join_us/$userId
+
+Paramters
+$slug 
+example value: กรุงเทพมหานคร-หนองจอก-หนองจอก
+$userId
+example value: 8185
+
+response [json]
+
+Example Request
+http://localhost:8080/infoaid-api/page/กรุงเทพมหานคร-หนองจอก-หนองจอก/join_us/8185
+Example Response
+{"status":1,"user":"admin","page":"กรุงเทพมหานคร หนองจอก หนองจอก","pageSlug":"กรุงเทพมหานคร-หนองจอก-หนองจอก","relation":"MEMBER"}
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/page/$slug/leave_by/$userId
+
+Paramters
+$slug 
+example value: กรุงเทพมหานคร-หนองจอก-หนองจอก
+$userId
+example value: 8185
+
+response [json]
+
+Example Request
+http://localhost:8080/infoaid-api/page/กรุงเทพมหานคร-หนองจอก-หนองจอก/leave_by/8185
+Example Response
+{"status":1,"message":"user id: 8185 left from page: กรุงเทพมหานคร-หนองจอก-หนองจอก"}
+
+{"status":0,"message":"user id: 8185 could not be left from page: กรุงเทพมหานคร-หนองจอก-หนองจอก"}
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/page/$slug/limit_need/$limit
+
+Paramters
+$slug 
+example value: กรุงเทพมหานคร-หนองจอก-หนองจอก
+$limit
+example value: 5
+
+response [json]
+
+Example Request
+http://localhost:8080/infoaid-api/page/กรุงเทพมหานคร-หนองจอก-หนองจอก/limit_need/5
+Example Response
+{"needs":[{"message":"it.message","dateCreated":"2012-09-3 07:31","createdBy":"admin",
+"expiredDate":"2012-09-17 07:31","quantity":5,"item":"water"}],"totalNeeds":0,"status":1}
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/page/$slug/map
+
+Paramters
+$slug 
+example value: กรุงเทพมหานคร-หนองจอก-หนองจอก
+
+response [json]
+
+Example Request
+http://localhost:8080/infoaid-api/page/กรุงเทพมหานคร-หนองจอก-หนองจอก/map
+Example Response
+{"status":1,"id":7420,"name":"กรุงเทพมหานคร หนองจอก หนองจอก","lat":"13.8725204467773","lng":"100.873893737793"}
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/page/$slug/members
+
+Paramters
+$slug 
+example value: กรุงเทพมหานคร-หนองจอก-หนองจอก
+
+response [json]
+
+Example Request
+http://localhost:8080/infoaid-api/page/กรุงเทพมหานคร-หนองจอก-หนองจอก/members
+Example Response
+{"status":1,"members":[{"id":8185,"username":"admin","firstname":"username","lastname":"lastname",
+"email":"email@email.com","telNo":"123456789","relation":"MEMBER"}],"totalMembers":1}
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/page/$slug/need
+
+Paramters
+$slug 
+example value: กรุงเทพมหานคร-หนองจอก-หนองจอก
+
+response [json]
+
+Example Request
+http://localhost:8080/infoaid-api/page/กรุงเทพมหานคร-หนองจอก-หนองจอก/need
+Example Response
+{"status":1,"needs":[{"message":"it.message","dateCreated":"2012-09-3 07:31","createdBy":"admin",
+"expiredDate":"2012-09-17 07:31","quantity":5,"item":"water"}],"totalNeeds":0}
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/page/$slug/post_comment
+
+Paramters
+$slug 
+example value: กรุงเทพมหานคร-หนองจอก-หนองจอก
+
+Post values
+userId: 8185
+postId: 
+message:
+
+response [json]
+
+Example Request
+http://localhost:8080/infoaid-api/page/กรุงเทพมหานคร-หนองจอก-หนองจอก/post_comment
+Example Response
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/page/$slug/status
+
+Paramters
+$slug 
+example value: กรุงเทพมหานคร-หนองจอก-หนองจอก
+
+response [json]
+
+Example Request
+http://localhost:8080/infoaid-api/page/กรุงเทพมหานคร-หนองจอก-หนองจอก/status
+Example Response
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/page/$slug/top_members
+
+Paramters
+$slug 
+example value: กรุงเทพมหานคร-หนองจอก-หนองจอก
+
+response [json]
+
+Example Request
+http://localhost:8080/infoaid-api/page/กรุงเทพมหานคร-หนองจอก-หนองจอก/top_members
+Example Response
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/page/$slug/top_post
+
+Paramters
+$slug 
+example value: กรุงเทพมหานคร-หนองจอก-หนองจอก
+
+response [json]
+
+Example Request
+http://localhost:8080/infoaid-api/page/กรุงเทพมหานคร-หนองจอก-หนองจอก/top_post
+Example Response
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/page/$slug/update_page
+
+Paramters
+$slug 
+example value: กรุงเทพมหานคร-หนองจอก-หนองจอก
+
+Post values:
+name:
+lat:
+lng:
+location:
+status:
+household:
+population:
+about:
+version:
+
+response [json]
+
+Example Request
+http://localhost:8080/infoaid-api/page/กรุงเทพมหานคร-หนองจอก-หนองจอก/update_page
+Example Response
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/page/create_page
+
+Post values:
+userId: 8185
+name: 'page name'
+lat: '1233245234'
+lng: '123465546'
+location: 2
+household: 100
+population: 300
+about: 'this place is located in the new world'
+
+response [json]
+
+Example Request
+http://localhost:8080/infoaid-api/page/create_page
+Example Response
+{"status":1,"message":"user id: 8185 created page: 8185 page","userId":"8185",
+"name":"8185 page","lat":"1233245234","lng":"123465546","household":100,
+"population":300,"about":"this place is located in the new world","location":null}
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/home/$userId/recent-post
+
+Paramters
+$userId
+example value: 8185
+
+response [json]
+
+Example Request
+http://localhost:8080/infoaid-api/home/8185/recent-post
+Example Response
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/home/$userId/top-post
+
+Paramters
+$userId
+example value: 8185
+
+response [json]
+
+Example Request
+http://localhost:8080/infoaid-api/home/8185/top-post
+Example Response
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/front_page/info
+
+Example Request
+http://localhost:8080/infoaid-api/front_page/info
+Example Response
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/user/create
+
+Post values:
+username:
+password:
+firstname:
+lastname:
+email:
+telNo:
+
+Example Request
+http://localhost:8080/infoaid-api/user/create
+Example Response
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/user/$userId/basic_info
+
+Method: GET
+
+Paramters
+$userId
+example value: 8185
+
+Example Request
+http://localhost:8080/infoaid-api/user/8185/basic_info
+Example Response
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/user/$userId/basic_info
+
+Method: PUT
+
+Paramters
+$userId
+example value: 8185
+Put values:
+username:
+firstname:
+lastname:
+email:
+telNo:
+
+Example Request
+http://localhost:8080/infoaid-api/user/8185/basic_info
+Example Response
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/user/$userId/joining
+
+Paramters
+$userId
+
+Example Request
+http://localhost:8080/infoaid-api/user/8185/joining
+Example Response
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/user/$userId/password
+
+Method: PUT
+
+Paramters
+$userId
+example value: 8185
+Put values:
+password:
+
+Example Request
+http://localhost:8080/infoaid-api/user/8185/password
+Example Response
+--------------------------------------------------------------
+--------------------------------------------------------------
