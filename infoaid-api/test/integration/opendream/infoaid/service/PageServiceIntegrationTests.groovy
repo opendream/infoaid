@@ -149,10 +149,10 @@ class PageServiceIntegrationTests {
             pageService.postComment(user.id, firstResultPost.id, "my comment"+it)
         }
 
-        def resultsLimitComment = pageService.getLimitComments(firstResultPost.id, 3)
+        def resultsLimitComment = pageService.getLimitComments(firstResultPost.id)
 
         assert resultsLimitComment.totalComments == 10
 
-        assert resultsLimitComment.comments.last().message == "my comment2"
+        assert resultsLimitComment.comments.last().message == "my comment7"
     }
 }
