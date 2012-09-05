@@ -36,7 +36,6 @@ class RoleServiceTests {
     void testCreateRoleFail() {
     	assert Role.count() == 2
 
-    	assert Role.count() == 2
     	shouldFail(RuntimeException) {
             service.createRole('')
         }
