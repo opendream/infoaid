@@ -91,10 +91,7 @@ class PageService {
     def createPage(userId, name, lat, lng, location, household, population, about) {
         def page = new Page(name: name, lat: lat, lng: lng, location: location,
             household: household, population: population, about: about)
-        if(!page.save()) {
-            //throw new RuntimeException("can not save new page")
-            return false
-        }
+        page.save(failOnError: true)
         def user = User.get(userId)
         PageUser.createPage(user, page)
         page
