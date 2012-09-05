@@ -56,13 +56,13 @@ class PageService {
     	[comments: comments, totalComments: comments.size()]
     }
 
-    def getLimitComments(postId, max) {
-
+    def getLimitComments(postId) {
+        def max = 3
         def comments = Comment.createCriteria().list(max: max) {
             post {
                 idEq(postId)
             }
-            order('dateCreated', 'asc')
+            order('dateCreated', 'desc')
         }
 
         [comments: comments, totalComments: comments.totalCount]
