@@ -108,14 +108,12 @@ class PageService {
     }
 
     def createPage(userId, name, lat, lng, location, household, population, about) {
-
-        def page = new Page(name: name, lat: lat, lng: lng, location: location)
-        if(!page.save()) {
-            return false
-        }
+        def page = new Page(name: name, lat: lat, lng: lng, location: location,
+            household: household, population: population, about: about)
+        page.save(failOnError: true)
         def user = User.get(userId)
         PageUser.createPage(user, page)
-
+        page
     }
 
     def joinPage(userId, slug) {
@@ -129,8 +127,12 @@ class PageService {
     def leavePage(userId, slug) {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
-
-        PageUser.leavePage(user, page)
+        try {
+            PageUser.leavePage(user, page)
+        } catch (e) {
+            log.error e
+            throw e
+        }
     }
 
     def inactivePage(userId, slug) {
@@ -185,7 +187,7 @@ class PageService {
         pageUser.conversation++
         pageUser.save()
         def date = new Date()
-        def need = new Need(lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: message, quantity: 10)
+        def need = new Need(lastActived: date, createdBy: user.username, updatedBy: user.username, expiredDate: date, message: message, quantity: 10)
         page.addToPosts(need)
         if(!page.save()) {
             return false
@@ -196,14 +198,17 @@ class PageService {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
         def pageUser = PageUser.findByUserAndPage(user, page)
-        pageUser.conversation++
-        pageUser.save()
-        def date = new Date()
-        def messagePost = new MessagePost(lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: message)
-        page.addToPosts(messagePost)
-        if(!page.save()) {
-            return false
+        if(pageUser) {
+            pageUser.conversation++
+            pageUser.save()
         }
+        def date = new Date()
+        def messagePost = new MessagePost(lastActived: date, createdBy: user.username, updatedBy: user.username, expiredDate: date+14, message: message)
+        page.addToPosts(messagePost)
+        if(!page.save(flush:true)) {
+            throw new RuntimeException(page.errors)
+        }
+        return [user: user, page: page, post: messagePost]
     }
 
     def getAbout(slug) {
@@ -235,13 +240,14 @@ class PageService {
 
     def disablePage(slug) {
         def page = Page.findBySlug(slug)
-        if(!page) {
+        if(!page) { // page not found
             return
         }
 
         page.status = Page.Status.INACTIVE
-        if(!page.save()) {
+        if(!page.save()) { // process not complete
             return
         }
+        page
     }
 }

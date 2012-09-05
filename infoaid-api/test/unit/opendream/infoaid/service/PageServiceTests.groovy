@@ -12,6 +12,8 @@ import opendream.infoaid.domain.User
 import opendream.infoaid.domain.Need
 import opendream.infoaid.domain.MessagePost
 import opendream.infoaid.domain.Item
+
+import grails.validation.ValidationException
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
@@ -83,7 +85,7 @@ class PageServiceTests {
 
         service.createPage(user.id, name1, lat1, lng1, location, null, null, null)
         service.createPage(user.id, name2, lat2, lng2, null, null, null, null)
-        service.createPage(user2.id, name2, lat2, lng2, null, null, null, null) // error because page name is exists
+        //service.createPage(user2.id, name2, lat2, lng2, null, null, null, null) // error because page name is exists
 
         assert Page.count() == 4
 
@@ -109,6 +111,20 @@ class PageServiceTests {
 
         service.leavePage(user2.id, "tmpSlug")
         assert page.users.size() == 1
+    }
+
+    void testCreatePageFail() {
+        def user = new User(username: 'admin', password: 'password', firstname: 'thawatchai', lastname: 'jong')
+        user.save()
+
+        def name2 = 'testCreatePage2'
+        def lat2 = 'lat2'
+        def lng2 = 'lng2'
+
+        service.createPage(user.id, name2, lat2, lng2, null, null, null, null)
+        shouldFail(ValidationException) {
+            service.createPage(user.id, name2, lat2, lng2, null, null, null, null)
+        }
     }
 
     void testGetMembers() {
@@ -199,12 +215,15 @@ class PageServiceTests {
 
         def pageUser = new PageUser(page: page, user: user1, relation: PageUser.Relation.MEMBER).save(flush: true)
 
-        service.createMessagePost(1, "0", message)
+        def result = service.createMessagePost(1, "0", message)
         def pageUserAfterCreateMessagePost = PageUser.get(1)
         assert pageUserAfterCreateMessagePost.conversation == 1
 
         page = Page.get(1)
         assert page.posts.size() == 23
+        assert user1.id == result.user.id
+        assert page.id == result.page.id
+        assert message == result.post.message        
     }
 
     void testGetAbout() {

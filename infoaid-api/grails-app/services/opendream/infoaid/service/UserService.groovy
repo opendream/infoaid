@@ -7,10 +7,10 @@ class UserService {
 
     def create(userparams) {
         def user = new User()
-        user.properties['username', 'password', 'firstname', 'lastname', 'email', 'telNo', 'dateCreated', 'lastUpdated'] = userparams
+        user.properties['username', 'password', 'firstname', 'lastname', 'email', 'telNo'] = userparams
         if(!user.save()) {
             log.error user.errors
-            throw RuntimeException("${user.errors}")
+            throw new RuntimeException("${user.errors}")
         }
         user
     }
@@ -25,7 +25,7 @@ class UserService {
         user.properties['username', 'firstname', 'lastname', 'email', 'telNo'] = updateparmas
         if(!user.save()) {
             log.error user.errors
-            throw RuntimeException("${user.errors}")
+            throw new RuntimeException("${user.errors}")
         }
         [username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, telNo:user.telNo]
     }
@@ -48,7 +48,7 @@ class UserService {
         
         if(!user.save()) {
             log.error user.errors
-            throw RuntimeException("${user.errors}")
+            throw new RuntimeException("${user.errors}")
         }
         return [message: "password is updated"]
     }
