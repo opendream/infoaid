@@ -90,7 +90,6 @@ class PageService {
     }
 
     def postComment(userId, postId, message) {
-
         def user = User.get(userId)
     	def commentDate = new Date()
     	def post = Post.get(postId)
@@ -100,13 +99,12 @@ class PageService {
     	post.lastActived = commentDate
         post.conversation++
 
-        if(!post.save(flush:true)) {
-            return false
-        }
+        post.save(failOnError: true, flush:true)
 
         def pageUser = PageUser.get(user.id, post.page.id)
         pageUser.conversation++
         pageUser.save()
+        [user: user, post: post, comment: comment]
     }
 
     def createPage(userId, name, lat, lng, location, household, population, about) {
