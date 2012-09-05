@@ -91,8 +91,8 @@ return array(
 		'adminEmail'=>'webmaster@example.com',
 
 		'api'=>array(
-			'server'=>'http://twitter.com/',
-			'port'=>80,
+			'server'=>'http://localhost/',
+			'port'=>8080,
 		),
 	),
 );

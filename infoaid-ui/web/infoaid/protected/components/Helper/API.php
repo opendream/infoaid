@@ -69,7 +69,7 @@ class API
 	}
 
 	public static function call($method, $uri, $params = array(),
-		$format = 'json')
+		$format = NULL)
 	{
 		$rest = self::getRESTObject();
 		if (self::isMethodAllowed($method)) {
@@ -79,8 +79,13 @@ class API
 		return $result;
 	}
 
-	public static function get($uri, $params = array(), $format = 'json')
+	public static function get($uri, $params = array(), $format = NULL)
 	{
 		return self::call('get', $uri, $params, $format);
+	}
+
+	public static function getJSON($uri, $params = array())
+	{
+		return self::get($uri, $params, 'json');
 	}
 }
