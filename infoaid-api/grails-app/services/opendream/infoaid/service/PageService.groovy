@@ -33,12 +33,23 @@ class PageService {
         getPosts(slug, offset, max, order)        
     }
 
-    def getComments(postId) {
-
+    def getComments(postId, fromId, toId, since, until) {
     	def comments = Comment.createCriteria().list() {
     		post {
     			idEq(postId)
     		}
+            if(fromId) {
+                ge('id', fromId)
+            }
+            if(toId) {
+                le('id', toId)
+            }
+            if(since) {
+                ge('dateCreated', since)
+            }
+            if(until) {
+                le('dateCreated', until)
+            }
     		order('dateCreated', 'asc')
     	}
 

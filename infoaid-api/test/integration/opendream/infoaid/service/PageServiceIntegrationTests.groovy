@@ -84,7 +84,6 @@ class PageServiceIntegrationTests {
 
     @Test
     void testGetComments() {
-        def comment = new Comment(message: "my comment11")
         def page = Page.findByName("page1")
         def posts = pageService.getPosts(page.slug, 0, 10)
         def firstResultPost = posts[0]
@@ -98,11 +97,27 @@ class PageServiceIntegrationTests {
 
         def comment11 = Comment.findByMessage('my comment11')
 
-        def resultsComment = pageService.getComments(firstResultPost.id)
+        def resultsComment = pageService.getComments(firstResultPost.id, null, null, null, null)
 
         assert resultsComment.totalComments == 11
         assert resultsComment.comments[0].message == 'my comment11'
         assert resultsComment.comments[0].dateCreated.time == comment11.dateCreated.time
+
+
+        resultsComment = pageService.getComments(firstResultPost.id, 10 as Long, null, null, null)
+        assert resultsComment.totalComments == 3 // comment id start at 2
+
+        resultsComment = pageService.getComments(firstResultPost.id, null, 10 as Long, null, null)
+        assert resultsComment.totalComments == 9 // comment id start at 2
+
+        resultsComment = pageService.getComments(firstResultPost.id, null, null, new Date(), null)
+        assert resultsComment.totalComments == 0 // comment id start at 2
+
+        resultsComment = pageService.getComments(firstResultPost.id, null, null, null, new Date())
+        assert resultsComment.totalComments == 11 // comment id start at 2
+
+        resultsComment = pageService.getComments(firstResultPost.id, 10 as Long, null, null, new Date())
+        assert resultsComment.totalComments == 3 // comment id start at 2
     }
 
     @Test
@@ -119,7 +134,7 @@ class PageServiceIntegrationTests {
         assert updatedPost.lastActived > previousActived
         assert updatedPost.conversation == 1
 
-        def newComment = pageService.getComments(updatedPost.id).comments.last().message
+        def newComment = pageService.getComments(updatedPost.id, null, null, null, null).comments.last().message
         assert newComment == message
     }
 
