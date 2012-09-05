@@ -116,6 +116,8 @@ class PageServiceTests {
     void testCreatePageFail() {
         def user = new User(username: 'admin', password: 'password', firstname: 'thawatchai', lastname: 'jong')
         user.save()
+        def user2 = new User(username: 'admin2', password: 'password2', firstname: 'jong', lastname: 'thawatchai')
+        user2.save()
 
         def name2 = 'testCreatePage2'
         def lat2 = 'lat2'
@@ -123,7 +125,7 @@ class PageServiceTests {
 
         service.createPage(user.id, name2, lat2, lng2, null, null, null, null)
         shouldFail(ValidationException) {
-            service.createPage(user.id, name2, lat2, lng2, null, null, null, null)
+            service.createPage(user2.id, name2, lat2, lng2, null, null, null, null)
         }
     }
 
@@ -193,18 +195,24 @@ class PageServiceTests {
 
     void testCreateNeed() {
         def page = Page.get(1)
+        def item = new Item(name: 'item').save()
+        def quantity = 10
         def message = 'hello new need'
         def user1 = User.get(1)
         assert page.posts.size() == 22
         def pageUser = new PageUser(page: page, user: user1, relation: PageUser.Relation.MEMBER).save(flush: true)
 
-        service.createNeed(1, "0", message)
+        def result = service.createNeed(user1.id, page.slug, item, quantity, message)
         def pageUserAfterCreateNeed = PageUser.get(1)
         assert pageUserAfterCreateNeed.conversation == 1
 
         page = Page.get(1)
         assert page.posts.size() == 23
 
+        assert user1.id == result.user.id
+        assert page.id == result.page.id
+        assert item.id == result.post.item.id
+        assert quantity == result.post.quantity
     }
 
     void testCreateMessagePost() {
