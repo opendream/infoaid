@@ -78,14 +78,15 @@ class PageService {
     }
 
     def createPage(userId, name, lat, lng, location, household, population, about) {
-
-        def page = new Page(name: name, lat: lat, lng: lng, location: location)
+        def page = new Page(name: name, lat: lat, lng: lng, location: location,
+            household: household, population: population, about: about)
         if(!page.save()) {
+            //throw new RuntimeException("can not save new page")
             return false
         }
         def user = User.get(userId)
         PageUser.createPage(user, page)
-
+        page
     }
 
     def joinPage(userId, slug) {
@@ -99,8 +100,12 @@ class PageService {
     def leavePage(userId, slug) {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
-
-        PageUser.leavePage(user, page)
+        try {
+            PageUser.leavePage(user, page)
+        } catch (e) {
+            log.error e
+            throw e
+        }
     }
 
     def inactivePage(userId, slug) {
@@ -205,13 +210,14 @@ class PageService {
 
     def disablePage(slug) {
         def page = Page.findBySlug(slug)
-        if(!page) {
+        if(!page) { // page not found
             return
         }
 
         page.status = Page.Status.INACTIVE
-        if(!page.save()) {
+        if(!page.save()) { // process not complete
             return
         }
+        page
     }
 }

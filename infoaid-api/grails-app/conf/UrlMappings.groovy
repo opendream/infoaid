@@ -7,23 +7,27 @@ class UrlMappings {
 			}
 		}
         "/page/$slug/about"(controller: "page", action: "about")
-        "/page/$slug/disablePage"(controller: "page", action: "disablePage")
+        "/page/$slug/disable_page"(controller: "page", action: "disablePage")
         "/page/$slug/info"(controller: "page", action: "info")
         "/page/$slug/join_us/$userId"(controller: "page", action: "joinUs")
-        "/page/$slug/leavePage"(controller: "page", action: "leavePage")
-        "/page/$slug/limitNeed/$limit"(controller: "page", action: "limitNeed")
+        "/page/$slug/leave_by/$userId"(controller: "page", action: "leavePage")
+        "/page/$slug/limit_need/$limit"(controller: "page", action: "limitNeed")
         "/page/$slug/map"(controller: "page", action: "map")
         "/page/$slug/members"(controller: "page", action: "member")  
         "/page/$slug/need"(controller: "page", action: "need")
-        "/page/$slug/postComment"(controller: "page", action: "postComment")
+        "/page/$slug/post_comment"(controller: "page", action: "postComment")
         "/page/$slug/status"(controller: "page", action: "status") // default by recent posts
-        "/page/$slug/topMembers"(controller: "page", action: "topMember")        
-        "/page/$slug/topPost"(controller: "page", action: "topPost")
-        "/page/$slug/updatePage"(controller: "page", action: "updatePage")
-        "/page/createPage"(controller: "page", action: "createPage")
-        "/home/recent-post"(controller: "home", action: "recentPost")
-        "/home/top-post"(controller: "home", action: "topPost")
-        "/main/info"(controller: "page", action: "summaryInfo")
+        "/page/$slug/top_members"(controller: "page", action: "topMember")        
+        "/page/$slug/top_post"(controller: "page", action: "topPost")
+        "/page/$slug/update_page"(controller: "page", action: "updatePage")
+        "/page/create_page"(controller: "page"){ action = [POST:"createPage"] }
+        "/home/$userId/recent-post"(controller: "home", action: "recentPost")
+        "/home/$userId/top-post"(controller: "home", action: "topPost")
+        "/front_page/info"(controller: "frontPage", action: "info")
+        "/user/create"(controller: "user", action: "create")
+        "/user/$userId/basic_info"(controller: "user"){ action = [GET:"showBasicInfo", PUT:"updateBasicInfo"] }
+        "/user/$userId/joining"(controller: "user", action: "getPages")
+        "/user/$userId/password"(controller: "user"){ action = [PUT:"updatePassword"] }
         "/"(view:"/index")
         "500"(view:'/error')
         }

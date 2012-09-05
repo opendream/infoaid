@@ -24,7 +24,7 @@ class PageController {
         def ret = [:]
         def map = pageService.getInfo(params.slug)
         if(map) {
-            ret = [id: map.id, name: map.name, lat: map.lat, lng: map.lng]
+            ret = [status:1, id: map.id, name: map.name, lat: map.lat, lng: map.lng]
         }
 
         render ret as JSON
@@ -33,6 +33,7 @@ class PageController {
     def member() {
         def ret = [:]
         def results = pageService.getMembers(params.slug)
+        ret.status = 1
         ret.members = results.collect{
             [
                 id: it.user.id,
@@ -97,6 +98,7 @@ class PageController {
     def need() {
         def ret = [:]
         def results = pageService.getAllNeeds(params.slug)
+        ret.status = 1
         ret.needs = results.needs.collect {
             [
                 message: it.message,
@@ -126,21 +128,27 @@ class PageController {
             ]
         }
         ret.totalNeeds = results.totalNeeds
+        ret.status = 1
         render ret as JSON
     }
 
     def about() {
         def result = pageService.getAbout(params.slug)
-        render result
+        def about = [about:result]
+        render about as JSON
     }
 
     def joinUs() {
+        def ret
         def userId = params.userId
         if(!userId) {
             return
         } else {
-            pageService.joinPage(userId, params.slug)
-        }
+            def pageuser = pageService.joinPage(userId, params.slug)
+            ret = [user: pageuser.user.username, page: pageuser.page.name, 
+                    pageSlug: pageuser.page.slug, relation: pageuser.relation.toString()]
+        } 
+        render ret as JSON       
     }
 
     def createPage() {
@@ -152,22 +160,34 @@ class PageController {
         def population = params.population
         def about = params.about
         def location = params.location
+        def ret = [:]
 
         if(!userId || !name) {
-            return
+            ret = [status:0, message: "user id: ${userId} could not create page: ${name}",
+                    lat: lat, lng: lng, household: household, population: population,
+                    about: about, location: location]
+            render ret as JSON
         } else {
-            pageService.createPage(userId, name, lat, lng, location, household, population, about)
+            def result = pageService.createPage(userId, name, lat, lng, location, household, population, about)
+            ret = [status:1, message: "user id: ${userId} created page: ${name}", userId: userId, 
+                    name:result.name, lat: result.lat, lng: result.lng, household: result.household, 
+                    population: result.population, about: result.about, location: result.location]
+            render ret as JSON
         }
     }
 
     def leavePage() {
         def userId = params.userId
         def slug = params.slug
+        def ret
         if(!userId || !slug) {
-            return
+            ret = [status: 0, message: "user id: ${userId} could not be left from page: ${slug}"]
+            render ret as JSON
         } else {
             pageService.leavePage(userId, slug)
-        }
+            ret = [status: 1, message: "user id: ${userId} left from page: ${slug}"]
+            render ret as JSON
+        }        
     }
 
     def postComment(){
@@ -178,29 +198,7 @@ class PageController {
         if(userId && postId && message) {
             pageService.postComment(userId, postId, message)
         }
-    }
-
-    def summaryInfo() {
-        def ret = [:]
-        def pages = pageService.getSummaryInfo()
-        ret.pages = pages.collect {
-            [
-                name: it.name,
-                lat: it.lat,
-                lng: it.lng,
-                needs: pageService.getLimitNeeds(it.slug, 5).needs.collect {
-                    [
-                        message: it.message,
-                        quantity: it.quantity
-                    ]
-                }
-
-            ]
-        }
-        ret.totalPages = pages.size()
-        
-        render ret as JSON
-    }
+    }    
 
     def updatePage() {
         def slug = params.slug
@@ -210,6 +208,9 @@ class PageController {
 
     def disablePage() {
         def slug = params.slug
-        pageService.disablePage(slug)
+        def page = pageService.disablePage(slug)
+        def ret = [status:1, page:[slug:page.slug, name:page.name, 
+                    lat: page.lat, lng: page.lng, status:page.status.toString()]]
+        render ret as JSON
     }
 }
