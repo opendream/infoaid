@@ -68,8 +68,8 @@ class PageController {
     }
 
     def status() {
-        def posts = pageService.getPosts(params.slug, params.offset, params.max)
-        
+        def posts = pageService.getPosts(params.slug, params.fromId, params.toId, params.since, params.until, params.type=null)
+        println posts
         posts = posts.collect{
             [
                 message: it.message,
