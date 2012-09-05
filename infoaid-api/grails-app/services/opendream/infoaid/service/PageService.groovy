@@ -94,7 +94,7 @@ class PageService {
     	def commentDate = new Date()
     	def post = Post.get(postId)
         
-    	def comment = new Comment(message: message, dateCreated: commentDate)
+    	def comment = new Comment(message: message, dateCreated: commentDate, user: user)
     	post.addToComments(comment)
     	post.lastActived = commentDate
         post.conversation++

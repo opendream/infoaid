@@ -12,7 +12,7 @@ import org.junit.*
 class CommentTests extends DomainTestTemplate {
 
     def requiredProperties() {
-        ['message', 'dateCreated', 'lastUpdated']
+        ['message', 'dateCreated', 'lastUpdated', 'user']
     }
 
     def domainClass() {

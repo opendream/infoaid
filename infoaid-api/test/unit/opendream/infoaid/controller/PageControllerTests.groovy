@@ -44,8 +44,8 @@ class PageControllerTests {
         page1.addToPosts(secondPost)
         page1.save()
 
-        def comment = new Comment(message: 'comment1')
-        def comment2 = new Comment(message: 'comment2')
+        def comment = new Comment(message: 'comment1', user: user1)
+        def comment2 = new Comment(message: 'comment2', user: user1)
         firstPost.addToComments(comment)
         firstPost.addToComments(comment2)
 
@@ -163,7 +163,6 @@ class PageControllerTests {
 
         params.slug = 'page-slug'
         controller.status()
-        println response.text
         assert 4 == response.json.size()
         assert 'item 10' == response.json[0].message
     }

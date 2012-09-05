@@ -69,12 +69,17 @@ class PageController {
 
     def status() {
         def posts = pageService.getPosts(params.slug, params.fromId, params.toId, params.since, params.until, params.type=null)
-        println posts
         posts = posts.collect{
             [
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
-                comments: it.previewComments.message
+                comments: it.previewComments.collect {
+                    [
+                        message: it.message,
+                        user: it.user.username,
+                        lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
+                    ]
+                }
             ]
         }
         //ret.totalPosts = results.totalPosts
@@ -88,7 +93,13 @@ class PageController {
             [
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
-                comments: it.previewComments.message
+                comments: it.previewComments.collect {
+                    [
+                        message: it.message,
+                        user: it.user.username,
+                        lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
+                    ]
+                }
             ]
         }
         //ret.totalPosts = results.totalPosts
@@ -102,7 +113,13 @@ class PageController {
             [
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
-                comments: it.previewComments.message
+                comments: it.previewComments.collect {
+                    [
+                        message: it.message,
+                        user: it.user.username,
+                        lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
+                    ]
+                }
             ]
         }
         //ret.totalPosts = results.totalPosts
