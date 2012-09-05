@@ -39,8 +39,8 @@ class FrontPageControllerTests {
         page1.addToPosts(secondPost)
         page1.save()
 
-        def comment = new Comment(message: 'comment1')
-        def comment2 = new Comment(message: 'comment2')
+        def comment = new Comment(message: 'comment1', user: user1)
+        def comment2 = new Comment(message: 'comment2', user: user1)
         firstPost.addToComments(comment)
         firstPost.addToComments(comment2)
 

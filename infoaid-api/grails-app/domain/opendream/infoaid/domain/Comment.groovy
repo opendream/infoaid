@@ -5,6 +5,7 @@ class Comment {
     String message
     Date dateCreated
     Date lastUpdated
+    User user
 
     static belongsTo = [post:Post]
 

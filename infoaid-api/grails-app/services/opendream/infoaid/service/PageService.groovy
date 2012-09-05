@@ -16,7 +16,7 @@ class PageService {
     	def pageInfo = Page.findBySlug(slug)
     }
 
-    def getPosts(slug, fromId, toId, since, until, type = null) {
+    def getPosts(slug, fromId=null, toId=null, since=null, until=null, type = null) {
         def max = 10
         
         def posts = Post.createCriteria().list() {
@@ -39,10 +39,11 @@ class PageService {
             }
             if(type == 'top') {
                 order('conversation', 'desc')
-            } else {
-                order('lastActived', 'desc')
             }
+            order('lastActived', 'desc')
         }
+
+        return posts
     }
 
     def getTopPost(slug) {
@@ -94,7 +95,7 @@ class PageService {
     	def commentDate = new Date()
     	def post = Post.get(postId)
         
-    	def comment = new Comment(message: message, dateCreated: commentDate)
+    	def comment = new Comment(message: message, dateCreated: commentDate, user: user)
     	post.addToComments(comment)
     	post.lastActived = commentDate
         post.conversation++

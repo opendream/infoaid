@@ -44,8 +44,8 @@ class PageControllerTests {
         page1.addToPosts(secondPost)
         page1.save()
 
-        def comment = new Comment(message: 'comment1')
-        def comment2 = new Comment(message: 'comment2')
+        def comment = new Comment(message: 'comment1', user: user1)
+        def comment2 = new Comment(message: 'comment2', user: user1)
         firstPost.addToComments(comment)
         firstPost.addToComments(comment2)
 
@@ -130,25 +130,39 @@ class PageControllerTests {
     }
 
     void testStatus() {
-        pageService.demand.getPosts(1..1) {slug, offset, max -> 
-            def posts = Post.createCriteria().list(max: max, sort: 'lastActived', order: 'desc', offset: offset) {
+        pageService.demand.getPosts(1..1) { slug, fromId=null, toId=null, since=null, until=null, type=null -> 
+            def max = 10
+        
+            def posts = Post.createCriteria().list() {
                 eq('status', Post.Status.ACTIVE)
                 page {
-                    eq('slug', slug)
+                    eq('slug', slug)    
                 }
+                maxResults(max)
+                if(fromId) {
+                    ge('id', fromId)
+                }
+                if(toId) {
+                    le('id', toId)
+                }
+                if(since) {
+                    ge('dateCreated', since)
+                }
+                if(until) {
+                    le('dateCreated', until)
+                }
+                if(type == 'top') {
+                    order('conversation', 'desc')
+                }
+                order('lastActived', 'desc')
             }
-            posts
-            //[posts: posts, totalPosts: posts.totalCount]
-            //getData()
+
+            return posts
         }
         controller.pageService = pageService.createMock()
 
         params.slug = 'page-slug'
-        params.offset = 0
-        params.max = 10
         controller.status()
-        //def expectResponse = """{"posts":[{"message":"item 10","dateCreated":"${date.format(dateFormat)}","comments":[]},{"message":"item 10","dateCreated":"${date.format(dateFormat)}","comments":[]},{"message":null,"dateCreated":"${date.format(dateFormat)}","comments":[]},{"message":null,"dateCreated":"${date.format(dateFormat)}","comments":["comment1","comment2"]}],"totalPosts":4}"""
-        //assert expectResponse == response.text
         assert 4 == response.json.size()
         assert 'item 10' == response.json[0].message
     }
