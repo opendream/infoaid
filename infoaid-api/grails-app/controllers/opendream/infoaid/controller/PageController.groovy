@@ -190,6 +190,21 @@ class PageController {
         }        
     }
 
+    def postMessage() {
+        def ret
+        def userId = params.userId
+        def slug = params.slug
+        def message = params.message
+
+        def result = pageService.createMessagePost(userId, slug, message)
+        ret = [post: [id :result.post.id, message: result.post.message, 
+        createdBy: result.post.createdBy, lastActived: result.post.lastActived], 
+        user: result.user.username, page: result.page.name, slug: result.page.slug]
+        ret.status = 1
+        ret.message = "user: ${result.user.username} posted message in page: ${result.page.name}"
+        render ret as JSON
+    }
+
     def postComment(){
         def userId = params.userId
         def postId = params.postId

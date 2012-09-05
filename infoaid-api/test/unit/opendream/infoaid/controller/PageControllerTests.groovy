@@ -10,12 +10,13 @@ import opendream.infoaid.domain.Post
 import opendream.infoaid.domain.Item
 import opendream.infoaid.domain.Item.Status
 import opendream.infoaid.domain.Need
+import opendream.infoaid.domain.MessagePost
 import opendream.infoaid.domain.Comment
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(PageController)
-@Mock([Page, PageService, User, PageUser, Post, Item, Need, Comment])
+@Mock([Page, PageService, User, PageUser, MessagePost, Post, Item, Need, Comment])
 class PageControllerTests {
     def pageService
     def date
@@ -385,5 +386,25 @@ class PageControllerTests {
         assert 1 == response.json.status
         assert 'page-slug' == response.json.page.slug
         assert 'INACTIVE' == response.json.page.status
+    }
+
+    void testPostMessage() {
+        // param nut , page-slug
+        controller.pageService = new PageService()
+        def user = User.findByUsername('nut')
+        def page = Page.findBySlug('page-slug')
+
+        params.userId = user.id
+        params.slug = page.slug
+        params.message = 'hello world'
+
+        // controller
+        controller.postMessage()
+
+        // expect
+        def post = Post.findByCreatedByAndPage(user.username, page)
+        assert 1 == response.json.status
+        assert "user: ${user.username} posted message in page: ${page.name}" == response.json.message
+        assert 'hello world' == response.json.post.message        
     }
 }
