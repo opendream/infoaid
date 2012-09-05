@@ -236,6 +236,24 @@ class PageController {
         render ret as JSON
     }
 
+    def postNeed() {
+        def ret
+        def userId = params.userId
+        def slug = params.slug
+        def itemId = params.itemId
+        def quantity = params.quantity
+        def message = params.message
+
+        def result = pageService.createNeed(userId, slug, itemId, quantity, message)
+        ret = [post: [id :result.post.id, message: result.post.message,
+        item: [id: result.post.item.id, name: result.post.item.name], quantity: result.post.quantity,
+        createdBy: result.post.createdBy, lastActived: result.post.lastActived], 
+        user: result.user.username, page: result.page.name, slug: result.page.slug]
+        ret.status = 1
+        ret.message = "user: ${result.user.username} posted request ${result.post.item.name}, quantity: ${result.post.quantity} in page: ${result.page.name}"
+        render ret as JSON
+    }
+
     def postComment(){
         def userId = params.userId
         def postId = params.postId

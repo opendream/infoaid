@@ -7,34 +7,24 @@ import opendream.infoaid.domain.PageUser.Relation
 import opendream.infoaid.domain.Post
 import opendream.infoaid.domain.User
 
-import grails.test.mixin.*
+import static org.junit.Assert.*
 import org.junit.*
 
-/**
- * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
- */
-@TestFor(HomeService)
-@Mock([Page, Post, PageUser, User])
 class HomeServiceTests {
-    def user
-    def follower    
+    def homeService        
 
     @Before
     void setUp() {
-        Page.metaClass.generateSlug = {-> 'slug'}
-        Page.metaClass.isDirty = {name -> false}
-        User.metaClass.encodePassword = { -> 'password'}
-        User.metaClass.isDirty = {password -> false}
         def date = new Date() - 1
 
         // mock user
-        user = new User(username: 'admin', password: 'password', 
-            firstname: 'thawatchai', lastname: 'jong', dateCreated: date, lastUpdated: date)
-        user.save(flush:true)
-
-        follower = new User(username: 'follower', password: 'password', 
-            firstname: 'nut', lastname: 'tong', dateCreated: date, lastUpdated: date)
-        follower.save(flush:true)
+        def user = new User(username: 'adminx', password: 'password', 
+            firstname: 'thawatchai', lastname: 'jong')
+        user.save(failOnError: true, flush:true)
+        //def user = User.findByUsername("admin")
+        def follower = new User(username: 'follower', password: 'password', 
+            firstname: 'nut', lastname: 'tong')
+        follower.save(failOnError: true, flush:true)
 
         // mock page
         def page1 = new Page(name: "page1", lat: "page1", 
@@ -89,9 +79,11 @@ class HomeServiceTests {
         assert 3 == Page.count()
         assert 5 == PageUser.count()
         assert 12 == Post.count()
+        def user = User.findByUsername("adminx")
+        def follower = User.findByUsername("follower")
 
-        def userPostResults = service.getFeedByRecentPost(user)
-        def followerPostResults = service.getFeedByRecentPost(follower)
+        def userPostResults = homeService.getFeedByRecentPost(user)
+        def followerPostResults = homeService.getFeedByRecentPost(follower)
         assert 10 == userPostResults.size()
         assert 8 == followerPostResults.size()
 
@@ -100,15 +92,18 @@ class HomeServiceTests {
         assert "page1" == userPostResults[0].page.name
 
         // test with offset and max
-        userPostResults = service.getFeedByRecentPost(user, 1, 9)
+        userPostResults = homeService.getFeedByRecentPost(user, 1, 9)
         assert 9 == userPostResults.size()
         assert "third Post2" == userPostResults[0].message
         assert "page3" == userPostResults[0].page.name
     }
 
     void testGetHomeFeedByTopPost() {
-        def userPostResults = service.getFeedByTopPost(user)
-        def followerPostResults = service.getFeedByTopPost(follower)
+        def user = User.findByUsername("adminx")
+        def follower = User.findByUsername("follower")
+
+        def userPostResults = homeService.getFeedByTopPost(user)
+        def followerPostResults = homeService.getFeedByTopPost(follower)
         assert 10 == userPostResults.size()
         assert 8 == followerPostResults.size()
 
