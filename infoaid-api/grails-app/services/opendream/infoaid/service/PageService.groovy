@@ -161,18 +161,17 @@ class PageService {
         pageUser.user
     }
 
-    def createNeed(userId, slug, message) {
+    def createNeed(userId, slug, item, quantity, message = "") {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
         def pageUser = PageUser.findByUserAndPage(user, page)
         pageUser.conversation++
         pageUser.save()
         def date = new Date()
-        def need = new Need(lastActived: date, createdBy: user.username, updatedBy: user.username, expiredDate: date, message: message, quantity: 10)
+        def need = new Need(lastActived: date, createdBy: user.username, updatedBy: user.username, expiredDate: date, message: message, item: item, quantity: quantity)
         page.addToPosts(need)
-        if(!page.save()) {
-            return false
-        }
+        page.save(failOnError: true, flush: true)
+        return [user: user, page: page, post: need]
     }
 
     def createMessagePost(userId, slug, message) {
@@ -186,9 +185,7 @@ class PageService {
         def date = new Date()
         def messagePost = new MessagePost(lastActived: date, createdBy: user.username, updatedBy: user.username, expiredDate: date+14, message: message)
         page.addToPosts(messagePost)
-        if(!page.save(flush:true)) {
-            throw new RuntimeException(page.errors)
-        }
+        page.save(failOnError: true, flush: true)
         return [user: user, page: page, post: messagePost]
     }
 
