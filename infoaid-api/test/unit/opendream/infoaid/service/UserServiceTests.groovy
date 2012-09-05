@@ -19,15 +19,14 @@ class UserServiceTests {
         User.metaClass.isDirty = {password -> true}
 
         user = new User(username: 'admin', password: 'password', 
-            firstname: 'thawatchai', lastname: 'jong', dateCreated: new Date(), 
-            lastUpdated: new Date()).save(flush:true)
+            firstname: 'thawatchai', lastname: 'jong').save(flush:true)
 
         service.springSecurityService = [encodePassword: {pwd -> pwd?pwd+'password':''}]
     }
 
     void testCreate() {
         def userparams = [username: "nut", password: "nut", firstname: 'firstname', 
-        lastname: 'lastname', dateCreated: new Date(), lastUpdated: new Date()]
+        lastname: 'lastname']
         service.create(userparams)
         assert 2 == User.count()
         assert 'nut' == User.findByUsername('nut').username
