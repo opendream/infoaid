@@ -258,10 +258,15 @@ class PageController {
         def userId = params.userId
         def postId = params.postId
         def message = params.message
+        def ret
 
         if(userId && postId && message) {
-            pageService.postComment(userId, postId, message)
+            def result = pageService.postComment(userId, postId, message)
+            ret = [status: 1, message: "user ${result.user.username} post comment ${result.comment.message} on post ${result.post.message}",
+            userId: result.user.id, user: result.user.username, postId: result.post.id, 
+            post: result.post.message, commentId: result.comment.id, comment: result.comment.message]
         }
+        render ret as JSON
     }    
 
     def updatePage() {
