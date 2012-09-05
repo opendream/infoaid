@@ -202,7 +202,7 @@ class PageServiceTests {
         assert page.posts.size() == 22
         def pageUser = new PageUser(page: page, user: user1, relation: PageUser.Relation.MEMBER).save(flush: true)
 
-        def result = service.createNeed(user1.id, page.slug, item, quantity, message)
+        def result = service.createNeed(user1.id, page.slug, item.id, quantity, message)
         def pageUserAfterCreateNeed = PageUser.get(1)
         assert pageUserAfterCreateNeed.conversation == 1
 
