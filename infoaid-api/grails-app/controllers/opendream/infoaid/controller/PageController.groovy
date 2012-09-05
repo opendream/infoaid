@@ -198,29 +198,7 @@ class PageController {
         if(userId && postId && message) {
             pageService.postComment(userId, postId, message)
         }
-    }
-
-    def summaryInfo() {
-        def ret = [:]
-        def pages = pageService.getSummaryInfo()
-        ret.pages = pages.collect {
-            [
-                name: it.name,
-                lat: it.lat,
-                lng: it.lng,
-                needs: pageService.getLimitNeeds(it.slug, 5).needs.collect {
-                    [
-                        message: it.message,
-                        quantity: it.quantity
-                    ]
-                }
-
-            ]
-        }
-        ret.totalPages = pages.size()
-        
-        render ret as JSON
-    }
+    }    
 
     def updatePage() {
         def slug = params.slug
