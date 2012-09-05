@@ -284,7 +284,7 @@ class PageControllerTests {
         assert 3 == Page.count()
         assert 4 == PageUser.count()
 
-        assert 1 = response.json.status
+        assert 1 == response.json.status
         assert 1 == response.json.userId
         assert 'my page' == response.json.name
         assert 'my lat' == response.json.lat
@@ -353,33 +353,7 @@ class PageControllerTests {
         assert pageUser.conversation == 2
         assert thisPost.conversation == 1
         assert 3 == Comment.count()
-    }
-
-    void testSummaryInfo() {
-        def page2 = new Page(name: "page2", lat: "latPage2", lng: "lngPage2", dateCreated: date, lastUpdated: date, slug: 'slug2', about: 'this is page 2').save()
-        pageService.demand.getSummaryInfo(1..1) { -> 
-            Page.findAllByStatus(Page.Status.ACTIVE)
-        }
-
-        pageService.demand.getLimitNeeds(1..3) {slug, max -> 
-            def page = Page.findBySlug(slug)
-            def needs = Need.createCriteria().list(max: max, sort: 'dateCreated', order: 'desc') {
-                eq('status', Post.Status.ACTIVE)
-                eq('page', page)
-            }
-
-            [needs: needs, totalNeeds: needs.totalCount]
-        }
-
-        controller.pageService = pageService.createMock()
-
-        controller.summaryInfo()
-
-        assert 3 == response.json['totalPages']
-        assert '111' == response.json['pages'][0].lat
-        def expectResponse = """{"pages":[{"name":"page","lat":"111","lng":"222","needs":[{"message":"item 10","quantity":10},{"message":"item 9","quantity":9}]},{"name":"second-page","lat":"11122","lng":"1234","needs":[]},{"name":"page2","lat":"latPage2","lng":"lngPage2","needs":[]}],"totalPages":3}"""
-        assert expectResponse == response.text
-    }
+    }    
 
     void testUpdatePage() {
         def page = Page.findBySlug("page-slug")
