@@ -5,11 +5,12 @@ import grails.converters.JSON
 
 class LocationController {
 
+    def locationService
+
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def list(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        def locations = Location.list(params)
+        def locations = locationService.list(max)
         def ret = [:]
         ret.locations = locations.collect {
             [
@@ -30,17 +31,29 @@ class LocationController {
     }
 
     def createLocation() {
-        def location = new Location(params)
-        if (!location.save()) {
-            def errorMessage = [message: "Can't save this location"]
-            log.error(location.errors)
-            render errorMessage as JSON
-            return
+        def ret = [:]
+        try {
+            def newLocation = locationService.createLocation(params)
+            ret.region = newLocation.region
+            ret.province = newLocation.province
+            ret.district = newLocation.district
+            ret.subDistrict = newLocation.subDistrict
+            ret.label = newLocation.label
+            ret.lat = newLocation.lat
+            ret.lng = newLocation.lng
+            ret.dateCreated = newLocation.dateCreated
+            ret.lastUpdated = newLocation.lastUpdated
+            ret.status = newLocation.status.toString()
+
+            render ret as JSON
+        } catch(e) {
+            ret = [message: 'can not create new location', location: params]
+            render ret as JSON
         }
     }
 
     def show(Long id) {
-        def location = Location.get(id)
+        def location = locationService.show(id)
         if (!location) {
             def errorMessage = [message: "Location not Found"]
             render errorMessage as JSON
@@ -48,6 +61,7 @@ class LocationController {
         }
 
         def ret = [:]
+        ret.id = location.id
         ret.region = location.region
         ret.province = location.province
         ret.district = location.district
@@ -55,51 +69,58 @@ class LocationController {
         ret.label = location.label
         ret.lat = location.lat
         ret.lng = location.lng
-        ret.dateCreated = location.dateCreated.format('yyyy-MM-dd HH:mm')
-        ret.lastUpdated = location.lastUpdated.format('yyyy-MM-dd HH:mm')
+        ret.dateCreated = location.dateCreated
+        ret.lastUpdated = location.lastUpdated
         ret.status = location.status.toString()
 
         render ret as JSON
     }
 
-    def update(Long id, Long version) {        
-        def locationInstance = Location.get(id)
-        if (!locationInstance) {
-            return
-        }
-
-        if (version != null) {
-            if (locationInstance.version > version) {
-                locationInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'location.label', default: 'Location')] as Object[],
-                          "Another user has updated this Location while you were editing")
-                return
-            }
-        }
-
-        locationInstance.properties = params
-
-        if (!locationInstance.save(flush: true)) {
-            def errorMessage = "Can't update this location"
-            render errorMessage as JSON
-            return
+    def update() {        
+        def ret = [:]
+        try {
+            def location = locationService.update(params)
+            ret.id = location.id
+            ret.region = location.region
+            ret.province = location.province
+            ret.district = location.district
+            ret.subDistrict = location.subDistrict
+            ret.label = location.label
+            ret.lat = location.lat
+            ret.lng = location.lng
+            ret.dateCreated = location.dateCreated
+            ret.lastUpdated = location.lastUpdated
+            ret.status = location.status.toString()
+            render ret as JSON
+        } catch (e) {
+            ret = [message: 'can not edit this location', location: params]
+            render ret as JSON
         }
     }
     
-    def disableLocation(long id) {
-        def location = Location.get(id)
-        if(!location) {
-            def errorMessage = "Location not found"
-            render errorMessage as JSON
-            return
+    def disableLocation() {
+        def ret = [:]
+        try {
+            def location = locationService.disable(params.id)
+            ret.id = location.id
+            ret.status = location.status.toString()
+            render ret as JSON
+        } catch (e) {
+            ret = [message: 'can not disable this location', location: params]
+            render ret as JSON
         }
+    }
 
-        location.status = Location.Status.INACTIVE
-        if(!location.save()) {
-            def errorMessage = "Can't disable this location"
-            log.error(location.errors)
-            render errorMessage as JSON
-            return
+    def enableLocation() {
+        def ret = [:]
+        try {
+            def location = locationService.enable(params.id)
+            ret.id = location.id
+            ret.status = location.status.toString()
+            render ret as JSON
+        } catch (e) {
+            ret = [message: 'can not enable this location', location: params]
+            render ret as JSON
         }
     }
     

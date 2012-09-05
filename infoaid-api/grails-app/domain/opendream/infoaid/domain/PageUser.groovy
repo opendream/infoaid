@@ -33,7 +33,7 @@ class PageUser implements Serializable {
 
     static PageUser leavePage(User user, Page page) {
         def pageUser = PageUser.findByPageAndUser(page, user)
-        pageUser.delete()
+        pageUser.delete(flush: true)
     }
 
     static PageUser get(long userId, long pageId) {

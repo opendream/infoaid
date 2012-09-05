@@ -10,12 +10,13 @@ import opendream.infoaid.domain.Post
 import opendream.infoaid.domain.Item
 import opendream.infoaid.domain.Item.Status
 import opendream.infoaid.domain.Need
+import opendream.infoaid.domain.MessagePost
 import opendream.infoaid.domain.Comment
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(PageController)
-@Mock([Page, PageService, User, PageUser, Post, Item, Need, Comment])
+@Mock([Page, PageService, User, PageUser, MessagePost, Post, Item, Need, Comment])
 class PageControllerTests {
     def pageService
     def date
@@ -86,7 +87,7 @@ class PageControllerTests {
 
         params.slug = 'page-slug'
         controller.map()
-        def expectResponse = """{"id":1,"name":"page","lat":"111","lng":"222"}"""
+        def expectResponse = """{"status":1,"id":1,"name":"page","lat":"111","lng":"222"}"""
 
         assert expectResponse == response.text
     }
@@ -99,7 +100,8 @@ class PageControllerTests {
         controller.member()
 
         assert response.json['members'].size() == 2
-        assert 'nut' == response.json['members'][0].username        
+        assert 'nut' == response.json['members'][0].username 
+        assert 1 == response.json.status   
     }
 
     void testTopMember() {
@@ -170,7 +172,7 @@ class PageControllerTests {
         params.slug = 'page-slug'
         controller.need()
 
-        def expectResponse = """{"needs":[{"message":"item 9","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":9,"item":"item"},{"message":"item 10","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":10,"item":"item"}],"totalNeeds":2}"""
+        def expectResponse = """{"status":1,"needs":[{"message":"item 9","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":9,"item":"item"},{"message":"item 10","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":10,"item":"item"}],"totalNeeds":2}"""
         assert expectResponse == response.text
     }
 
@@ -191,7 +193,7 @@ class PageControllerTests {
         params.limit = 1
         controller.limitNeed()
 
-        def expectResponse = """{"needs":[{"message":"item 10","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":10,"item":"item"}],"totalNeeds":2}"""
+        def expectResponse = """{"needs":[{"message":"item 10","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":10,"item":"item"}],"totalNeeds":2,"status":1}"""
         assert expectResponse == response.text
     }
 
@@ -202,8 +204,7 @@ class PageControllerTests {
         params.slug = 'page-slug'
         controller.about()
 
-        def expectResponse = 'this is page 1'
-        assert expectResponse == response.text
+        assert 'this is page 1' == response.json.about
     }
 
     void testJoinUs() {
@@ -225,6 +226,10 @@ class PageControllerTests {
         testPage = Page.findBySlug('page-slug')
         assert 3 == testPage.users.size()
         assert PageUser.Relation.MEMBER == testPage.users.last().relation
+        assert "nut3" == response.json.user
+        assert "page" == response.json.page
+        assert "page-slug" == response.json.pageSlug
+        assert "MEMBER" == response.json.relation
     }    
 
     void testTopPost() {
@@ -259,9 +264,11 @@ class PageControllerTests {
         assert 2 == Page.count()
 
         pageService.demand.createPage(1..1) { userId, name, lat, lng, location, household, population, about -> 
-            def page = new Page(name: name, lat: lat, lng: lng, location: location).save()
+            def page = new Page(name: name, lat: lat, lng: lng, location: location,
+            household: household, population: population, about: about).save()
             def user = User.get(userId)
             new PageUser(user: user, page: page, relation: PageUser.Relation.OWNER).save()
+            page
         }
         controller.pageService = pageService.createMock()
 
@@ -270,13 +277,22 @@ class PageControllerTests {
         params.lat = 'my lat'
         params.lng = 'my lng'
         params.location = null
-        params.household = null
-        params.population = null
-        params.about = null
+        params.household = 100
+        params.population = 300
+        params.about = 'about body'
         controller.createPage()
 
         assert 3 == Page.count()
         assert 4 == PageUser.count()
+
+        assert 1 == response.json.status
+        assert 1 == response.json.userId
+        assert 'my page' == response.json.name
+        assert 'my lat' == response.json.lat
+        assert 'my lng' == response.json.lng
+        assert 100 == response.json.household
+        assert 300 == response.json.population
+        assert 'about body' == response.json.about
     }
 
     void testLeavePage() {
@@ -295,6 +311,9 @@ class PageControllerTests {
         controller.leavePage()
 
         assert 2 == PageUser.count()
+
+        assert 1 == response.json.status
+        assert "user id: 1 left from page: page-slug" == response.json.message
     }
 
     void testPostComment() {
@@ -335,33 +354,7 @@ class PageControllerTests {
         assert pageUser.conversation == 2
         assert thisPost.conversation == 1
         assert 3 == Comment.count()
-    }
-
-    void testSummaryInfo() {
-        def page2 = new Page(name: "page2", lat: "latPage2", lng: "lngPage2", dateCreated: date, lastUpdated: date, slug: 'slug2', about: 'this is page 2').save()
-        pageService.demand.getSummaryInfo(1..1) { -> 
-            Page.findAllByStatus(Page.Status.ACTIVE)
-        }
-
-        pageService.demand.getLimitNeeds(1..3) {slug, max -> 
-            def page = Page.findBySlug(slug)
-            def needs = Need.createCriteria().list(max: max, sort: 'dateCreated', order: 'desc') {
-                eq('status', Post.Status.ACTIVE)
-                eq('page', page)
-            }
-
-            [needs: needs, totalNeeds: needs.totalCount]
-        }
-
-        controller.pageService = pageService.createMock()
-
-        controller.summaryInfo()
-
-        assert 3 == response.json['totalPages']
-        assert '111' == response.json['pages'][0].lat
-        def expectResponse = """{"pages":[{"name":"page","lat":"111","lng":"222","needs":[{"message":"item 10","quantity":10},{"message":"item 9","quantity":9}]},{"name":"second-page","lat":"11122","lng":"1234","needs":[]},{"name":"page2","lat":"latPage2","lng":"lngPage2","needs":[]}],"totalPages":3}"""
-        assert expectResponse == response.text
-    }
+    }    
 
     void testUpdatePage() {
         def page = Page.findBySlug("page-slug")
@@ -390,6 +383,28 @@ class PageControllerTests {
         controller.disablePage()
         page = Page.findBySlug('page-slug')
 
-        assert page.status == Page.Status.INACTIVE
+        assert 1 == response.json.status
+        assert 'page-slug' == response.json.page.slug
+        assert 'INACTIVE' == response.json.page.status
+    }
+
+    void testPostMessage() {
+        // param nut , page-slug
+        controller.pageService = new PageService()
+        def user = User.findByUsername('nut')
+        def page = Page.findBySlug('page-slug')
+
+        params.userId = user.id
+        params.slug = page.slug
+        params.message = 'hello world'
+
+        // controller
+        controller.postMessage()
+
+        // expect
+        def post = Post.findByCreatedByAndPage(user.username, page)
+        assert 1 == response.json.status
+        assert "user: ${user.username} posted message in page: ${page.name}" == response.json.message
+        assert 'hello world' == response.json.post.message        
     }
 }

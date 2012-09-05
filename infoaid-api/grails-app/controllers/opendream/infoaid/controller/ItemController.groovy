@@ -1,22 +1,31 @@
 package opendream.infoaid.controller
 
-//import org.springframework.dao.DataIntegrityViolationException
 import opendream.infoaid.domain.Item
 import grails.converters.JSON
 
 class ItemController {
 
+    def itemService
+
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def list(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        def items = Item.list(params)
+        def items = itemService.list(max)
         def ret = [:]
         ret.items = items.collect {
             [
+                id: it.id,
                 name: it.name,
+                lastUpdated: it.lastUpdated,
+                dateCreated: it.dateCreated,
                 status: it.status.toString(),
-                dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm')
+                needs: it.needs.collect {
+                    [
+                        id: it.id,
+                        message: it.message,
+                        quantity: it.quantity
+                    ]
+                }
             ]
         }
         ret.totalItems = items.size()
@@ -24,19 +33,26 @@ class ItemController {
     }
 
     def createItem() {
-        if(params.name) {
-            def item = new Item(params)
-            if (!item.save()) {
-                def errorMessage = [message: "Can't save this item ${params.name}"]
-                log.error(item.errors)
-                render errorMessage as JSON
-                return
-            }
+        def ret = [:]
+        try {
+            def newItem = itemService.createItem(params.name)
+            ret.id = newItem.id
+            ret.name = newItem.name
+            ret.lastUpdated = newItem.lastUpdated
+            ret.dateCreated = newItem.dateCreated
+            ret.needs = newItem.needs
+            ret.status = newItem.status.toString()
+
+            render ret as JSON
+        } catch(e) {
+            ret = [message: 'can not create new item', item: params]
+            render ret as JSON
         }
+        
     }
 
     def show(Long id) {
-        def item = Item.get(id)
+        def item = itemService.show(id)
         if (!item) {
             def errorMessage = [message: "Item not Found"]
             render errorMessage as JSON
@@ -44,50 +60,70 @@ class ItemController {
         }
 
         def ret = [:]
+        ret.id = item.id
         ret.name = item.name
+        ret.lastUpdated = item.lastUpdated
+        ret.dateCreated = item.dateCreated
+        ret.needs = item.needs.collect{
+            [
+                id: it.id,
+                message: it.message,
+                quantity: it.quantity
+            ]
+        }
         ret.status = item.status.toString()
-        ret.dateCreated = item.dateCreated.format('yyyy-MM-dd HH:mm')
+
         render ret as JSON
     }
 
-    def update(Long id, Long version) {        
-        def itemInstance = Item.get(id)
-        if (!itemInstance) {
-            return
+    def update() {
+        def ret = [:]
+        try {
+            def item = itemService.update(params)
+            ret.id = item.id
+            ret.name = item.name
+            ret.lastUpdated = item.lastUpdated
+            ret.dateCreated = item.dateCreated
+            ret.needs = item.needs
+            ret.status = item.status.toString()
+            render ret as JSON
+        } catch (e) {
+            ret = [message: 'can not edit this item', item: params]
+            render ret as JSON
         }
-
-        if (version != null) {
-            if (itemInstance.version > version) {
-                itemInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'item.label', default: 'Item')] as Object[],
-                          "Another user has updated this Item while you were editing")
-                return
-            }
-        }
-
-        itemInstance.properties = params
-
-        if (!itemInstance.save(flush: true)) {
-            def errorMessage = [message: "Can't update this item ${itemInstance.name}"]
-            render errorMessage as JSON
-            return
+    }
+    
+    def disableItem() {
+        def ret = [:]
+        try {
+            def item = itemService.disable(params.id)
+            ret.id = item.id
+            ret.name = item.name
+            ret.lastUpdated = item.lastUpdated
+            ret.dateCreated = item.dateCreated
+            ret.needs = item.needs
+            ret.status = item.status.toString()
+            render ret as JSON
+        } catch (e) {
+            ret = [message: 'can not disable this item', item: params]
+            render ret as JSON
         }
     }
 
-    def disableItem(long id) {
-        def item = Item.get(id)
-        if(!item) {
-            def errorMessage = [message: "Item not found"]
-            render errorMessage as JSON
-            return
-        }
-
-        item.status = Item.Status.INACTIVE
-        if(!item.save()) {
-            def errorMessage = [message: "Can't disable this item ${item.name}"]
-            log.error(item.errors)
-            render errorMessage as JSON
-            return
+    def enableItem() {
+        def ret = [:]
+        try {
+            def item = itemService.enable(params.id)
+            ret.id = item.id
+            ret.name = item.name
+            ret.lastUpdated = item.lastUpdated
+            ret.dateCreated = item.dateCreated
+            ret.needs = item.needs
+            ret.status = item.status.toString()
+            render ret as JSON
+        } catch (e) {
+            ret = [message: 'can not enable this item', item: params]
+            render ret as JSON
         }
     }
 }

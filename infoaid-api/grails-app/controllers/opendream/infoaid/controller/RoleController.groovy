@@ -5,11 +5,12 @@ import grails.converters.JSON
 
 class RoleController {
 
+    def roleService
+
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def list(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        def roles = Role.list(params)
+        def roles = roleService.list(max)
         def ret = [:]
         ret.roles = roles.collect {
             [
@@ -22,17 +23,22 @@ class RoleController {
     }
 
     def createRole() {
-        def role = new Role(params)
-        if (!role.save()) {
-            def errorMessage = [message: "Can't save this role"]
-            log.error(role.errors)
-            render errorMessage as JSON
-            return
+        def ret = [:]
+        try{
+            def newRole = roleService.createRole(params.authority)
+            ret.authority = newRole.authority
+            ret.status = newRole.status.toString()
+
+            render ret as JSON
+        } catch(e) {
+            ret = [message: 'can not create new role', role: params]
+            render ret as JSON
         }
+        
     }
 
     def show(Long id) {
-        def role = Role.get(id)
+        def role = roleService.show(id)
         if (!role) {
             def errorMessage = [message: "Role not Found"]
             render errorMessage as JSON
@@ -46,44 +52,42 @@ class RoleController {
         render ret as JSON
     }
 
-    def update(Long id, Long version) {        
-        def roleInstance = Role.get(id)
-        if (!roleInstance) {
-            return
-        }
-
-        if (version != null) {
-            if (roleInstance.version > version) {
-                roleInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'role.label', default: 'Role')] as Object[],
-                          "Another user has updated this Role while you were editing")
-                return
-            }
-        }
-
-        roleInstance.properties = params
-
-        if (!roleInstance.save(flush: true)) {
-            def errorMessage = "Can't update this role"
-            render errorMessage as JSON
-            return
+    def update() {
+        def ret = [:]
+        try {
+            def role = roleService.update(params)
+            ret.id = role.id
+            ret.authority = role.authority
+            render ret as JSON
+        } catch (e) {
+            ret = [message: 'can not edit this role', role: params]
+            render ret as JSON
         }
     }
     
-    def disableRole(long id) {
-        def role = Role.get(id)
-        if(!role) {
-            def errorMessage = "Role not found"
-            render errorMessage as JSON
-            return
+    def disableRole() {
+        def ret = [:]
+        try {
+            def role = roleService.disable(params.id)
+            ret.id = role.id
+            ret.status = role.status.toString()
+            render ret as JSON
+        } catch (e) {
+            ret = [message: 'can not disable this role', role: params]
+            render ret as JSON
         }
+    }
 
-        role.status = Role.Status.INACTIVE
-        if(!role.save()) {
-            def errorMessage = "Can't disable this role"
-            log.error(role.errors)
-            render errorMessage as JSON
-            return
+    def enableRole() {
+        def ret = [:]
+        try {
+            def role = roleService.enable(params.id)
+            ret.id = role.id
+            ret.status = role.status.toString()
+            render ret as JSON
+        } catch (e) {
+            ret = [message: 'can not enable this role', role: params]
+            render ret as JSON
         }
     }
     
