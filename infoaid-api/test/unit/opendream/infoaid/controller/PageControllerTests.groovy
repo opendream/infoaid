@@ -402,9 +402,28 @@ class PageControllerTests {
         controller.postMessage()
 
         // expect
-        def post = Post.findByCreatedByAndPage(user.username, page)
         assert 1 == response.json.status
         assert "user: ${user.username} posted message in page: ${page.name}" == response.json.message
         assert 'hello world' == response.json.post.message        
+    }
+
+    void testPostNeed() {
+        // param nut , page-slug
+        controller.pageService = new PageService()
+        def user = User.findByUsername('nut')
+        def page = Page.findBySlug('page-slug')
+        def item = new Item(name: 'water').save(flush: true)
+
+        params.userId = user.id
+        params.slug = page.slug
+        params.itemId = item.id
+        params.quantity = 20
+
+        // controller
+        controller.postNeed()
+
+        // expect        
+        assert 1 == response.json.status
+        assert "user: ${user.username} posted request ${item.name}, quantity: 20 in page: ${page.name}" == response.json.message
     }
 }

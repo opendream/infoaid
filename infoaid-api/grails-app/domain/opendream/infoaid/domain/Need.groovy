@@ -8,6 +8,7 @@ class Need extends Post {
 
     static constraints = {
         quantity nullable: false
+        item nullable: false
     }
 
     def beforeInsert() {
