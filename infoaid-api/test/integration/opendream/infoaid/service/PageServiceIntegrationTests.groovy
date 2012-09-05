@@ -105,19 +105,19 @@ class PageServiceIntegrationTests {
 
 
         resultsComment = pageService.getComments(firstResultPost.id, comment11.id+8 as Long, null, null, null)
-        assert resultsComment.totalComments == 3 // comment id start at 2
+        assert resultsComment.comments.size() == 3 // comment id start at 2
 
         resultsComment = pageService.getComments(firstResultPost.id, null, comment11.id+8 as Long, null, null)
-        assert resultsComment.totalComments == 9 // comment id start at 2
+        assert resultsComment.comments.size() == 9 // comment id start at 2
 
         resultsComment = pageService.getComments(firstResultPost.id, null, null, new Date(), null)
-        assert resultsComment.totalComments == 0 // comment id start at 2
+        assert resultsComment.comments.size() == 0 // comment id start at 2
 
         resultsComment = pageService.getComments(firstResultPost.id, null, null, null, new Date())
-        assert resultsComment.totalComments == 11 // comment id start at 2
+        assert resultsComment.comments.size() == 11 // comment id start at 2
 
         resultsComment = pageService.getComments(firstResultPost.id, comment11.id+8 as Long, null, null, new Date())
-        assert resultsComment.totalComments == 3 // comment id start at 2
+        assert resultsComment.comments.size() == 3 // comment id start at 2
     }
 
     @Test

@@ -53,8 +53,9 @@ class PageService {
         getPosts(slug, null, null, null, null, 'recent')        
     }
 
-    def getComments(postId, fromId, toId, since, until) {
-    	def comments = Comment.createCriteria().list() {
+    def getComments(postId, fromId=null, toId=null, since=null, until=null) {
+        def max = 50
+    	def comments = Comment.createCriteria().list(max: max) {
     		post {
     			idEq(postId)
     		}
@@ -73,19 +74,11 @@ class PageService {
     		order('dateCreated', 'asc')
     	}
 
-    	[comments: comments, totalComments: comments.size()]
+    	[comments: comments, totalComments: comments.totalCount]
     }
 
     def getLimitComments(postId) {
-        def max = 3
-        def comments = Comment.createCriteria().list(max: max) {
-            post {
-                idEq(postId)
-            }
-            order('dateCreated', 'desc')
-        }
-
-        [comments: comments, totalComments: comments.totalCount]
+        def comments = Post.findById(postId).previewComments
     }
 
     def postComment(userId, postId, message) {

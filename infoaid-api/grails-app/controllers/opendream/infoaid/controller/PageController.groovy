@@ -73,7 +73,7 @@ class PageController {
             [
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
-                comments: it.previewComments.collect {
+                comments: it.previewComments.comments.collect {
                     [
                         message: it.message,
                         user: it.user.username,
@@ -93,7 +93,7 @@ class PageController {
             [
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
-                comments: it.previewComments.collect {
+                comments: it.previewComments.comments.collect {
                     [
                         message: it.message,
                         user: it.user.username,
@@ -113,7 +113,7 @@ class PageController {
             [
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
-                comments: it.previewComments.collect {
+                comments: it.previewComments.comments.collect {
                     [
                         message: it.message,
                         user: it.user.username,
