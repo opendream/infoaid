@@ -377,11 +377,11 @@ class PageControllerTests {
             def pageUser = PageUser.findByPageAndUser(post.page, user)
             pageUser.conversation++
             pageUser.save()
-            
+            [user: user, post: post, comment: comment]
         }
 
         controller.pageService = pageService.createMock()
-
+        
         params.message = 'this is my comment'
         params.postId = 1
         params.userId = 1
@@ -393,7 +393,7 @@ class PageControllerTests {
         thisPost = Post.get(1)
         assert pageUser.conversation == 2
         assert thisPost.conversation == 1
-        assert 3 == Comment.count()
+        assert 3 == Comment.count()        
     }    
 
     void testUpdatePage() {
