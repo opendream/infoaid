@@ -239,8 +239,8 @@ class PageControllerTests {
             postlist[it].save()
         }
 
-        pageService.demand.getTopPost(1..1) { slug, offset -> 
-            def posts = Post.createCriteria().list(max: 10, sort: 'conversation', order: 'desc', offset: offset) {
+        pageService.demand.getTopPost(1..1) { slug -> 
+            def posts = Post.createCriteria().list(max: 10, sort: 'conversation', order: 'desc') {
                 eq('status', Post.Status.ACTIVE)
                 page {
                     eq('slug', slug)
@@ -251,8 +251,34 @@ class PageControllerTests {
         controller.pageService = pageService.createMock()
 
         params.slug = 'page-slug'
-        params.offset = 0
         controller.topPost()
+        
+        assert 4 == response.json.size()
+        assert 'item 10' == response.json[0].message
+        assert 'item 9' == response.json[1].message
+        assert 'first post' == response.json[3].message
+    }
+
+    void testRecentPost() {
+        def postlist = Post.list()
+        4.times {
+            postlist[it].conversation = it
+            postlist[it].save()
+        }
+
+        pageService.demand.getRecentPost(1..1) { slug -> 
+            def posts = Post.createCriteria().list(max: 10, sort: 'lastActived', order: 'desc') {
+                eq('status', Post.Status.ACTIVE)
+                page {
+                    eq('slug', slug)
+                }
+            }
+            posts            
+        }
+        controller.pageService = pageService.createMock()
+
+        params.slug = 'page-slug'
+        controller.recentPost()
         
         assert 4 == response.json.size()
         assert 'item 10' == response.json[0].message
