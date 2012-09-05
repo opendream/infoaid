@@ -7,7 +7,7 @@ class UserService {
 
     def create(userparams) {
         def user = new User()
-        user.properties['username', 'password', 'firstname', 'lastname', 'email', 'telNo', 'dateCreated', 'lastUpdated'] = userparams
+        user.properties['username', 'password', 'firstname', 'lastname', 'email', 'telNo'] = userparams
         if(!user.save()) {
             log.error user.errors
             throw RuntimeException("${user.errors}")
