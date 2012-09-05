@@ -3,6 +3,7 @@ package opendream.infoaid.service
 import opendream.infoaid.domain.Page
 import opendream.infoaid.domain.Post
 import opendream.infoaid.domain.Comment
+import opendream.infoaid.domain.Item
 import opendream.infoaid.domain.PageUser
 import opendream.infoaid.domain.User
 import opendream.infoaid.domain.Need
@@ -161,9 +162,10 @@ class PageService {
         pageUser.user
     }
 
-    def createNeed(userId, slug, item, quantity, message = "") {
+    def createNeed(userId, slug, itemId, quantity, message = "") {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
+        def item = Item.get(itemId)
         def pageUser = PageUser.findByUserAndPage(user, page)
         pageUser.conversation++
         pageUser.save()
