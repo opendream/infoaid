@@ -158,10 +158,14 @@ class PageService {
 
     def getLimitNeeds(slug, max) {
         def page = Page.findBySlug(slug)
-        def needs = Need.createCriteria().list(max: max, sort: 'dateCreated', order: 'desc') {
+        def needs = Need.createCriteria().list(max: max, sort: 'dateCreated', order: 'desc', cache: true) {
             eq('status', Post.Status.ACTIVE)
             eq('page', page)
         }
+
+        /*def needs = Need.findAll("from Need as n where n.status = :status and page.slug = :slug \
+                                order by n.dateCreated desc ",
+                                [status: Post.Status.ACTIVE, slug: slug] )*/
 
         [needs: needs, totalNeeds: needs.totalCount]
     }
@@ -173,11 +177,12 @@ class PageService {
 
     def getTopMembers(slug) {
         def page = Page.findBySlug(slug)
-        def pageUser = PageUser.createCriteria().list(sort: 'conversation', order: 'desc', max: 5) {
+        def pageUsers = PageUser.createCriteria().list(sort: 'conversation', order: 'desc', max: 5) {
             eq('page', page)
         }
 
-        pageUser.user
+        //pageUser.collect { it.user }
+        [page:page, pageUsers:pageUsers]
     }
 
     def createNeed(userId, slug, itemId, quantity, message = "") {
@@ -247,5 +252,17 @@ class PageService {
             return
         }
         page
+    }
+
+    def getActiveNeedPage() {
+        def pages = Need.createCriteria().list() {            
+            eq('status', Post.Status.ACTIVE)
+            
+            projections {
+                distinct('page')
+            }
+        }
+        println pages
+        pages
     }
 }
