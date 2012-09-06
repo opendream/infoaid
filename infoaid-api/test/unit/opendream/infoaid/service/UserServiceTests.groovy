@@ -19,17 +19,18 @@ class UserServiceTests {
         User.metaClass.isDirty = {password -> true}
 
         user = new User(username: 'admin', password: 'password', 
-            firstname: 'thawatchai', lastname: 'jong').save(flush:true)
+            firstname: 'thawatchai', lastname: 'jong', picOriginal: 'picOri').save(flush:true)
 
         service.springSecurityService = [encodePassword: {pwd -> pwd?pwd+'password':''}]
     }
 
     void testCreate() {
         def userparams = [username: "nut", password: "nut", firstname: 'firstname', 
-        lastname: 'lastname']
+        lastname: 'lastname', picOriginal: 'picOriNut']
         service.create(userparams)
         assert 2 == User.count()
         assert 'nut' == User.findByUsername('nut').username
+        assert 'picOriNut' == User.findByUsername('nut').picOriginal
     }
 
     void testCreateFail() {
@@ -46,18 +47,20 @@ class UserServiceTests {
         assert 'admin' == result.username
         assert 'thawatchai' == result.firstname
         assert 'jong' == result.lastname
+        assert 'picOri' == result.picOriginal
         assert null == result.email
     }
 
     void testUpdateBasicInfo() {
         def updateparmas = [id:user.id, username: 'admin', firstname: 'thawatchai', 
-        lastname: 'jong', email:'boyone@opendream.co.th', telNo:'12345678']
+        lastname: 'jong', email:'boyone@opendream.co.th', telNo:'12345678', picOriginal: 'picOri2']
         
         def result = service.updateBasicInfo(updateparmas)
         assert 'admin' == result.username
         assert 'thawatchai' == result.firstname
         assert 'jong' == result.lastname
-        assert 'boyone@opendream.co.th' == result.email 
+        assert 'boyone@opendream.co.th' == result.email
+        assert 'picOri2' == result.picOriginal
         assert '12345678' == result.telNo      
     }
 

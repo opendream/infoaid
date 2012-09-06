@@ -54,8 +54,9 @@ class PageService {
         getPosts(slug, null, null, null, null, 'recent')        
     }
 
-    def getComments(postId, fromId, toId, since, until) {
-    	def comments = Comment.createCriteria().list() {
+    def getComments(postId, fromId=null, toId=null, since=null, until=null) {
+        def max = 50
+    	def comments = Comment.createCriteria().list(max: max) {
     		post {
     			idEq(postId)
     		}
@@ -74,19 +75,11 @@ class PageService {
     		order('dateCreated', 'asc')
     	}
 
-    	[comments: comments, totalComments: comments.size()]
+    	[comments: comments, totalComments: comments.totalCount]
     }
 
     def getLimitComments(postId) {
-        def max = 3
-        def comments = Comment.createCriteria().list(max: max) {
-            post {
-                idEq(postId)
-            }
-            order('dateCreated', 'desc')
-        }
-
-        [comments: comments, totalComments: comments.totalCount]
+        def comments = Post.findById(postId).previewComments
     }
 
     def postComment(userId, postId, message) {
@@ -107,9 +100,9 @@ class PageService {
         [user: user, post: post, comment: comment]
     }
 
-    def createPage(userId, name, lat, lng, location, household, population, about) {
+    def createPage(userId, name, lat, lng, location, household, population, about, picOriginal) {
         def page = new Page(name: name, lat: lat, lng: lng, location: location,
-            household: household, population: population, about: about)
+            household: household, population: population, about: about, picOriginal: picOriginal)
         page.save(failOnError: true)
         def user = User.get(userId)
         PageUser.createPage(user, page)
@@ -235,7 +228,7 @@ class PageService {
                 return "Another user has updated this Page while you were editing"
             }
         }
-        page.properties['name', 'lat', 'lng', 'location', 'status', 'household', 'population', 'about', 'version'] = data
+        page.properties['name', 'lat', 'lng', 'location', 'status', 'household', 'population', 'about', 'version', 'picOriginal'] = data
         if(!page.save()) {
             return
         }

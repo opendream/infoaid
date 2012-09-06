@@ -12,7 +12,7 @@ class PageController {
         def info = pageService.getInfo(params.slug)
         if(info) {
             ret = [id: info.id, name: info.name, lat: info.lat, lng: info.lng, dateCreated: info.dateCreated.format('yyyy-MM-dd HH:mm'), 
-            lastUpdated: info.lastUpdated.format('yyyy-MM-dd HH:mm')
+            lastUpdated: info.lastUpdated.format('yyyy-MM-dd HH:mm'), picOriginal: info.picOriginal
             ]
         }
         
@@ -42,7 +42,10 @@ class PageController {
                 lastname: it.user.lastname,
                 email: it.user.email,
                 telNo: it.user.telNo,
-                relation: it.relation.toString()
+                relation: it.relation.toString(),
+                picOriginal: it.user.picOriginal,
+                picLarge: it.user.picLarge,
+                picSmall: it.user.picSmall
             ]
         }
         ret.totalMembers = results.size()
@@ -60,7 +63,10 @@ class PageController {
                 lastname: it.user.lastname,
                 email: it.user.email,
                 telNo: it.user.telNo,
-                relation: it.relation.toString()
+                relation: it.relation.toString(),
+                picOriginal: it.user.picOriginal,
+                picLarge: it.user.picLarge,
+                picSmall: it.user.picSmall
             ]
         }
         ret.totalTopMembers = results.pageUsers.size()
@@ -75,10 +81,13 @@ class PageController {
             [
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
-                comments: it.previewComments.collect {
+                comments: it.previewComments.comments.collect {
                     [
                         message: it.message,
                         user: it.user.username,
+                        picOriginal: it.user.picOriginal,
+                        picLarge: it.user.picLarge,
+                        picSmall: it.user.picSmall,
                         lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
                     ]
                 }
@@ -95,10 +104,13 @@ class PageController {
             [
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
-                comments: it.previewComments.collect {
+                comments: it.previewComments.comments.collect {
                     [
                         message: it.message,
                         user: it.user.username,
+                        picOriginal: it.user.picOriginal,
+                        picLarge: it.user.picLarge,
+                        picSmall: it.user.picSmall,
                         lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
                     ]
                 }
@@ -115,10 +127,13 @@ class PageController {
             [
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
-                comments: it.previewComments.collect {
+                comments: it.previewComments.comments.collect {
                     [
                         message: it.message,
                         user: it.user.username,
+                        picOriginal: it.user.picOriginal,
+                        picLarge: it.user.picLarge,
+                        picSmall: it.user.picSmall,
                         lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
                     ]
                 }
@@ -193,18 +208,19 @@ class PageController {
         def population = params.population
         def about = params.about
         def location = params.location
+        def picOriginal = params.picOriginal
         def ret = [:]
 
         if(!userId || !name) {
             ret = [status:0, message: "user id: ${userId} could not create page: ${name}",
                     lat: lat, lng: lng, household: household, population: population,
-                    about: about, location: location]
+                    about: about, location: location, picOriginal: picOriginal]
             render ret as JSON
         } else {
-            def result = pageService.createPage(userId, name, lat, lng, location, household, population, about)
+            def result = pageService.createPage(userId, name, lat, lng, location, household, population, about, picOriginal)
             ret = [status:1, message: "user id: ${userId} created page: ${name}", userId: userId, 
-                    name:result.name, lat: result.lat, lng: result.lng, household: result.household, 
-                    population: result.population, about: result.about, location: result.location]
+                    name: result.name, lat: result.lat, lng: result.lng, household: result.household, 
+                    population: result.population, about: result.about, location: result.location, picOriginal: picOriginal]
             render ret as JSON
         }
     }

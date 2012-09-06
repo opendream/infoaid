@@ -33,9 +33,10 @@ class Post {
     def getPreviewComments() {
         def previewComments = Comment.createCriteria().list(max: 3) {
             eq('post', this)
+            order('dateCreated', 'desc')
         }
 
-        return previewComments
+        [comments: previewComments, totalComments: previewComments.totalCount]
     }
     
 }
