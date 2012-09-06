@@ -8,11 +8,11 @@
       "needs": [
         {
           "message": "Boat",
-          "quantity": 8,
+          "quantity": 8
         },
         {
           "message": "Car",
-          "quantity": 3,
+          "quantity": 3
         }
       ]
     },
@@ -23,7 +23,7 @@
       "needs": [
         {
           "message": "Boat",
-          "quantity": 19,
+          "quantity": 19
         }
       ]
     },
@@ -34,7 +34,7 @@
       "needs": [
         {
           "message": "Food",
-          "quantity": 300,
+          "quantity": 300
         }
       ]
     }
