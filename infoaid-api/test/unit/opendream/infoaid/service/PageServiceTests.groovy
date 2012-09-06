@@ -151,9 +151,9 @@ class PageServiceTests {
         new PageUser(page: page, user: user6, relation: PageUser.Relation.MEMBER, conversation: 6).save(flush: true)
 
         def topMembers = service.getTopMembers("0")
-        assert topMembers.first() == user6
-        assert topMembers.last() == user2
-        assert topMembers.size() == 5
+        assert topMembers.pageUsers.user.first() == user6
+        assert topMembers.pageUsers.user.last() == user2
+        assert topMembers.pageUsers.user.size() == 5
     }
 
     void testGetAllNeeds() {
@@ -283,5 +283,27 @@ class PageServiceTests {
 
         page = Page.findBySlug("0")
         assert page.status == Page.Status.INACTIVE
+    }
+
+    void testGetActiveNeedPage() {
+        def item = new Item(name: 'item')
+        def newNeed = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'message', quantity: 10)
+        def newNeed2 = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'message', quantity: 10)
+
+        def page = Page.get(1)
+        page.addToPosts(newNeed)        
+        page.addToPosts(newNeed2)
+        page.save()
+
+        def page2 = Page.get(2)
+        page2.addToPosts(newNeed2)
+        page2.save()
+
+        def pages = service.getActiveNeedPage()
+        assert 2 == pages.size()
+        assert 24 == pages[0].posts.size()
+        assert 'page1' == pages[0].name
+        assert 'page2' == pages[1].name
+        assert 1 == pages[1].posts.size()
     }
 }
