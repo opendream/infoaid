@@ -2,7 +2,6 @@
 
 class FrontController extends IAController
 {
-
 	public function actionIndex()
 	{
 		$this->actionMap();

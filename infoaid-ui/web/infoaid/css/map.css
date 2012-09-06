@@ -1,0 +1,34 @@
+.tipsy-inner header {
+	border-bottom: 1px solid #555555;
+	color: #DD0000;
+	text-transform: uppercase;
+	text-align: left;
+}
+
+.tipsy-inner header h1 {
+	color: #DD0000;
+}
+
+.tipsy-inner .needs-overview {
+	font-size: 1.8em;
+}
+
+.tipsy-inner .needs-overview ul {
+	list-style: none outside none;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+}
+
+.tipsy-inner .needs-overview ul li {
+	padding: 8px 0 8px 12px;
+}
+
+.tipsy-inner .needs-overview ul li .quantity {
+	float: right;
+	margin-right: 24px;
+}
+
+.tipsy-inner .more {
+	font-size: 1.4em;
+}

@@ -2,6 +2,8 @@
 
 class ApiController extends IAController
 {
+	public $jquery = FALSE;
+
 	protected function renderJSON($content)
 	{
 		$this->layout = 'application.views.layouts.json';
