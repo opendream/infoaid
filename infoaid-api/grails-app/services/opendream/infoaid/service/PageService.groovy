@@ -102,9 +102,9 @@ class PageService {
         pageUser.save()
     }
 
-    def createPage(userId, name, lat, lng, location, household, population, about) {
+    def createPage(userId, name, lat, lng, location, household, population, about, picOriginal) {
         def page = new Page(name: name, lat: lat, lng: lng, location: location,
-            household: household, population: population, about: about)
+            household: household, population: population, about: about, picOriginal: picOriginal)
         page.save(failOnError: true)
         def user = User.get(userId)
         PageUser.createPage(user, page)
@@ -225,7 +225,7 @@ class PageService {
                 return "Another user has updated this Page while you were editing"
             }
         }
-        page.properties['name', 'lat', 'lng', 'location', 'status', 'household', 'population', 'about', 'version'] = data
+        page.properties['name', 'lat', 'lng', 'location', 'status', 'household', 'population', 'about', 'version', 'picOriginal'] = data
         if(!page.save()) {
             return
         }

@@ -17,7 +17,8 @@ class PageServiceIntegrationTests {
         def date2 = new Date()-20
 
          def user1 = new User(username: "nut", password: "nut", firstname: 'firstname', 
-            lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
+            lastname: 'lastname', dateCreated: date, lastUpdated: date, 
+            picSmall: 'picSma', picOriginal: 'picOri', picLar: 'picLar').save()
         def user2 = new User(username: "nut2", password: "nut2", firstname: 'firstname2', 
             lastname: 'lastname2').save()
         
@@ -101,6 +102,7 @@ class PageServiceIntegrationTests {
 
         assert resultsComment.totalComments == 11
         assert resultsComment.comments[0].message == 'my comment11'
+        assert resultsComment.comments[0].user.picSmall == 'picSma'
         assert resultsComment.comments[0].dateCreated.time == comment11.dateCreated.time
 
 

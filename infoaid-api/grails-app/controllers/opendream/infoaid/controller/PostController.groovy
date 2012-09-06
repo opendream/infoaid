@@ -17,6 +17,9 @@ class PostController {
                     id: it.id,
                     message: it.message,
                     user: it.user.username,
+                    picSmall: it.user.picSmall,
+                    picOriginal: it.user.picOriginal,
+                    picLarge: it.user.picLarge,
                     dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                     lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm'),
                 ]
@@ -36,6 +39,9 @@ class PostController {
                     id: it.id,
                     message: it.message,
                     user: it.user.username,
+                    picSmall: it.user.picSmall,
+                    picOriginal: it.user.picOriginal,
+                    picLarge: it.user.picLarge,
                     dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                     lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm'),
                 ]

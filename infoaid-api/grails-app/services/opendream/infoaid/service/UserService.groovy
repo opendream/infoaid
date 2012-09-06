@@ -7,7 +7,7 @@ class UserService {
 
     def create(userparams) {
         def user = new User()
-        user.properties['username', 'password', 'firstname', 'lastname', 'email', 'telNo'] = userparams
+        user.properties['username', 'password', 'firstname', 'lastname', 'email', 'telNo', 'picOriginal'] = userparams
         if(!user.save()) {
             log.error user.errors
             throw new RuntimeException("${user.errors}")
@@ -17,17 +17,17 @@ class UserService {
 
     def getBasicInfo(userId) {
         def user = User.get(userId)
-        [username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, telNo:user.telNo]
+        [username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, telNo:user.telNo, picOriginal: user.picOriginal]
     }
 
     def updateBasicInfo(updateparmas) {
         def user = User.get(updateparmas.id)
-        user.properties['username', 'firstname', 'lastname', 'email', 'telNo'] = updateparmas
+        user.properties['username', 'firstname', 'lastname', 'email', 'telNo', 'picOriginal'] = updateparmas
         if(!user.save()) {
             log.error user.errors
             throw new RuntimeException("${user.errors}")
         }
-        [username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, telNo:user.telNo]
+        [username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, telNo:user.telNo, picOriginal: user.picOriginal]
     }
 
     def updatePassword(updateparmas) {

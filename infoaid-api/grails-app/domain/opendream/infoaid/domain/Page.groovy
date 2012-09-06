@@ -14,6 +14,9 @@ class Page {
     Integer household
     Integer population
     String about
+    String picSmall
+    String picOriginal
+    String picLarge
 
     static hasMany = [posts:Post]
     static transients = ['slugGeneratorService']
@@ -28,6 +31,9 @@ class Page {
         household nullable:true
         population nullable:true
         about maxSize: 500, nullable: true
+        picSmall nullable: true
+        picOriginal nullable: true
+        picLarge nullable: true
     }
 
     public enum Status {

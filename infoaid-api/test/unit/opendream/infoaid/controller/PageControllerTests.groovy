@@ -30,10 +30,11 @@ class PageControllerTests {
         User.metaClass.isDirty = {password -> false}
         pageService = mockFor(PageService)
 
-        def user1 = new User(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
+        def user1 = new User(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: date, lastUpdated: date, picOriginal: 'picOri', picLarge: 'picLar', picSmall: 'picSma').save()
         def user2 = new User(username: "nut2", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save()
 
-        def page1 = new Page(name: "page", lat: "111", lng: "222", dateCreated: date, lastUpdated: date, about: 'this is page 1').save()
+        def page1 = new Page(name: "page", lat: "111", lng: "222", dateCreated: date, lastUpdated: date, 
+            about: 'this is page 1', picOriginal: 'picOri').save()
         def secondPage = new Page(name: "second-page", lat: "11122", lng: "1234", dateCreated: date, lastUpdated: date, about: 'this is 2nd page').save()
                
         
@@ -75,10 +76,9 @@ class PageControllerTests {
 
         params.slug = 'page-slug'
         
-        def expectResponse = """{"id":1,"name":"page","lat":"111","lng":"222","dateCreated":"${date.format(dateFormat)}","lastUpdated":"${date.format(dateFormat)}"}"""
         controller.info()
-
-        assert expectResponse == response.text
+        assert response.json['picOriginal'] == 'picOri'
+        assert response.json['name'] == 'page'
     }
 
     void testMap() {
@@ -100,8 +100,9 @@ class PageControllerTests {
         controller.member()
 
         assert response.json['members'].size() == 2
-        assert 'nut' == response.json['members'][0].username 
-        assert 1 == response.json.status   
+        assert 'nut' == response.json['members'][0].username
+        assert 'picSma' == response.json['members'][0].picSmall
+        assert 1 == response.json.status
     }
 
     void testTopMember() {
@@ -303,9 +304,9 @@ class PageControllerTests {
     void testCreatePage() {
         assert 2 == Page.count()
 
-        pageService.demand.createPage(1..1) { userId, name, lat, lng, location, household, population, about -> 
+        pageService.demand.createPage(1..1) { userId, name, lat, lng, location, household, population, about, picOriginal -> 
             def page = new Page(name: name, lat: lat, lng: lng, location: location,
-            household: household, population: population, about: about).save()
+            household: household, population: population, about: about, picOriginal: picOriginal).save()
             def user = User.get(userId)
             new PageUser(user: user, page: page, relation: PageUser.Relation.OWNER).save()
             page
@@ -320,6 +321,7 @@ class PageControllerTests {
         params.household = 100
         params.population = 300
         params.about = 'about body'
+        params.picOriginal = 'picOri'
         controller.createPage()
 
         assert 3 == Page.count()
@@ -333,6 +335,7 @@ class PageControllerTests {
         assert 100 == response.json.household
         assert 300 == response.json.population
         assert 'about body' == response.json.about
+        assert 'picOri' == response.json.picOriginal
     }
 
     void testLeavePage() {
@@ -402,11 +405,11 @@ class PageControllerTests {
         params.slug = 'page-slug'
         params.version = page.version
         params.name = 'newNamePage1'
+        params.picOriginal = 'newPicOri'
         controller.updatePage()
 
-        
-
         assert page.name == 'newNamePage1'
+        assert page.picOriginal == 'newPicOri'
 
         params.version = page.version - 1
         params.name = 'newNewNamePage1'

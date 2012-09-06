@@ -10,6 +10,9 @@ class User {
     String lastname
     String email
     String telNo
+    String picOriginal
+    String picLarge
+    String picSmall
 	boolean enabled
 	boolean accountExpired
 	boolean accountLocked
@@ -22,6 +25,9 @@ class User {
 		password blank: false
 		email nullable: true
         telNo nullable: true
+        picOriginal nullable: true
+        picLarge nullable: true
+        picSmall nullable: true
 	}
 
 	static mapping = {

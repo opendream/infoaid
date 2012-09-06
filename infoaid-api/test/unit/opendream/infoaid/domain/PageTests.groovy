@@ -11,7 +11,8 @@ import org.junit.*
 class PageTests extends DomainTestTemplate {
 
     def requiredProperties() {
-        ['name', 'lat', 'lng', 'dateCreated', 'lastUpdated', 'location']
+        ['name', 'lat', 'lng', 'dateCreated', 'lastUpdated', 'location', 'status', 'slug', 'household', 'population', 'about'
+        , 'picSmall', 'picLarge', 'picOriginal']
     }
 
     def domainClass() {

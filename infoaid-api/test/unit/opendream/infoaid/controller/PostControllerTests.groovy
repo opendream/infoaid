@@ -29,7 +29,8 @@ class PostControllerTests {
         User.metaClass.isDirty = {password -> false}
         pageService = mockFor(PageService)
 
-        def user1 = new User(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
+        def user1 = new User(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: date, lastUpdated: date,
+            picSmall: 'picSma', picLarge: 'picLar', picOriginal: 'picOri').save()
         def user2 = new User(username: "nut2", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save()
 
         def page1 = new Page(name: "page", lat: "111", lng: "222", dateCreated: date, lastUpdated: date, about: 'this is page 1').save()
@@ -87,6 +88,7 @@ class PostControllerTests {
 
         controller.comment()
         assert response.json['comments'][0].message == 'comment1'
+        assert response.json['comments'][0].picLarge == 'picLar'
         assert response.json['totalComments'] == 5
     }
 
@@ -102,6 +104,7 @@ class PostControllerTests {
 
         controller.previewComment()
         assert response.json['comments'][0].message == 'comment1'
+        assert response.json['comments'][0].picSmall == 'picSma'
         assert response.json['comments'].size() == 3
         assert response.json['totalComments'] == 5
     }
