@@ -115,13 +115,7 @@ class PageControllerTests {
         new PageUser(page: page1, user: user5, relation: PageUser.Relation.MEMBER, conversation: 5).save()
         new PageUser(page: page1, user: user6, relation: PageUser.Relation.MEMBER, conversation: 6).save()
 
-        pageService.demand.getTopMembers(1..1) {slug -> 
-            def page = Page.findBySlug(slug)
-            PageUser.createCriteria().list(sort: 'conversation', order: 'desc', max: 5) {
-                eq('page', page)
-            }
-        }
-        controller.pageService = pageService.createMock()
+        controller.pageService = new PageService()
 
         params.slug = 'page-slug'
         controller.topMember()
