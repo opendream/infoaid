@@ -7,22 +7,24 @@ class FrontPageController {
 
     def info() {
         def ret = [:]
-        def pages = pageService.getSummaryInfo()
+        def pageNeedActive = pageService.getActiveNeedPage()
         ret.status = 1
-        ret.pages = pages.collect {
+        def pages = pageNeedActive.collect {
             [
                 name: it.name,
                 lat: it.lat,
                 lng: it.lng,
+                
                 needs: pageService.getLimitNeeds(it.slug, 5).needs.collect {
-                    [
-                        message: it.message,
+                   [
+                        item: it.item.name,
                         quantity: it.quantity
-                    ]
+                   ]
                 }
-
             ]
+            
         }
+        ret.pages = pages
         ret.totalPages = pages.size()
         
         render ret as JSON

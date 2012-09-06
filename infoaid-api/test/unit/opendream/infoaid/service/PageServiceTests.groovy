@@ -34,7 +34,8 @@ class PageServiceTests {
         def date2 = new Date()-20
         
         def page = new Page(name: "page1", lat: "page1", lng: "page1", 
-            dateCreated: date, lastUpdated: date, about: 'this is page 1')
+            dateCreated: date, lastUpdated: date, about: 'this is page 1', picOriginal: 'picOri', picSmall: 'picSma',
+            picLarge: 'picLar')
         def user1 = new User(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
         def user2 = new User(username: "nut2", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save()
         
@@ -83,9 +84,8 @@ class PageServiceTests {
         def lat2 = 'lat2'
         def lng2 = 'lng2'
 
-        service.createPage(user.id, name1, lat1, lng1, location, null, null, null)
-        service.createPage(user.id, name2, lat2, lng2, null, null, null, null)
-        //service.createPage(user2.id, name2, lat2, lng2, null, null, null, null) // error because page name is exists
+        service.createPage(user.id, name1, lat1, lng1, location, null, null, null, 'picOri')
+        service.createPage(user.id, name2, lat2, lng2, null, null, null, null, null)
 
         assert Page.count() == 4
 
@@ -93,6 +93,7 @@ class PageServiceTests {
         page.slug = "tmpSlug"
         page.save()
         assert page.location == location
+        assert page.picOriginal == 'picOri'
 
         def page2 = Page.get(4)
         assert page2.location == null
@@ -116,14 +117,16 @@ class PageServiceTests {
     void testCreatePageFail() {
         def user = new User(username: 'admin', password: 'password', firstname: 'thawatchai', lastname: 'jong')
         user.save()
+        def user2 = new User(username: 'admin2', password: 'password2', firstname: 'jong', lastname: 'thawatchai')
+        user2.save()
 
         def name2 = 'testCreatePage2'
         def lat2 = 'lat2'
         def lng2 = 'lng2'
 
-        service.createPage(user.id, name2, lat2, lng2, null, null, null, null)
+        service.createPage(user.id, name2, lat2, lng2, null, null, null, null, null)
         shouldFail(ValidationException) {
-            service.createPage(user.id, name2, lat2, lng2, null, null, null, null)
+            service.createPage(user2.id, name2, lat2, lng2, null, null, null, null, null)
         }
     }
 
@@ -149,9 +152,9 @@ class PageServiceTests {
         new PageUser(page: page, user: user6, relation: PageUser.Relation.MEMBER, conversation: 6).save(flush: true)
 
         def topMembers = service.getTopMembers("0")
-        assert topMembers.first() == user6
-        assert topMembers.last() == user2
-        assert topMembers.size() == 5
+        assert topMembers.pageUsers.user.first() == user6
+        assert topMembers.pageUsers.user.last() == user2
+        assert topMembers.pageUsers.user.size() == 5
     }
 
     void testGetAllNeeds() {
@@ -193,18 +196,24 @@ class PageServiceTests {
 
     void testCreateNeed() {
         def page = Page.get(1)
+        def item = new Item(name: 'item').save()
+        def quantity = 10
         def message = 'hello new need'
         def user1 = User.get(1)
         assert page.posts.size() == 22
         def pageUser = new PageUser(page: page, user: user1, relation: PageUser.Relation.MEMBER).save(flush: true)
 
-        service.createNeed(1, "0", message)
+        def result = service.createNeed(user1.id, page.slug, item.id, quantity, message)
         def pageUserAfterCreateNeed = PageUser.get(1)
         assert pageUserAfterCreateNeed.conversation == 1
 
         page = Page.get(1)
         assert page.posts.size() == 23
 
+        assert user1.id == result.user.id
+        assert page.id == result.page.id
+        assert item.id == result.post.item.id
+        assert quantity == result.post.quantity
     }
 
     void testCreateMessagePost() {
@@ -251,13 +260,15 @@ class PageServiceTests {
     void testUpdatePage() {
         def data = [
             name: 'newNamePage1',
-            lat: 'newLatPage1'
+            lat: 'newLatPage1',
+            picOriginal: 'picOriginal2'
         ]
         service.updatePage("0", data)
 
         def page = Page.findBySlug("0")
         assert page.name == 'newNamePage1'
         assert page.lng == 'page1'
+        assert page.picOriginal == 'picOriginal2'
 
         data = [
             name: 'newNewNamePage1',
@@ -275,5 +286,27 @@ class PageServiceTests {
 
         page = Page.findBySlug("0")
         assert page.status == Page.Status.INACTIVE
+    }
+
+    void testGetActiveNeedPage() {
+        def item = new Item(name: 'item')
+        def newNeed = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'message', quantity: 10)
+        def newNeed2 = new Need(item: item, lastActived: date, createdBy: 'nut', updatedBy: 'nut', expiredDate: date, message: 'message', quantity: 10)
+
+        def page = Page.get(1)
+        page.addToPosts(newNeed)        
+        page.addToPosts(newNeed2)
+        page.save()
+
+        def page2 = Page.get(2)
+        page2.addToPosts(newNeed2)
+        page2.save()
+
+        def pages = service.getActiveNeedPage()
+        assert 2 == pages.size()
+        assert 24 == pages[0].posts.size()
+        assert 'page1' == pages[0].name
+        assert 'page2' == pages[1].name
+        assert 1 == pages[1].posts.size()
     }
 }

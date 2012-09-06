@@ -17,7 +17,8 @@ class PageServiceIntegrationTests {
         def date2 = new Date()-20
 
          def user1 = new User(username: "nut", password: "nut", firstname: 'firstname', 
-            lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
+            lastname: 'lastname', dateCreated: date, lastUpdated: date, 
+            picSmall: 'picSma', picOriginal: 'picOri', picLar: 'picLar').save()
         def user2 = new User(username: "nut2", password: "nut2", firstname: 'firstname2', 
             lastname: 'lastname2').save()
         
@@ -55,7 +56,7 @@ class PageServiceIntegrationTests {
     @Test
     void testGetPosts() {
         def page = Page.findByName("page1")
-        def posts = pageService.getPosts(page.slug, 0, 10) // default recent post
+        def posts = pageService.getPosts(page.slug, null, null, null, null) // default recent post
         assert posts.size() == 10
         assert posts.getAt(0).createdBy == 'yo19'
     }
@@ -67,7 +68,7 @@ class PageServiceIntegrationTests {
         pageService.postComment(user.id, post.id, "my comment for top posts")
                 
         def page = Page.findByName("page1")
-        def posts = pageService.getTopPost(page.slug, 0)
+        def posts = pageService.getTopPost(page.slug)
         
         assert posts.size() == 10
         assert posts[0].message == 'post1'
@@ -76,7 +77,7 @@ class PageServiceIntegrationTests {
     @Test
     void testGetRecentPost() {
         def page = Page.findByName("page1")
-        def posts = pageService.getRecentPost(page.slug, 0)
+        def posts = pageService.getRecentPost(page.slug)
         
         assert posts.size() == 10
         assert posts[0].createdBy == 'yo19'
@@ -85,7 +86,7 @@ class PageServiceIntegrationTests {
     @Test
     void testGetComments() {
         def page = Page.findByName("page1")
-        def posts = pageService.getPosts(page.slug, 0, 10)
+        def posts = pageService.getPosts(page.slug, 0, null, null, null)
         def firstResultPost = posts[0]
         def user = User.findByUsername("nut")
 
@@ -101,30 +102,31 @@ class PageServiceIntegrationTests {
 
         assert resultsComment.totalComments == 11
         assert resultsComment.comments[0].message == 'my comment11'
+        assert resultsComment.comments[0].user.picSmall == 'picSma'
         assert resultsComment.comments[0].dateCreated.time == comment11.dateCreated.time
 
 
-        resultsComment = pageService.getComments(firstResultPost.id, 10 as Long, null, null, null)
-        assert resultsComment.totalComments == 3 // comment id start at 2
+        resultsComment = pageService.getComments(firstResultPost.id, comment11.id+8 as Long, null, null, null)
+        assert resultsComment.comments.size() == 3 // comment id start at 2
 
-        resultsComment = pageService.getComments(firstResultPost.id, null, 10 as Long, null, null)
-        assert resultsComment.totalComments == 9 // comment id start at 2
+        resultsComment = pageService.getComments(firstResultPost.id, null, comment11.id+8 as Long, null, null)
+        assert resultsComment.comments.size() == 9 // comment id start at 2
 
         resultsComment = pageService.getComments(firstResultPost.id, null, null, new Date(), null)
-        assert resultsComment.totalComments == 0 // comment id start at 2
+        assert resultsComment.comments.size() == 0 // comment id start at 2
 
         resultsComment = pageService.getComments(firstResultPost.id, null, null, null, new Date())
-        assert resultsComment.totalComments == 11 // comment id start at 2
+        assert resultsComment.comments.size() == 11 // comment id start at 2
 
-        resultsComment = pageService.getComments(firstResultPost.id, 10 as Long, null, null, new Date())
-        assert resultsComment.totalComments == 3 // comment id start at 2
+        resultsComment = pageService.getComments(firstResultPost.id, comment11.id+8 as Long, null, null, new Date())
+        assert resultsComment.comments.size() == 3 // comment id start at 2
     }
 
     @Test
     void testPostComment() {
         def message = "abcdefg"
         def page = Page.findByName("page1")
-        def posts = pageService.getPosts(page.slug, 0, 10)
+        def posts = pageService.getPosts(page.slug, 0, null, null, null)
         def post = posts.getAt(0)
         def previousActived = post.lastActived
         def user = User.findByUsername("nut")
@@ -141,7 +143,7 @@ class PageServiceIntegrationTests {
     @Test
     void testGetLimitComments() {
         def page = Page.findByName("page1")
-        def posts = pageService.getPosts(page.slug, 0, 10)
+        def posts = pageService.getPosts(page.slug, 0, null, null, null)
         def firstResultPost = posts.getAt(0)
         def user = User.findByUsername("nut")
 

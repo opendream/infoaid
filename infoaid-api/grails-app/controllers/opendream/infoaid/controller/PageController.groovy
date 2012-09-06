@@ -12,7 +12,7 @@ class PageController {
         def info = pageService.getInfo(params.slug)
         if(info) {
             ret = [id: info.id, name: info.name, lat: info.lat, lng: info.lng, dateCreated: info.dateCreated.format('yyyy-MM-dd HH:mm'), 
-            lastUpdated: info.lastUpdated.format('yyyy-MM-dd HH:mm')
+            lastUpdated: info.lastUpdated.format('yyyy-MM-dd HH:mm'), picOriginal: info.picOriginal
             ]
         }
         
@@ -42,7 +42,10 @@ class PageController {
                 lastname: it.user.lastname,
                 email: it.user.email,
                 telNo: it.user.telNo,
-                relation: it.relation.toString()
+                relation: it.relation.toString(),
+                picOriginal: it.user.picOriginal,
+                picLarge: it.user.picLarge,
+                picSmall: it.user.picSmall
             ]
         }
         ret.totalMembers = results.size()
@@ -52,7 +55,7 @@ class PageController {
     def topMember() {
         def ret = [:]
         def results = pageService.getTopMembers(params.slug)
-        ret.topMembers = results.collect {
+        ret.topMembers = results.pageUsers.collect {
             [   
                 id: it.user.id,
                 username: it.user.username,
@@ -60,21 +63,34 @@ class PageController {
                 lastname: it.user.lastname,
                 email: it.user.email,
                 telNo: it.user.telNo,
-                relation: it.relation.toString()
+                relation: it.relation.toString(),
+                picOriginal: it.user.picOriginal,
+                picLarge: it.user.picLarge,
+                picSmall: it.user.picSmall
             ]
         }
-        ret.totalTopMembers = results.size()
+        ret.totalTopMembers = results.pageUsers.size()
+        ret.status = 1
+        ret.message = "top member on page ${results.page.name}"
         render ret as JSON
     }
 
     def status() {
-        def posts = pageService.getPosts(params.slug, params.offset, params.max)
-        
+        def posts = pageService.getPosts(params.slug, params.fromId, params.toId, params.since, params.until, params.type=null)
         posts = posts.collect{
             [
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
-                comments: it.previewComments.message
+                comments: it.previewComments.comments.collect {
+                    [
+                        message: it.message,
+                        user: it.user.username,
+                        picOriginal: it.user.picOriginal,
+                        picLarge: it.user.picLarge,
+                        picSmall: it.user.picSmall,
+                        lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
+                    ]
+                }
             ]
         }
         //ret.totalPosts = results.totalPosts
@@ -82,13 +98,45 @@ class PageController {
     }
 
     def topPost() {
-        def posts = pageService.getTopPost(params.slug, params.offset)
+        def posts = pageService.getTopPost(params.slug)
         
         posts = posts.collect{
             [
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
-                comments: it.previewComments.message
+                comments: it.previewComments.comments.collect {
+                    [
+                        message: it.message,
+                        user: it.user.username,
+                        picOriginal: it.user.picOriginal,
+                        picLarge: it.user.picLarge,
+                        picSmall: it.user.picSmall,
+                        lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
+                    ]
+                }
+            ]
+        }
+        //ret.totalPosts = results.totalPosts
+        render posts as JSON
+    }
+
+    def recentPost() {
+        def posts = pageService.getRecentPost(params.slug)
+        
+        posts = posts.collect{
+            [
+                message: it.message,
+                dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
+                comments: it.previewComments.comments.collect {
+                    [
+                        message: it.message,
+                        user: it.user.username,
+                        picOriginal: it.user.picOriginal,
+                        picLarge: it.user.picLarge,
+                        picSmall: it.user.picSmall,
+                        lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
+                    ]
+                }
             ]
         }
         //ret.totalPosts = results.totalPosts
@@ -160,18 +208,19 @@ class PageController {
         def population = params.population
         def about = params.about
         def location = params.location
+        def picOriginal = params.picOriginal
         def ret = [:]
 
         if(!userId || !name) {
             ret = [status:0, message: "user id: ${userId} could not create page: ${name}",
                     lat: lat, lng: lng, household: household, population: population,
-                    about: about, location: location]
+                    about: about, location: location, picOriginal: picOriginal]
             render ret as JSON
         } else {
-            def result = pageService.createPage(userId, name, lat, lng, location, household, population, about)
+            def result = pageService.createPage(userId, name, lat, lng, location, household, population, about, picOriginal)
             ret = [status:1, message: "user id: ${userId} created page: ${name}", userId: userId, 
-                    name:result.name, lat: result.lat, lng: result.lng, household: result.household, 
-                    population: result.population, about: result.about, location: result.location]
+                    name: result.name, lat: result.lat, lng: result.lng, household: result.household, 
+                    population: result.population, about: result.about, location: result.location, picOriginal: picOriginal]
             render ret as JSON
         }
     }
@@ -205,14 +254,37 @@ class PageController {
         render ret as JSON
     }
 
+    def postNeed() {
+        def ret
+        def userId = params.userId
+        def slug = params.slug
+        def itemId = params.itemId
+        def quantity = params.quantity
+        def message = params.message
+
+        def result = pageService.createNeed(userId, slug, itemId, quantity, message)
+        ret = [post: [id :result.post.id, message: result.post.message,
+        item: [id: result.post.item.id, name: result.post.item.name], quantity: result.post.quantity,
+        createdBy: result.post.createdBy, lastActived: result.post.lastActived], 
+        user: result.user.username, page: result.page.name, slug: result.page.slug]
+        ret.status = 1
+        ret.message = "user: ${result.user.username} posted request ${result.post.item.name}, quantity: ${result.post.quantity} in page: ${result.page.name}"
+        render ret as JSON
+    }
+
     def postComment(){
         def userId = params.userId
         def postId = params.postId
         def message = params.message
+        def ret
 
         if(userId && postId && message) {
-            pageService.postComment(userId, postId, message)
+            def result = pageService.postComment(userId, postId, message)
+            ret = [status: 1, message: "user ${result.user.username} post comment ${result.comment.message} on post ${result.post.message}",
+            userId: result.user.id, user: result.user.username, postId: result.post.id, 
+            post: result.post.message, commentId: result.comment.id, comment: result.comment.message]
         }
+        render ret as JSON
     }    
 
     def updatePage() {

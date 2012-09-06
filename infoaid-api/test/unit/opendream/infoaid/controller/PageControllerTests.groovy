@@ -30,10 +30,11 @@ class PageControllerTests {
         User.metaClass.isDirty = {password -> false}
         pageService = mockFor(PageService)
 
-        def user1 = new User(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
+        def user1 = new User(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: date, lastUpdated: date, picOriginal: 'picOri', picLarge: 'picLar', picSmall: 'picSma').save()
         def user2 = new User(username: "nut2", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save()
 
-        def page1 = new Page(name: "page", lat: "111", lng: "222", dateCreated: date, lastUpdated: date, about: 'this is page 1').save()
+        def page1 = new Page(name: "page", lat: "111", lng: "222", dateCreated: date, lastUpdated: date, 
+            about: 'this is page 1', picOriginal: 'picOri').save()
         def secondPage = new Page(name: "second-page", lat: "11122", lng: "1234", dateCreated: date, lastUpdated: date, about: 'this is 2nd page').save()
                
         
@@ -44,8 +45,8 @@ class PageControllerTests {
         page1.addToPosts(secondPost)
         page1.save()
 
-        def comment = new Comment(message: 'comment1')
-        def comment2 = new Comment(message: 'comment2')
+        def comment = new Comment(message: 'comment1', user: user1)
+        def comment2 = new Comment(message: 'comment2', user: user1)
         firstPost.addToComments(comment)
         firstPost.addToComments(comment2)
 
@@ -75,10 +76,9 @@ class PageControllerTests {
 
         params.slug = 'page-slug'
         
-        def expectResponse = """{"id":1,"name":"page","lat":"111","lng":"222","dateCreated":"${date.format(dateFormat)}","lastUpdated":"${date.format(dateFormat)}"}"""
         controller.info()
-
-        assert expectResponse == response.text
+        assert response.json['picOriginal'] == 'picOri'
+        assert response.json['name'] == 'page'
     }
 
     void testMap() {
@@ -100,8 +100,9 @@ class PageControllerTests {
         controller.member()
 
         assert response.json['members'].size() == 2
-        assert 'nut' == response.json['members'][0].username 
-        assert 1 == response.json.status   
+        assert 'nut' == response.json['members'][0].username
+        assert 'picSma' == response.json['members'][0].picSmall
+        assert 1 == response.json.status
     }
 
     void testTopMember() {
@@ -115,13 +116,7 @@ class PageControllerTests {
         new PageUser(page: page1, user: user5, relation: PageUser.Relation.MEMBER, conversation: 5).save()
         new PageUser(page: page1, user: user6, relation: PageUser.Relation.MEMBER, conversation: 6).save()
 
-        pageService.demand.getTopMembers(1..1) {slug -> 
-            def page = Page.findBySlug(slug)
-            PageUser.createCriteria().list(sort: 'conversation', order: 'desc', max: 5) {
-                eq('page', page)
-            }
-        }
-        controller.pageService = pageService.createMock()
+        controller.pageService = new PageService()
 
         params.slug = 'page-slug'
         controller.topMember()
@@ -130,25 +125,39 @@ class PageControllerTests {
     }
 
     void testStatus() {
-        pageService.demand.getPosts(1..1) {slug, offset, max -> 
-            def posts = Post.createCriteria().list(max: max, sort: 'lastActived', order: 'desc', offset: offset) {
+        pageService.demand.getPosts(1..1) { slug, fromId=null, toId=null, since=null, until=null, type=null -> 
+            def max = 10
+        
+            def posts = Post.createCriteria().list() {
                 eq('status', Post.Status.ACTIVE)
                 page {
-                    eq('slug', slug)
+                    eq('slug', slug)    
                 }
+                maxResults(max)
+                if(fromId) {
+                    ge('id', fromId)
+                }
+                if(toId) {
+                    le('id', toId)
+                }
+                if(since) {
+                    ge('dateCreated', since)
+                }
+                if(until) {
+                    le('dateCreated', until)
+                }
+                if(type == 'top') {
+                    order('conversation', 'desc')
+                }
+                order('lastActived', 'desc')
             }
-            posts
-            //[posts: posts, totalPosts: posts.totalCount]
-            //getData()
+
+            return posts
         }
         controller.pageService = pageService.createMock()
 
         params.slug = 'page-slug'
-        params.offset = 0
-        params.max = 10
         controller.status()
-        //def expectResponse = """{"posts":[{"message":"item 10","dateCreated":"${date.format(dateFormat)}","comments":[]},{"message":"item 10","dateCreated":"${date.format(dateFormat)}","comments":[]},{"message":null,"dateCreated":"${date.format(dateFormat)}","comments":[]},{"message":null,"dateCreated":"${date.format(dateFormat)}","comments":["comment1","comment2"]}],"totalPosts":4}"""
-        //assert expectResponse == response.text
         assert 4 == response.json.size()
         assert 'item 10' == response.json[0].message
     }
@@ -239,8 +248,8 @@ class PageControllerTests {
             postlist[it].save()
         }
 
-        pageService.demand.getTopPost(1..1) { slug, offset -> 
-            def posts = Post.createCriteria().list(max: 10, sort: 'conversation', order: 'desc', offset: offset) {
+        pageService.demand.getTopPost(1..1) { slug -> 
+            def posts = Post.createCriteria().list(max: 10, sort: 'conversation', order: 'desc') {
                 eq('status', Post.Status.ACTIVE)
                 page {
                     eq('slug', slug)
@@ -251,8 +260,34 @@ class PageControllerTests {
         controller.pageService = pageService.createMock()
 
         params.slug = 'page-slug'
-        params.offset = 0
         controller.topPost()
+        
+        assert 4 == response.json.size()
+        assert 'item 10' == response.json[0].message
+        assert 'item 9' == response.json[1].message
+        assert 'first post' == response.json[3].message
+    }
+
+    void testRecentPost() {
+        def postlist = Post.list()
+        4.times {
+            postlist[it].conversation = it
+            postlist[it].save()
+        }
+
+        pageService.demand.getRecentPost(1..1) { slug -> 
+            def posts = Post.createCriteria().list(max: 10, sort: 'lastActived', order: 'desc') {
+                eq('status', Post.Status.ACTIVE)
+                page {
+                    eq('slug', slug)
+                }
+            }
+            posts            
+        }
+        controller.pageService = pageService.createMock()
+
+        params.slug = 'page-slug'
+        controller.recentPost()
         
         assert 4 == response.json.size()
         assert 'item 10' == response.json[0].message
@@ -263,9 +298,9 @@ class PageControllerTests {
     void testCreatePage() {
         assert 2 == Page.count()
 
-        pageService.demand.createPage(1..1) { userId, name, lat, lng, location, household, population, about -> 
+        pageService.demand.createPage(1..1) { userId, name, lat, lng, location, household, population, about, picOriginal -> 
             def page = new Page(name: name, lat: lat, lng: lng, location: location,
-            household: household, population: population, about: about).save()
+            household: household, population: population, about: about, picOriginal: picOriginal).save()
             def user = User.get(userId)
             new PageUser(user: user, page: page, relation: PageUser.Relation.OWNER).save()
             page
@@ -280,6 +315,7 @@ class PageControllerTests {
         params.household = 100
         params.population = 300
         params.about = 'about body'
+        params.picOriginal = 'picOri'
         controller.createPage()
 
         assert 3 == Page.count()
@@ -293,6 +329,7 @@ class PageControllerTests {
         assert 100 == response.json.household
         assert 300 == response.json.population
         assert 'about body' == response.json.about
+        assert 'picOri' == response.json.picOriginal
     }
 
     void testLeavePage() {
@@ -337,11 +374,11 @@ class PageControllerTests {
             def pageUser = PageUser.findByPageAndUser(post.page, user)
             pageUser.conversation++
             pageUser.save()
-            
+            [user: user, post: post, comment: comment]
         }
 
         controller.pageService = pageService.createMock()
-
+        
         params.message = 'this is my comment'
         params.postId = 1
         params.userId = 1
@@ -353,7 +390,7 @@ class PageControllerTests {
         thisPost = Post.get(1)
         assert pageUser.conversation == 2
         assert thisPost.conversation == 1
-        assert 3 == Comment.count()
+        assert 3 == Comment.count()        
     }    
 
     void testUpdatePage() {
@@ -362,11 +399,11 @@ class PageControllerTests {
         params.slug = 'page-slug'
         params.version = page.version
         params.name = 'newNamePage1'
+        params.picOriginal = 'newPicOri'
         controller.updatePage()
 
-        
-
         assert page.name == 'newNamePage1'
+        assert page.picOriginal == 'newPicOri'
 
         params.version = page.version - 1
         params.name = 'newNewNamePage1'
@@ -402,9 +439,28 @@ class PageControllerTests {
         controller.postMessage()
 
         // expect
-        def post = Post.findByCreatedByAndPage(user.username, page)
         assert 1 == response.json.status
         assert "user: ${user.username} posted message in page: ${page.name}" == response.json.message
         assert 'hello world' == response.json.post.message        
+    }
+
+    void testPostNeed() {
+        // param nut , page-slug
+        controller.pageService = new PageService()
+        def user = User.findByUsername('nut')
+        def page = Page.findBySlug('page-slug')
+        def item = new Item(name: 'water').save(flush: true)
+
+        params.userId = user.id
+        params.slug = page.slug
+        params.itemId = item.id
+        params.quantity = 20
+
+        // controller
+        controller.postNeed()
+
+        // expect        
+        assert 1 == response.json.status
+        assert "user: ${user.username} posted request ${item.name}, quantity: 20 in page: ${page.name}" == response.json.message
     }
 }
