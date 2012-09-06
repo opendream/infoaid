@@ -52,7 +52,7 @@ class PageController {
     def topMember() {
         def ret = [:]
         def results = pageService.getTopMembers(params.slug)
-        ret.topMembers = results.collect {
+        ret.topMembers = results.pageUsers.collect {
             [   
                 id: it.user.id,
                 username: it.user.username,
@@ -63,7 +63,9 @@ class PageController {
                 relation: it.relation.toString()
             ]
         }
-        ret.totalTopMembers = results.size()
+        ret.totalTopMembers = results.pageUsers.size()
+        ret.status = 1
+        ret.message = "top member on page ${results.page.name}"
         render ret as JSON
     }
 
