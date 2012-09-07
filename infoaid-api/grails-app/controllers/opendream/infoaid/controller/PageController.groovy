@@ -87,7 +87,8 @@ class PageController {
                 comments: it.previewComments.comments.collect {
                     [
                         message: it.message,
-                        user: it.user.username,
+                        createdBy: it.user.username,
+                        userId: it.user.id,
                         picOriginal: it.user.picOriginal,
                         picLarge: it.user.picLarge,
                         picSmall: it.user.picSmall,
