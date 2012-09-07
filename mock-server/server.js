@@ -10,7 +10,7 @@ http.createServer(function (request, response) {
 
   var request_url = url.parse(request.url);
 
-  fs.readFile('json' + request_url.pathname, function (err, data) {
+  fs.readFile('json' + request_url.pathname + '.json', function (err, data) {
     if (err) response.end(JSON.stringify({'status': false}));
     else response.end(data);
   });
