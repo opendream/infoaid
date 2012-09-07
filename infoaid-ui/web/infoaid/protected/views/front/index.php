@@ -4,7 +4,7 @@
 <?php Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl .'/js/tipsy/stylesheets/tipsy.css'); ?>
 <?php Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl .'/css/map.css'); ?>
 <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl .'/js/openlayers/OpenLayers.debug.js'); ?>
-<?php Yii::app()->clientScript->registerScriptFile("http://maps.google.com/maps/api/js?sensor=false"); ?>
+<?php Yii::app()->clientScript->registerScriptFile("http://maps.google.com/maps/api/js?v=3.8&sensor=false"); ?>
 
 <script>
 jQuery(function ($) {
@@ -38,16 +38,18 @@ jQuery(function ($) {
 		markers.addMarker(marker);
 
 		var imageDiv = marker.icon.imageDiv;
-		$(imageDiv).tipsy({
-			delayOut: 200,
-			fade: true,
-			gravity: $.fn.tipsy.autoWE,
-			html: true,
-			title: function () {
-				return renderMarkerTooltip(item);
-			},
-			trigger: 'hover'
-		});
+		$(imageDiv)
+			.css({'cursor': 'pointer'})
+			.tipsy({
+				delayOut: 100,
+				fade: true,
+				gravity: $.fn.tipsy.autoWE,
+				html: true,
+				title: function () {
+					return renderMarkerTooltip(item);
+				},
+				trigger: 'hover'
+			});
 	};
 
 	var renderMarkerTooltip = function (item) {
