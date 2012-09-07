@@ -38,8 +38,8 @@ class PageControllerTests {
         def secondPage = new Page(name: "second-page", lat: "11122", lng: "1234", dateCreated: date, lastUpdated: date, about: 'this is 2nd page').save()
                
         
-        def firstPost = new Post(message: 'first post', dateCreated: date, lastUpdated: date, lastActived: date, createdBy: 'nut', updatedBy: 'boy')
-        def secondPost = new Post(message: 'second post', dateCreated: date, lastUpdated: date, lastActived: date+1, createdBy: 'nut', updatedBy: 'boy')
+        def firstPost = new Post(message: 'first post', dateCreated: date, lastUpdated: date, lastActived: date, createdBy: user1, updatedBy: user1)
+        def secondPost = new Post(message: 'second post', dateCreated: date, lastUpdated: date, lastActived: date+1, createdBy: user1, updatedBy: user1)
         page1.addToPosts(firstPost)
         page1.save()
         page1.addToPosts(secondPost)
@@ -51,17 +51,17 @@ class PageControllerTests {
         firstPost.addToComments(comment2)
 
         def item = new Item(name: 'item', status: Status.ACTIVE).save()
-        def firstNeed = new Need(item: item, lastActived: date+2, createdBy: 'nut', updatedBy: 'nut', 
+        def firstNeed = new Need(item: item, lastActived: date+2, createdBy: user1, updatedBy: user1, 
             expiredDate: date, message: 'need1', quantity: 9)
 
-        def secondNeed = new Need(item: item,lastActived: date+3, createdBy: 'nut', updatedBy: 'nut', 
+        def secondNeed = new Need(item: item,lastActived: date+3, createdBy: user1, updatedBy: user1, 
             expiredDate: date, quantity: 10)
         page1.addToPosts(firstNeed)
         page1.save()
         page1.addToPosts(secondNeed)
         page1.save()
 
-        def fifthPost = new Post(message: 'fifth post', dateCreated: date, lastUpdated: date, lastActived: date+1, createdBy: 'nut', updatedBy: 'boy')
+        def fifthPost = new Post(message: 'fifth post', dateCreated: date, lastUpdated: date, lastActived: date+1, createdBy: user1, updatedBy: user1)
         secondPage.addToPosts(fifthPost)
         secondPage.save()
 
@@ -125,41 +125,12 @@ class PageControllerTests {
     }
 
     void testStatus() {
-        pageService.demand.getPosts(1..1) { slug, fromId=null, toId=null, since=null, until=null, type=null -> 
-            def max = 10
-        
-            def posts = Post.createCriteria().list() {
-                eq('status', Post.Status.ACTIVE)
-                page {
-                    eq('slug', slug)    
-                }
-                maxResults(max)
-                if(fromId) {
-                    ge('id', fromId)
-                }
-                if(toId) {
-                    le('id', toId)
-                }
-                if(since) {
-                    ge('dateCreated', since)
-                }
-                if(until) {
-                    le('dateCreated', until)
-                }
-                if(type == 'top') {
-                    order('conversation', 'desc')
-                }
-                order('lastActived', 'desc')
-            }
-
-            return posts
-        }
-        controller.pageService = pageService.createMock()
+        controller.pageService = new PageService()
 
         params.slug = 'page-slug'
         controller.status()
-        assert 4 == response.json.size()
-        assert 'item 10' == response.json[0].message
+        assert 4 == response.json['posts'].size()
+        assert 'item 10' == response.json['posts'][0].message
     }
 
     void testEmptyInfo() {
@@ -169,41 +140,27 @@ class PageControllerTests {
     }
 
     void testNeed() {
-        pageService.demand.getAllNeeds(1..1) {slug -> 
-            def page = Page.findBySlug(slug)
-            def needs = Need.findAllByPageAndStatus(page, Post.Status.ACTIVE)
-
-            [needs: needs, totalNeeds: needs.size()]
-        }
-
-        controller.pageService = pageService.createMock()
+        controller.pageService = new PageService()
 
         params.slug = 'page-slug'
         controller.need()
 
-        def expectResponse = """{"status":1,"needs":[{"message":"item 9","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":9,"item":"item"},{"message":"item 10","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":10,"item":"item"}],"totalNeeds":2}"""
-        assert expectResponse == response.text
+        assert response.json['needs'][0].message == 'item 9'
+        assert response.json['totalNeeds'] == 2
+        assert response.json['status'] == 1
     }
 
     void testLimitNeed() {
-        pageService.demand.getLimitNeeds(1..1) {slug, max -> 
-            def page = Page.findBySlug(slug)
-            def needs = Need.createCriteria().list(max: max, sort: 'dateCreated', order: 'desc') {
-                eq('status', Post.Status.ACTIVE)
-                eq('page', page)
-            }
-
-            [needs: needs, totalNeeds: needs.totalCount]
-        }
-
-        controller.pageService = pageService.createMock()
+        controller.pageService = new PageService()
 
         params.slug = 'page-slug'
         params.limit = 1
         controller.limitNeed()
 
-        def expectResponse = """{"needs":[{"message":"item 10","dateCreated":"${(date).format(dateFormat)}","createdBy":"nut","expiredDate":"${(date).format(dateFormat)}","quantity":10,"item":"item"}],"totalNeeds":2,"status":1}"""
-        assert expectResponse == response.text
+        assert response.json['needs'][0].message == 'item 10' // order by dateCreated desc
+        assert response.json['needs'].size() == 1
+        assert response.json['totalNeeds'] == 2
+        assert response.json['status'] == 1
     }
 
     void testAbout() {
@@ -248,24 +205,15 @@ class PageControllerTests {
             postlist[it].save()
         }
 
-        pageService.demand.getTopPost(1..1) { slug -> 
-            def posts = Post.createCriteria().list(max: 10, sort: 'conversation', order: 'desc') {
-                eq('status', Post.Status.ACTIVE)
-                page {
-                    eq('slug', slug)
-                }
-            }
-            posts            
-        }
-        controller.pageService = pageService.createMock()
+        controller.pageService = new PageService()
 
         params.slug = 'page-slug'
         controller.topPost()
         
-        assert 4 == response.json.size()
-        assert 'item 10' == response.json[0].message
-        assert 'item 9' == response.json[1].message
-        assert 'first post' == response.json[3].message
+        assert 4 == response.json['posts'].size()
+        assert 'item 10' == response.json['posts'][0].message
+        assert 'item 9' == response.json['posts'][1].message
+        assert 'first post' == response.json['posts'][3].message
     }
 
     void testRecentPost() {
@@ -275,24 +223,15 @@ class PageControllerTests {
             postlist[it].save()
         }
 
-        pageService.demand.getRecentPost(1..1) { slug -> 
-            def posts = Post.createCriteria().list(max: 10, sort: 'lastActived', order: 'desc') {
-                eq('status', Post.Status.ACTIVE)
-                page {
-                    eq('slug', slug)
-                }
-            }
-            posts            
-        }
-        controller.pageService = pageService.createMock()
+        controller.pageService = new PageService()
 
         params.slug = 'page-slug'
         controller.recentPost()
         
-        assert 4 == response.json.size()
-        assert 'item 10' == response.json[0].message
-        assert 'item 9' == response.json[1].message
-        assert 'first post' == response.json[3].message
+        assert 4 == response.json['posts'].size()
+        assert 'item 10' == response.json['posts'][0].message
+        assert 'item 9' == response.json['posts'][1].message
+        assert 'first post' == response.json['posts'][3].message
     }
 
     void testCreatePage() {

@@ -76,15 +76,19 @@ class PageController {
     }
 
     def status() {
+        def ret = [:]
         def posts = pageService.getPosts(params.slug, params.fromId, params.toId, params.since, params.until, params.type=null)
-        posts = posts.collect{
+        ret.posts = posts.collect{
             [
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
+                createdBy: it.createdBy.username,
+                userId: it.createdBy.id,
                 comments: it.previewComments.comments.collect {
                     [
                         message: it.message,
-                        user: it.user.username,
+                        createdBy: it.user.username,
+                        userId: it.user.id,
                         picOriginal: it.user.picOriginal,
                         picLarge: it.user.picLarge,
                         picSmall: it.user.picSmall,
@@ -93,21 +97,25 @@ class PageController {
                 }
             ]
         }
-        //ret.totalPosts = results.totalPosts
-        render posts as JSON
+        ret.status = 1
+        render ret as JSON
     }
 
     def topPost() {
+        def ret = [:]
         def posts = pageService.getTopPost(params.slug)
         
-        posts = posts.collect{
+        ret.posts = posts.collect{
             [
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
+                createdBy: it.createdBy.username,
+                userId: it.createdBy.id,
                 comments: it.previewComments.comments.collect {
                     [
                         message: it.message,
-                        user: it.user.username,
+                        createdBy: it.user.username,
+                        userId: it.user.id,
                         picOriginal: it.user.picOriginal,
                         picLarge: it.user.picLarge,
                         picSmall: it.user.picSmall,
@@ -116,21 +124,25 @@ class PageController {
                 }
             ]
         }
-        //ret.totalPosts = results.totalPosts
-        render posts as JSON
+        ret.status = 1
+        render ret as JSON
     }
 
     def recentPost() {
+        def ret = [:]
         def posts = pageService.getRecentPost(params.slug)
         
-        posts = posts.collect{
+        ret.posts = posts.collect{
             [
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
+                createdBy: it.createdBy.username,
+                userId: it.createdBy.id,
                 comments: it.previewComments.comments.collect {
                     [
                         message: it.message,
-                        user: it.user.username,
+                        createdBy: it.user.username,
+                        userId: it.user.id,
                         picOriginal: it.user.picOriginal,
                         picLarge: it.user.picLarge,
                         picSmall: it.user.picSmall,
@@ -139,8 +151,8 @@ class PageController {
                 }
             ]
         }
-        //ret.totalPosts = results.totalPosts
-        render posts as JSON
+        ret.status = 1
+        render ret as JSON
     }
 
     def need() {
@@ -151,7 +163,8 @@ class PageController {
             [
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
-                createdBy: it.createdBy,
+                createdBy: it.createdBy.username,
+                userId: it.createdBy.id,
                 expiredDate: it.expiredDate.format('yyyy-MM-dd HH:mm'),
                 quantity: it.quantity,
                 item: it.item.name
@@ -169,7 +182,8 @@ class PageController {
             [
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
-                createdBy: it.createdBy,
+                createdBy: it.createdBy.username,
+                userId: it.createdBy.id,
                 expiredDate: it.expiredDate.format('yyyy-MM-dd HH:mm'),
                 quantity: it.quantity,
                 item: it.item.name
@@ -195,7 +209,7 @@ class PageController {
             def pageuser = pageService.joinPage(userId, params.slug)
             ret = [user: pageuser.user.username, page: pageuser.page.name, 
                     pageSlug: pageuser.page.slug, relation: pageuser.relation.toString()]
-        } 
+        }
         render ret as JSON       
     }
 

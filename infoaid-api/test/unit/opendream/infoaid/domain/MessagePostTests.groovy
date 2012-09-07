@@ -32,26 +32,4 @@ class MessagePostTests extends DomainTestTemplate {
         messagePost.message = 'Hello World'
         verifyPass(messagePost, 'message')
     }
-
-    void testValidateCreatedBy() {
-        mockForConstraintsTests(MessagePost)
-
-        def messagePost = new MessagePost()
-
-        verifyNotNull(messagePost, 'createdBy')
-
-        messagePost.createdBy = 'username'
-        verifyPass(messagePost, 'createdBy')
-    }
-
-    void testValidateUpdateBy() {
-        mockForConstraintsTests(MessagePost)
-
-        def messagePost = new MessagePost()
-
-        verifyNotNull(messagePost, 'updatedBy')
-
-        messagePost.updatedBy = 'username'
-        verifyPass(messagePost, 'updatedBy')
-    }
 }
