@@ -44,26 +44,26 @@ class HomeServiceTests {
 
         // mock post (12 posts)
         def firstPost = new Post(message:'first Post', dateCreated: date, lastUpdated: date, 
-            lastActived: new Date(), createdBy: 'nut', updatedBy: 'boy', conversation:0)
+            lastActived: new Date(), createdBy: user, updatedBy: user, conversation:0)
         page1.addToPosts(firstPost)
         page1.save(flush: true)
         4.times {
             page1.addToPosts(new Post(message:"first Post sub$it", dateCreated: date, lastUpdated: date, 
-            lastActived: new Date(), createdBy: "nut", updatedBy: 'boy', conversation:20+it))
+            lastActived: new Date(), createdBy: follower, updatedBy: user, conversation:20+it))
             page1.save(flush: true)
         }
         
 
         4.times {
             page2.addToPosts(new Post(message:"second Post$it", dateCreated: date, lastUpdated: date, 
-            lastActived: new Date(), createdBy: 'nut', updatedBy: 'boy', conversation:10+it))
+            lastActived: new Date(), createdBy: follower, updatedBy: user, conversation:10+it))
             page2.save(flush: true)
         }
         
 
         3.times {
             page3.addToPosts(new Post(message:"third Post$it", dateCreated: date, lastUpdated: date, 
-            lastActived: new Date(), createdBy: "nut", updatedBy: 'boy', conversation:1+it))
+            lastActived: new Date(), createdBy: follower, updatedBy: user, conversation:1+it))
             page3.save(flush: true)
         }
         

@@ -29,17 +29,17 @@ class PageServiceIntegrationTests {
             dateCreated: date, lastUpdated: date, lastActived: date)
         
         def post = new Post(message: 'post1',dateCreated: date, lastUpdated: date, 
-            lastActived: date, createdBy: 'nut', updatedBy: 'boy')
+            lastActived: date, createdBy: user1, updatedBy: user1)
 
         def post2 = new Post(message: 'post2', dateCreated: date, lastUpdated: date, 
-            lastActived: date2, createdBy: 'yo', updatedBy: 'boy')
+            lastActived: date2, createdBy: user1, updatedBy: user1)
         page.addToPosts(post)
         page.addToPosts(post2)
         //page.save()
 
         20.times {
             def post3 = new Post(message: 'post3: '+it, dateCreated: date, lastUpdated: date, 
-                lastActived: date2+it, createdBy: 'yo'+it, updatedBy: 'boy')
+                lastActived: date2+it, createdBy: user1, updatedBy: user2)
             page.addToPosts(post3)            
         }
         page.save()
@@ -57,8 +57,9 @@ class PageServiceIntegrationTests {
     void testGetPosts() {
         def page = Page.findByName("page1")
         def posts = pageService.getPosts(page.slug, null, null, null, null) // default recent post
+        def user = User.findByUsername('nut')
         assert posts.size() == 10
-        assert posts.getAt(0).createdBy == 'yo19'
+        assert posts.getAt(0).createdBy == user
     }
 
     @Test
@@ -78,9 +79,9 @@ class PageServiceIntegrationTests {
     void testGetRecentPost() {
         def page = Page.findByName("page1")
         def posts = pageService.getRecentPost(page.slug)
-        
+        def user = User.findByUsername('nut')
         assert posts.size() == 10
-        assert posts[0].createdBy == 'yo19'
+        assert posts[0].createdBy == user
     }
 
     @Test

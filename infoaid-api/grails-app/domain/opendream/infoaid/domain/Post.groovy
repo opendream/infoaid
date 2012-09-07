@@ -5,8 +5,8 @@ class Post {
     Date dateCreated
     Date lastUpdated
     Date lastActived
-    String createdBy
-    String updatedBy
+    User createdBy
+    User updatedBy
     Status status = Status.ACTIVE
     Page page
     Integer conversation = 0
