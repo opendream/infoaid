@@ -34,7 +34,7 @@ class PageControllerTests {
         def user2 = new User(username: "nut2", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save()
 
         def page1 = new Page(name: "page", lat: "111", lng: "222", dateCreated: date, lastUpdated: date, 
-            about: 'this is page 1', picOriginal: 'picOri').save()
+            about: 'this is page 1', picOriginal: 'picOri', household: 1, population: 11).save()
         def secondPage = new Page(name: "second-page", lat: "11122", lng: "1234", dateCreated: date, lastUpdated: date, about: 'this is 2nd page').save()
                
         
@@ -79,6 +79,8 @@ class PageControllerTests {
         controller.info()
         assert response.json['picOriginal'] == 'picOri'
         assert response.json['name'] == 'page'
+        assert response.json['household'] == 1
+        assert response.json['population'] == 11
     }
 
     void testMap() {
@@ -351,7 +353,7 @@ class PageControllerTests {
         assert page.name == 'newNamePage1'
     }
 
-    void testDisablePage() {
+    void testDisablePageEnablePage() {
         def page = Page.findBySlug('page-slug')
         assert page.status == Page.Status.ACTIVE
         params.slug = 'page-slug'
@@ -362,6 +364,15 @@ class PageControllerTests {
         assert 1 == response.json.status
         assert 'page-slug' == response.json.page.slug
         assert 'INACTIVE' == response.json.page.status
+
+        response.reset()
+        params.slug = 'page-slug'
+        controller.enablePage()
+        page = Page.findBySlug('page-slug')
+
+        assert 1 == response.json.status
+        assert 'page-slug' == response.json.page.slug
+        assert 'ACTIVE' == response.json.page.status
     }
 
     void testPostMessage() {
@@ -401,5 +412,38 @@ class PageControllerTests {
         // expect        
         assert 1 == response.json.status
         assert "user: ${user.username} posted request ${item.name}, quantity: 20 in page: ${page.name}" == response.json.message
+    }
+
+    void testSearchPage() {
+        controller.pageService = new PageService()
+
+        params.word = ''
+        controller.searchPage()
+
+        assert response.json['pages'][0].name == 'page'
+        assert response.json['pages'][1].name == 'second-page'
+
+        assert response.json['pages'][0].needs.size() == 2
+        assert response.json['pages'][1].needs.size() == 0
+
+        assert response.json['pages'][0].needs[0].quantity == 10
+        assert response.json['pages'][0].needs[1].quantity == 9
+
+        assert response.json['status'] == 1
+
+        assert response.json['totalResults'] == 2
+
+        response.reset()
+
+        params.word = 'sec'
+        controller.searchPage()
+        assert response.json['pages'][0].name == 'second-page'
+
+        assert response.json['pages'][0].needs.size() == 0
+
+        assert response.json['status'] == 1
+
+        assert response.json['totalResults'] == 1
+
     }
 }
