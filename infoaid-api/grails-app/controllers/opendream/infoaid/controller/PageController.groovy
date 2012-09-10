@@ -12,7 +12,8 @@ class PageController {
         def info = pageService.getInfo(params.slug)
         if(info) {
             ret = [id: info.id, name: info.name, lat: info.lat, lng: info.lng, dateCreated: info.dateCreated.format('yyyy-MM-dd HH:mm'), 
-            lastUpdated: info.lastUpdated.format('yyyy-MM-dd HH:mm'), picOriginal: info.picOriginal
+            lastUpdated: info.lastUpdated.format('yyyy-MM-dd HH:mm'), picOriginal: info.picOriginal, household: info.household, 
+            population: info.population
             ]
         }
         

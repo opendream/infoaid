@@ -34,7 +34,7 @@ class PageControllerTests {
         def user2 = new User(username: "nut2", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save()
 
         def page1 = new Page(name: "page", lat: "111", lng: "222", dateCreated: date, lastUpdated: date, 
-            about: 'this is page 1', picOriginal: 'picOri').save()
+            about: 'this is page 1', picOriginal: 'picOri', household: 1, population: 11).save()
         def secondPage = new Page(name: "second-page", lat: "11122", lng: "1234", dateCreated: date, lastUpdated: date, about: 'this is 2nd page').save()
                
         
@@ -79,6 +79,8 @@ class PageControllerTests {
         controller.info()
         assert response.json['picOriginal'] == 'picOri'
         assert response.json['name'] == 'page'
+        assert response.json['household'] == 1
+        assert response.json['population'] == 11
     }
 
     void testMap() {
