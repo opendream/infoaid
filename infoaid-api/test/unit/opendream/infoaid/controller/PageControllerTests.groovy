@@ -351,7 +351,7 @@ class PageControllerTests {
         assert page.name == 'newNamePage1'
     }
 
-    void testDisablePage() {
+    void testDisablePageEnablePage() {
         def page = Page.findBySlug('page-slug')
         assert page.status == Page.Status.ACTIVE
         params.slug = 'page-slug'
@@ -362,6 +362,15 @@ class PageControllerTests {
         assert 1 == response.json.status
         assert 'page-slug' == response.json.page.slug
         assert 'INACTIVE' == response.json.page.status
+
+        response.reset()
+        params.slug = 'page-slug'
+        controller.enablePage()
+        page = Page.findBySlug('page-slug')
+
+        assert 1 == response.json.status
+        assert 'page-slug' == response.json.page.slug
+        assert 'ACTIVE' == response.json.page.status
     }
 
     void testPostMessage() {
@@ -401,5 +410,38 @@ class PageControllerTests {
         // expect        
         assert 1 == response.json.status
         assert "user: ${user.username} posted request ${item.name}, quantity: 20 in page: ${page.name}" == response.json.message
+    }
+
+    void testSearchPage() {
+        controller.pageService = new PageService()
+
+        params.word = ''
+        controller.searchPage()
+
+        assert response.json['pages'][0].name == 'page'
+        assert response.json['pages'][1].name == 'second-page'
+
+        assert response.json['pages'][0].needs.size() == 2
+        assert response.json['pages'][1].needs.size() == 0
+
+        assert response.json['pages'][0].needs[0].quantity == 10
+        assert response.json['pages'][0].needs[1].quantity == 9
+
+        assert response.json['status'] == 1
+
+        assert response.json['totalResults'] == 2
+
+        response.reset()
+
+        params.word = 'sec'
+        controller.searchPage()
+        assert response.json['pages'][0].name == 'second-page'
+
+        assert response.json['pages'][0].needs.size() == 0
+
+        assert response.json['status'] == 1
+
+        assert response.json['totalResults'] == 1
+
     }
 }

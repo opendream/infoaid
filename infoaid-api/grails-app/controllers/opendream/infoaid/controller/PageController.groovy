@@ -314,4 +314,40 @@ class PageController {
                     lat: page.lat, lng: page.lng, status:page.status.toString()]]
         render ret as JSON
     }
+
+    def enablePage() {
+        def slug = params.slug
+        def page = pageService.enablePage(slug)
+        def ret = [status:1, page:[slug:page.slug, name:page.name, 
+                    lat: page.lat, lng: page.lng, status:page.status.toString()]]
+        render ret as JSON
+    }
+
+    def searchPage() {
+        def ret = [:]
+        def word = params.word
+        def pages = pageService.searchPage(word)
+
+        ret.pages = pages.collect{
+            [
+                name: it.name,
+                lat: it.lat,
+                lng: it.lng,
+                household: it.household,
+                population: it.population,
+                about: it.about,
+                picOriginal: it.picOriginal,
+
+                needs: pageService.getLimitNeeds(it.slug, 4).needs.collect {
+                   [
+                        item: it.item.name,
+                        quantity: it.quantity
+                   ]
+                }
+            ]
+        }
+        ret.status = 1
+        ret.totalResults = pages.size()
+        render ret as JSON
+    }
 }

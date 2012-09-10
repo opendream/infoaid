@@ -279,13 +279,17 @@ class PageServiceTests {
         assert page.name == 'newNamePage1'
     }
 
-    void testDisablePage() {
+    void testDisablePageEnablePage() {
         def page = Page.findBySlug("0")
         assert page.status == Page.Status.ACTIVE
         service.disablePage("0")
 
         page = Page.findBySlug("0")
         assert page.status == Page.Status.INACTIVE
+
+        service.enablePage("0")
+        page = Page.findBySlug("0")
+        assert page.status == Page.Status.ACTIVE
     }
 
     void testGetActiveNeedPage() {
@@ -308,5 +312,23 @@ class PageServiceTests {
         assert 'page1' == pages[0].name
         assert 'page2' == pages[1].name
         assert 1 == pages[1].posts.size()
+    }
+
+    void testSearchPage() {
+        def pages = service.searchPage('page1')
+        assert pages.size() == 1
+        assert pages[0].name == 'page1'
+
+        pages = service.searchPage('2')
+        assert pages.size() == 1
+        assert pages[0].name == 'page2'
+
+        pages = service.searchPage('This')
+        assert pages.size() == 1
+
+        pages = service.searchPage('')
+        assert pages.size() == 2
+        assert pages[0].name == 'page1'
+        assert pages[1].name == 'page2'
     }
 }
