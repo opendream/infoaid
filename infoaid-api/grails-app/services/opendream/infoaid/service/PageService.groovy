@@ -255,7 +255,6 @@ class PageService {
                 distinct('page')
             }
         }
-        println pages
         pages
     }
 }
