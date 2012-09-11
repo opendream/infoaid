@@ -1,5 +1,5 @@
 <ul class="page-posts">
-	<li ng-repeat="post in posts">
+	<li ng-repeat="post in posts" id="post-{{post.id}}">
 		<div class="message-content">
 			<div class="message-picture">
 				<img src="{{post.picSmall}}"></img>
@@ -11,6 +11,13 @@
 				</div>
 				<div class="message-body">
 					{{post.message}}
+				</div>
+
+				<div class="meta">
+					<time class="timeago" datetime="{{post.dateCreated}}"
+						title="{{post.dateCreated}}">
+						{{post.dateCreated}}
+					</time>
 				</div>
 			</div>
 
@@ -29,6 +36,13 @@
 					</div>
 					<div class="comment-body">
 						{{comment.message}}
+					</div>
+
+					<div class="meta">
+						<time class="timeago" datetime="{{comment.lastUpdated}}"
+							title="{{comment.lastUpdated}}">
+							{{comment.lastUpdated}}
+						</time>
 					</div>
 				</div>
 

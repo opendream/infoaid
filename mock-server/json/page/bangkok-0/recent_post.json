@@ -2,6 +2,7 @@
     "status": 1,
     "posts": [
         {
+            "id": 8100,
             "message": "Under forest fire attack !!",
             "userId": 8185,
             "user": "Firefly",
@@ -49,6 +50,7 @@
             ]
         },
         {
+            "id": 8099,
             "message": "Clone attack",
             "userId": 8080,
             "user": "Ray McDonald",
@@ -87,6 +89,7 @@
             ]
         },
         {
+            "id": 8098,
             "message": "Draught",
             "userId": 8185,
             "user": "Firefly",
@@ -116,6 +119,7 @@
             ]
         },
         {
+            "id": 8097,
             "message": "Bangkok flood demonstration",
             "userId": 8185,
             "user": "Firefly",
@@ -135,6 +139,7 @@
             ]
         },
         {
+            "id": 8096,
             "message": "Earthquake",
             "userId": 8185,
             "user": "Firefly",
@@ -145,6 +150,7 @@
         }
         ,
         {
+            "id": 8095,
             "message": "Earthquake",
             "userId": 8185,
             "user": "Firefly",
