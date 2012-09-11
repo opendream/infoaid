@@ -1,0 +1,44 @@
+.page-posts {
+
+	list-style: none;
+	margin: 0;
+
+	.message-picture {
+		float: left;
+	}
+
+	.message-details {
+		margin-left: 50px;
+		padding: 0 12px;
+
+		.message-body {
+			padding: 12px 0;
+		}
+	}
+
+	.message-comments {
+		margin-left: 62px;
+		padding: 8px 0 36px;
+
+		.comment-picture {
+			float: left;
+		}
+
+		.comment-details {
+			margin-left: 50px;
+			padding: 0 12px;
+
+			.comment-body {
+				padding: 8px 0;
+			}
+		}
+	}
+
+	ul {
+		list-style: none;
+
+		li {
+			margin-bottom: 12px;
+		}
+	}
+}
