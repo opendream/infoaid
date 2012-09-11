@@ -18,7 +18,6 @@ class PageService {
 
     def getPosts(slug, fromId=null, toId=null, since=null, until=null, type = null) {
         def max = 10
-        
         def posts = Post.createCriteria().list() {
             eq('status', Post.Status.ACTIVE)
             page {
@@ -42,16 +41,15 @@ class PageService {
             }
             order('lastActived', 'desc')
         }
-
         return posts
     }
 
-    def getTopPost(slug) {
-        getPosts(slug, null, null, null, null, 'top')
+    def getTopPost(slug, fromId=null, toId=null, since=null, until=null) {
+        getPosts(slug, fromId, toId, since, until, 'top')
     }
 
-    def getRecentPost(slug) {
-        getPosts(slug, null, null, null, null, 'recent')        
+    def getRecentPost(slug, fromId=null, toId=null, since=null, until=null) {
+        getPosts(slug, fromId, toId, since, until, 'recent')        
     }
 
     def getComments(postId, fromId=null, toId=null, since=null, until=null) {
