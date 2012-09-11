@@ -13,6 +13,8 @@
 					{{post.message}}
 				</div>
 			</div>
+
+			<div class="clear"></div>
 		</div>
 
 		<ul class="message-comments">
@@ -29,6 +31,8 @@
 						{{comment.message}}
 					</div>
 				</div>
+
+				<div class="clear"></div>
 			</li>
 		</ul>
 	</li>

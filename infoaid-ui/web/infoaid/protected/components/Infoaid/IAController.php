@@ -6,6 +6,8 @@ class IAController extends CController
 	
 	public $angular = TRUE;
 
+	public $styles = array();
+
 	protected function renderJSON($content)
 	{
 		$this->layout = 'application.views.layouts.json';
@@ -26,6 +28,11 @@ class IAController extends CController
 			Yii::app()->clientScript
 				->registerScriptFile(Yii::app()->baseUrl .'/js/angular.js/angular.js')
 				->registerScriptFile(Yii::app()->baseUrl .'/js/angular.js/angular-resource.js');
+		}
+
+		foreach ($this->styles as $style) {
+			Yii::app()->clientScript
+				->registerCssFile(Yii::app()->baseUrl .'/css/'. $style);
 		}
 	}
 
