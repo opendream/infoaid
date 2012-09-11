@@ -1,0 +1,3 @@
+[submodule "infoaid-ui/modules/jquery-timeago"]
+	path = infoaid-ui/modules/jquery-timeago
+	url = git://github.com/rmm5t/jquery-timeago.git
