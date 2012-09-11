@@ -2,6 +2,10 @@
 
 class PageController extends IAController
 {
+	public $styles = array(
+		'page.css',
+	);
+
 	public function actions()
 	{
 		return array(
