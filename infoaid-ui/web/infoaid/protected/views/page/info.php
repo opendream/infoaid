@@ -1,7 +1,7 @@
 <div id="page-<?php echo $page->id; ?>" class="page-info">
 
 	<header class="info">
-		<h1><?php echo $page->name; ?></h1>
+		<h1><?php include '_header.php'; ?></h1>
 	</header>
 
 	<section class="posts" ng-app="post">

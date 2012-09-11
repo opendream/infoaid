@@ -227,3 +227,45 @@ div.search-form
 {
 	background: #80CFFF;
 }
+
+.pic-small
+{
+	border: solid 2px #000000;
+	margin-left: 10px;
+	margin-right: 10px;
+	float: left;
+}
+
+.word-small
+{
+	font-size: 14px;
+}
+
+.word-original
+{
+	font-size: 18px;
+}
+
+.page-lat
+{
+	font-size: 14px;
+	margin-left: 75px;
+}
+
+.page-lng
+{
+	font-size: 14px;
+	margin-left: 5px;
+}
+
+.page-needs
+{
+	font-size: 14px;
+	margin-left: 75px;
+}
+
+.page-header
+{
+	padding-top: 10px;
+	background-color: #F2F2F2;
+}

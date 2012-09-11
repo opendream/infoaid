@@ -5,5 +5,8 @@
 	"lat": "13.9137096405029",
 	"lng": "100.824531555176",
 	"dateCreated": "2012-08-28 10:56",
-	"lastUpdated": "2012-08-28 10:56"
+	"lastUpdated": "2012-08-28 10:56",
+	"picSmall": "/media/pages/page_small.jpg",
+	"household": 10,
+	"population": 200
 }
