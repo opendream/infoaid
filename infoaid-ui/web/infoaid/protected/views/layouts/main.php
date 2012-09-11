@@ -14,29 +14,41 @@
 
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
+	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/bootstrap.min.css" />
 
+	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/bootstrap.min.js"></script>
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
 
 <body>
 
 <div class="container" id="page">
-
-	<div id="header">
-		<div id="logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
-	</div><!-- header -->
-
-	<div id="mainmenu">
-		<?php $this->widget('zii.widgets.CMenu',array(
-			'items'=>array(
-				array('label'=>'Home', 'url'=>Yii::app()->homeUrl),
-				array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
-				array('label'=>'Contact', 'url'=>array('/site/contact')),
-				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
-				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
-			),
-		)); ?>
-	</div><!-- mainmenu -->
+	<div class="navbar navbar-static-top">
+        <div class="navbar-inner">            
+            <a class="brand" href="<?php echo Yii::app()->homeUrl ?>"><?php echo CHtml::encode(Yii::app()->name); ?></a>
+            <ul class="nav actions">
+                <li><a href="#">Place</a></li>
+                <li><a href="#">People</a></li>
+                <li><a href="#">Status</a></li>
+                <li><a href="/site/pages/about">About us</a></li>                          
+            </ul>
+            <ul class="nav menu pull-right">
+                <li class="dropdown" id="fat">            
+	                <a href="#fat" class="dropdown-toggle" data-toggle="dropdown">Log in as <i class="icon-user icon-black"></i> admin <b class="caret"></b></a>
+	                <ul class="dropdown-menu">
+	                    <li><a href="/user/edit/1">Edit Profile</a></li>
+	                    	<li><a href="/user/list">List All Users</a></li>
+	                        <li class="divider"></li>
+	                        <li><a href="/event/create">Create New Event</a></li>
+	                        <li><a href="/user/create">Create New User</a></li>                                
+	                    <li class="divider"></li>
+	                    <li><a href="/logout/index">Logout</a></li>
+	                </ul>
+                </li>
+            </ul>
+        </div> <!-- navbar inner -->
+    </div>
+	
 	<?php if(isset($this->breadcrumbs)):?>
 		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
 			'links'=>$this->breadcrumbs,
@@ -48,9 +60,8 @@
 	<div class="clear"></div>
 
 	<div id="footer">
-		Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
-		All Rights Reserved.<br/>
-		<?php echo Yii::powered(); ?>
+		Copyright &copy; <?php echo date('Y'); ?> by Opendream Co., Ltd.<br/>
+		All Rights Reserved.<br/>		
 	</div><!-- footer -->
 
 </div><!-- page -->

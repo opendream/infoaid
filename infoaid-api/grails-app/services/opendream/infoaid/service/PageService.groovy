@@ -247,6 +247,19 @@ class PageService {
         page
     }
 
+    def enablePage(slug) {
+        def page = Page.findBySlug(slug)
+        if(!page) {
+            return
+        }
+
+        page.status = Page.Status.ACTIVE
+        if(!page.save()) {
+            return
+        }
+        page
+    }
+
     def getActiveNeedPage() {
         def pages = Need.createCriteria().list() {            
             eq('status', Post.Status.ACTIVE)
@@ -255,7 +268,18 @@ class PageService {
                 distinct('page')
             }
         }
-        println pages
+        pages
+    }
+
+    def searchPage(word = null) {
+        def max = 10
+        def pages = Page.createCriteria().list(max: max, sort: 'name', order: 'asc') {
+            eq('status', Page.Status.ACTIVE)
+            or {
+                ilike("name", "%${word}%")
+                ilike("about", "%${word}%")
+            }
+        }
         pages
     }
 }
