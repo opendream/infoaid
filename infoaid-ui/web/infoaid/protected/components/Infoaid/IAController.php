@@ -21,13 +21,16 @@ class IAController extends CController
 	{
 		if ($this->jquery == TRUE) {
 			Yii::app()->clientScript
-				->registerScriptFile(Yii::app()->baseUrl .'/js/jquery/jquery.js');
+				->registerScriptFile(Yii::app()->baseUrl .'/js/jquery/jquery.js')
+				->registerScriptFile(Yii::app()->baseUrl .'/js/jquery.timeago.js')
+				->registerScriptFile(Yii::app()->baseUrl .'/js/timeago.js');
 		}
 
 		if ($this->angular == TRUE) {
 			Yii::app()->clientScript
 				->registerScriptFile(Yii::app()->baseUrl .'/js/angular.js/angular.js')
-				->registerScriptFile(Yii::app()->baseUrl .'/js/angular.js/angular-resource.js');
+				->registerScriptFile(Yii::app()->baseUrl .'/js/angular.js/angular-resource.js')
+				->registerScriptFile(Yii::app()->baseUrl .'/js/angular.js/angular-bootstrap.js');
 		}
 
 		foreach ($this->styles as $style) {
