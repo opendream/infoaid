@@ -45,7 +45,20 @@ class UserController {
     }
 
     def getPages() {
+        def ret = [:]
+        ret.status = 0
         def user = User.get(params.id)
-        render user.getPages() as JSON
+        def pages = user.getPages()
+        if(pages) {
+            ret.totalPages = pages.size()
+            ret.pages = pages.collect{
+                [   
+                    id: it.id,
+                    name: it.name
+                ]
+            }
+            ret.status = 1
+        }
+        render ret as JSON
     }
 }
