@@ -9,11 +9,12 @@ class PageController {
 
     def info() {
         def ret = [:]
+        ret.status = 0
         def info = pageService.getInfo(params.slug)
         if(info) {
             ret = [id: info.id, name: info.name, lat: info.lat, lng: info.lng, dateCreated: info.dateCreated.format('yyyy-MM-dd HH:mm'), 
-            lastUpdated: info.lastUpdated.format('yyyy-MM-dd HH:mm'), picOriginal: info.picOriginal, household: info.household, 
-            population: info.population
+            lastUpdated: info.lastUpdated.format('yyyy-MM-dd HH:mm'), picSmall: info.picSmall, household: info.household, 
+            population: info.population, status: 1
             ]
         }
         
@@ -108,6 +109,7 @@ class PageController {
         
         ret.posts = posts.collect{
             [
+                id: it.id,
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                 createdBy: it.createdBy.username,
@@ -135,6 +137,7 @@ class PageController {
         
         ret.posts = posts.collect{
             [
+                id: it.id,
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                 createdBy: it.createdBy.username,
@@ -181,13 +184,8 @@ class PageController {
         def results = pageService.getLimitNeeds(params.slug, limit)
         ret.needs = results.needs.collect {
             [
-                message: it.message,
-                dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
-                createdBy: it.createdBy.username,
-                userId: it.createdBy.id,
-                expiredDate: it.expiredDate.format('yyyy-MM-dd HH:mm'),
-                quantity: it.quantity,
-                item: it.item.name
+                id: it.id,
+                message: it.message
             ]
         }
         ret.totalNeeds = results.totalNeeds

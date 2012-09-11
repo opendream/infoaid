@@ -16,6 +16,7 @@ class PostController {
                 [
                     id: it.id,
                     message: it.message,
+                    userId: it.user.id,
                     user: it.user.username,
                     picSmall: it.user.picSmall,
                     picOriginal: it.user.picOriginal,
@@ -38,6 +39,7 @@ class PostController {
                 [
                     id: it.id,
                     message: it.message,
+                    userId: it.user.id,
                     user: it.user.username,
                     picSmall: it.user.picSmall,
                     picOriginal: it.user.picOriginal,

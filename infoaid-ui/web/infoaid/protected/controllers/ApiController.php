@@ -20,4 +20,18 @@ class ApiController extends IAController
 		}
 		$this->renderJSON($posts);
 	}
+
+	public function actionPageInfo($slug)
+	{	
+		$slug = urlencode($slug);
+		$resultInfo = API::getJSON("page/$slug/info");
+		$this->renderJSON($resultInfo);
+	}
+
+	public function actionPageNeeds($slug)
+	{
+		$slug = urlencode($slug);
+		$resultNeeds = API::getJSON('page/'.$slug.'/limit_need/4');
+		$this->renderJSON($resultNeeds);
+	}
 }
