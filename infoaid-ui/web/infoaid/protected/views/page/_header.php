@@ -25,7 +25,6 @@
     $.getJSON(urlNeeds, {slug: "<?php echo $slug ?>", limit: 4}, function (resp) {
         for(el in resp.needs) {
             $('#page-needs').append(' ' + resp.needs[el].message);
-            
         }
     });
 </script>
