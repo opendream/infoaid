@@ -34,7 +34,7 @@ class PageControllerTests {
         def user2 = new User(username: "nut2", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save()
 
         def page1 = new Page(name: "page", lat: "111", lng: "222", dateCreated: date, lastUpdated: date, 
-            about: 'this is page 1', picOriginal: 'picOri', household: 1, population: 11).save()
+            about: 'this is page 1', picOriginal: 'picOri',picSmall: 'picSma', household: 1, population: 11).save()
         def secondPage = new Page(name: "second-page", lat: "11122", lng: "1234", dateCreated: date, lastUpdated: date, about: 'this is 2nd page').save()
                
         
@@ -71,13 +71,12 @@ class PageControllerTests {
     }
 
     void testInfo() {
-        pageService.demand.getInfo(1..1) {slug -> Page.findBySlug(slug)}
-        controller.pageService = pageService.createMock()
+        controller.pageService = new PageService()
 
         params.slug = 'page-slug'
         
         controller.info()
-        assert response.json['picOriginal'] == 'picOri'
+        assert response.json['picSmall'] == 'picSma'
         assert response.json['name'] == 'page'
         assert response.json['household'] == 1
         assert response.json['population'] == 11
@@ -136,9 +135,11 @@ class PageControllerTests {
     }
 
     void testEmptyInfo() {
+        controller.pageService = new PageService()
+
         params.slug = 'abc'
         controller.info()
-        assert response.text == '{}'
+        assert response.text == '{"status":0}'
     }
 
     void testNeed() {
