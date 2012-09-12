@@ -228,24 +228,6 @@ div.search-form
 	background: #80CFFF;
 }
 
-.pic-small
-{
-	border: solid 2px #000000;
-	margin-left: 10px;
-	margin-right: 10px;
-	float: left;
-}
-
-.word-small
-{
-	font-size: 14px;
-}
-
-.word-original
-{
-	font-size: 18px;
-}
-
 .page-lat
 {
 	font-size: 14px;
@@ -267,4 +249,27 @@ div.search-form
 {
 	padding-top: 10px;
 	background-color: #F2F2F2;
+}
+
+.page-picture
+{
+	border: solid 2px #000000;
+	margin-left: 10px;
+	margin-right: 10px;
+	float: left;
+}
+
+.page-name
+{
+	font-size: 18px;
+}
+
+.page-household
+{
+	font-size: 18px;
+}
+
+.page-population
+{
+	font-size: 18px;
 }

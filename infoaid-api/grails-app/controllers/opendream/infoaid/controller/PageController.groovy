@@ -342,12 +342,10 @@ class PageController {
     }
 
     def searchPage() {
-        println 's'
         def ret = [:]
         ret.status = 0
         def word = params.word
         def pages = pageService.searchPage(word)
-        println word
         if(pages) {
             ret.pages = pages.collect{
                 [

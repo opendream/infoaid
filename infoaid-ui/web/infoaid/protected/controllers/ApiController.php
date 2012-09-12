@@ -22,7 +22,7 @@ class ApiController extends IAController
 	}
 
 	public function actionPageInfo($slug)
-	{	
+	{
 		$slug = urlencode($slug);
 		$resultInfo = API::getJSON("page/$slug/info");
 		$this->renderJSON($resultInfo);
@@ -33,5 +33,13 @@ class ApiController extends IAController
 		$slug = urlencode($slug);
 		$resultNeeds = API::getJSON('page/'.$slug.'/limit_need/4');
 		$this->renderJSON($resultNeeds);
+	}
+
+	public function actionPageSearch($word)
+	{
+		$resultSearch = API::getJSON('page/searchPage', array('word'=>$word));
+		foreach($resultSearch->pages as $el) {
+			$this->renderPartial('/page/header', array('slug'=>$el->slug, 'id'=>$el->id));
+		}
 	}
 }
