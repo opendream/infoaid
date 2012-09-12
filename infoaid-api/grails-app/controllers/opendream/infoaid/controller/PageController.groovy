@@ -324,29 +324,32 @@ class PageController {
 
     def searchPage() {
         def ret = [:]
+        ret.status = 0
         def word = params.word
         def pages = pageService.searchPage(word)
+        if(pages) {
+            ret.pages = pages.collect{
+                [
+                    name: it.name,
+                    lat: it.lat,
+                    lng: it.lng,
+                    household: it.household,
+                    population: it.population,
+                    about: it.about,
+                    picOriginal: it.picOriginal,
 
-        ret.pages = pages.collect{
-            [
-                name: it.name,
-                lat: it.lat,
-                lng: it.lng,
-                household: it.household,
-                population: it.population,
-                about: it.about,
-                picOriginal: it.picOriginal,
-
-                needs: pageService.getLimitNeeds(it.slug, 4).needs.collect {
-                   [
-                        item: it.item.name,
-                        quantity: it.quantity
-                   ]
-                }
-            ]
+                    needs: pageService.getLimitNeeds(it.slug, 4).needs.collect {
+                       [
+                            item: it.item.name,
+                            quantity: it.quantity
+                       ]
+                    }
+                ]
+            }
+            ret.status = 1
+            ret.totalResults = pages.size()
         }
-        ret.status = 1
-        ret.totalResults = pages.size()
+        
         render ret as JSON
     }
 }
