@@ -79,83 +79,102 @@ class PageController {
 
     def status() {
         def ret = [:]
-        def posts = pageService.getPosts(params.slug, params.fromId, params.toId, params.since, params.until, params.type=null)
-        ret.posts = posts.collect{
-            [
-                message: it.message,
-                dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
-                createdBy: it.createdBy.username,
-                userId: it.createdBy.id,
-                comments: it.previewComments.comments.collect {
-                    [
-                        message: it.message,
-                        createdBy: it.user.username,
-                        userId: it.user.id,
-                        picOriginal: it.user.picOriginal,
-                        picLarge: it.user.picLarge,
-                        picSmall: it.user.picSmall,
-                        lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
-                    ]
-                }
-            ]
+        ret.status = 0
+        if(!params.max) {
+            params.max = 10
         }
-        ret.status = 1
+        def posts = pageService.getPosts(params.slug, params.fromId, params.toId, params.since, params.until, params.max, params.type=null)
+        if(posts) {
+            ret.posts = posts.collect{
+                [
+                    message: it.message,
+                    dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
+                    createdBy: it.createdBy.username,
+                    userId: it.createdBy.id,
+                    comments: it.previewComments.comments.collect {
+                        [
+                            message: it.message,
+                            createdBy: it.user.username,
+                            userId: it.user.id,
+                            picOriginal: it.user.picOriginal,
+                            picLarge: it.user.picLarge,
+                            picSmall: it.user.picSmall,
+                            lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
+                        ]
+                    }
+                ]
+            }
+            ret.status = 1
+        }
+        
         render ret as JSON
     }
 
     def topPost() {
         def ret = [:]
-        def posts = pageService.getTopPost(params.slug)
-        
-        ret.posts = posts.collect{
-            [
-                id: it.id,
-                message: it.message,
-                dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
-                createdBy: it.createdBy.username,
-                userId: it.createdBy.id,
-                comments: it.previewComments.comments.collect {
-                    [
-                        message: it.message,
-                        createdBy: it.user.username,
-                        userId: it.user.id,
-                        picOriginal: it.user.picOriginal,
-                        picLarge: it.user.picLarge,
-                        picSmall: it.user.picSmall,
-                        lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
-                    ]
-                }
-            ]
+        ret.status = 0
+        if(!params.max) {
+            params.max = 10
         }
-        ret.status = 1
+        def posts = pageService.getTopPost(params.slug, params.fromId, params.toId, params.since, params.until, params.max)
+        if(posts) {
+            ret.posts = posts.collect{
+                [
+                    id: it.id,
+                    message: it.message,
+                    dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
+                    createdBy: it.createdBy.username,
+                    userId: it.createdBy.id,
+                    comments: it.previewComments.comments.collect {
+                        [
+                            message: it.message,
+                            createdBy: it.user.username,
+                            userId: it.user.id,
+                            picOriginal: it.user.picOriginal,
+                            picLarge: it.user.picLarge,
+                            picSmall: it.user.picSmall,
+                            lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
+                        ]
+                    }
+                ]
+            }
+            ret.status = 1
+        }
+        
         render ret as JSON
     }
 
     def recentPost() {
         def ret = [:]
-        def posts = pageService.getRecentPost(params.slug)
-        
-        ret.posts = posts.collect{
-            [
-                id: it.id,
-                message: it.message,
-                dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
-                createdBy: it.createdBy.username,
-                userId: it.createdBy.id,
-                comments: it.previewComments.comments.collect {
-                    [
-                        message: it.message,
-                        createdBy: it.user.username,
-                        userId: it.user.id,
-                        picOriginal: it.user.picOriginal,
-                        picLarge: it.user.picLarge,
-                        picSmall: it.user.picSmall,
-                        lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
-                    ]
-                }
-            ]
+        ret.status = 0
+        if(!params.max) {
+            params.max = 10
         }
-        ret.status = 1
+        def posts = pageService.getRecentPost(params.slug, params.fromId, params.toId, params.since, params.until, params.max)
+        if(posts) {
+            ret.posts = posts.collect{
+                [
+                    id: it.id,
+                    message: it.message,
+                    dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
+                    createdBy: it.createdBy.username,
+                    userId: it.createdBy.id,
+                    comments: it.previewComments.comments.collect {
+                        [
+                            message: it.message,
+                            createdBy: it.user.username,
+                            userId: it.user.id,
+                            picOriginal: it.user.picOriginal,
+                            picLarge: it.user.picLarge,
+                            picSmall: it.user.picSmall,
+                            lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
+                        ]
+                    }
+                ]
+            }
+            ret.status = 1
+        }
+        
         render ret as JSON
     }
 
@@ -324,29 +343,35 @@ class PageController {
 
     def searchPage() {
         def ret = [:]
+        ret.status = 0
         def word = params.word
         def pages = pageService.searchPage(word)
+        if(pages) {
+            ret.pages = pages.collect{
+                [
+                    id: it.id,
+                    name: it.name,
+                    lat: it.lat,
+                    lng: it.lng,
+                    household: it.household,
+                    population: it.population,
+                    about: it.about,
+                    picOriginal: it.picOriginal,
+                    slug: it.slug,
 
-        ret.pages = pages.collect{
-            [
-                name: it.name,
-                lat: it.lat,
-                lng: it.lng,
-                household: it.household,
-                population: it.population,
-                about: it.about,
-                picOriginal: it.picOriginal,
-
-                needs: pageService.getLimitNeeds(it.slug, 4).needs.collect {
-                   [
-                        item: it.item.name,
-                        quantity: it.quantity
-                   ]
-                }
-            ]
+                    needs: pageService.getLimitNeeds(it.slug, 4).needs.collect {
+                       [
+                            id: it.id,
+                            item: it.item.name,
+                            quantity: it.quantity
+                       ]
+                    }
+                ]
+            }
+            ret.status = 1
+            ret.totalResults = pages.size()
         }
-        ret.status = 1
-        ret.totalResults = pages.size()
+        
         render ret as JSON
     }
 }

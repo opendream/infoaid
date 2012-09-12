@@ -1,7 +1,7 @@
 <div id="page-<?php echo $page->id; ?>" class="page-info">
 
 	<header class="info">
-		<h1><?php include '_header.php'; ?></h1>
+		<?php $this->renderPartial('header', array('slug'=>$slug,'id'=>$page->id)); ?>
 	</header>
 
 	<section class="posts" ng-app="post">

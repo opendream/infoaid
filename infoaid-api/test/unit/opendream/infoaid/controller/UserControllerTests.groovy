@@ -185,7 +185,7 @@ class UserControllerTests {
         params.id = user.id
         controller.getPages()
 
-        assert 3 == response.json.size()
-        assert 'page1' == response.json[0].name
+        assert 3 == response.json['pages'].size()
+        assert 'page1' == response.json['pages'][0].name
     }
 }

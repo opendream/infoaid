@@ -14,9 +14,10 @@ class PageServiceIntegrationTests {
     @Before
     void setup() {
         date = new Date()-19
+        println date
         def date2 = new Date()-20
 
-         def user1 = new User(username: "nut", password: "nut", firstname: 'firstname', 
+        def user1 = new User(username: "nut", password: "nut", firstname: 'firstname', 
             lastname: 'lastname', dateCreated: date, lastUpdated: date, 
             picSmall: 'picSma', picOriginal: 'picOri', picLar: 'picLar').save()
         def user2 = new User(username: "nut2", password: "nut2", firstname: 'firstname2', 
@@ -60,6 +61,7 @@ class PageServiceIntegrationTests {
         def user = User.findByUsername('nut')
         assert posts.size() == 10
         assert posts.getAt(0).createdBy == user
+        assert posts.getAt(0).message == 'post3: 19'
     }
 
     @Test
@@ -69,7 +71,7 @@ class PageServiceIntegrationTests {
         pageService.postComment(user.id, post.id, "my comment for top posts")
                 
         def page = Page.findByName("page1")
-        def posts = pageService.getTopPost(page.slug)
+        def posts = pageService.getTopPost(page.slug, null, null, null, null)
         
         assert posts.size() == 10
         assert posts[0].message == 'post1'
@@ -78,7 +80,7 @@ class PageServiceIntegrationTests {
     @Test
     void testGetRecentPost() {
         def page = Page.findByName("page1")
-        def posts = pageService.getRecentPost(page.slug)
+        def posts = pageService.getRecentPost(page.slug, null, null, new Date()-1, null)
         def user = User.findByUsername('nut')
         assert posts.size() == 10
         assert posts[0].createdBy == user
@@ -108,19 +110,19 @@ class PageServiceIntegrationTests {
 
 
         resultsComment = pageService.getComments(firstResultPost.id, comment11.id+8 as Long, null, null, null)
-        assert resultsComment.comments.size() == 3 // comment id start at 2
+        assert resultsComment.comments.size() == 3
 
         resultsComment = pageService.getComments(firstResultPost.id, null, comment11.id+8 as Long, null, null)
-        assert resultsComment.comments.size() == 9 // comment id start at 2
+        assert resultsComment.comments.size() == 9
 
         resultsComment = pageService.getComments(firstResultPost.id, null, null, new Date(), null)
-        assert resultsComment.comments.size() == 0 // comment id start at 2
+        assert resultsComment.comments.size() == 0
 
         resultsComment = pageService.getComments(firstResultPost.id, null, null, null, new Date())
-        assert resultsComment.comments.size() == 11 // comment id start at 2
+        assert resultsComment.comments.size() == 11
 
         resultsComment = pageService.getComments(firstResultPost.id, comment11.id+8 as Long, null, null, new Date())
-        assert resultsComment.comments.size() == 3 // comment id start at 2
+        assert resultsComment.comments.size() == 3
     }
 
     @Test

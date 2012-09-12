@@ -12,17 +12,14 @@ import opendream.infoaid.domain.MessagePost
 class PageService {
 
     def getInfo(slug) {
-
     	def pageInfo = Page.findBySlug(slug)
     }
 
-    def getPosts(slug, fromId=null, toId=null, since=null, until=null, type = null) {
-        def max = 10
-        
+    def getPosts(slug, fromId=null, toId=null, since=null, until=null, max = 10, type = null) {
         def posts = Post.createCriteria().list() {
             eq('status', Post.Status.ACTIVE)
             page {
-                eq('slug', slug)    
+                eq('slug', slug)
             }
             maxResults(max)
             if(fromId) {
@@ -42,16 +39,15 @@ class PageService {
             }
             order('lastActived', 'desc')
         }
-
         return posts
     }
 
-    def getTopPost(slug) {
-        getPosts(slug, null, null, null, null, 'top')
+    def getTopPost(slug, fromId=null, toId=null, since=null, until=null, max = 10) {
+        getPosts(slug, fromId, toId, since, until, max, 'top')
     }
 
-    def getRecentPost(slug) {
-        getPosts(slug, null, null, null, null, 'recent')        
+    def getRecentPost(slug, fromId=null, toId=null, since=null, until=null, max = 10) {
+        getPosts(slug, fromId, toId, since, until, max, 'recent')
     }
 
     def getComments(postId, fromId=null, toId=null, since=null, until=null) {

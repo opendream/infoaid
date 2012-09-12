@@ -29,4 +29,9 @@ class PageController extends IAController
 		}
 	}
 
+	public function actionSearch()
+	{
+		$this->render('search');
+	}
+
 }
