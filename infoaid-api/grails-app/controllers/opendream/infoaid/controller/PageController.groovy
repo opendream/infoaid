@@ -345,7 +345,8 @@ class PageController {
         def ret = [:]
         ret.status = 0
         def word = params.word
-        def pages = pageService.searchPage(word)
+        def offset = params.offset ? params.offset : 0
+        def pages = pageService.searchPage(word, offset)
         if(pages) {
             ret.pages = pages.collect{
                 [
@@ -356,7 +357,7 @@ class PageController {
                     household: it.household,
                     population: it.population,
                     about: it.about,
-                    picOriginal: it.picOriginal,
+                    picSmall: it.picSmall,
                     slug: it.slug,
 
                     needs: pageService.getLimitNeeds(it.slug, 4).needs.collect {

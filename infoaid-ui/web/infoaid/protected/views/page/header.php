@@ -1,38 +1,75 @@
 <?php
     $slugEncode = urlencode($slug);
     $post = API::getJSON("page/$slugEncode/info");
+    $needs = API::getJSON('page/'.$slug.'/limit_need/4');
 ?>
 <div id="page-header-<?php echo $id; ?>" class='page-header'>
     <div id="page-header-left-<?php echo $id; ?>">
-        <div class="page-picture"></div>
+        <div class="page-picture">
+            <?php 
+                if($post->picSmall == null) {
+                    echo '<img src="/infoaid/media/pages/page_default_small.jpg" />';
+                } else {
+                    echo '<img src=' . Yii::app()->baseUrl . $post->picSmall . '>';
+                }
+            ?>
+        </div>
     </div>
     <div id="page-header-right-<?php echo $id; ?>">
         <div><span class='page-name'><?php echo CHtml::link($post->name, array("page/$slug")); ?></span></div>
-        <div><span class='page-household'></span><span class='page-population'></span></div>
-        <div><span class='page-lat'></span><span class='page-lng'></span></div>
-        <div><span class='page-needs'>Need : </span></div>
+        <div class='page-household-population'>
+            <span>
+                <?php
+                    if($post->household == null) {
+                        echo '? House';
+                    } else {
+                        echo $post->household.' House';
+                    }
+                ?>
+            </span>
+            <span>
+                <?php
+                    if($post->population == null) {
+                        echo '? Man';
+                    } else {
+                        echo $post->population.' Man';
+                    }
+                ?>
+            </span>
+        </div>
+        <div class='page-lat-lng'>
+            <span>
+                <?php
+                    if($post->lat == null) {
+                        echo '<b>Latitude :</b> ?';
+                    } else {
+                        echo '<b>Latitude :</b> '.$post->lat;
+                    }
+                ?>
+            </span>
+            <span>
+                <?php
+                    if($post->lng == null) {
+                        echo '<b>Longitude :</b> ?';
+                    } else {
+                        echo '<b>Longitude :</b> '.$post->lng;
+                    }
+                ?>
+            </span>
+        </div>
+        <div>
+            <span class='page-needs'>
+                <b>Need :</b>
+                    <?php
+                        if($needs->status == 0 || $needs->needs == null) {
+                            echo ' ?';
+                        } else {
+                            foreach($needs->needs as $el) {
+                                echo ' '.$el->message.' ';
+                            }    
+                        }
+                    ?>
+            </span>
+        </div>
     </div>
 </div>
-<script>
-(function() {
-    var urlInfo = "<?php echo $this->createUrl('api/pageInfo'); ?>";
-    var urlNeeds = "<?php echo $this->createUrl('api/pageNeeds'); ?>";
-    var pageId = "#page-header-<?php echo $id; ?>";
-
-    $.getJSON(urlInfo, {slug: "<?php echo $slug; ?>"}, function (resp) {
-        var imgStr = '<img src="' + baseUrl + resp.picSmall + '"/>';
-        $('.page-picture', pageId).html(imgStr);
-        //$('.page-name', pageId).html(resp.name);
-        $('.page-household', pageId).html(resp.household + ' house ');
-        $('.page-population', pageId).html(resp.population + ' man');
-        $('.page-lat', pageId).html('Latitude : ' + resp.lat);
-        $('.page-lng', pageId).html(' Longitude : ' + resp.lng);
-    });
-
-    $.getJSON(urlNeeds, {slug: "<?php echo $slug ?>", limit: 4}, function (resp) {
-        for(el in resp.needs) {
-            $('.page-needs', pageId).append(' ' + resp.needs[el].message);
-        }
-    });
-})();
-</script>
