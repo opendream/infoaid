@@ -33,6 +33,24 @@ angular.module('post', ['postService'], function ($routeProvider, $locationProvi
 });
 
 function ListCtrl($scope, Post) {
-	$scope.posts = Post.query({slug: "<?php echo $slug; ?>"});
+	var slug = "<?php echo $slug; ?>";
+
+	var lastRowDateCreated = function () {
+		return $($scope.posts).last().get(0).dateCreated;
+	};
+
+	$scope.posts = Post.query({slug: slug});
+
+	$scope.loadMore = function () {
+		Post.query({
+			slug: slug,
+			until: lastRowDateCreated(),
+			limit: 10
+		}, function (posts) {
+			angular.forEach(posts, function (post) {
+				$scope.posts.push(post);
+			});
+		});
+	};
 }
 </script>

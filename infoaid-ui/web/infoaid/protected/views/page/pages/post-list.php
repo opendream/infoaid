@@ -51,3 +51,9 @@
 		</ul>
 	</li>
 </ul>
+
+<div class="load-more">
+	<button class="btn" ng-click="loadMore()">
+		<i class="icon icon-plus"></i> Load more
+	</button>
+</div>
