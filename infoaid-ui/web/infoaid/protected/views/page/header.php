@@ -15,16 +15,34 @@
 </div>
 <script>
 (function() {
+
     var urlInfo = "<?php echo $this->createUrl('api/pageInfo'); ?>";
     var urlNeeds = "<?php echo $this->createUrl('api/pageNeeds'); ?>";
     var pageId = "#page-header-<?php echo $id; ?>";
-
+    var imgStr = ''
     $.getJSON(urlInfo, {slug: "<?php echo $slug; ?>"}, function (resp) {
-        var imgStr = '<img src="' + baseUrl + resp.picSmall + '"/>';
+        
+        if(resp.picSmall != null) {
+            imgStr = '<img src="' + baseUrl + resp.picSmall + '"/>';
+        } else {
+            imgStr = '<img src="' + baseUrl + '/media/pages/page_default_small.jpg"/>';
+        }
+
+        if(resp.household != null) {
+            $('.page-household', pageId).html(resp.household + ' house ');
+        } else {
+            $('.page-household', pageId).html(' ? house ');
+        }
+
+        if(resp.population != null) {
+            $('.page-population', pageId).html(resp.population + ' man');
+        } else {
+            $('.page-population', pageId).html(' ? man');
+        }
+        
         $('.page-picture', pageId).html(imgStr);
-        //$('.page-name', pageId).html(resp.name);
-        $('.page-household', pageId).html(resp.household + ' house ');
-        $('.page-population', pageId).html(resp.population + ' man');
+        
+        
         $('.page-lat', pageId).html('Latitude : ' + resp.lat);
         $('.page-lng', pageId).html(' Longitude : ' + resp.lng);
     });
