@@ -267,9 +267,10 @@ class PageService {
         pages
     }
 
-    def searchPage(word = null) {
+    def searchPage(word = null, offset = 0) {
         def max = 10
-        def pages = Page.createCriteria().list(max: max, sort: 'name', order: 'asc') {
+        def offsetInt = offset.toInteger()
+        def pages = Page.createCriteria().list(max: max, sort: 'name', order: 'asc', offset: offsetInt) {
             eq('status', Page.Status.ACTIVE)
             or {
                 ilike("name", "%${word}%")

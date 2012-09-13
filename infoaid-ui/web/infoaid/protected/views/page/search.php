@@ -1,26 +1,64 @@
-<div id='page-search' class='page-search' ng-app="">
+<div id='page-search' class='page-search' ng-app="page">
 	<header class="search">
-		<div><span><h1>Search Places</h1></span></div>
+		<div class="search-header"><span>Search Places</span></div>
 	</header>
-	<div ng-controller="searchController">
-		<form name="search-form">
-			<span><input name="word" type="text" ng-model="word" pattern=".{2,}" required/></span>
-			<span><input type="submit" ng-click="search()"></span>
+	<div ng-controller="searchController" class="search-input">
+		<form class="form-search" name="search-form">
+			<div class="input-append">
+				<span><input style="width: 200px" class="span2 search-query" placeholder="2 more character..." name="word" type="text" ng-model="word" pattern=".{2,}" required/></span>
+				<span><input class="btn" type="button" value="Search" ng-click="search()"></span>
+			</div>
 		</form>
-	</div>
-	<div id='result-search'>
-	</div>
+
+		<div id='result-search'>
+			<ul class="unstyled">
+				<li ng-repeat="page in pages" ng-bind-html-unsafe="page.body"></li>
+			<ul>
+		</div>
+
+		<div class="load-more">
+			<button class="btn" ng-click="loadMore()">
+				<i class="icon icon-plus"></i> Load more
+			</button>
+		</div>
+	<div>
 </div>
 <script>
-	function searchController($scope) {
+
+	angular.module('pageService', ['ngResource']).
+		factory('Page', function ($resource) {
+			var Page = $resource('<?php echo $this->createUrl("api/pageSearch"); ?>');
+
+			return Page;
+		});
+
+	angular.module('page', ['pageService']);
+
+	function searchController($scope, Page) {
 		var urlSearch = "<?php echo $this->createUrl('api/pageSearch'); ?>";
 		$scope.word = '';
+		$scope.pages = [];
 		$scope.search = function() {
 			if($scope.word.length >= 2) {
-				$.get(urlSearch, {word: $scope.word}, function (resp) {
-					$('#result-search').html(resp)
-		    	});
+				$scope.pages = Page.query({
+					word: $scope.word,
+					offset: 0
+				});
 			}
 		}
+
+		$scope.loadMore = function() {
+			Page.query({
+				word: $scope.word,
+				offset: 10
+			}, function (pages) {
+				angular.forEach(pages, function (page) {
+					$scope.pages.push(page);
+				});
+			});
+			console.log($scope.pages)
+		};
 	}
+
+	
 </script>
