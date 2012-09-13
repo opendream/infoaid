@@ -6,10 +6,11 @@
 <div id="page-header-<?php echo $id; ?>" class='page-header'>
     <div id="page-header-left-<?php echo $id; ?>">
         <div class="page-picture">
-            <?php if($post->picSmall == null) {
-                echo "<img src=" .$baseUrl.$post->picSmall . "/>";
+            <?php 
+                if($post->picSmall == null) {
+                    echo '<img src="/infoaid/media/pages/page_default_small.jpg" />';
                 } else {
-                    echo '<img src="/infoaid/media/pages/page_default_small.jpg"/>';
+                    echo '<img src=' . Yii::app()->baseUrl . $post->picSmall . '>';
                 }
             ?>
         </div>
@@ -60,7 +61,7 @@
             <span class='page-needs'>
                 <b>Need :</b>
                     <?php
-                        if($needs->status == 0) {
+                        if($needs->status == 0 || $needs->needs == null) {
                             echo ' ?';
                         } else {
                             foreach($needs->needs as $el) {

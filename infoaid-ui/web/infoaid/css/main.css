@@ -228,19 +228,15 @@ div.search-form
 	background: #80CFFF;
 }
 
-.page-lat
+.page-lat-lng
 {
+	margin-top: 5px;
 	font-size: 14px;
-}
-
-.page-lng
-{
-	font-size: 14px;
-	margin-left: 5px;
 }
 
 .page-needs
 {
+	margin-top: 5px;
 	font-size: 14px;
 	margin-left: 75px;
 }
@@ -264,12 +260,21 @@ div.search-form
 	font-size: 18px;
 }
 
-.page-household
+.page-household-population
 {
+	margin-top: 5px;
 	font-size: 18px;
 }
 
-.page-population
+.search-input
 {
-	font-size: 18px;
+	margin-left: 10px;
+}
+
+.search-header
+{
+	font-size: 36px;
+	margin-left: 10px;
+	margin-bottom: 20px;
+	margin-top: 20px;
 }

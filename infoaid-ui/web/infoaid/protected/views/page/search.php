@@ -35,7 +35,6 @@
 	angular.module('page', ['pageService']);
 
 	function searchController($scope, Page) {
-		var urlSearch = "<?php echo $this->createUrl('api/pageSearch'); ?>";
 		$scope.word = '';
 		$scope.pages = [];
 		$scope.search = function() {
@@ -50,15 +49,12 @@
 		$scope.loadMore = function() {
 			Page.query({
 				word: $scope.word,
-				offset: 10
+				offset: $scope.pages.length
 			}, function (pages) {
 				angular.forEach(pages, function (page) {
 					$scope.pages.push(page);
 				});
 			});
-			console.log($scope.pages)
 		};
 	}
-
-	
 </script>
