@@ -13,14 +13,11 @@
 	</section>
 </div>
 
-<script id="postService.js">
-angular.module('postService', ['ngResource']).
-	factory('Post', function ($resource) {
-		var Post = $resource('<?php echo $this->createUrl("api/page"); ?>/:slug/recent_post');
-
-		return Post;
-	});
+<script>
+	var apiUrl = "<?php echo $this->createUrl("api/page") ;?>/:slug/recent_post";
 </script>
+
+<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl .'/js/main/postService.js'); ?>
 
 <script id="post.js">
 angular.module('post', ['postService'], function ($routeProvider, $locationProvider) {
