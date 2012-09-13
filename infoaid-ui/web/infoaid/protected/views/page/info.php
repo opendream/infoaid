@@ -20,7 +20,7 @@
 <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl .'/js/main/postService.js'); ?>
 
 <script id="post.js">
-angular.module('post', ['postService'], function ($routeProvider, $locationProvider) {
+angular.module('post', ['postService', 'time'], function ($routeProvider, $locationProvider) {
 
 	$routeProvider.
 		when('/', {

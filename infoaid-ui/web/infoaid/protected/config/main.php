@@ -9,6 +9,8 @@ return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'InfoAid',
 
+	'language'=>'en',
+
 	// preloading 'log' component
 	'preload'=>array('log'),
 
@@ -97,6 +99,11 @@ return array(
 				*/
 			),
 		),
+		'coreMessages'=>array(
+			'class'=>'IAPhpMessageSource',
+			'language'=>'en_us',
+			'basePath'=>dirname(__FILE__).'/../messages',
+		),
 	),
 
 	// application-level parameters that can be accessed
@@ -109,5 +116,7 @@ return array(
 			'server'=>'http://localhost/',
 			'port'=>8080,
 		),
+
+		'allowed_language' => array('en', 'th'),
 	),
 );

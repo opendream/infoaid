@@ -14,8 +14,7 @@
 				</div>
 
 				<div class="meta">
-					<time class="timeago" datetime="{{post.dateCreated}}"
-						title="{{post.dateCreated}}">
+					<time class="timeago" datetime="{{post.dateCreated}}">
 						{{post.dateCreated}}
 					</time>
 				</div>
