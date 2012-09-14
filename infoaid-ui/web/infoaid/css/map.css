@@ -7,6 +7,8 @@
 
 .tipsy-inner header h1 {
 	color: #DD0000;
+	font-size: 2em;
+	line-height: 1;
 }
 
 .tipsy-inner .needs-overview {
