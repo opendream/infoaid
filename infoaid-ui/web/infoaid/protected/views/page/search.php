@@ -17,7 +17,7 @@
 		</div>
 		<div id='result-search-error'></div>
 		<div id="loading" class="ajax-loading"></div>
-		<div class="load-more" id="load-more" ng-show="pages">
+		<div class="load-more" id="load-more" ng-show="pages.length">
 			<button class="btn" ng-click="loadMore()">
 				<i class="icon icon-plus"></i> Load more
 			</button>
@@ -65,12 +65,12 @@
 					offset: 0
 				}, function(resp) {
 					if(resp.length == 0) {
-						$('#load-more').hide();
+						//$('#load-more').hide();
 						$('#result-search-error').addClass("text-error");
 						$('#result-search-error').html('Not found this place');
 					} else {
 						$('#result-search-error').html('');
-						$('#load-more').show();
+						//$('#load-more').show();
 					}
 					spinner.stop()
 				});

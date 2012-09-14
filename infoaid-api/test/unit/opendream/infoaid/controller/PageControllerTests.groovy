@@ -88,7 +88,7 @@ class PageControllerTests {
 
         params.slug = 'page-slug'
         controller.map()
-        def expectResponse = """{"status":1,"id":1,"name":"page","lat":"111","lng":"222"}"""
+        def expectResponse = """{"status":1,"id":1,"name":"page","lat":"111","lng":"222","slug":"page-slug"}"""
 
         assert expectResponse == response.text
     }
