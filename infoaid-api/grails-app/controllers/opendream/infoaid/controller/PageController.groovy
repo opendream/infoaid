@@ -14,7 +14,7 @@ class PageController {
         if(info) {
             ret = [id: info.id, name: info.name, lat: info.lat, lng: info.lng, dateCreated: info.dateCreated.format('yyyy-MM-dd HH:mm'), 
             lastUpdated: info.lastUpdated.format('yyyy-MM-dd HH:mm'), picSmall: info.picSmall, household: info.household, 
-            population: info.population, status: 1
+            population: info.population, status: 1, slug: info.slug
             ]
         }
         
@@ -26,7 +26,7 @@ class PageController {
         def ret = [:]
         def map = pageService.getInfo(params.slug)
         if(map) {
-            ret = [status:1, id: map.id, name: map.name, lat: map.lat, lng: map.lng]
+            ret = [status:1, id: map.id, name: map.name, lat: map.lat, lng: map.lng, slug: map.slug]
         }
 
         render ret as JSON
