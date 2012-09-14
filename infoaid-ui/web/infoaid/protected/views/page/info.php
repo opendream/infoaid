@@ -24,7 +24,8 @@ angular.module('post', ['postService', 'commentService', 'time'], function ($rou
 		when('/', {
 			controller: ListCtrl,
 			templateUrl: '<?php echo $this->createUrl(); ?>/static/view/post-list'
-		});
+		}).
+		otherwise({redirectTo: '/'});
 });
 
 function ListCtrl($scope, Post) {

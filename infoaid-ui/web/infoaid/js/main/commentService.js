@@ -8,7 +8,13 @@ angular.module('commentService', ['ngResource']).
 function CommentCtrl($scope, Comment) {
 
 	var lastRowLastUpdated = function () {
-		return $($scope.comments).last().get(0).lastUpdated;
+		var comments = $($scope.comments);
+		if (comments.length === 0) {
+			return false;
+		}
+		else {
+			return comments.last().get(0).lastUpdated;
+		}
 	};
 
 	if (! angular.isUndefined($scope.post.comments)) {
@@ -16,11 +22,19 @@ function CommentCtrl($scope, Comment) {
 	}
 
 	$scope.loadMore = function () {
-		Comment.query({
-			postId: $scope.post.id,
-			until: lastRowLastUpdated(),
-			limit: 10
-		}, function (comments) {
+		var options = {
+				postId: $scope.post.id,
+				limit: 10 
+			},
+			lastUpdated = lastRowLastUpdated()
+		;
+
+		if (lastUpdated) {
+			options.until = lastUpdated;
+		}
+
+		$scope.comments = $scope.comments || [];
+		Comment.query(options, function (comments) {
 			angular.forEach(comments, function (comment) {
 				$scope.comments.unshift(comment);
 			});
