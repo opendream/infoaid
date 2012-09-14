@@ -4,6 +4,8 @@
   .page-posts time {
     color: #999;
     font-size: 12px; }
+  .page-posts .meta {
+    margin-top: 4px; }
   .page-posts .message-picture {
     float: left; }
     .page-posts .message-picture img {
@@ -24,8 +26,12 @@
     .page-posts .message-comments .comment-details {
       margin-left: 40px;
       padding: 0 12px; }
+      .page-posts .message-comments .comment-details .comment-poster-name {
+        float: left;
+        margin-right: 8px;
+        font-weight: bolder; }
       .page-posts .message-comments .comment-details .comment-body {
-        padding: 8px 0; }
+        padding: 0; }
     .page-posts .message-comments .load-more {
       cursor: pointer;
       margin: 4px 0; }

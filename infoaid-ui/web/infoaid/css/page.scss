@@ -8,6 +8,10 @@
 		font-size: 12px;
 	}
 
+	.meta {
+		margin-top: 4px;
+	}
+
 	.message-picture {
 		float: left;
 
@@ -42,8 +46,14 @@
 			margin-left: 40px;
 			padding: 0 12px;
 
+			.comment-poster-name {
+				float: left;
+				margin-right: 8px;
+				font-weight: bolder;
+			}
+
 			.comment-body {
-				padding: 8px 0;
+				padding: 0;
 			}
 		}
 
