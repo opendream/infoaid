@@ -23,7 +23,6 @@ function CommentCtrl($scope, Comment) {
 			until: lastRowLastUpdated(),
 			limit: 10
 		}, function (comments) {
-			var _comments = comments.reverse();
 			angular.forEach(comments, function (comment) {
 				$scope.comments.unshift(comment);
 			});
