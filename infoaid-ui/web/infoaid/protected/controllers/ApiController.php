@@ -49,10 +49,14 @@ class ApiController extends IAController
 	public function actionPageSearch($word, $offset)
 	{
 		$resultSearch = API::getJSON('page/searchPage', array('word'=>$word,'offset'=>$offset));
-		foreach($resultSearch->pages as $el) {
-			$resultJson[] = array(
-				'body' => $this->renderPartial('/page/header', array('slug'=>$el->slug, 'id'=>$el->id), true),
-			);
+		$resultJson = array();
+		if(sizeOf($resultSearch->pages) == 0) {
+		} else {
+			foreach($resultSearch->pages as $el) {
+				$resultJson[] = array(
+					'body' => $this->renderPartial('/page/header', array('slug'=>$el->slug, 'id'=>$el->id), true)
+				);
+			}
 		}
 		$this->renderJSON($resultJson);
 	}

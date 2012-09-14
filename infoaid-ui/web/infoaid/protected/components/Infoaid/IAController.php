@@ -32,8 +32,10 @@ class IAController extends CController
 
 		if ($this->jquery == TRUE) {
 			Yii::app()->clientScript
-				->registerScriptFile(Yii::app()->baseUrl .'/js/jquery/jquery.js')
-				->registerScriptFile(Yii::app()->baseUrl .'/js/jquery.timeago.js');
+				->registerScriptFile(Yii::app()->baseUrl .'/js/jquery/jquery-1.8.1.js')
+				->registerScriptFile(Yii::app()->baseUrl .'/js/jquery.timeago.js')
+				->registerScriptFile(Yii::app()->baseUrl .'/css/bootstrap/js/bootstrap.js')
+				->registerScriptFile(Yii::app()->baseUrl .'/js/spin.min.js');
 		}
 
 		if ($this->angular == TRUE) {
