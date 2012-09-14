@@ -1,23 +1,37 @@
 .page-posts {
   list-style: none;
   margin: 0; }
+  .page-posts time {
+    color: #999;
+    font-size: 12px; }
   .page-posts .message-picture {
     float: left; }
+    .page-posts .message-picture img {
+      width: 50px;
+      height: 50px; }
   .page-posts .message-details {
     margin-left: 50px;
     padding: 0 12px; }
     .page-posts .message-details .message-body {
       padding: 12px 0; }
   .page-posts .message-comments {
-    margin-left: 62px;
-    padding: 8px 0 36px; }
+    padding: 8px 0 18px 62px; }
     .page-posts .message-comments .comment-picture {
       float: left; }
+      .page-posts .message-comments .comment-picture img {
+        width: 40px;
+        height: 40px; }
     .page-posts .message-comments .comment-details {
-      margin-left: 50px;
+      margin-left: 40px;
       padding: 0 12px; }
       .page-posts .message-comments .comment-details .comment-body {
         padding: 8px 0; }
+    .page-posts .message-comments .load-more {
+      cursor: pointer;
+      margin: 4px 0; }
+  .page-posts li {
+    border-bottom: 1px solid #DDD;
+    margin-bottom: 18px; }
   .page-posts ul {
     list-style: none; }
     .page-posts ul li {

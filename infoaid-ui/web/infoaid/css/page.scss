@@ -3,8 +3,18 @@
 	list-style: none;
 	margin: 0;
 
+	time {
+		color: #999;
+		font-size: 12px;
+	}
+
 	.message-picture {
 		float: left;
+
+		img {
+			width: 50px;
+			height: 50px;
+		}
 	}
 
 	.message-details {
@@ -17,21 +27,35 @@
 	}
 
 	.message-comments {
-		margin-left: 62px;
-		padding: 8px 0 36px;
+		padding: 8px 0 18px 62px;
 
 		.comment-picture {
 			float: left;
+
+			img {
+				width: 40px;
+				height: 40px;
+			}
 		}
 
 		.comment-details {
-			margin-left: 50px;
+			margin-left: 40px;
 			padding: 0 12px;
 
 			.comment-body {
 				padding: 8px 0;
 			}
 		}
+
+		.load-more {
+			cursor: pointer;
+			margin: 4px 0;
+		}
+	}
+
+	li {
+		border-bottom: 1px solid #DDD;
+		margin-bottom: 18px;
 	}
 
 	ul {
