@@ -17,7 +17,8 @@
     .page-posts .message-details .message-body {
       padding: 12px 0; }
   .page-posts .message-comments {
-    padding: 8px 0 18px 62px; }
+    padding: 8px 0 18px 62px;
+    font-size: 13px; }
     .page-posts .message-comments .comment-picture {
       float: left; }
       .page-posts .message-comments .comment-picture img {
@@ -41,7 +42,7 @@
   .page-posts ul {
     list-style: none; }
     .page-posts ul li {
-      margin-bottom: 12px; }
+      margin-bottom: 6px; }
 
 .load-more {
   text-align: center; }
