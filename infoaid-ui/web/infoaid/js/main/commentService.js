@@ -11,11 +11,9 @@ function CommentCtrl($scope, Comment) {
 		return $($scope.comments).last().get(0).lastUpdated;
 	};
 
-	Comment.query({
-		postId: $scope.post.id
-	}, function (comments) {
-		$scope.comments = comments.slice(0, 3).reverse();
-	});
+	if (! angular.isUndefined($scope.post.comments)) {
+		$scope.comments = $scope.post.comments.slice(0, 3).reverse();
+	}
 
 	$scope.loadMore = function () {
 		Comment.query({
