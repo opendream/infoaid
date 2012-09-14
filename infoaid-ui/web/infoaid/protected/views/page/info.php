@@ -13,14 +13,13 @@
 	</section>
 </div>
 
-<script>
-	var apiUrl = "<?php echo $this->createUrl("api/page") ;?>/:slug/recent_post";
-</script>
-
-<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl .'/js/main/postService.js'); ?>
+<?php Yii::app()->clientScript
+	->registerScriptFile(Yii::app()->baseUrl .'/js/main/postService.js')
+	->registerScriptFile(Yii::app()->baseUrl .'/js/main/commentService.js')
+; ?>
 
 <script id="post.js">
-angular.module('post', ['postService', 'time'], function ($routeProvider) {
+angular.module('post', ['postService', 'commentService', 'time'], function ($routeProvider) {
 	$routeProvider.
 		when('/', {
 			controller: ListCtrl,
@@ -49,4 +48,6 @@ function ListCtrl($scope, Post) {
 		});
 	};
 }
+
+
 </script>

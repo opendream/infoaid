@@ -60,6 +60,9 @@ jQuery(function ($) {
 					return renderMarkerTooltip(item);
 				},
 				trigger: 'hover'
+			})
+			.click(function (evt) {
+				window.location.href = baseUrl + '/index.php/page/' + item.slug;
 			});
 	};
 

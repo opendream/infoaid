@@ -3,6 +3,7 @@
   "pages": [
     {
       "name": "Bangrak, Bangkok",
+      "slug": "bangkok-0",
       "lat": "13.7241697311401",
       "lng": "100.529228210449",
       "needs": [
@@ -18,6 +19,7 @@
     },
     {
       "name": "Mueng, Pra Nakornsiayuttaya",
+      "slug": "bangkok-0",
       "lat": "14.3043899536133",
       "lng": "100.548461914062",
       "needs": [
@@ -29,6 +31,7 @@
     },
     {
       "name": "Warin-chamraab, Ubonratchatani",
+      "slug": "bangkok-0",
       "lat": "15.1127700805664",
       "lng": "104.966972351074",
       "needs": [

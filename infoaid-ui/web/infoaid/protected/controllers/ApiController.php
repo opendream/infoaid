@@ -14,11 +14,22 @@ class ApiController extends IAController
 	public function actionPage($slug, $method)
 	{
 		$posts = array();
+		$slug = urlencode($slug);
 		$result = API::getJSON('page/'. $slug .'/'. $method);
 		if ($result->status == 1) {
 			$posts = $result->posts;
 		}
 		$this->renderJSON($posts);
+	}
+
+	public function actionPostGetComment($id)
+	{
+		$_list = array();
+		$result = API::getJSON('post/'. $id .'/comment');
+		if ($result->status == 1) {
+			$comments = $result->comments;
+		}
+		$this->renderJSON($comments);
 	}
 
 	public function actionPageInfo($slug)
