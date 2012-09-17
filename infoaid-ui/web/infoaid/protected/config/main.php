@@ -59,7 +59,7 @@ return array(
 				''=>'front/index',
 				'site/<action:\w+>'=>'front/<action>',
 
-				'api/post/<id:\d+>/comment'=>'api/postGetComment',
+				'api/post/<id:\d+>/<method:\w+>'=>'api/post',
 				'api/page/<slug:[^\/]*>/<method:\w+>'=>'api/page',
 				'api/members/<slug:[^\/]*>'=>'api/members',
 				'page/search'=>'page/search',
