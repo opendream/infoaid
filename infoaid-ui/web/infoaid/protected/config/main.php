@@ -97,6 +97,7 @@ return array(
 				
 				array(
 					'class'=>'CWebLogRoute',
+					'ignoreAjaxInFireBug'=>true,
 					'showInFireBug'=>true,
 				),
 				

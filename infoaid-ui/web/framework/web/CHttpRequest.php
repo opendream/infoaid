@@ -571,7 +571,9 @@ class CHttpRequest extends CApplicationComponent
 	 */
 	public function getIsAjaxRequest()
 	{
-		return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']==='XMLHttpRequest';
+		return
+			isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']==='XMLHttpRequest'
+			|| isset($_SERVER['X-Requested-With']) && $_SERVER['X-Requested-With']==='XMLHttpRequest';
 	}
 
 	/**
