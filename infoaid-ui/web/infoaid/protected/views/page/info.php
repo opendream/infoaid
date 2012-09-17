@@ -36,14 +36,3 @@
 			</div>
 		</div>	
 </div>
-
-<script>
-angular.module('post', ['postService', 'commentService', 'time'], function ($routeProvider) {
-	$routeProvider.
-		when('/', {
-			controller: ListCtrl,
-			templateUrl: '<?php echo $this->createUrl(); ?>/static/view/post-list'
-		}).
-		otherwise({redirectTo: '/'});
-});
-</script>

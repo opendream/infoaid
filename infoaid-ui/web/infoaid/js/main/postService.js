@@ -4,3 +4,12 @@ angular.module('postService', ['ngResource']).
 
 		return Post;
 	});
+
+angular.module('post', ['postService', 'commentService', 'time'], function ($routeProvider) {
+	$routeProvider.
+		when('/', {
+			controller: ListCtrl,
+			templateUrl: baseUrl + '/index.php/page/static/view/post-list'
+		}).
+		otherwise({redirectTo: '/'});
+});
