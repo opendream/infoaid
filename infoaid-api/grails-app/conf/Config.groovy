@@ -93,9 +93,10 @@ log4j = {
 // infoaid-api config
 infoaid.api.post.max = 10
 infoaid.api.post.limited = 20
-infoaid.api.comment.limited = 5
-infoaid.api.need.limited = 5
-infoaid.api.member.limited = 5
+infoaid.api.comment.limited = 50
+infoaid.api.need.max = 5
+infoaid.api.member.max = 5
+infoaid.api.search.max = 10
 
 
 // Added by the Spring Security Core plugin:
