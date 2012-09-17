@@ -60,9 +60,9 @@ return array(
 				'site/<action:\w+>'=>'front/<action>',
 
 				'api/post/<id:\d+>/comment'=>'api/postGetComment',
-				'api/page/<slug:(\w|-)+>/<method:\w+>'=>'api/page',
+				'api/page/<slug:[^\/]*>/<method:\w+>'=>'api/page',
 				'page/search'=>'page/search',
-				'page/<slug:(\w|-)+>'=>'page/index',
+				'page/<slug:[^\/]*>'=>'page/view',
 
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
