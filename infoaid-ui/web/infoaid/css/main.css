@@ -298,3 +298,19 @@ div.search-form
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
+
+.user-edit-password-header
+{
+	font-size: 36px;
+	margin-left: 10px;
+	margin-bottom: 20px;
+	margin-top: 20px;
+}
+
+.user-edit-header
+{
+	font-size: 36px;
+	margin-left: 10px;
+	margin-bottom: 20px;
+	margin-top: 20px;
+}
