@@ -70,7 +70,7 @@ class API
 
 	public static function call($method, $uri, $params = array(),
 		$format = NULL)
-	{
+	{		
 		$rest = self::getRESTObject();
 		if (self::isMethodAllowed($method)) {
 			$result = $rest->$method($uri, $params, $format);
