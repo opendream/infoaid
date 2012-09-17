@@ -46,7 +46,7 @@ class UserService {
         }
         user.password = springSecurityService.encodePassword(updateparmas.newPassword)
         
-        if(!user.save()) {
+        if(!user.save(flush: true)) {
             log.error user.errors
             throw new RuntimeException("${user.errors}")
         }
