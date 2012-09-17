@@ -14,7 +14,7 @@ class IAController extends CController
 
 	protected $_app;
 
-	protected function renderJSON($content)
+	public function renderJSON($content)
 	{
 		$this->layout = 'application.views.layouts.json';
 		if (! is_string($content)) {
