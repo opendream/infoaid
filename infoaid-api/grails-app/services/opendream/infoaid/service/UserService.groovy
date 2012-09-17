@@ -17,7 +17,7 @@ class UserService {
 
     def getBasicInfo(userId) {
         def user = User.get(userId)
-        [username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, telNo:user.telNo, picOriginal: user.picOriginal]
+        [id:user.id, username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, telNo:user.telNo, picOriginal: user.picOriginal]
     }
 
     def updateBasicInfo(updateparmas) {
