@@ -1,4 +1,6 @@
 <IfModule mod_php5.c>
   php_flag display_error 1
-  php_flag error_reporting 1
+  
+  # E_ALL ^ E_WARNING
+  php_value error_reporting 30717
 </IfModule>
