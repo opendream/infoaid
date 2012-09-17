@@ -13,11 +13,6 @@ class PageHelper
 	{
 		// Unicode support for slug
 		$slug = urlencode($slug);
-<<<<<<< HEAD
-
-=======
-		
->>>>>>> eed08b7e8a722695b7507b48394cf9fd65a5b1dc
 		return API::getJSON(self::$base . $slug .'/'. $method);
 	}
 
