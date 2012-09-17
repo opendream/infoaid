@@ -10,12 +10,14 @@ import opendream.infoaid.domain.Need
 import opendream.infoaid.domain.MessagePost
 
 class PageService {
+    def grailsApplication
 
     def getInfo(slug) {
-    	def pageInfo = Page.findBySlug(slug)
+        def pageInfo = Page.findBySlug(slug)
     }
 
-    def getPosts(slug, fromId=null, toId=null, since=null, until=null, max = 10, type = null) {
+    def getPosts(slug, fromId=null, toId=null, since=null, until=null, max=null, type = null) {
+        max = max?:grailsApplication.config.infoaid.api.post.max
         def posts = Post.createCriteria().list() {
             eq('status', Post.Status.ACTIVE)
             page {
