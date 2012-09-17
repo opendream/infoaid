@@ -72,8 +72,8 @@ class UserServiceTests {
         }
     }
 
-    void testUpdatePassword() {        
-        def updateparmas = [id:user.id, oldpassword: 'password', 
+    void testUpdatePassword() {   
+        def updateparmas = [id:user.id, oldPassword: 'password', 
             newPassword: 'new-password', comfirmedPassword: 'new-password']
         def result = service.updatePassword(updateparmas)        
         assert "password is updated" == result.message
@@ -83,21 +83,21 @@ class UserServiceTests {
     }
 
     void testUpdatePasswordWithWrongOldPassword() {
-        def updateparmas = [id:user.id, oldpassword: 'passwordx', 
+        def updateparmas = [id:user.id, oldPassword: 'passwordx', 
             newPassword: 'new-password', comfirmedPassword: 'new-password']
         def result = service.updatePassword(updateparmas)        
         assert "wrong password" == result.message
     }
 
     void testUpdatePasswordWithWrongNewPassword() {
-        def updateparmas = [id:user.id, oldpassword: 'password', 
+        def updateparmas = [id:user.id, oldPassword: 'password', 
             newPassword: 'new-password', comfirmedPassword: 'new-passwordx']
         def result = service.updatePassword(updateparmas)        
         assert "password confirmation miss match" == result.message
     }
 
     void testUpdatePasswordFail() {
-        def updateparmas = [id:user.id, oldpassword: 'password', 
+        def updateparmas = [id:user.id, oldPassword: 'password', 
             newPassword: '', comfirmedPassword: '']
         shouldFail(RuntimeException) {    
             service.updatePassword(updateparmas)
