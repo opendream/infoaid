@@ -12,7 +12,7 @@ http.createServer(function (request, response) {
 
   var request_url = url.parse(request.url);
 
-  var pathname = request_url.pathname;
+  var pathname = decodeURI(request_url.pathname);
 
   console.log('Request : ' + pathname);
 
