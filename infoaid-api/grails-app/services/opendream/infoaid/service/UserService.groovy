@@ -20,9 +20,9 @@ class UserService {
         [id:user.id, username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, telNo:user.telNo, picOriginal: user.picOriginal]
     }
 
-    def updateBasicInfo(updateparmas) {
-        def user = User.get(updateparmas.id)
-        user.properties['username', 'firstname', 'lastname', 'email', 'telNo', 'picOriginal'] = updateparmas
+    def updateBasicInfo(updateparams) {
+        def user = User.get(updateparams.id)
+        user.properties['username', 'firstname', 'lastname', 'email', 'telNo', 'picOriginal'] = updateparams
         if(!user.save()) {
             log.error user.errors
             throw new RuntimeException("${user.errors}")
@@ -30,21 +30,21 @@ class UserService {
         [username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, telNo:user.telNo, picOriginal: user.picOriginal]
     }
 
-    def updatePassword(updateparmas) {
-        if(updateparmas.newPassword != updateparmas.comfirmedPassword) {
+    def updatePassword(updateparams) {
+        if(updateparams.newPassword != updateparams.comfirmedPassword) {
             log.error "password confirmation miss match"
             //throw RuntimeException("password confirmation miss match")
             return [message: "password confirmation miss match"]
         }
 
-        def user = User.get(updateparmas.id)
+        def user = User.get(updateparams.id)
 
-        if(user.password != springSecurityService.encodePassword(updateparmas.oldPassword)) {
+        if(user.password != springSecurityService.encodePassword(updateparams.oldPassword)) {
             log.error "wrong password"
             //throw RuntimeException("wrong password")
             return [message: "wrong password"]
         }
-        user.password = updateparmas.newPassword
+        user.password = updateparams.newPassword
         
         if(!user.save(flush: true)) {
             log.error user.errors
