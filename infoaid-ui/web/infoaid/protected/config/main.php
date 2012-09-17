@@ -61,6 +61,7 @@ return array(
 
 				'api/post/<id:\d+>/comment'=>'api/postGetComment',
 				'api/page/<slug:[^\/]*>/<method:\w+>'=>'api/page',
+				'api/members/<slug:[^\/]*>'=>'api/members',
 				'page/search'=>'page/search',
 				'page/<slug:[^\/]*>'=>'page/view',
 
