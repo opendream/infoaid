@@ -117,7 +117,9 @@ class PageControllerTests {
         new PageUser(page: page1, user: user5, relation: PageUser.Relation.MEMBER, conversation: 5).save()
         new PageUser(page: page1, user: user6, relation: PageUser.Relation.MEMBER, conversation: 6).save()
 
-        controller.pageService = new PageService()
+        def pageService = new PageService()
+        pageService.grailsApplication = [config:[infoaid:[api:[member:[max:5]]]]]
+        controller.pageService = pageService
 
         params.slug = 'page-slug'
         controller.topMember()
@@ -416,7 +418,9 @@ class PageControllerTests {
     }
 
     void testSearchPage() {
-        controller.pageService = new PageService()
+        def pageService = new PageService()
+        pageService.grailsApplication = [config:[infoaid:[api:[search:[max:10]]]]]
+        controller.pageService = pageService
 
         params.word = ''
         controller.searchPage()
