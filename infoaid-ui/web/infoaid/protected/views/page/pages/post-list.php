@@ -1,4 +1,4 @@
-<ul class="page-posts span6">
+<ul class="page-posts">
 	<li ng-repeat="post in posts" id="post-{{post.id}}">
 		<div class="message-content">
 			<div class="message-picture">

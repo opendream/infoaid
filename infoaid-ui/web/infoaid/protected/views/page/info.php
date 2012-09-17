@@ -17,7 +17,7 @@
 						<h1>Status Update</h1>
 					</header>
 
-					<div ng-view></div>
+					<div ng-view class="span6"></div>
 				</section>
 			</div>	
 
