@@ -10,22 +10,13 @@ class ApiController extends IAController
 	{
 		return array(
 			'page'=>'application.controllers.api.PageAPIAction',
+			'post'=>'application.controllers.api.PostAPIAction'
 		);
 	}
 
 	public function actionFrontPageInfo()
 	{
 		$this->renderJSON(API::get('front_page/info'));
-	}
-
-	public function actionPostGetComment($id)
-	{
-		$_list = array();
-		$result = API::getJSON('post/'. $id .'/comment');
-		if ($result->status == 1) {
-			$comments = $result->comments;
-		}
-		$this->renderJSON($comments);
 	}
 
 	public function actionPageInfo($slug)

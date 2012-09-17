@@ -9,9 +9,7 @@ class PageAPIAction extends CAction
 
 	public function runWithParams($params)
 	{
-		$keys = array_keys($params);
-
-		if ($keys[0] == 'slug' && $keys[1] == 'method') {
+		if (isset($params['slug']) && isset($params['method'])) {
 
 			switch($params['method']) {
 
