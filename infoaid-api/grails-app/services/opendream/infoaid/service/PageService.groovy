@@ -10,12 +10,14 @@ import opendream.infoaid.domain.Need
 import opendream.infoaid.domain.MessagePost
 
 class PageService {
+    def grailsApplication
 
     def getInfo(slug) {
-    	def pageInfo = Page.findBySlug(slug)
+        def pageInfo = Page.findBySlug(slug)
     }
 
-    def getPosts(slug, fromId=null, toId=null, since=null, until=null, max = 10, type = null) {
+    def getPosts(slug, fromId=null, toId=null, since=null, until=null, max=null, type = null) {
+        max = max?:grailsApplication.config.infoaid.api.post.max
         def posts = Post.createCriteria().list() {
             eq('status', Post.Status.ACTIVE)
             page {
@@ -42,17 +44,19 @@ class PageService {
         return posts
     }
 
-    def getTopPost(slug, fromId=null, toId=null, since=null, until=null, max = 10) {
+    def getTopPost(slug, fromId=null, toId=null, since=null, until=null, max=null) {
+        max = max?:grailsApplication.config.infoaid.api.post.max
         getPosts(slug, fromId, toId, since, until, max, 'top')
     }
 
-    def getRecentPost(slug, fromId=null, toId=null, since=null, until=null, max = 10) {
+    def getRecentPost(slug, fromId=null, toId=null, since=null, until=null, max=null) {
+        max = max?:grailsApplication.config.infoaid.api.post.max
         getPosts(slug, fromId, toId, since, until, max, 'recent')
     }
 
     def getComments(postId, fromId=null, toId=null, since=null, until=null) {
-        def max = 50
-    	def comments = Comment.createCriteria().list(max: max) {
+        def max = grailsApplication.config.infoaid.api.comment.limited
+        def comments = Comment.createCriteria().list(max: max) {
     		post {
     			idEq(postId)
     		}
@@ -146,6 +150,7 @@ class PageService {
     }
 
     def getLimitNeeds(slug, max) {
+        max = max?:grailsApplication.config.infoaid.api.need.max
         def page = Page.findBySlug(slug)
         def needs = Need.createCriteria().list(max: max, sort: 'dateCreated', order: 'desc', cache: true) {
             eq('status', Post.Status.ACTIVE)
@@ -165,8 +170,9 @@ class PageService {
     }
 
     def getTopMembers(slug) {
+        def max = grailsApplication.config.infoaid.api.member.max
         def page = Page.findBySlug(slug)
-        def pageUsers = PageUser.createCriteria().list(sort: 'conversation', order: 'desc', max: 5) {
+        def pageUsers = PageUser.createCriteria().list(sort: 'conversation', order: 'desc', max: max) {
             eq('page', page)
         }
 
@@ -179,10 +185,12 @@ class PageService {
         def page = Page.findBySlug(slug)
         def item = Item.get(itemId)
         def pageUser = PageUser.findByUserAndPage(user, page)
-        pageUser.conversation++
-        pageUser.save()
+        if(pageUser) {
+            pageUser.conversation++
+            pageUser.save()
+        }
         def date = new Date()
-        def need = new Need(lastActived: date, createdBy: user.username, updatedBy: user.username, expiredDate: date, message: message, item: item, quantity: quantity)
+        def need = new Need(lastActived: date, createdBy: user, updatedBy: user, expiredDate: date, message: message, item: item, quantity: quantity)
         page.addToPosts(need)
         page.save(failOnError: true, flush: true)
         return [user: user, page: page, post: need]
@@ -197,7 +205,7 @@ class PageService {
             pageUser.save()
         }
         def date = new Date()
-        def messagePost = new MessagePost(lastActived: date, createdBy: user.username, updatedBy: user.username, expiredDate: date+14, message: message)
+        def messagePost = new MessagePost(lastActived: date, createdBy: user, updatedBy: user, expiredDate: date+14, message: message)
         page.addToPosts(messagePost)
         page.save(failOnError: true, flush: true)
         return [user: user, page: page, post: messagePost]
@@ -268,7 +276,7 @@ class PageService {
     }
 
     def searchPage(word = null, offset = 0) {
-        def max = 10
+        def max = grailsApplication.config.infoaid.api.search.max
         def offsetInt = offset.toInteger()
         def pages = Page.createCriteria().list(max: max, sort: 'name', order: 'asc', offset: offsetInt) {
             eq('status', Page.Status.ACTIVE)

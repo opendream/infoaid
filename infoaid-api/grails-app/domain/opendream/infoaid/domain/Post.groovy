@@ -29,6 +29,8 @@ class Post {
     static mapping = {
         sort lastActived: "desc"
     }
+
+    static transients = ['previewComments']
     
     def getPreviewComments() {
         def previewComments = Comment.createCriteria().list(max: 3) {

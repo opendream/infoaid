@@ -17,7 +17,7 @@ class UserService {
 
     def getBasicInfo(userId) {
         def user = User.get(userId)
-        [username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, telNo:user.telNo, picOriginal: user.picOriginal]
+        [id:user.id, username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, telNo:user.telNo, picOriginal: user.picOriginal]
     }
 
     def updateBasicInfo(updateparmas) {
@@ -39,14 +39,14 @@ class UserService {
 
         def user = User.get(updateparmas.id)
 
-        if(user.password != springSecurityService.encodePassword(updateparmas.oldpassword)) {
+        if(user.password != springSecurityService.encodePassword(updateparmas.oldPassword)) {
             log.error "wrong password"
             //throw RuntimeException("wrong password")
             return [message: "wrong password"]
         }
-        user.password = springSecurityService.encodePassword(updateparmas.newPassword)
+        user.password = updateparmas.newPassword
         
-        if(!user.save()) {
+        if(!user.save(flush: true)) {
             log.error user.errors
             throw new RuntimeException("${user.errors}")
         }

@@ -56,4 +56,9 @@ class ApiController extends IAController
 		}
 		$this->renderJSON($resultJson);
 	}
+
+	public function actionMembers($slug) {
+		$resultNeeds = API::getJSON('page/'.urlencode($slug).'/top_members');
+		$this->renderJSON($resultNeeds);
+	}
 }

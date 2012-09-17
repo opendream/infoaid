@@ -2,20 +2,9 @@
 
 class UserController extends IAController
 {
-	public $jquery = FALSE;
+	public $jquery = TRUE;
 
-	public $angular = FALSE;
-
-	public function actionPageSearch($word, $offset)
-	{
-		$resultSearch = API::getJSON('page/searchPage', array('word'=>$word,'offset'=>$offset));
-		foreach($resultSearch->pages as $el) {
-			$resultJson[] = array(
-				'body' => $this->renderPartial('/page/header', array('slug'=>$el->slug, 'id'=>$el->id), true),
-			);
-		}
-		$this->renderJSON($resultJson);
-	}
+	public $angular = TRUE;
 
 	public function actionCreate()
 	{
@@ -64,6 +53,92 @@ class UserController extends IAController
 				'tel'=>$_POST['tel'],
 				)
 			);
+			Yii::app()->end();
+		}
+	}
+
+	public function actionEdit()
+	{
+		$session = new CHttpSession;
+		$session->open();
+
+		$userId = $session['userId'];
+
+		$session->close();
+
+		$resultGetBasicInfo = API::getJSON('user/showBasicInfo', array(
+			'id'=>$userId
+			)
+		);
+
+		if($resultGetBasicInfo->id == null) {
+			
+		}
+		$this->render('edit', array(
+			'id'=>$resultGetBasicInfo->id,
+			'username'=>$resultGetBasicInfo->username,
+			'firstname'=>$resultGetBasicInfo->firstname,
+			'lastname'=>$resultGetBasicInfo->lastname,
+			'email'=>$resultGetBasicInfo->email,
+			'tel'=>$resultGetBasicInfo->telNo,
+			'pic-original'=>$resultGetBasicInfo->picOriginal
+			)
+		);
+	}
+
+	public function actionDoEdit()
+	{
+		
+	}
+
+	public function actionEditPassword()
+	{
+		$this->render('editPassword');
+	}
+
+	public function actionDoEditPassword()
+	{
+		$session = new CHttpSession;
+		$session->open();
+
+		$userId = $session['userId'];
+
+		$session->close();
+
+		$oldPassword = $_POST['old-password'];
+		if($oldPassword == '') {
+			Yii::app()->user->setFlash('error', "Please type your old password.");
+			$this->render('editPassword');
+			Yii::app()->end();
+		}
+
+		$newPassword = $_POST['new-password'];
+		$confirmPassword = $_POST['confirm-new-password'];
+
+		if($newPassword == '' || $confirmPassword == '') {
+			Yii::app()->user->setFlash('error', "Please type your new password and confirm password");
+			$this->render('editPassword');
+			Yii::app()->end();
+		}else if($newPassword != $confirmPassword) {
+			Yii::app()->user->setFlash('error', "New password and Confirm new password doesn't match.");
+			$this->render('editPassword');
+			Yii::app()->end();
+		} else {
+			$resultEditPassword = API::getJSON('user/updatePassword', array(
+				'id'=>$userId,
+				'oldPassword'=>$oldPassword,
+				'newPassword'=>$newPassword,
+				'confirmedPassword'=>$confirmPassword
+				)
+			);
+		}
+
+		if($resultEditPassword->message == 'password is updated') {
+			Yii::app()->user->setFlash('editSuccess', 'Password is Updated');
+			$this->redirect(array('user/editPassword'));
+		} else {
+			Yii::app()->user->setFlash('error', $resultEditPassword->message);
+			$this->render('editPassword');
 			Yii::app()->end();
 		}
 	}

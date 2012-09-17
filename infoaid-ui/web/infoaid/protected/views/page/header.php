@@ -1,14 +1,13 @@
 <?php
-    $slugEncode = urlencode($slug);
-    $post = API::getJSON("page/$slugEncode/info");
-    $needs = API::getJSON('page/'.$slug.'/limit_need/4');
+    $post = PageHelper::getJSON($slug, "info");
+    $needs = PageHelper::getJSON($slug, 'limit_need/4');
 ?>
 <div id="page-header-<?php echo $id; ?>" class='page-header'>
     <div id="page-header-left-<?php echo $id; ?>">
         <div class="page-picture">
             <?php 
                 if($post->picSmall == null) {
-                    echo '<img src="/infoaid/media/pages/page_default_small.jpg" />';
+                    echo '<img src='.Yii::app()->baseUrl.'/media/pages/page_default_small.jpg>';
                 } else {
                     echo '<img src=' . Yii::app()->baseUrl . $post->picSmall . '>';
                 }
