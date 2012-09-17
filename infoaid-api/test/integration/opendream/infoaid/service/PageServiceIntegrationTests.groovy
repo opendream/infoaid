@@ -144,6 +144,18 @@ class PageServiceIntegrationTests {
     }
 
     @Test
+    void testPostMessage() {
+        def page = Page.findByName("page1")
+        def message = "need some help!"
+        def user = User.findByUsername("nut")
+        def result = pageService.createMessagePost(user.id, page.slug, message)
+        //[user: user, page: page, post: messagePost]
+        assert 'nut' == result.user.username
+        assert page.name == result.page.name
+        assert "need some help!" == result.post.message
+    }
+
+    @Test
     void testGetLimitComments() {
         def page = Page.findByName("page1")
         def posts = pageService.getPosts(page.slug, 0, null, null, null)

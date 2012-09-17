@@ -15,7 +15,7 @@ class PageController extends IAController
 		);
 	}
 	
-	public function actionIndex($slug)
+	public function actionView($slug)
 	{
 		$result = PageHelper::getInfoBySlug($slug);
 		if ($result) {

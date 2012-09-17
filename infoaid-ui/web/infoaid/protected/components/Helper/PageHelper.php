@@ -11,6 +11,8 @@ class PageHelper
 
 	public static function getJSON($slug, $method)
 	{
+		// Unicode support for slug
+		$slug = urlencode($slug);
 		return API::getJSON(self::$base . $slug .'/'. $method);
 	}
 

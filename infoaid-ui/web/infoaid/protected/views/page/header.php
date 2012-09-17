@@ -1,7 +1,6 @@
 <?php
-    $slugEncode = urlencode($slug);
-    $post = API::getJSON("page/$slugEncode/info");
-    $needs = API::getJSON('page/'.$slug.'/limit_need/4');
+    $post = PageHelper::getJSON($slug, "info");
+    $needs = PageHelper::getJSON($slug, 'limit_need/4');
 ?>
 <div id="page-header-<?php echo $id; ?>" class='page-header'>
     <div id="page-header-left-<?php echo $id; ?>">
