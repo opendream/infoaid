@@ -39,7 +39,7 @@ class UserService {
 
         def user = User.get(updateparmas.id)
 
-        if(user.password != springSecurityService.encodePassword(updateparmas.oldpassword)) {
+        if(user.password != springSecurityService.encodePassword(updateparmas.oldPassword)) {
             log.error "wrong password"
             //throw RuntimeException("wrong password")
             return [message: "wrong password"]
