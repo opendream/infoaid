@@ -90,9 +90,19 @@ log4j = {
            'net.sf.ehcache.hibernate'
 }
 
+// infoaid-api config
+infoaid.api.post.max = 10
+infoaid.api.post.limited = 20
+infoaid.api.comment.limited = 5
+infoaid.api.need.limited = 5
+infoaid.api.member.limited = 5
+
+
 // Added by the Spring Security Core plugin:
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'opendream.infoaid.domain.User'
 grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'opendream.infoaid.domain.UserRole'
 grails.plugins.springsecurity.authority.className = 'opendream.infoaid.domain.Role'
 grails.plugins.springsecurity.requestMap.className = 'opendream.infoaid.domain.Requestmap'
 grails.plugins.springsecurity.securityConfigType = 'Requestmap'
+grails.plugins.springsecurity.useBasicAuth = true
+grails.plugins.springsecurity.basic.realmName = "infoaid"
