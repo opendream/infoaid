@@ -8,7 +8,7 @@
         <div class="page-picture">
             <?php 
                 if($post->picSmall == null) {
-                    echo '<img src="/infoaid/media/pages/page_default_small.jpg" />';
+                    echo '<img src='.Yii::app()->baseUrl.'/media/pages/page_default_small.jpg/>';
                 } else {
                     echo '<img src=' . Yii::app()->baseUrl . $post->picSmall . '>';
                 }
