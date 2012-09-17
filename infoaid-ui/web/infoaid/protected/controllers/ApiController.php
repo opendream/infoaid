@@ -6,20 +6,16 @@ class ApiController extends IAController
 
 	public $angular = FALSE;
 
+	public function actions()
+	{
+		return array(
+			'page'=>'application.controllers.api.PageAPIAction',
+		);
+	}
+
 	public function actionFrontPageInfo()
 	{
 		$this->renderJSON(API::get('front_page/info'));
-	}
-
-	public function actionPage($slug, $method)
-	{
-		$posts = array();
-		$slug = urlencode($slug);
-		$result = API::getJSON('page/'. $slug .'/'. $method);
-		if ($result->status == 1) {
-			$posts = $result->posts;
-		}
-		$this->renderJSON($posts);
 	}
 
 	public function actionPostGetComment($id)
