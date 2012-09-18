@@ -3,9 +3,13 @@ angular.module('commentService', ['ngResource']).
 		var Comment = $resource(baseUrl + '/api/post/:postId/comments');
 
 		return Comment;
+	}).
+	factory('PostComment', function ($resource) {
+		var PostComment = $resource(baseUrl + '/api/comment');
+		return PostComment;
 	});
 
-function CommentCtrl($scope, Comment) {
+function CommentCtrl($scope, Comment, PostComment) {
 
 	var lastRowLastUpdated = function () {
 		var comments = $($scope.comments);
@@ -40,5 +44,22 @@ function CommentCtrl($scope, Comment) {
 			});
 		});
 	};
+	
+	$scope.submitComment = function() {
+		if (this.comment && this.memberId && this.post.id) {	
+			var options = {
+				userId: this.memberId, 
+				postId: this.post.id, 
+				message: this.comment
+			};
+			
+			var result = PostComment.save(options, function (ret) {	
+				//console.log(ret.status);
+				$scope.comment = '';		
+				
+			});					
+		}
+	};
+	
 
 }
