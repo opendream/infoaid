@@ -15,7 +15,7 @@ class User {
     String picOriginal
     String picLarge
     String picSmall
-	boolean enabled
+	boolean enabled = true
 	boolean accountExpired
 	boolean accountLocked
 	boolean passwordExpired

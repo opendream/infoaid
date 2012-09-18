@@ -2,10 +2,10 @@
 	$session = new CHttpSession;
 	$session->open();
 	$userId = $session['userId'];
-
-    $resultPages = API::getJSON('user/getPages', array('id'=>$userId));
-    $resultUserInfo = API::getJSON('user/showBasicInfo', array('id'=>$userId));
-
+	if($userId != null) {
+    	$resultPages = API::getJSON('user/getPages', array('id'=>$userId));
+    	$resultUserInfo = API::getJSON('user/showBasicInfo', array('id'=>$userId));
+	}
     $session->close();
 ?>
 <div id='page-sidebar' class='span2'>
