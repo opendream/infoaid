@@ -73,3 +73,16 @@
 		</form>
 	</div>
 </div>
+
+<script>
+jQuery(function ($) {
+	$('#input-re-password').bind('input', function (event) {
+		if ($(this).val() != $('#input-password').val()) {
+			this.setCustomValidity('The both password field must match');
+		} else {
+			// input is valid -- reset the error message
+			this.setCustomValidity('');
+		}
+	});
+});
+</script>
