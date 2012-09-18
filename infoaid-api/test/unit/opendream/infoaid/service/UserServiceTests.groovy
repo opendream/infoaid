@@ -26,11 +26,10 @@ class UserServiceTests {
 
     void testCreate() {
         def userparams = [username: "nut", password: "nut", firstname: 'firstname', 
-        lastname: 'lastname', picOriginal: 'picOriNut']
+        lastname: 'lastname']
         service.create(userparams)
         assert 2 == User.count()
         assert 'nut' == User.findByUsername('nut').username
-        assert 'picOriNut' == User.findByUsername('nut').picOriginal
     }
 
     void testCreateFail() {
