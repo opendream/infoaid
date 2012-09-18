@@ -53,7 +53,7 @@ function CommentCtrl($scope, Comment, PostComment) {
 				message: this.comment
 			};
 			
-			var result = PostComment.save(options, function (ret) {	
+			var result = PostComment.query(options, function (ret) {	
 				//console.log(ret.status);
 				$scope.comment = '';		
 				
@@ -61,5 +61,9 @@ function CommentCtrl($scope, Comment, PostComment) {
 		}
 	};
 	
+	$scope.deleteComment = function(comment) {
+		console.log(comment.id);	
+			
+	}
 
 }
