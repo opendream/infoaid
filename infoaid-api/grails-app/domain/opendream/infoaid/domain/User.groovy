@@ -40,7 +40,7 @@ class User {
 	}
 
 	List getPages() {
-        PageUser.findAllByUser(this).collect { it.page } as List
+        PageUser.findAllByUser(this,[max: ctx.grailsApplication.config.infoaid.getPage.max, sort: "conversation", order: "desc"]).collect { it.page } as List
     }
 
 	def beforeInsert() {
