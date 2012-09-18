@@ -432,14 +432,11 @@ class PageControllerTests {
         params.word = ''
         controller.searchPage()
 
-        assert response.json['pages'][0].name == 'page'
-        assert response.json['pages'][1].name == 'second-page'
+        assert response.json['pages'][1].name == 'page'
+        assert response.json['pages'][0].name == 'second-page'
 
-        assert response.json['pages'][0].needs.size() == 2
-        assert response.json['pages'][1].needs.size() == 0
-
-        assert response.json['pages'][0].needs[0].quantity == 10
-        assert response.json['pages'][0].needs[1].quantity == 9
+        assert response.json['pages'][1].needs.size() == 2
+        assert response.json['pages'][0].needs.size() == 0
 
         assert response.json['status'] == 1
 

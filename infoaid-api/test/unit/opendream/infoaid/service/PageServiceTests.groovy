@@ -328,7 +328,7 @@ class PageServiceTests {
 
         pages = service.searchPage('')
         assert pages.size() == 2
-        assert pages[0].name == 'page1'
-        assert pages[1].name == 'page2'
+        assert pages[0].name == 'page2'
+        assert pages[1].name == 'page1'
     }
 }
