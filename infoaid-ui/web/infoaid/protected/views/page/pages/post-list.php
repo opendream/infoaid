@@ -26,6 +26,7 @@
 		<div class="message-comments" ng-controller="CommentCtrl">
 			<div class="load-more" ng-click="loadMore()">
 				<span class="label label-info">View all comments</span>
+				<div ng-init="memberId=8185"></div>
 			</div>
 
 			<ul>
@@ -36,7 +37,7 @@
 
 					<div class="comment-details">
 						<div class="comment-poster-name">
-							<a href="">{{comment.user}}</a>
+							<a href="">{{comment.createdBy}}</a>
 						</div>
 						<div class="comment-body">
 							{{comment.message}}
@@ -49,10 +50,14 @@
 							</time>
 						</div>
 					</div>
-
-					<div class="clear"></div>
-				</li>
+					<div class="clear"></div>					
+				</li>				
 			</ul>
+			<div>
+				<form ng-submit="submitComment()">
+					<input ng-model='comment' type="text" placeholder="Type a comment..."></input>					
+				</form>
+			</div>
 		</div>
 	</li>
 </ul>
