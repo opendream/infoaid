@@ -6,6 +6,7 @@ import grails.converters.JSON
 
 class UserController {
     def userService
+    def springSecurityService
 
     def create() {
         try { 
@@ -18,7 +19,7 @@ class UserController {
     }
 
     def showBasicInfo() {
-        def result = userService.getBasicInfo(params.id)
+        def result = userService.getBasicInfo(params.userId)
         render result as JSON
     }
 
@@ -60,5 +61,11 @@ class UserController {
             ret.status = 1
         }
         render ret as JSON
+    }
+
+    def authenticate() {
+        def userId = springSecurityService.principal?.id
+        def result = userService.getBasicInfo(userId)
+        render result as JSON
     }
 }
