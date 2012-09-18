@@ -369,3 +369,8 @@ div.search-form
 	margin-top: 10px;
 	background: no-repeat url('/infoaid/media/icons/add_group.gif');	
 }
+
+.btn-joinus
+{
+	margin-left:35px;
+}
