@@ -1,5 +1,7 @@
 package opendream.infoaid.domain
 
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
+
 class User {
 
 	transient springSecurityService
@@ -40,7 +42,7 @@ class User {
 	}
 
 	List getPages() {
-        PageUser.findAllByUser(this,[max: ctx.grailsApplication.config.infoaid.getPage.max, sort: "conversation", order: "desc"]).collect { it.page } as List
+    PageUser.findAllByUser(this,[max: ConfigurationHolder.config.infoaid.api.getPage.max, sort: "conversation", order: "desc"]).collect { it.page } as List
     }
 
 	def beforeInsert() {
