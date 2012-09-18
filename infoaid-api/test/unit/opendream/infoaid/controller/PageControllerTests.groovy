@@ -231,6 +231,13 @@ class PageControllerTests {
         controller.pageService = new PageService()
 
         params.slug = 'page-slug'
+        params.until = '2012-09-12 15:07'
+        controller.recentPost()
+        
+        assert null == response.json['posts']
+
+        response.reset()
+        params.until = '2012-09-19 15:07'
         controller.recentPost()
         
         assert 4 == response.json['posts'].size()

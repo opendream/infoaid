@@ -79,11 +79,19 @@ class PageController {
 
     def status() {
         def ret = [:]
+        def since
+        def until
         ret.status = 0
         if(!params.max) {
             params.max = 10
         }
-        def posts = pageService.getPosts(params.slug, params.fromId, params.toId, params.since, params.until, params.max, params.type=null)
+        if(params.since) {
+            since = new Date().parse("yyyy-MM-dd H:m", params.since)
+        }
+        if(params.until) {
+            until = new Date().parse("yyyy-MM-dd H:m", params.until)
+        }
+        def posts = pageService.getPosts(params.slug, params.fromId, params.toId, since, until, params.max, params.type=null)
         if(posts) {
             ret.posts = posts.collect{
                 [
@@ -112,11 +120,19 @@ class PageController {
 
     def topPost() {
         def ret = [:]
+        def since
+        def until
         ret.status = 0
         if(!params.max) {
             params.max = 10
         }
-        def posts = pageService.getTopPost(params.slug, params.fromId, params.toId, params.since, params.until, params.max)
+        if(params.since) {
+            since = new Date().parse("yyyy-MM-dd H:m", params.since)
+        }
+        if(params.until) {
+            until = new Date().parse("yyyy-MM-dd H:m", params.until)
+        }
+        def posts = pageService.getTopPost(params.slug, params.fromId, params.toId, since, until, params.max)
         if(posts) {
             ret.posts = posts.collect{
                 [
@@ -146,11 +162,19 @@ class PageController {
 
     def recentPost() {
         def ret = [:]
+        def since
+        def until
         ret.status = 0
         if(!params.max) {
             params.max = 10
         }
-        def posts = pageService.getRecentPost(params.slug, params.fromId, params.toId, params.since, params.until, params.max)
+        if(params.since) {
+            since = new Date().parse("yyyy-MM-dd H:m", params.since)
+        }
+        if(params.until) {
+            until = new Date().parse("yyyy-MM-dd H:m", params.until)
+        }
+        def posts = pageService.getRecentPost(params.slug, params.fromId, params.toId, since, until, params.max)
         if(posts) {
             ret.posts = posts.collect{
                 [

@@ -10,6 +10,14 @@ class PostController {
 
     def comment() {
         def ret = [:]
+        def since
+        def until
+        if(params.since) {
+            since = new Date().parse("yyyy-MM-dd H:m", params.since)
+        }
+        if(params.until) {
+            until = new Date().parse("yyyy-MM-dd H:m", params.until)
+        }
         if(params.postId) {
             def comments = pageService.getComments(params.postId, params.fromId, params.toId, params.since, params.until)
             ret.comments = comments.comments.collect{
