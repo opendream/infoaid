@@ -76,12 +76,17 @@
 
 <script>
 jQuery(function ($) {
-	$('#input-re-password').bind('input', function (event) {
-		if ($(this).val() != $('#input-password').val()) {
-			this.setCustomValidity('The both password field must match');
+	$('#input-password, #input-re-password').bind('input', function (event) {
+		var
+			p1 = $('#input-password'),
+			p2 = $('#input-re-password')
+		;
+
+		if (p1.val() != p2.val()) {
+			p2[0].setCustomValidity('The both password field must match');
 		} else {
 			// input is valid -- reset the error message
-			this.setCustomValidity('');
+			p2[0].setCustomValidity('');
 		}
 	});
 });
