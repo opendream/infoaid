@@ -18,21 +18,21 @@
 			<div class="control-group">
 			    <label class="control-label" for="input-username">Username</label>
 			    <div class="controls">
-			      <input type="text" id="input-username" value="<?php echo $username; ?>" name='username' placeholder="Username">
+			      <input type="text" id="input-username" value="<?php echo $username; ?>" name='username' placeholder="Username" required>
 			    </div>
 			</div>
 
 			<div class="control-group">
 			    <label class="control-label" for="input-password">Password</label>
 			    <div class="controls">
-			      <input type="password" id="input-password" name='password' placeholder="Password">
+			      <input type="password" id="input-password" name='password' placeholder="Password" required>
 			    </div>
 			</div>
 
 			<div class="control-group">
 			    <label class="control-label" for="input-re-password">Repeat Password</label>
 			    <div class="controls">
-			      <input type="password" id="input-re-password" name='re-password' placeholder="Repeat Password">
+			      <input type="password" id="input-re-password" name='re-password' placeholder="Repeat Password" required>
 			    </div>
 			</div>
 
@@ -53,7 +53,7 @@
 			<div class="control-group">
 			    <label class="control-label" for="input-email">Email</label>
 			    <div class="controls">
-			      <input type="text" id="input-email" value="<?php echo $email; ?>" name='email' placeholder="Email">
+			      <input type="email" id="input-email" value="<?php echo $email; ?>" name='email' placeholder="Email" required>
 			    </div>
 			</div>
 
