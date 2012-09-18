@@ -22,7 +22,7 @@ function ListCtrl($scope, Post) {
 
 function MemberCtrl($scope, $http) {  
     console.log('hello: '+$scope.slug);
-    $http.get(baseUrl+'/index.php/api/members/'+$scope.slug).success(function(data) {
+    $http.get(baseUrl + '/api/members/'+$scope.slug).success(function(data) {
         $scope.members = data.topMembers;
     });
 }

@@ -1,6 +1,6 @@
 angular.module('commentService', ['ngResource']).
 	factory('Comment', function ($resource) {
-		var Comment = $resource(baseUrl + '/index.php/api/post/:postId/comments');
+		var Comment = $resource(baseUrl + '/api/post/:postId/comments');
 
 		return Comment;
 	});

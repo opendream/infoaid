@@ -1,6 +1,6 @@
 angular.module('postService', ['ngResource']).
 	factory('Post', function ($resource) {
-		var Post = $resource(baseUrl + '/index.php/api/page/:slug/recent_post');
+		var Post = $resource(baseUrl + '/api/page/:slug/recent_post');
 
 		return Post;
 	});
@@ -9,7 +9,7 @@ angular.module('post', ['postService', 'commentService', 'time'], function ($rou
 	$routeProvider.
 		when('/', {
 			controller: ListCtrl,
-			templateUrl: baseUrl + '/index.php/page/static/view/post-list'
+			templateUrl: baseUrl + '/page/static/view/post-list'
 		}).
 		otherwise({redirectTo: '/'});
 });
