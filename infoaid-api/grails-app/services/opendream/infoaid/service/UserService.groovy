@@ -17,7 +17,13 @@ class UserService {
 
     def getBasicInfo(userId) {
         def user = User.get(userId)
-        [id:user.id, username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, telNo:user.telNo, picOriginal: user.picOriginal]
+        if(user) {
+            [status:1, id:user.id, username:user.username, firstname:user.firstname, 
+            lastname:user.lastname, email:user.email, telNo:user.telNo, 
+            picOriginal:user.picOriginal, picLarge:user.picLarge, picSmall:user.picSmall]
+        } else {
+            [status:0, message:'user not found']
+        }
     }
 
     def updateBasicInfo(updateparams) {
