@@ -48,6 +48,7 @@
 								title="{{comment.lastUpdated}}">
 								{{comment.lastUpdated}}
 							</time>
+							<button class="btn btn-mini btn-link" ng-click="deleteComment(comment)" type="button">delete</button>
 						</div>
 					</div>
 					<div class="clear"></div>					
