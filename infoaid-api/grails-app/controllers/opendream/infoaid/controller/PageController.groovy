@@ -185,6 +185,7 @@ class PageController {
                     userId: it.createdBy.id,
                     comments: it.previewComments.comments.collect {
                         [
+                            id: it.id,
                             message: it.message,
                             createdBy: it.user.username,
                             userId: it.user.id,
