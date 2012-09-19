@@ -374,3 +374,7 @@ div.search-form
 {
 	margin-left:35px;
 }
+
+.form-group > legend {
+	text-indent: 12px;
+}

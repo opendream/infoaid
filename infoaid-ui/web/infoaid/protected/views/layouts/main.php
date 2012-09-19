@@ -51,19 +51,16 @@
 			</ul>
 			<?php else: ?>
 			<ul class="nav menu pull-right">
-				<li class="dropdown">      
-					<a href="" class="dropdown-toggle" data-toggle="dropdown">Log in as <i class="icon-user icon-black"></i> <?php echo Yii::app()->user->getName(); ?> <b class="caret"></b></a>
+				<li class="dropdown">
+					<a href="" class="dropdown-toggle" data-toggle="dropdown"> <i class="icon-user icon-black"></i> <?php echo Yii::app()->user->getName(); ?> <b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="/user/edit/1">Edit Profile</a></li>
-							<li><a href="/user/list">List All Users</a></li>
-							<li class="divider"></li>
-							<li><a href="/event/create">Create New Event</a></li>
-							<li><a href="/user/create">Create New User</a></li>                                
+						<li><a href="<?php echo $this->createUrl('user/edit'); ?>">Edit Profile</a></li>                                
 						<li class="divider"></li>
 						<li><a href="<?php echo $this->createUrl('user/logout'); ?>">Logout</a></li>
 					</ul>
 				</li>
 			</ul>
+			<p class="navbar-text pull-right">Log in as </p>
 			<?php endif; ?>
 		</div> <!-- navbar inner -->
 	</div>

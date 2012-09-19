@@ -78,9 +78,21 @@ class API
 		$rest = self::getRESTObject();
 
 		// Use Basic Authenticate if supply
-		$rest->http_user = self::$http_user;
-		$rest->http_pass = self::$http_pass;
-		$rest->http_auth = self::$http_auth;
+		if (self::$http_user && self::$http_pass) {
+			$rest->http_user = self::$http_user;
+			$rest->http_pass = self::$http_pass;
+		}
+		else {
+			$cache_key = Yii::app()->user->getState('cache_key');
+			$data = Yii::app()->cache->get($cache_key);
+
+			$username = $data['username'];
+			$password = $data['password'];
+
+			$rest->http_user = $username;
+			$rest->http_pass = $password;
+		}
+		$rest->http_auth = 'Basic';
 
 		if (self::isMethodAllowed($method)) {
 			$result = $rest->$method($uri, $params, $format);
