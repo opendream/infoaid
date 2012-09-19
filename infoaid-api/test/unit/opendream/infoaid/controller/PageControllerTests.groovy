@@ -342,7 +342,37 @@ class PageControllerTests {
         assert pageUser.conversation == 2
         assert thisPost.conversation == 1
         assert 3 == Comment.count()        
-    }    
+    }   
+
+    void testDisableComment() {
+        def nut = User.findByUsername("nut")
+        //def post = Post.findByMessage('first post')
+        def comment = Comment.findByMessage('comment1')
+
+        controller.pageService = new PageService()
+        controller.springSecurityService  = [principal:[id:nut.id]]
+        params.commentId = comment.id        
+
+        controller.disableComment()
+
+        assert 1 == response.json.status
+        assert "comment ${comment.id} is deleted" == response.json.message
+        assert false == comment.enabled
+    } 
+
+    void testDisableCommentFail() {
+        def comment = Comment.findByMessage('comment1')
+
+        controller.pageService = new PageService()
+        controller.springSecurityService  = [principal:[id:0]]
+        params.commentId = comment.id        
+
+        controller.disableComment()
+
+        assert 0 == response.json.status
+        assert "unauthorized user or not found comment" == response.json.message
+        assert true == comment.enabled
+    }
 
     void testUpdatePage() {
         def page = Page.findBySlug("page-slug")
