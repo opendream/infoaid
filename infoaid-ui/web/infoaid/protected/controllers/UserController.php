@@ -15,9 +15,22 @@ class UserController extends IAController
 	{
 		$password = $_POST['password'];
 		$rePassword = $_POST['re-password'];
+		$passwordLength = strlen($password);
 		
 		if($password != $rePassword) {
 			Yii::app()->user->setFlash('error', "Please type same password and repeat password");
+			$this->render('create', array(
+				'username'=>$_POST['username'],
+				'password'=>$_POST['password'],
+				'firstname'=>$_POST['firstname'],
+				'lastname'=>$_POST['lastname'],
+				'email'=>$_POST['email'],
+				'tel'=>$_POST['tel'],
+				)
+			);
+			Yii::app()->end();
+		} else if($passwordLength < 7 || $passwordLength > 20) {
+			Yii::app()->user->setFlash('error', "Password must have 7 to 20 character");
 			$this->render('create', array(
 				'username'=>$_POST['username'],
 				'password'=>$_POST['password'],
