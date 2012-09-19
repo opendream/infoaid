@@ -231,6 +231,13 @@ class PageControllerTests {
         controller.pageService = new PageService()
 
         params.slug = 'page-slug'
+        params.until = '2012-09-12 15:07'
+        controller.recentPost()
+        
+        assert null == response.json['posts']
+
+        response.reset()
+        params.until = '2012-09-19 15:07'
         controller.recentPost()
         
         assert 4 == response.json['posts'].size()
@@ -425,14 +432,11 @@ class PageControllerTests {
         params.word = ''
         controller.searchPage()
 
-        assert response.json['pages'][0].name == 'page'
-        assert response.json['pages'][1].name == 'second-page'
+        assert response.json['pages'][1].name == 'page'
+        assert response.json['pages'][0].name == 'second-page'
 
-        assert response.json['pages'][0].needs.size() == 2
-        assert response.json['pages'][1].needs.size() == 0
-
-        assert response.json['pages'][0].needs[0].quantity == 10
-        assert response.json['pages'][0].needs[1].quantity == 9
+        assert response.json['pages'][1].needs.size() == 2
+        assert response.json['pages'][0].needs.size() == 0
 
         assert response.json['status'] == 1
 

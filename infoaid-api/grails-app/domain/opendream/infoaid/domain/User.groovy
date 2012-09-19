@@ -1,5 +1,7 @@
 package opendream.infoaid.domain
 
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
+
 class User {
 
 	transient springSecurityService
@@ -13,7 +15,7 @@ class User {
     String picOriginal
     String picLarge
     String picSmall
-	boolean enabled
+	boolean enabled = true
 	boolean accountExpired
 	boolean accountLocked
 	boolean passwordExpired
@@ -23,6 +25,8 @@ class User {
 	static constraints = {
 		username blank: false, unique: true
 		password blank: false
+		firstname blank: false
+		lastname blank: false
 		email nullable: true
         telNo nullable: true
         picOriginal nullable: true
@@ -40,7 +44,7 @@ class User {
 	}
 
 	List getPages() {
-        PageUser.findAllByUser(this).collect { it.page } as List
+    PageUser.findAllByUser(this,[max: ConfigurationHolder.config.infoaid.api.getPage.max, sort: "conversation", order: "desc"]).collect { it.page } as List
     }
 
 	def beforeInsert() {

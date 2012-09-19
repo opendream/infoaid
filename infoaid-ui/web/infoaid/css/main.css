@@ -238,7 +238,7 @@ div.search-form
 {
 	margin-top: 5px;
 	font-size: 14px;
-	margin-left: 75px;
+	margin-left: 80px;
 }
 
 .page-header
@@ -249,7 +249,6 @@ div.search-form
 
 .page-picture
 {
-	border: solid 2px #000000;
 	margin-left: 10px;
 	margin-right: 10px;
 	float: left;
@@ -313,4 +312,65 @@ div.search-form
 	margin-left: 10px;
 	margin-bottom: 20px;
 	margin-top: 20px;
+}
+
+.page-sidebar-places-header
+{
+	padding-left: 5px;
+	font-size: 11px;
+	font-weight: bold;
+}
+
+.ul-list
+{
+	padding-left: 10px;
+}
+
+.left-side-bar
+{
+	padding-left: 20px;	
+	font-size: 13px;
+}
+
+.li-place
+{
+	background: no-repeat url('/infoaid/media/pages/icon_page.png');
+	margin-bottom: 10px;
+}
+
+.page-sidebar-profile
+{
+	padding-left: 5px;
+}
+
+.page-sidebar-profile-username
+{
+	padding-left: 2px;
+	font-weight: bold;
+}
+
+.page-sidebar-menu
+{
+	margin-top: 20px;
+}
+
+.li-feeds
+{
+	background: no-repeat url('/infoaid/media/icons/new_feeds.png');
+}
+
+.li-private-message
+{
+	background: no-repeat url('/infoaid/media/icons/private_messages.gif');
+}
+
+.li-add-group
+{
+	margin-top: 10px;
+	background: no-repeat url('/infoaid/media/icons/add_group.gif');	
+}
+
+.btn-joinus
+{
+	margin-left:35px;
 }

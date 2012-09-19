@@ -6,8 +6,14 @@ class UserService {
     def springSecurityService
 
     def create(userparams) {
+        def passLength = userparams['password'].size()
+
+        if(passLength < 7 || passLength > 20) {
+            log.error "password confirmation miss match"
+            return [message: "Password must have 7 to 20 character"]
+        }
         def user = new User()
-        user.properties['username', 'password', 'firstname', 'lastname', 'email', 'telNo', 'picOriginal'] = userparams
+        user.properties['username', 'password', 'firstname', 'lastname', 'email', 'telNo'] = userparams
         if(!user.save()) {
             log.error user.errors
             throw new RuntimeException("${user.errors}")
@@ -17,7 +23,8 @@ class UserService {
 
     def getBasicInfo(userId) {
         def user = User.get(userId)
-        [id:user.id, username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, telNo:user.telNo, picOriginal: user.picOriginal]
+        [id:user.id, username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, telNo:user.telNo, 
+        picOriginal: user.picOriginal, picSmall: user.picSmall, picLarge: user.picLarge]
     }
 
     def updateBasicInfo(updateparams) {
@@ -31,6 +38,12 @@ class UserService {
     }
 
     def updatePassword(updateparams) {
+        def passLength = updateparams['newPassword'].size()
+
+        if(passLength < 7 || passLength > 20) {
+            log.error "password confirmation miss match"
+            return [message: "Password must have 7 to 20 character"]
+        }
         if(updateparams.newPassword != updateparams.comfirmedPassword) {
             log.error "password confirmation miss match"
             //throw RuntimeException("password confirmation miss match")

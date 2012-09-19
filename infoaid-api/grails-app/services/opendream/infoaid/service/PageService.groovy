@@ -278,11 +278,22 @@ class PageService {
     def searchPage(word = null, offset = 0) {
         def max = grailsApplication.config.infoaid.api.search.max
         def offsetInt = offset.toInteger()
-        def pages = Page.createCriteria().list(max: max, sort: 'name', order: 'asc', offset: offsetInt) {
-            eq('status', Page.Status.ACTIVE)
-            or {
-                ilike("name", "%${word}%")
-                ilike("about", "%${word}%")
+        def pages
+        if(!word) {
+            pages = Page.createCriteria().list(max: max, sort: 'dateCreated', order: 'desc', offset: offsetInt) {
+                eq('status', Page.Status.ACTIVE)
+                or {
+                    ilike("name", "%${word}%")
+                    ilike("about", "%${word}%")
+                }
+            }
+        } else {
+            pages = Page.createCriteria().list(max: max, sort: 'name', order: 'asc', offset: offsetInt) {
+                eq('status', Page.Status.ACTIVE)
+                or {
+                    ilike("name", "%${word}%")
+                    ilike("about", "%${word}%")
+                }
             }
         }
         pages

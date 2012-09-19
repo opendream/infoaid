@@ -106,5 +106,25 @@
 				spinner.stop();
 			});
 		};
+
+		$scope.init = function() {
+			var target = document.getElementById('loading');
+			var spinner = new Spinner(opts).spin(target);
+			var pages = Page.query({
+				word: '',
+				offset: 0
+			}, function(resp) {
+				if(resp.length == 0) {
+					//$('#load-more').hide();
+					$('#result-search-error').addClass("text-error");
+					$('#result-search-error').html('Not found this place');
+				} else {
+					$('#result-search-error').html('');
+					//$('#load-more').show();
+				}
+				spinner.stop()
+			});
+			$scope.pages = pages;
+		}();
 	}
 </script>

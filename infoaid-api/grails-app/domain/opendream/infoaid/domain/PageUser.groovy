@@ -17,9 +17,10 @@ class PageUser implements Serializable {
 
     public enum Relation {
     	OWNER,
-    	MEMBER
+    	MEMBER,
+        MODERATOR
     	static list() {
-    		[OWNER,MEMBER]
+    		[OWNER,MEMBER,MODERATOR]
     	}
     }
 
