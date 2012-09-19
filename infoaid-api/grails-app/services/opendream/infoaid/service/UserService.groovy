@@ -23,8 +23,13 @@ class UserService {
 
     def getBasicInfo(userId) {
         def user = User.get(userId)
-        [id:user.id, username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, telNo:user.telNo, 
-        picOriginal: user.picOriginal, picSmall: user.picSmall, picLarge: user.picLarge]
+        if(user) {
+            [status:1, id:user.id, username:user.username, firstname:user.firstname, 
+            lastname:user.lastname, email:user.email, telNo:user.telNo, 
+            picOriginal:user.picOriginal, picLarge:user.picLarge, picSmall:user.picSmall]
+        } else {
+            [status:0, message:'user not found']
+        }
     }
 
     def updateBasicInfo(updateparams) {
@@ -39,15 +44,16 @@ class UserService {
 
     def updatePassword(updateparams) {
         def passLength = updateparams['newPassword'].size()
-
+        println updateparams
         if(passLength < 7 || passLength > 20) {
-            log.error "password confirmation miss match"
+            log.error "password confirmation mismatch"
             return [message: "Password must have 7 to 20 character"]
         }
-        if(updateparams.newPassword != updateparams.comfirmedPassword) {
-            log.error "password confirmation miss match"
-            //throw RuntimeException("password confirmation miss match")
-            return [message: "password confirmation miss match"]
+        println "${updateparams.newPassword} != ${updateparams.confirmedPassword}"
+        if(updateparams.newPassword != updateparams.confirmedPassword) {
+            log.error "password confirmation mismatch"
+            //throw RuntimeException("password confirmation mismatch")
+            return [message: "password confirmation mismatch"]
         }
 
         def user = User.get(updateparams.id)

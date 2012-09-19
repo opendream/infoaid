@@ -122,4 +122,9 @@ class API
 	{
 		return self::get($uri, $params, 'json');
 	}
+
+	public static function post($uri, $params = array(), $format = NULL)
+	{
+		return self::call('post', $uri, $params, $format);
+	}
 }

@@ -91,7 +91,7 @@ class UserServiceTests {
         def updateparams = [id:user.id, oldPassword: 'password', 
             newPassword: 'new-password', comfirmedPassword: 'new-passwordx']
         def result = service.updatePassword(updateparams)        
-        assert "password confirmation miss match" == result.message
+        assert "password confirmation mismatch" == result.message
     }
 
     void testUpdatePasswordFail() {
