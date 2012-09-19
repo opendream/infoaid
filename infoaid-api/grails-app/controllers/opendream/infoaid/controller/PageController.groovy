@@ -278,7 +278,7 @@ class PageController {
             def result = pageService.createPage(userId, name, lat, lng, location, household, population, about, picOriginal)
             ret = [status:1, message: "user id: ${userId} created page: ${name}", userId: userId, 
                     name: result.name, lat: result.lat, lng: result.lng, household: result.household, 
-                    population: result.population, about: result.about, location: result.location, picOriginal: picOriginal]
+                    population: result.population, about: result.about, location: result.location, picOriginal: result.picOriginal, slug: result.slug]
             render ret as JSON
         }
     }

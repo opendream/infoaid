@@ -79,7 +79,7 @@ jQuery(function ($) {
 		$.each(overview_needs, function (index, item) {
 			needs_html +=
 				'<li>' +
-					'<span class="message">' + item.message + '</span> : ' +
+					'<span class="message">' + item.item + '</span> : ' +
 					'<span class="quantity">' + item.quantity.toString() + '</span>'
 				'</li>'
 			;
@@ -98,7 +98,7 @@ jQuery(function ($) {
 
 	var center = new OpenLayers.LonLat(100.491882324219, 13.7516899108887);
 	center.transform(WGS1984, SPHERICALMERCATOR);
-	map.setCenter(center, 6);
+	map.setCenter(center, 12);
 
 	$.getJSON(url, function (resp) {
 		$.each(resp.pages, function (index, item) {

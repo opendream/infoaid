@@ -51,8 +51,18 @@ class IAController extends CController
 		}
 
 		foreach ($this->styles as $style) {
+
+			if (pathinfo($style, PATHINFO_EXTENSION) === 'scss') {
+				$publishedURL = Yii::app()->getAssetManager()->publish(
+					Yii::app()->basePath .'/../css/'. $style
+				);
+			}
+			else {
+				$publishedURL = Yii::app()->baseUrl .'/css/'. $style;
+			}
+
 			Yii::app()->clientScript
-				->registerCssFile(Yii::app()->baseUrl .'/css/'. $style);
+				->registerCssFile($publishedURL);
 		}
 	}
 

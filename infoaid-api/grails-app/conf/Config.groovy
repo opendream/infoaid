@@ -97,6 +97,7 @@ infoaid.api.comment.limited = 50
 infoaid.api.need.max = 5
 infoaid.api.member.max = 5
 infoaid.api.search.max = 10
+infoaid.api.getPage.max = 10
 
 
 // Added by the Spring Security Core plugin:

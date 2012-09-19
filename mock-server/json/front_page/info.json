@@ -8,11 +8,11 @@
       "lng": "100.529228210449",
       "needs": [
         {
-          "message": "Boat",
+          "item": "Boat",
           "quantity": 8
         },
         {
-          "message": "Car",
+          "item": "Car",
           "quantity": 3
         }
       ]
@@ -24,7 +24,7 @@
       "lng": "100.548461914062",
       "needs": [
         {
-          "message": "Boat",
+          "item": "Boat",
           "quantity": 19
         }
       ]
@@ -36,7 +36,7 @@
       "lng": "104.966972351074",
       "needs": [
         {
-          "message": "Food",
+          "item": "Food",
           "quantity": 300
         }
       ]

@@ -55,7 +55,8 @@ class UserController {
             ret.pages = pages.collect{
                 [   
                     id: it.id,
-                    name: it.name
+                    name: it.name,
+                    slug: it.slug
                 ]
             }
             ret.status = 1

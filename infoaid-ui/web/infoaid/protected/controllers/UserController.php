@@ -15,9 +15,22 @@ class UserController extends IAController
 	{
 		$password = $_POST['password'];
 		$rePassword = $_POST['re-password'];
+		$passwordLength = strlen($password);
 		
 		if($password != $rePassword) {
 			Yii::app()->user->setFlash('error', "Please type same password and repeat password");
+			$this->render('create', array(
+				'username'=>$_POST['username'],
+				'password'=>$_POST['password'],
+				'firstname'=>$_POST['firstname'],
+				'lastname'=>$_POST['lastname'],
+				'email'=>$_POST['email'],
+				'tel'=>$_POST['tel'],
+				)
+			);
+			Yii::app()->end();
+		} else if($passwordLength < 7 || $passwordLength > 20) {
+			Yii::app()->user->setFlash('error', "Password must have 7 to 20 character");
 			$this->render('create', array(
 				'username'=>$_POST['username'],
 				'password'=>$_POST['password'],
@@ -141,5 +154,35 @@ class UserController extends IAController
 			$this->render('editPassword');
 			Yii::app()->end();
 		}
+	}
+
+	public function actionLogin()
+	{
+		if (! empty($_POST)) {
+			$username = trim($_POST['username']);
+			$password = $_POST['password'];
+
+			if ($username && mb_strlen($password) > 0) {
+				$identity = new IAUserIdentity($username, $password);
+
+				$isAuthorized = $identity->authenticate();
+
+				if ($isAuthorized) {
+					Yii::app()->user->login($identity, 60*60*24);
+					$this->redirect(Yii::app()->user->returnUrl);
+				}
+				else {
+					Yii::app()->user->setFlash('error', 'User/Password is not corrected');
+				}
+			}
+		}
+
+		$this->render('login');
+	}
+
+	public function actionLogout()
+	{
+		Yii::app()->user->logout();
+		$this->redirect(Yii::app()->homeUrl);
 	}
 }

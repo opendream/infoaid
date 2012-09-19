@@ -3,7 +3,7 @@
 class PageController extends IAController
 {
 	public $styles = array(
-		'page.css',
+		'page.scss',
 	);
 
 	public function actions()

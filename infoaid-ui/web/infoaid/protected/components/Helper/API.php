@@ -10,6 +10,10 @@ class API
 
 	public static $config;
 
+	public static $http_user;
+	public static $http_pass;
+	public static $http_auth;
+
 	public static function getAPIConfig()
 	{
 		if (empty(self::$config))
@@ -70,10 +74,28 @@ class API
 
 	public static function call($method, $uri, $params = array(),
 		$format = NULL)
-	{		
+	{
 		$rest = self::getRESTObject();
+
+		// Use Basic Authenticate if supply
+		$rest->http_user = self::$http_user;
+		$rest->http_pass = self::$http_pass;
+		$rest->http_auth = self::$http_auth;
+
 		if (self::isMethodAllowed($method)) {
 			$result = $rest->$method($uri, $params, $format);
+
+			$dbg_msg  = strtoupper($method) ." $uri";
+			$dbg_msg .= "\nAUTHENTICATION = ";
+			$dbg_msg .= "\nuser : ". $rest->http_user;
+			$dbg_msg .= "\npass : ". $rest->http_pass;
+			$dbg_msg .= "\nauth : ". $rest->http_auth;
+			$dbg_msg .= "\nPARAMS = ";
+			$dbg_msg .= print_r($params, 1);
+			$dbg_msg .= "\nRESULTS = ";
+			$dbg_msg .= print_r($result, 1);
+
+			Yii::log($dbg_msg, 'debug', 'API');
 		}
 
 		return $result;
