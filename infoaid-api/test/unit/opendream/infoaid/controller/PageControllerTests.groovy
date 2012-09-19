@@ -237,7 +237,9 @@ class PageControllerTests {
         assert null == response.json['posts']
 
         response.reset()
-        params.until = '2012-09-19 15:07'
+        params.slug = 'page-slug'
+        params.since = '2012-09-12 15:07'
+        params.until = '2020-09-12 15:07'
         controller.recentPost()
         
         assert 4 == response.json['posts'].size()
@@ -302,6 +304,34 @@ class PageControllerTests {
 
         assert 1 == response.json.status
         assert "user id: 1 left from page: page-slug" == response.json.message
+    }
+
+    void testRemoveUserFromPage() {
+        assert 3 == PageUser.count()
+
+        controller.pageService = new PageService()
+
+        params.userId = 1
+        params.slug = 'page-slug'
+        controller.removeUserFromPage()
+
+        assert 2 == PageUser.count()
+
+        assert 1 == response.json.status
+    }
+
+    void testSetRelation() {
+        controller.pageService = new PageService()
+
+        params.userId = 1
+        params.slug = 'page-slug'
+        params.relation = 'Member'
+
+        controller.setRelation()
+
+        def pageUser = PageUser.get(1)
+
+        assert pageUser.relation == PageUser.Relation.MEMBER
     }
 
     void testPostComment() {

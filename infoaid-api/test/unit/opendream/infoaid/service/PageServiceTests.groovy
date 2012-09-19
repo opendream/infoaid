@@ -69,7 +69,7 @@ class PageServiceTests {
     }      
 
 
-    void testCreatePageJoinPageLeavePageInactivePage() {
+    void testCreatePageJoinPageLeavePageInactivePageSetRelationRemoveUserFromPage() {
         def user = new User(username: 'admin', password: 'password', firstname: 'thawatchai', lastname: 'jong')
         user.save()
         def user2 = new User(username: 'admin2', password: 'password2', firstname: 'jong', lastname: 'thawatchai')
@@ -113,7 +113,7 @@ class PageServiceTests {
         service.leavePage(user2.id, "tmpSlug")
         assert page.getUsers(0).size() == 1
 
-        service.setRelation(user.id, 'tmpSlug', PageUser.Relation.MEMBER)
+        service.setRelation(user.id, 'tmpSlug', 'Member')
         pageUser = PageUser.get(1)
         assert pageUser.relation == PageUser.Relation.MEMBER
 

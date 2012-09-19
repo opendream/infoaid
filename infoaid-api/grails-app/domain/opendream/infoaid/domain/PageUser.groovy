@@ -46,9 +46,15 @@ class PageUser implements Serializable {
         pageUser.delete(flush: true)
     }
 
-    static PageUser setRelation(User user, Page page, Relation relation) {
+    static PageUser setRelation(User user, Page page, String relation) {
+        def relationEnum
+        if(relation == 'Owner') {
+            relationEnum = Relation.OWNER
+        } else {
+            relationEnum = Relation.MEMBER
+        }
         def pageUser = PageUser.findByPageAndUser(page, user)
-        pageUser.relation = relation
+        pageUser.relation = relationEnum
         pageUser.save(flush: true)
     }
 
