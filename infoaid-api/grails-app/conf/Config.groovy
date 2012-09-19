@@ -106,4 +106,9 @@ grails.plugins.springsecurity.authority.className = 'opendream.infoaid.domain.Ro
 grails.plugins.springsecurity.requestMap.className = 'opendream.infoaid.domain.Requestmap'
 grails.plugins.springsecurity.securityConfigType = 'Requestmap'
 grails.plugins.springsecurity.useBasicAuth = true
-grails.plugins.springsecurity.basic.realmName = "infoaid"
+grails.plugins.springsecurity.basic.realmName = "Infoaid"
+grails.plugins.springsecurity.filterChain.chainMap = [
+   '/user**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+   '/user/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+   '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
+]

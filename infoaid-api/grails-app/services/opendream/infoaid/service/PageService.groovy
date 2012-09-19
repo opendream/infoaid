@@ -298,4 +298,18 @@ class PageService {
         }
         pages
     }
+
+    def disableComment(userId, commentId) {
+        def comment = Comment.get(commentId)
+        if(comment?.user?.id != userId) {
+            [status:0, message:'unauthorized user or not found comment']
+        } else {
+            comment.enabled = false
+            comment.save(failOnError: true, flush:true)
+            def post = comment.post
+            post.conversation --
+            post.save(failOnError: true, flush:true)
+            [status:1, message:"comment ${commentId} is deleted", id:commentId]
+        } 
+    }
 }

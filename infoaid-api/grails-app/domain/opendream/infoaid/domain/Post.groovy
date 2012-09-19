@@ -35,6 +35,7 @@ class Post {
     def getPreviewComments() {
         def previewComments = Comment.createCriteria().list(max: 3) {
             eq('post', this)
+            eq('enabled', true)
             order('dateCreated', 'desc')
         }
 
