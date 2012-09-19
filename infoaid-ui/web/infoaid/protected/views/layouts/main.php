@@ -26,30 +26,47 @@
 
 <div class="container" id="page">
 	<div class="navbar navbar-static-top">
-        <div class="navbar-inner">            
-            <a class="brand" href="<?php echo Yii::app()->homeUrl ?>"><?php echo CHtml::encode(Yii::app()->name); ?></a>
-            <ul class="nav actions">
-                <li><a href="#">Place</a></li>
-                <li><a href="#">People</a></li>
-                <li><a href="#">Status</a></li>
-                <li><a href="/site/pages/about">About us</a></li>                          
-            </ul>
-            <ul class="nav menu pull-right">
-                <li class="dropdown" id="fat">            
-	                <a href="#fat" class="dropdown-toggle" data-toggle="dropdown">Log in as <i class="icon-user icon-black"></i> admin <b class="caret"></b></a>
-	                <ul class="dropdown-menu">
-	                    <li><a href="/user/edit/1">Edit Profile</a></li>
-	                    	<li><a href="/user/list">List All Users</a></li>
-	                        <li class="divider"></li>
-	                        <li><a href="/event/create">Create New Event</a></li>
-	                        <li><a href="/user/create">Create New User</a></li>                                
-	                    <li class="divider"></li>
-	                    <li><a href="/logout/index">Logout</a></li>
-	                </ul>
-                </li>
-            </ul>
-        </div> <!-- navbar inner -->
-    </div>
+		<div class="navbar-inner">            
+			<a class="brand" href="<?php echo Yii::app()->homeUrl ?>"><?php echo CHtml::encode(Yii::app()->name); ?></a>
+
+			<ul class="nav actions">
+				<li><a href="#">Place</a></li>
+				<li><a href="#">People</a></li>
+				<li><a href="#">Status</a></li>
+				<li><a href="/site/pages/about">About us</a></li>
+			</ul>
+
+			<?php if (Yii::app()->user->isGuest): ?>
+			<ul class="nav menu pull-right">
+					<li>
+						<a href="<?php echo $this->createUrl('/user/login'); ?>">
+							Log in
+						</a>
+					</li>
+					<li>
+						<a href="<?php echo $this->createUrl('/user/register'); ?>">
+							Register
+						</a>
+					</li>
+			</ul>
+			<?php else: ?>
+			<ul class="nav menu pull-right">
+				<li class="dropdown">      
+					<a href="" class="dropdown-toggle" data-toggle="dropdown">Log in as <i class="icon-user icon-black"></i> <?php echo Yii::app()->user->getName(); ?> <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="/user/edit/1">Edit Profile</a></li>
+							<li><a href="/user/list">List All Users</a></li>
+							<li class="divider"></li>
+							<li><a href="/event/create">Create New Event</a></li>
+							<li><a href="/user/create">Create New User</a></li>                                
+						<li class="divider"></li>
+						<li><a href="<?php echo $this->createUrl('user/logout'); ?>">Logout</a></li>
+					</ul>
+				</li>
+			</ul>
+			<?php endif; ?>
+		</div> <!-- navbar inner -->
+	</div>
 	
 	<?php if(isset($this->breadcrumbs)):?>
 		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
