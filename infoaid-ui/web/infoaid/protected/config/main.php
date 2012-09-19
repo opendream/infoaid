@@ -64,6 +64,8 @@ return array(
 				'api/members/<slug:[^\/]*>'=>'api/members',
 				'page/search'=>'page/search',
 				'page/<slug:[^\/]*>'=>'page/view',
+				'/api/comment'=>'/api/comment',
+				'/api/deleteComment/<commentId:\d+>'=>'/api/deleteComment',
 
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
