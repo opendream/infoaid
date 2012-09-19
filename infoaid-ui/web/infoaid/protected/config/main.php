@@ -109,6 +109,37 @@ return array(
 			'language'=>'en_us',
 			'basePath'=>dirname(__FILE__).'/../messages',
 		),
+
+		'viewRenderer'=>array(
+			'class'=>'ext.phamlp.Haml',
+
+			// delete options below in production
+			'ugly' => false,
+			'style' => 'nested',
+			'debug' => true,
+			'cache' => false,
+		),
+
+		'assetManager' => array(
+			'class' => 'ext.phamlp.PBMAssetManager',
+			'parsers' => array(
+				'scss' => array(
+					'class' => 'ext.phamlp.Sass',
+					'output' => 'css',
+					'options' => array(
+						'style' => 'nested',
+					),
+				)
+			),
+		),
+
+		'cache'=>array(
+			'class'=>'system.caching.CMemCache',
+			'useMemcached'=>true,
+			'servers'=>array(
+				array('host'=>'localhost','port'=>11211),
+			),
+		),
 	),
 
 	// application-level parameters that can be accessed
