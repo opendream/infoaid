@@ -25,7 +25,7 @@ class UserServiceTests {
     }
 
     void testCreate() {
-        def userparams = [username: "nut", password: "nut", firstname: 'firstname', 
+        def userparams = [username: "nut", password: "nuttttt", firstname: 'firstname', 
         lastname: 'lastname']
         service.create(userparams)
         assert 2 == User.count()
@@ -97,9 +97,8 @@ class UserServiceTests {
 
     void testUpdatePasswordFail() {
         def updateparams = [id:user.id, oldPassword: 'password', 
-            newPassword: '', comfirmedPassword: '']
-        shouldFail(RuntimeException) {    
-            service.updatePassword(updateparams)
-        }
+            newPassword: '', comfirmedPassword: '']  
+        def result = service.updatePassword(updateparams)
+        assert "Password must have 7 to 20 character" == result.message
     }
 }

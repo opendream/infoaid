@@ -38,7 +38,7 @@ class UserService {
     }
 
     def updatePassword(updateparams) {
-        def passLength = updateparams['password'].size()
+        def passLength = updateparams['newPassword'].size()
 
         if(passLength < 7 || passLength > 20) {
             log.error "password confirmation miss match"
