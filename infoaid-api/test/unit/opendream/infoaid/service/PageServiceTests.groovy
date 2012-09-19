@@ -112,6 +112,13 @@ class PageServiceTests {
 
         service.leavePage(user2.id, "tmpSlug")
         assert page.getUsers(0).size() == 1
+
+        service.setRelation(user.id, 'tmpSlug', PageUser.Relation.MEMBER)
+        pageUser = PageUser.get(1)
+        assert pageUser.relation == PageUser.Relation.MEMBER
+
+        service.removeUserFromPage(user.id, "tmpSlug")
+        assert page.getUsers(0).size() == 0
     }
 
     void testCreatePageFail() {
