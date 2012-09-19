@@ -58,4 +58,9 @@ class ApiController extends IAController
 		$resultJson = API::post('post/comment', $params, 'json');
 		$this->renderJSON($resultJson);
 	}
+
+	public function actionDeleteComment($commentId, $userId) {
+		$resultJson = API::getJSON('comment/'.$commentId.'/delete', array('userId'=>$userId));
+		$this->renderJSON($resultJson);
+	}
 }
