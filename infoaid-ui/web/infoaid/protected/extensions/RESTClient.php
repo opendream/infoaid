@@ -37,9 +37,9 @@ class RESTClient extends CComponent
 	private $format;
 	private $mime_type;
 	
-	private $http_auth = null;
-	private $http_user = null;
-	private $http_pass = null;
+	public $http_auth = null;
+	public $http_user = null;
+	public $http_pass = null;
 
     private $response_string;
 	private $_curl;

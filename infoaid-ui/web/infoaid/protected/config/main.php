@@ -8,6 +8,7 @@
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'InfoAid',
+	'defaultController'=>'front',
 
 	'language'=>'en',
 
@@ -41,6 +42,8 @@ return array(
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
+			'loginUrl'=>'user/login',
+			'returnUrl'=>'/',
 		),
 		// uncomment the following to enable URLs in path-format
 		/*
@@ -57,7 +60,7 @@ return array(
 			'urlFormat'=>'path',
 			'rules'=>array(
 				''=>'front/index',
-				'site/<action:\w+>'=>'front/<action>',
+				'user/register'=>'user/create',
 
 				'api/post/<id:\d+>/<method:\w+>'=>'api/post',
 				'api/page/<slug:[^\/]*>/<method:\w+>'=>'api/page',
@@ -149,8 +152,8 @@ return array(
 		'adminEmail'=>'webmaster@example.com',
 
 		'api'=>array(
-			'server'=>'http://localhost/',
-			'port'=>8080,
+			'server'=>'http://192.168.1.123:8080/infoaid-api/',
+			//'port'=>8080,
 		),
 
 		'allowed_language' => array('en', 'th'),

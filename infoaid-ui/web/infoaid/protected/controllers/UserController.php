@@ -142,4 +142,34 @@ class UserController extends IAController
 			Yii::app()->end();
 		}
 	}
+
+	public function actionLogin()
+	{
+		if (! empty($_POST)) {
+			$username = trim($_POST['username']);
+			$password = $_POST['password'];
+
+			if ($username && mb_strlen($password) > 0) {
+				$identity = new IAUserIdentity($username, $password);
+
+				$isAuthorized = $identity->authenticate();
+
+				if ($isAuthorized) {
+					Yii::app()->user->login($identity, 60*60*24);
+					$this->redirect(Yii::app()->user->returnUrl);
+				}
+				else {
+					Yii::app()->user->setFlash('error', 'User/Password is not corrected');
+				}
+			}
+		}
+
+		$this->render('login');
+	}
+
+	public function actionLogout()
+	{
+		Yii::app()->user->logout();
+		$this->redirect(Yii::app()->homeUrl);
+	}
 }

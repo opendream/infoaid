@@ -1,7 +1,8 @@
 <div id='user-create'>
-	<header class="create">
-		<div class='user-create-header'><span>Register</span></div>
+	<header class="create page-header">
+		<h1>Register</h1>
 	</header>
+
 	<div class="flash-message-error">
 			<?php
 				if( Yii::app()->user->hasFlash('error') ) {
@@ -64,10 +65,8 @@
 			    </div>
 			</div>
 
-			<div class="control-group">
-			    <div class="controls">
-			      <button type="submit" class="btn">Register</button>
-			    </div>
+			<div class="form-actions">
+				<button type="submit" class="btn">Register</button>
 			</div>
 			
 		</form>
