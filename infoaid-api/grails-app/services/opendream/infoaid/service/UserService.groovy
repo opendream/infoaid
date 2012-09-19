@@ -9,8 +9,8 @@ class UserService {
         def passLength = userparams['password'].size()
 
         if(passLength < 7 || passLength > 20) {
-            throw new RuntimeException("${user.errors}")
-            return
+            log.error "password confirmation miss match"
+            return [message: "Password must have 7 to 20 character"]
         }
         def user = new User()
         user.properties['username', 'password', 'firstname', 'lastname', 'email', 'telNo'] = userparams
