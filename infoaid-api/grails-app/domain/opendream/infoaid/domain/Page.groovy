@@ -1,5 +1,7 @@
 package opendream.infoaid.domain
 
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
+
 class Page {
     def slugGeneratorService
 
@@ -44,7 +46,7 @@ class Page {
         }
     }
 
-    def getUsers() {
+    def getUsers(offset=0) {
         PageUser.findAllByPage(this).collect { [user: it.user, relation: it.relation] }
     }
 

@@ -104,14 +104,14 @@ class PageServiceTests {
         assert pageUser.relation == PageUser.Relation.OWNER
 
         service.joinPage(user2.id, "tmpSlug")
-        assert page.users.size() == 2
+        assert page.getUsers(0).size() == 2
 
         service.inactivePage(user.id, "tmpSlug")
         def pageStatus = Page.get(page.id).status
         assert pageStatus == Page.Status.INACTIVE
 
         service.leavePage(user2.id, "tmpSlug")
-        assert page.users.size() == 1
+        assert page.getUsers(0).size() == 1
     }
 
     void testCreatePageFail() {
@@ -131,7 +131,7 @@ class PageServiceTests {
     }
 
     void testGetMembers() {
-        def member = service.getMembers("0")
+        def member = service.getMembers("0", 0)
         assert member.size() == 0
     }
 

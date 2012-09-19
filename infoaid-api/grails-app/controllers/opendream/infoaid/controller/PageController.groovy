@@ -34,7 +34,8 @@ class PageController {
 
     def member() {
         def ret = [:]
-        def results = pageService.getMembers(params.slug)
+        def offset = params.offset ? params.offset : 0
+        def results = pageService.getMembers(params.slug, offset)
         ret.status = 1
         ret.members = results.collect{
             [

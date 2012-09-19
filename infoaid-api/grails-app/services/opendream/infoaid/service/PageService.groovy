@@ -164,9 +164,9 @@ class PageService {
         [needs: needs, totalNeeds: needs.totalCount]
     }
 
-    def getMembers(slug) {
+    def getMembers(slug, offset) {
         def page = Page.findBySlug(slug)
-        page.users
+        page.getUsers(offset)
     }
 
     def getTopMembers(slug) {
