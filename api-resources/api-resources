@@ -168,6 +168,17 @@ Example Response
 {"status":1,"message":"user admin post comment I got water (30 liter) on post water 20","userId":8185,"user":"admin","postId":10774,"post":"water 20","commentId":11140,"comment":"I got water (30 liter)"}
 --------------------------------------------------------------
 
+http://localhost:8080/infoaid-api/comment/$commentId/delete
+
+response [json]
+
+Example Request
+http://localhost:8080/infoaid-api/comment/$commentId/delete
+Example Response
+{"status":1,"message":"comment ${commentId} is deleted"}
+{"status":0,"message":"unauthorized user or not found comment"}
+--------------------------------------------------------------
+
 Resource URL
 http://localhost:8080/infoaid-api/page/$slug/status
 
