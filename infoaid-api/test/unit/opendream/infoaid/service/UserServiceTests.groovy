@@ -35,9 +35,8 @@ class UserServiceTests {
     void testCreateFail() {
         def userparams = [username: "", password: "nut", firstname: 'firstname', 
         lastname: 'lastname', dateCreated: new Date(), lastUpdated: new Date()]
-        shouldFail(RuntimeException) {
-            service.create(userparams)
-        }
+        def result = service.create(userparams)
+        assert "Password must have 7 to 20 character" == result.message
     }
 
     void testGetBasicInfo() {
