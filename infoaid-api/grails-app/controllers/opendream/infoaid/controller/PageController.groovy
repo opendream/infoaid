@@ -446,4 +446,12 @@ class PageController {
         def ret = pageService.disableComment(userId, commentId)
         render ret as JSON
     }
+
+    def isOwner() {
+        def userId = params.userId
+        def slug = params.slug
+
+        def result = pageService.isOwner(userId, slug)
+        render result as JSON
+    }
 }

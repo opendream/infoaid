@@ -68,7 +68,7 @@ class PageServiceTests {
     }      
 
 
-    void testCreatePageJoinPageLeavePageInactivePageSetRelationRemoveUserFromPage() {
+    void testCreatePageJoinPageLeavePageInactivePageSetRelationRemoveUserFromPageIsOwner() {
         def user = new User(username: 'admin', password: 'password', firstname: 'thawatchai', lastname: 'jong')
         user.save()
         def user2 = new User(username: 'admin2', password: 'password2', firstname: 'jong', lastname: 'thawatchai')
@@ -93,6 +93,9 @@ class PageServiceTests {
         page.save()
         assert page.location == location
         assert page.picOriginal == 'picOri'
+
+        def isOwner = service.isOwner(user.id, 'tmpSlug')
+        assert isOwner.isOwner == true
 
         def page2 = Page.get(4)
         assert page2.location == null
@@ -336,5 +339,5 @@ class PageServiceTests {
         assert pages.size() == 2
         assert pages[0].name == 'page2'
         assert pages[1].name == 'page1'
-    }    
+    }
 }

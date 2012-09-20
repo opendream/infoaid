@@ -515,4 +515,25 @@ class PageControllerTests {
         assert response.json['totalResults'] == 1
 
     }
+
+    void testIsOwner() {
+        controller.pageService = new PageService()
+
+        params.slug = 'page-slug'
+        def user1 = User.findByUsername('nut')
+        params.userId = user1.id
+
+        def result = controller.isOwner()
+        assert response.json['isOwner'] == true
+
+        response.reset()
+
+        def user2 = User.findByUsername('nut2')
+        params.userId = user2.id
+        params.slug = 'page-slug'
+
+        result = controller.isOwner()
+        println response.text
+        assert response.json['isOwner'] == false
+    }
 }

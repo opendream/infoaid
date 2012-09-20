@@ -202,6 +202,23 @@ class PageService {
         [page:page, pageUsers:pageUsers]
     }
 
+    def isOwner(userId, slug) {
+        def user = User.get(userId)
+        def page = Page.findBySlug(slug)
+
+        def pageUsers = PageUser.findByUserAndPage(user, page)
+        if(!pageUsers) {
+            [isOwner: false]
+        } else {
+            if(pageUsers.relation == PageUser.Relation.OWNER) {
+                [isOwner: true]
+            } else {
+                [isOwner: false]
+            }
+        }
+        
+    }
+
     def createNeed(userId, slug, itemId, quantity, message = "") {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
