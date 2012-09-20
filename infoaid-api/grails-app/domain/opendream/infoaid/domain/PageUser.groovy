@@ -17,10 +17,9 @@ class PageUser implements Serializable {
 
     public enum Relation {
     	OWNER,
-    	MEMBER,
-        MODERATOR
+    	MEMBER
     	static list() {
-    		[OWNER,MEMBER,MODERATOR]
+    		[OWNER,MEMBER]
     	}
     }
 
@@ -40,6 +39,23 @@ class PageUser implements Serializable {
     static PageUser get(long userId, long pageId) {
         PageUser.find 'from PageUser where user.id=:userId and page.id=:pageId',
             [userId: userId, pageId: pageId]
+    }
+
+    static PageUser removeUserFromPage(User user, Page page) {
+        def pageUser = PageUser.findByPageAndUser(page, user)
+        pageUser.delete(flush: true)
+    }
+
+    static PageUser setRelation(User user, Page page, String relation) {
+        def relationEnum
+        if(relation == 'Owner') {
+            relationEnum = Relation.OWNER
+        } else {
+            relationEnum = Relation.MEMBER
+        }
+        def pageUser = PageUser.findByPageAndUser(page, user)
+        pageUser.relation = relationEnum
+        pageUser.save(flush: true)
     }
 
     int hashCode() {

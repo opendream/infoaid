@@ -2,6 +2,7 @@
 
 class PageController extends IAController
 {
+
 	public $styles = array(
 		'page.scss',
 	);
@@ -17,6 +18,10 @@ class PageController extends IAController
 	
 	public function actionView($slug)
 	{
+       $this->scripts[] = 'main/postService.js';
+       $this->scripts[] = 'main/commentService.js';
+       $this->scripts[] = 'controllers.js';
+
 		$result = PageHelper::getInfoBySlug($slug);
 		if ($result) {
 			$this->render('info', array(
@@ -32,6 +37,20 @@ class PageController extends IAController
 	public function actionSearch()
 	{
 		$this->render('search');
+	}
+
+	public function actionMembers($slug)
+	{
+		$this->render('members');
+	}
+
+	public function actionRemoveMember()
+	{
+		$resultRemoveMember = API::getJSON('page/removeUserFromPage', array(
+			'userId'=>$userId
+			)
+		);
+		$this->render('members');
 	}
 
 }

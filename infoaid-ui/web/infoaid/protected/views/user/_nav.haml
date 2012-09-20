@@ -1,0 +1,7 @@
+%ul.nav.nav-list
+	%li.nav-header Edit
+
+	- foreach ($section_map as $key => $name)
+		%li{:class => "#{($key == $section) ? 'active' : ''}"}
+			%a{:href => "#{$baseUrl . $key}"}
+				=$name

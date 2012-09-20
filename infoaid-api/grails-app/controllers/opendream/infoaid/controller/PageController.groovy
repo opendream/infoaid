@@ -35,7 +35,8 @@ class PageController {
 
     def member() {
         def ret = [:]
-        def results = pageService.getMembers(params.slug)
+        def offset = params.offset ? params.offset : 0
+        def results = pageService.getMembers(params.slug, offset)
         ret.status = 1
         ret.members = results.collect{
             [
@@ -87,10 +88,10 @@ class PageController {
             params.max = 10
         }
         if(params.since) {
-            since = new Date().parse("yyyy-MM-dd H:m", params.since)
+            since = new Date().parse("yyyy-MM-dd HH:mm", params.since)
         }
         if(params.until) {
-            until = new Date().parse("yyyy-MM-dd H:m", params.until)
+            until = new Date().parse("yyyy-MM-dd HH:mm", params.until)
         }
         def posts = pageService.getPosts(params.slug, params.fromId, params.toId, since, until, params.max, params.type=null)
         if(posts) {
@@ -128,10 +129,10 @@ class PageController {
             params.max = 10
         }
         if(params.since) {
-            since = new Date().parse("yyyy-MM-dd H:m", params.since)
+            since = new Date().parse("yyyy-MM-dd HH:mm", params.since)
         }
         if(params.until) {
-            until = new Date().parse("yyyy-MM-dd H:m", params.until)
+            until = new Date().parse("yyyy-MM-dd HH:mm", params.until)
         }
         def posts = pageService.getTopPost(params.slug, params.fromId, params.toId, since, until, params.max)
         if(posts) {
@@ -170,10 +171,10 @@ class PageController {
             params.max = 10
         }
         if(params.since) {
-            since = new Date().parse("yyyy-MM-dd H:m", params.since)
+            since = new Date().parse("yyyy-MM-dd HH:mm", params.since)
         }
         if(params.until) {
-            until = new Date().parse("yyyy-MM-dd H:m", params.until)
+            until = new Date().parse("yyyy-MM-dd HH:mm", params.until)
         }
         def posts = pageService.getRecentPost(params.slug, params.fromId, params.toId, since, until, params.max)
         if(posts) {
@@ -294,7 +295,36 @@ class PageController {
             pageService.leavePage(userId, slug)
             ret = [status: 1, message: "user id: ${userId} left from page: ${slug}"]
             render ret as JSON
-        }        
+        }     
+    }
+
+    def removeUserFromPage() {
+        def userId = params.userId
+        def slug = params.slug
+        def ret
+        if(!userId || !slug) {
+            ret = [status: 0, message: "user id: ${userId} could not remove from page: ${slug}"]
+            render ret as JSON
+        } else {
+            pageService.removeUserFromPage(userId, slug)
+            ret = [status: 1, message: "user id: ${userId} removed from page: ${slug}"]
+            render ret as JSON
+        }
+    }
+
+    def setRelation() {
+        def userId = params.userId
+        def slug = params.slug
+        def relation = params.relation
+        def ret
+        if(!userId || !slug) {
+            ret = [status: 0, message: 'Can not change relation']
+            render ret as JSON
+        } else {
+            pageService.setRelation(userId, slug, relation)
+            ret = [status: 1, message: "user id: ${userId} had change relation to ${relation}"]
+            render ret as JSON
+        }
     }
 
     def postMessage() {

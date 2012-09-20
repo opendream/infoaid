@@ -94,10 +94,10 @@ class PageControllerTests {
     }
 
     void testMember() {
-        pageService.demand.getMembers(1..1) {slug -> Page.findBySlug(slug).users}
-        controller.pageService = pageService.createMock()
+        controller.pageService = new PageService()
 
         params.slug = 'page-slug'
+        params.offset = 0
         controller.member()
 
         assert response.json['members'].size() == 2
@@ -181,7 +181,7 @@ class PageControllerTests {
     void testJoinUs() {
         def user3 = new User(username: "nut3", password: "nut3", firstname: 'firstname3', lastname: 'lastname3').save(flush: true)
         def testPage = Page.findBySlug('page-slug')
-        assert 2 == testPage.users.size()
+        assert 2 == testPage.getUsers(0).size()
         pageService.demand.joinPage(1..1) {userId, slug -> 
             def user = User.get(userId)
             def page = Page.findBySlug(slug)
@@ -195,8 +195,8 @@ class PageControllerTests {
         controller.joinUs()
 
         testPage = Page.findBySlug('page-slug')
-        assert 3 == testPage.users.size()
-        assert PageUser.Relation.MEMBER == testPage.users.last().relation
+        assert 3 == testPage.getUsers(0).size()
+        assert PageUser.Relation.MEMBER == testPage.getUsers(0).last().relation
         assert "nut3" == response.json.user
         assert "page" == response.json.page
         assert "page-slug" == response.json.pageSlug
@@ -237,7 +237,9 @@ class PageControllerTests {
         assert null == response.json['posts']
 
         response.reset()
-        params.until = '2012-09-19 15:07'
+        params.slug = 'page-slug'
+        params.since = '2012-09-12 15:07'
+        params.until = '2020-09-12 15:07'
         controller.recentPost()
         
         assert 4 == response.json['posts'].size()
@@ -302,6 +304,34 @@ class PageControllerTests {
 
         assert 1 == response.json.status
         assert "user id: 1 left from page: page-slug" == response.json.message
+    }
+
+    void testRemoveUserFromPage() {
+        assert 3 == PageUser.count()
+
+        controller.pageService = new PageService()
+
+        params.userId = 1
+        params.slug = 'page-slug'
+        controller.removeUserFromPage()
+
+        assert 2 == PageUser.count()
+
+        assert 1 == response.json.status
+    }
+
+    void testSetRelation() {
+        controller.pageService = new PageService()
+
+        params.userId = 1
+        params.slug = 'page-slug'
+        params.relation = 'Member'
+
+        controller.setRelation()
+
+        def pageUser = PageUser.get(1)
+
+        assert pageUser.relation == PageUser.Relation.MEMBER
     }
 
     void testPostComment() {

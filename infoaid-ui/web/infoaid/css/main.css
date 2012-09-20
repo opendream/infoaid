@@ -367,10 +367,35 @@ div.search-form
 .li-add-group
 {
 	margin-top: 10px;
-	background: no-repeat url('/infoaid/media/icons/add_group.gif');	
+	background: no-repeat url('/infoaid/media/icons/add_group.gif');
 }
 
 .btn-joinus
 {
 	margin-left:35px;
+}
+
+<<<<<<< HEAD
+.page-members
+{
+	margin: 20px 5px 20px 5px;
+}
+
+.page-members-text
+{
+	margin-left: 10px;
+}
+
+.page-members-pic
+{
+	float: left;
+}
+
+.page-members-menu
+{
+	padding-left: 10px;
+}
+
+.form-group > legend {
+	text-indent: 12px;
 }

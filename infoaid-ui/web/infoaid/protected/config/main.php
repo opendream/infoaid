@@ -61,6 +61,8 @@ return array(
 			'rules'=>array(
 				''=>'front/index',
 				'user/register'=>'user/create',
+				'user/doEdit/<section:\w+>'=>'user/doEdit',
+				'user/edit/<section:\w+>'=>'user/edit',
 
 				'api/post/<id:\d+>/<method:\w+>'=>'api/post',
 				'api/page/<slug:[^\/]*>/<method:\w+>'=>'api/page',
@@ -97,7 +99,7 @@ return array(
 			'routes'=>array(
 				array(
 					'class'=>'CFileLogRoute',
-					'levels'=>'error, warning',
+					'levels'=>'debug, error, warning',
 				),
 				// uncomment the following to show log messages on web pages
 				
@@ -154,7 +156,7 @@ return array(
 		'adminEmail'=>'webmaster@example.com',
 
 		'api'=>array(
-			'server'=>'http://192.168.1.123:8080/infoaid-api/',
+			'server'=>'http://192.168.1.131:8080/infoaid-api/',
 			//'port'=>8080,
 		),
 

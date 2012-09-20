@@ -68,7 +68,7 @@ class PageServiceTests {
     }      
 
 
-    void testCreatePageJoinPageLeavePageInactivePage() {
+    void testCreatePageJoinPageLeavePageInactivePageSetRelationRemoveUserFromPage() {
         def user = new User(username: 'admin', password: 'password', firstname: 'thawatchai', lastname: 'jong')
         user.save()
         def user2 = new User(username: 'admin2', password: 'password2', firstname: 'jong', lastname: 'thawatchai')
@@ -103,14 +103,21 @@ class PageServiceTests {
         assert pageUser.relation == PageUser.Relation.OWNER
 
         service.joinPage(user2.id, "tmpSlug")
-        assert page.users.size() == 2
+        assert page.getUsers(0).size() == 2
 
         service.inactivePage(user.id, "tmpSlug")
         def pageStatus = Page.get(page.id).status
         assert pageStatus == Page.Status.INACTIVE
 
         service.leavePage(user2.id, "tmpSlug")
-        assert page.users.size() == 1
+        assert page.getUsers(0).size() == 1
+
+        service.setRelation(user.id, 'tmpSlug', 'Member')
+        pageUser = PageUser.get(1)
+        assert pageUser.relation == PageUser.Relation.MEMBER
+
+        service.removeUserFromPage(user.id, "tmpSlug")
+        assert page.getUsers(0).size() == 0
     }
 
     void testCreatePageFail() {
@@ -130,7 +137,7 @@ class PageServiceTests {
     }
 
     void testGetMembers() {
-        def member = service.getMembers("0")
+        def member = service.getMembers("0", 0)
         assert member.size() == 0
     }
 

@@ -1,75 +1,72 @@
-<?php
-	$session = new CHttpSession;
-	$session->open();
-?>
-<div id='user-edit'>
-	<header class="edit">
-		<div class='user-edit-header'><span>Edit Profile</span></div>
-	</header>
-	<div class="flash-message">
-		<?php
-			if( Yii::app()->user->hasFlash('error') ) {
-		?>
-		<span class="alert alert-error">
-			<?php
-					echo Yii::app()->user->getFlash('error');
-				}
-			?>
-		</span>
+<div id='user-edit' class="container-fluid user-edit-wrapper">
+<div class="row-fluid">
+
+	<div class="span3 well">
+		<?php $this->renderPartial('_nav', array(
+			'baseUrl' => Yii::app()->baseUrl .'/user/edit/',
+			'section_map' => $section_map,
+			'section' => $section,
+		)); ?>
 	</div>
-	<div id='form-edit'>
-		<form class="form-horizontal" method='post' action='doEdit'>
-			<div class="control-group">
-			    <label class="control-label" for="input-username">Username</label>
-			    <div class="controls">
-			      <label id="username"><?php echo $session['username']; ?></label>
-			    </div>
-			</div>
 
-			<div class="control-group">
-			    <div id='pic-original'></div>
-			    <div class="controls">
-			      <input type="file" id="input-pic-original" name='pic-original'>
-			    </div>
-			</div>
+	<div class="content-main span9">
+		<header class="page-header">
+			<h1>Edit <?php echo $section_name; ?></h1>
+		</header>
 
-			<div class="control-group">
-			    <label class="control-label" for="input-firstname">Firstname</label>
-			    <div class="controls">
-			      <input type="text" id="input-firstname" value="<?php echo $firstname; ?>" name='firstname' placeholder="Firstname">
-			    </div>
-			</div>
+		<div class="flash-message">
+			<?php if( Yii::app()->user->hasFlash('error') ): ?>
+				<div class="alert alert-error">
+					<?php echo Yii::app()->user->getFlash('error'); ?>
+				</div>
+			<?php endif; ?>
 
-			<div class="control-group">
-			    <label class="control-label" for="input-lastname">Lastname</label>
-			    <div class="controls">
-			      <input type="text" id="input-lastname" value="<?php echo $lastname; ?>" name='lastname' placeholder="Lastname">
-			    </div>
-			</div>
+			<?php if( Yii::app()->user->hasFlash('success') ): ?>
+				<div class="alert alert-success">
+					<?php echo Yii::app()->user->getFlash('success'); ?>
+				</div>
+			<?php endif; ?>
+		</div>
 
-			<div class="control-group">
-			    <label class="control-label" for="input-email">Email</label>
-			    <div class="controls">
-			      <input type="text" id="input-email" value="<?php echo $email; ?>" name='email' placeholder="Email">
-			    </div>
-			</div>
+		<div id='form-edit'>
+			<?php if ($section == 'password'): ?>
+				<form class="form-horizontal" method='POST' action='<?php echo $this->createUrl("user/doEdit/$section"); ?>' ng-controller="editPasswordController" ng-submit="submit()">
+			<?php else: ?>
+				<form class="form-horizontal" method='POST' action='<?php echo $this->createUrl("user/doEdit/$section"); ?>'>
+			<?php endif; ?>
 
-			<div class="control-group">
-			    <label class="control-label" for="input-tel">Tel No.</label>
-			    <div class="controls">
-			      <input type="text" id="input-tel" value="<?php echo $tel; ?>" name='tel' placeholder="Tel No.">
-			    </div>
-			</div>
 
-			<div class="control-group">
-			    <div class="controls">
-			      <button type="submit" class="btn">Edit</button>
-			    </div>
-			</div>
-			
-		</form>
+				<input type="hidden" name="section" value="<?php echo $section; ?>" />
+
+				<?php if ($section == 'account'): ?>
+					<?php $this->renderPartial('_form_user_email'); ?>
+
+				<?php elseif ($section == 'personal'): ?>
+					<?php $this->renderPartial('_form_personal', array(
+						'no_legend' => true,
+					)); ?>
+
+				<?php elseif ($section == 'password'): ?>
+					<?php $this->renderPartial('_form_edit_password'); ?>
+
+				<?php elseif ($section == 'photo'): ?>
+					<?php $this->renderPartial('_form_photo', array(
+						'no_legend' => true,
+					)); ?>
+
+				<?php endif; ?>
+
+				<hr />
+
+				<div class="control-group">
+				    <div class="controls">
+				      <button type="submit" class="btn">Save</button>
+				    </div>
+				</div>
+				
+			</form>
+		</div>
 	</div>
+
 </div>
-<?php
-	$session->close();
-?>
+</div>

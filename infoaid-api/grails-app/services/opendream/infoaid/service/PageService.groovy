@@ -128,6 +128,28 @@ class PageService {
         }
     }
 
+    def removeUserFromPage(userId, slug) {
+        def user = User.get(userId)
+        def page = Page.findBySlug(slug)
+        try {
+            PageUser.removeUserFromPage(user, page)
+        } catch (e) {
+            log.error e
+            throw e
+        }
+    }
+
+    def setRelation(userId, slug, relation) {
+        def user = User.get(userId)
+        def page = Page.findBySlug(slug)
+        try {
+            PageUser.setRelation(user, page, relation)
+        } catch (e) {
+            log.error e
+            throw e
+        }
+    }
+
     def inactivePage(userId, slug) {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
@@ -164,9 +186,9 @@ class PageService {
         [needs: needs, totalNeeds: needs.totalCount]
     }
 
-    def getMembers(slug) {
+    def getMembers(slug, offset) {
         def page = Page.findBySlug(slug)
-        page.users
+        page.getUsers(offset)
     }
 
     def getTopMembers(slug) {
