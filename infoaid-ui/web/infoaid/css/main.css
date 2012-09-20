@@ -375,6 +375,7 @@ div.search-form
 	margin-left:35px;
 }
 
+<<<<<<< HEAD
 .page-members
 {
 	margin: 20px 5px 20px 5px;
@@ -393,4 +394,8 @@ div.search-form
 .page-members-menu
 {
 	padding-left: 10px;
+}
+
+.form-group > legend {
+	text-indent: 12px;
 }

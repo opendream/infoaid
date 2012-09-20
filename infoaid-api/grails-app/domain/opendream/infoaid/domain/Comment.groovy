@@ -6,6 +6,7 @@ class Comment {
     Date dateCreated
     Date lastUpdated
     User user
+    boolean enabled = true
 
     static belongsTo = [post:Post]
 

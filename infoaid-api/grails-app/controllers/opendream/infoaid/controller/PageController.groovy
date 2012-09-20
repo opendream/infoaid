@@ -4,6 +4,7 @@ import grails.converters.JSON
 
 class PageController {
     def pageService
+    def springSecurityService
 
     def index() { }
 
@@ -186,6 +187,7 @@ class PageController {
                     userId: it.createdBy.id,
                     comments: it.previewComments.comments.collect {
                         [
+                            id: it.id,
                             message: it.message,
                             createdBy: it.user.username,
                             userId: it.user.id,
@@ -368,7 +370,8 @@ class PageController {
             def result = pageService.postComment(userId, postId, message)
             ret = [status: 1, message: "user ${result.user.username} post comment ${result.comment.message} on post ${result.post.message}",
             userId: result.user.id, user: result.user.username, postId: result.post.id, 
-            post: result.post.message, commentId: result.comment.id, comment: result.comment.message]
+            post: result.post.message, commentId: result.comment.id, comment: result.comment.message,
+            picSmall: result.user.picSmall, lastUpdated: result.comment.lastUpdated]
         }
         render ret as JSON
     }    
@@ -427,6 +430,19 @@ class PageController {
             ret.totalResults = pages.size()
         }
         
+        render ret as JSON
+    }
+
+    def disableComment() {
+        def commentId = params.commentId
+        def userId = params.userId
+        if(params.userId) {
+            userId = params.long('userId')
+        } else {
+            userId = springSecurityService?.principal?.id
+        } 
+        //def userId = springSecurityService?.principal?.id
+        def ret = pageService.disableComment(userId, commentId)
         render ret as JSON
     }
 }

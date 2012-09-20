@@ -6,6 +6,8 @@ class IAController extends CController
 	
 	public $angular = TRUE;
 
+	public $scripts = array();
+
 	public $styles = array();
 
 	public $jsLocale = array(
@@ -26,9 +28,14 @@ class IAController extends CController
 	public function init()
 	{
 		parent::init();
-		$this->_app = Yii::app();
-
 		$this->initLang();
+	}
+
+	public function beforeRender($view)
+	{
+		parent::beforeRender($view);
+		$this->_app = Yii::app();
+		$this->injectLocale();
 
 		if ($this->jquery == TRUE) {
 			Yii::app()->clientScript
@@ -50,10 +57,27 @@ class IAController extends CController
 				->registerScriptFile(Yii::app()->baseUrl .'/js/timeago.js');
 		}
 
-		foreach ($this->styles as $style) {
+		foreach ($this->scripts as $script) {
 			Yii::app()->clientScript
-				->registerCssFile(Yii::app()->baseUrl .'/css/'. $style);
+				->registerScriptFile(Yii::app()->baseUrl .'/js/'. $script);
 		}
+
+		foreach ($this->styles as $style) {
+
+			if (pathinfo($style, PATHINFO_EXTENSION) === 'scss') {
+				$publishedURL = Yii::app()->getAssetManager()->publish(
+					Yii::app()->basePath .'/../css/'. $style
+				);
+			}
+			else {
+				$publishedURL = Yii::app()->baseUrl .'/css/'. $style;
+			}
+
+			Yii::app()->clientScript
+				->registerCssFile($publishedURL);
+		}
+
+		return true;
 	}
 
 	public function initLang()
@@ -62,8 +86,11 @@ class IAController extends CController
 
 		if (isset($_GET['lang']) && in_array($_GET['lang'], $allowed_language)) {
 			Yii::app()->language = $_GET['lang'];
-		}
+		}		
+	}
 
+	public function injectLocale()
+	{
 		if ($this->jquery) {
 			$this->injectLocaleInJS();
 		}

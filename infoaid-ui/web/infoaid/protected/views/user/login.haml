@@ -1,0 +1,27 @@
+#user-login
+
+	%header.page-header
+		%h1 Login
+
+	.flash-message-error
+		- if (Yii::app()->user->hasFlash('error'))
+			%div.alert.alert-error
+				:php
+					echo Yii::app()->user->getFlash('error');
+
+	%form.form-horizontal{:method => "POST"}
+
+		.control-group
+			%label.control-label{:for => "username"}
+				Username
+			.controls
+				%input#username{:type => "text", :value => "", :required => true, :name => "username"}
+
+		.control-group
+			%label.control-label{:for => "password"}
+				Password
+			.controls
+				%input#password{:type => "password", :value => "", :required => true, :name => "password"}
+
+		.form-actions
+			%button.btn.btn-primary{:type => "submit"} Login

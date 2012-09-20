@@ -52,4 +52,15 @@ class ApiController extends IAController
 		$resultNeeds = API::getJSON('page/'.urlencode($slug).'/top_members');
 		$this->renderJSON($resultNeeds);
 	}
+
+	public function actionComment($userId, $postId, $message) {
+		$params = array('userId'=>$userId, 'postId'=>$postId, 'message'=>$message);
+		$resultJson = API::post('post/comment', $params, 'json');
+		$this->renderJSON($resultJson);
+	}
+
+	public function actionDeleteComment($commentId, $userId) {
+		$resultJson = API::getJSON('comment/'.$commentId.'/delete', array('userId'=>$userId));
+		$this->renderJSON($resultJson);
+	}
 }

@@ -34,8 +34,8 @@ class PageServiceTests {
         def date2 = new Date()-20
         
         def page = new Page(name: "page1", lat: "page1", lng: "page1", 
-            dateCreated: date, lastUpdated: date, about: 'this is page 1', picOriginal: 'picOri', picSmall: 'picSma',
-            picLarge: 'picLar')
+            dateCreated: date, lastUpdated: date, about: 'this is page 1', 
+            picOriginal: 'picOri', picSmall: 'picSma', picLarge: 'picLar')
         def user1 = new User(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
         def user2 = new User(username: "nut2", password: "nut2", firstname: 'firstname2', lastname: 'lastname2').save()
         
@@ -43,10 +43,10 @@ class PageServiceTests {
             dateCreated: date, lastUpdated: date)
         
         def post = new Post(message: 'post1',dateCreated: date, lastUpdated: date, 
-            lastActived: date, createdBy: 'nut', updatedBy: 'boy')
+            lastActived: date, createdBy: user1, updatedBy: user2)
 
         def post2 = new Post(message: 'post2', dateCreated: date, lastUpdated: date, 
-            lastActived: date2, createdBy: 'yo', updatedBy: 'boy')
+            lastActived: date2, createdBy: user2, updatedBy: user1)
         page.addToPosts(post)
         page.addToPosts(post2)
 
@@ -60,7 +60,6 @@ class PageServiceTests {
     }
 
     void testGetInfo() {
-
         def info = service.getInfo(0)
         
         assert info.name == 'page1'
@@ -337,5 +336,5 @@ class PageServiceTests {
         assert pages.size() == 2
         assert pages[0].name == 'page2'
         assert pages[1].name == 'page1'
-    }
+    }    
 }

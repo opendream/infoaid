@@ -1,9 +1,4 @@
-<div id="page-<?php echo $page->id; ?>" class="page-info">	
-	<?php Yii::app()->clientScript
-       ->registerScriptFile(Yii::app()->baseUrl .'/js/main/postService.js')
-       ->registerScriptFile(Yii::app()->baseUrl .'/js/main/commentService.js')
-       ->registerScriptFile(Yii::app()->baseUrl .'/js/controllers.js')       
-	; ?>
+<div id="page-<?php echo $page->id; ?>" class="page-info">
 
 		<header class="info">
 			<?php $this->renderPartial('header', array('slug'=>$slug,'id'=>$page->id)); ?>

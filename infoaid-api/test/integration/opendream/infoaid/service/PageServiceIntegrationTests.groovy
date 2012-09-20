@@ -14,7 +14,6 @@ class PageServiceIntegrationTests {
     @Before
     void setup() {
         date = new Date()-19
-        println date
         def date2 = new Date()-20
 
         def user1 = new User(username: "nut", password: "nut", firstname: 'firstname', 
@@ -141,6 +140,33 @@ class PageServiceIntegrationTests {
 
         def newComment = pageService.getComments(updatedPost.id, null, null, null, null).comments.last().message
         assert newComment == message
+    }
+
+    @Test
+    void testDisableComment() {
+        def nut = User.findByUsername("nut")
+        def post = Post.findByMessage('post1')
+                
+        pageService.postComment(nut.id, post.id, 'first comment')
+        pageService.postComment(nut.id, post.id, 'second comment')
+        assert 2 == post.comments.size()
+        assert 2 == post.conversation
+
+        def firstComment = Comment.findByMessage('first comment')
+        def result = pageService.disableComment(nut.id, firstComment.id)
+        assert 2 == post.comments.size()
+        assert 1 == post.conversation
+        assert false == firstComment.enabled
+        assert 1 == result.status
+        assert "comment ${firstComment.id} is deleted" == result.message
+
+        def secondComment = Comment.findByMessage('second comment')
+        result = pageService.disableComment(0, secondComment.id)
+        assert 2 == post.comments.size()
+        assert 1 == post.conversation
+        assert true == secondComment.enabled
+        assert 0 == result.status
+        assert "unauthorized user or not found comment" == result.message
     }
 
     @Test

@@ -8,6 +8,7 @@
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'InfoAid',
+	'defaultController'=>'front',
 
 	'language'=>'en',
 
@@ -41,6 +42,8 @@ return array(
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
+			'loginUrl'=>'user/login',
+			'returnUrl'=>'/',
 		),
 		// uncomment the following to enable URLs in path-format
 		/*
@@ -57,13 +60,17 @@ return array(
 			'urlFormat'=>'path',
 			'rules'=>array(
 				''=>'front/index',
-				'site/<action:\w+>'=>'front/<action>',
+				'user/register'=>'user/create',
+				'user/doEdit/<section:\w+>'=>'user/doEdit',
+				'user/edit/<section:\w+>'=>'user/edit',
 
 				'api/post/<id:\d+>/<method:\w+>'=>'api/post',
 				'api/page/<slug:[^\/]*>/<method:\w+>'=>'api/page',
 				'api/members/<slug:[^\/]*>'=>'api/members',
 				'page/search'=>'page/search',
 				'page/<slug:[^\/]*>'=>'page/view',
+				'/api/comment'=>'/api/comment',
+				'/api/deleteComment/<commentId:\d+>'=>'/api/deleteComment',
 
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
@@ -92,7 +99,7 @@ return array(
 			'routes'=>array(
 				array(
 					'class'=>'CFileLogRoute',
-					'levels'=>'error, warning',
+					'levels'=>'debug, error, warning',
 				),
 				// uncomment the following to show log messages on web pages
 				
@@ -109,6 +116,37 @@ return array(
 			'language'=>'en_us',
 			'basePath'=>dirname(__FILE__).'/../messages',
 		),
+
+		'viewRenderer'=>array(
+			'class'=>'ext.phamlp.Haml',
+
+			// delete options below in production
+			'ugly' => false,
+			'style' => 'nested',
+			'debug' => true,
+			'cache' => false,
+		),
+
+		'assetManager' => array(
+			'class' => 'ext.phamlp.PBMAssetManager',
+			'parsers' => array(
+				'scss' => array(
+					'class' => 'ext.phamlp.Sass',
+					'output' => 'css',
+					'options' => array(
+						'style' => 'nested',
+					),
+				)
+			),
+		),
+
+		'cache'=>array(
+			'class'=>'system.caching.CMemCache',
+			'useMemcached'=>true,
+			'servers'=>array(
+				array('host'=>'localhost','port'=>11211),
+			),
+		),
 	),
 
 	// application-level parameters that can be accessed
@@ -118,8 +156,8 @@ return array(
 		'adminEmail'=>'webmaster@example.com',
 
 		'api'=>array(
-			'server'=>'http://localhost/',
-			'port'=>8080,
+			'server'=>'http://192.168.1.131:8080/infoaid-api/',
+			//'port'=>8080,
 		),
 
 		'allowed_language' => array('en', 'th'),
