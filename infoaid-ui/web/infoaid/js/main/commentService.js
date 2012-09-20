@@ -15,6 +15,10 @@ angular.module('commentService', ['ngResource']).
 	factory('PostMessage', function ($resource) {
 		var PostMessage = $resource(baseUrl + '/api/postMessage');
 		return PostMessage;
+	}).
+	factory('DeletePost', function ($resource) {
+		var DeletePost = $resource(baseUrl + '/api/deletePost/:postId');
+		return DeletePost;
 	});
 
 function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post) {
@@ -107,9 +111,8 @@ function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post) {
 }
 
 
-function PostMessageCtrl($scope, PostMessage, Post) {
+function PostMessageCtrl($scope, PostMessage, Post, DeletePost) {
 	$scope.postMessage = function() {
-		console.log($scope.slug+' '+$scope.memberId+' '+$scope.message);
 		if ($scope.message && $scope.memberId) {	
 			var options = {
 				slug: $scope.slug,
@@ -122,6 +125,16 @@ function PostMessageCtrl($scope, PostMessage, Post) {
 				refresh();	
 				$scope.message = '';				
 			});							
+		}
+	}
+
+	$scope.deletePost = function(post) {
+		console.log(post.id, this.memberId);
+		if(post.id) {
+			var options = { postId: post.id, userId: this.memberId };
+			DeletePost.get(options, function (ret) {	
+				refresh();					
+			});
 		}
 	}
 
