@@ -11,6 +11,10 @@ angular.module('commentService', ['ngResource']).
 	factory('DeleteComment', function ($resource) {
 		var DeleteComment = $resource(baseUrl + '/api/deleteComment/:commentId');
 		return DeleteComment;
+	}).
+	factory('PostMessage', function ($resource) {
+		var PostMessage = $resource(baseUrl + '/api/postMessage');
+		return PostMessage;
 	});
 
 function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post) {
@@ -67,8 +71,8 @@ function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post) {
 				$scope.comments.splice(0, 1);				
 			});							
 		}
-	};
-	
+	}
+
 	$scope.deleteComment = function(comment) {
 		if(comment.id) {
 			var options = { commentId: comment.id, userId: this.memberId };
@@ -85,6 +89,8 @@ function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post) {
 		}		
 	}
 
+	
+
 	function refresh() {
 		Post.query({slug:$scope.slug}, function (posts) {					 
 			var i = 0;
@@ -98,4 +104,39 @@ function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post) {
 			});					
 		});
 	}
+}
+
+
+function PostMessageCtrl($scope, PostMessage, Post) {
+	$scope.postMessage = function() {
+		console.log($scope.slug+' '+$scope.memberId+' '+$scope.message);
+		if ($scope.message && $scope.memberId) {	
+			var options = {
+				slug: $scope.slug,
+				userId: $scope.memberId, 
+				message: $scope.message
+			};
+			
+			PostMessage.get(options, function (ret) {	
+				console.log(ret);
+				refresh();	
+				$scope.message = '';				
+			});							
+		}
+	}
+
+	function refresh() { // duplicated function need to fix!
+		Post.query({slug:$scope.slug}, function (posts) {					 
+			var i = 0;
+			angular.forEach(posts, function(post) {
+				if($scope.posts.length > i) {
+					$scope.posts.splice(i, 1, post);
+				} else {
+					$scope.posts.push(post);
+				}
+				i++;
+			});					
+		});
+	}
+
 }
