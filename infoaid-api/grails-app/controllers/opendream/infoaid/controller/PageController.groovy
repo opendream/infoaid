@@ -436,7 +436,7 @@ class PageController {
 
     def disableComment() {
         def commentId = params.commentId
-        def userId = params.userId
+        def userId
         if(params.userId) {
             userId = params.long('userId')
         } else {
@@ -444,6 +444,19 @@ class PageController {
         } 
         //def userId = springSecurityService?.principal?.id
         def ret = pageService.disableComment(userId, commentId)
+        render ret as JSON
+    }
+
+    def disablePost() {
+        def postId = params.postId
+        def userId
+        if(params.userId) {
+            userId = params.long('userId')
+        } else {
+            userId = springSecurityService?.principal?.id
+        } 
+        //def userId = springSecurityService?.principal?.id
+        def ret = pageService.disablePost(userId, postId)
         render ret as JSON
     }
 }
