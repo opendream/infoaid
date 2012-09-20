@@ -72,6 +72,7 @@ return array(
 				'/api/comment'=>'/api/comment',
 				'/api/deleteComment/<commentId:\d+>'=>'/api/deleteComment',
 				'/api/postMessage'=>'/api/postMessage',
+				'/api/deletePost/<postId:\d+>'=>'/api/deletePost',
 
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
