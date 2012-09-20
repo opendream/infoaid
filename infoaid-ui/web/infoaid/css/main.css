@@ -314,9 +314,27 @@ div.search-form
 	margin-top: 20px;
 }
 
+.page-status-update
+{
+	float:left;
+	margin-left: 10px;
+}
+
+.page-sidebar
+{
+	padding-top: 20px;
+	float: left;
+	width: 150px;
+	min-height: 500px;
+}
+
+.page-sidebar-joinus
+{
+	padding-top: 40px;
+}
+
 .page-sidebar-places-header
 {
-	padding-left: 5px;
 	font-size: 11px;
 	font-weight: bold;
 }
@@ -340,7 +358,7 @@ div.search-form
 
 .page-sidebar-profile
 {
-	padding-left: 5px;
+	padding-left: 10px;
 }
 
 .page-sidebar-profile-username

@@ -49,7 +49,8 @@ class PageController {
                 relation: it.relation.toString(),
                 picOriginal: it.user.picOriginal,
                 picLarge: it.user.picLarge,
-                picSmall: it.user.picSmall
+                picSmall: it.user.picSmall,
+                relation: it.relation.toString()
             ]
         }
         ret.totalMembers = results.size()
@@ -458,5 +459,13 @@ class PageController {
         //def userId = springSecurityService?.principal?.id
         def ret = pageService.disablePost(userId, postId)
         render ret as JSON
+    }
+
+    def isOwner() {
+        def userId = params.userId
+        def slug = params.slug
+
+        def result = pageService.isOwner(userId, slug)
+        render result as JSON
     }
 }
