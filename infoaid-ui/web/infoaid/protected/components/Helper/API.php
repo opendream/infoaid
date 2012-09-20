@@ -83,19 +83,23 @@ class API
 			$rest->http_pass = self::$http_pass;
 		}
 		else {
-			$cache_key = Yii::app()->user->getState('cache_key');
-			$data = Yii::app()->cache->get($cache_key);
+			$user_cache_key = Yii::app()->user->getState('user_cache_key');
 
-			$username = $data['username'];
-			$password = $data['password'];
+			if ($user_cache_key) {
+				$data = Yii::app()->cache->get($user_cache_key);
 
-			$rest->http_user = $username;
-			$rest->http_pass = $password;
+				$username = $data['username'];
+				$password = $data['password'];
+
+				$rest->http_user = $username;
+				$rest->http_pass = $password;
+			}
 		}
 		$rest->http_auth = 'Basic';
 
 		if (self::isMethodAllowed($method)) {
 			$result = $rest->$method($uri, $params, $format);
+			$rest->debug();
 
 			$dbg_msg  = strtoupper($method) ." $uri";
 			$dbg_msg .= "\nAUTHENTICATION = ";
@@ -108,6 +112,10 @@ class API
 			$dbg_msg .= print_r($result, 1);
 
 			Yii::log($dbg_msg, 'debug', 'API');
+
+			if ($rest->status() != 200) {
+				return false;
+			}
 		}
 
 		return $result;

@@ -154,9 +154,12 @@ class UserController extends IAController
 
 		if ($resultEditPassword->message == 'password is updated') {
 			Yii::app()->user->setFlash('success', 'Password is Updated');
+
+			UserHelper::updateCachedPassword(Yii::app()->user->getId(), Yii::app()->user->getName(), $newPassword);
 		}
 		else {
-			Yii::app()->user->setFlash('error', $resultEditPassword->message);
+			$message = $resultEditPassword->message ?: "There's something wrong, please try again";
+			Yii::app()->user->setFlash('error', $message);
 		}
 
 		$this->redirect($editPasswordUrl);
