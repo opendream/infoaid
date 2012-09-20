@@ -1,15 +1,17 @@
 <div id="page-<?php echo $page->id; ?>" class="page-info">
 
 		<header class="info">
-			<?php $this->renderPartial('header', array('slug'=>$slug,'id'=>$page->id)); ?>
+			<div>
+				<?php $this->renderPartial('sidebar'); ?>
+			</div>
+			<div>
+				<?php $this->renderPartial('header', array('slug'=>$slug,'id'=>$page->id)); ?>
+			</div>
 		</header>
 		
 		<div class="row" ng-app="post">				
 			<div ng-init="slug='<?php echo $slug ?>'"></div>
-			<div>
-				<?php $this->renderPartial('sidebar'); ?>
-			</div>
-			<div class="span8">
+			<div class="span7">
 				<section class="posts" >
 					<header>
 						<h1>Status Update</h1>
