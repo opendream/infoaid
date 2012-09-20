@@ -49,7 +49,8 @@ class PageController {
                 relation: it.relation.toString(),
                 picOriginal: it.user.picOriginal,
                 picLarge: it.user.picLarge,
-                picSmall: it.user.picSmall
+                picSmall: it.user.picSmall,
+                relation: it.relation.toString()
             ]
         }
         ret.totalMembers = results.size()
