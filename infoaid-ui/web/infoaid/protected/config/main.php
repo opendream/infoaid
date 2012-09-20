@@ -71,6 +71,7 @@ return array(
 				'page/<slug:[^\/]*>'=>'page/view',
 				'/api/comment'=>'/api/comment',
 				'/api/deleteComment/<commentId:\d+>'=>'/api/deleteComment',
+				'/api/postMessage'=>'/api/postMessage',
 
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
