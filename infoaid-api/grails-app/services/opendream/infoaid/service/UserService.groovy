@@ -44,12 +44,10 @@ class UserService {
 
     def updatePassword(updateparams) {
         def passLength = updateparams['newPassword'].size()
-        println updateparams
         if(passLength < 7 || passLength > 20) {
             log.error "password confirmation mismatch"
             return [message: "Password must have 7 to 20 character"]
         }
-        println "${updateparams.newPassword} != ${updateparams.confirmedPassword}"
         if(updateparams.newPassword != updateparams.confirmedPassword) {
             log.error "password confirmation mismatch"
             //throw RuntimeException("password confirmation mismatch")

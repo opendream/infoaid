@@ -35,7 +35,8 @@ class PageController {
 
     def member() {
         def ret = [:]
-        def results = pageService.getMembers(params.slug)
+        def offset = params.offset ? params.offset : 0
+        def results = pageService.getMembers(params.slug, offset)
         ret.status = 1
         ret.members = results.collect{
             [
@@ -48,7 +49,8 @@ class PageController {
                 relation: it.relation.toString(),
                 picOriginal: it.user.picOriginal,
                 picLarge: it.user.picLarge,
-                picSmall: it.user.picSmall
+                picSmall: it.user.picSmall,
+                relation: it.relation.toString()
             ]
         }
         ret.totalMembers = results.size()
@@ -87,10 +89,10 @@ class PageController {
             params.max = 10
         }
         if(params.since) {
-            since = new Date().parse("yyyy-MM-dd H:m", params.since)
+            since = new Date().parse("yyyy-MM-dd HH:mm", params.since)
         }
         if(params.until) {
-            until = new Date().parse("yyyy-MM-dd H:m", params.until)
+            until = new Date().parse("yyyy-MM-dd HH:mm", params.until)
         }
         def posts = pageService.getPosts(params.slug, params.fromId, params.toId, since, until, params.max, params.type=null)
         if(posts) {
@@ -128,10 +130,10 @@ class PageController {
             params.max = 10
         }
         if(params.since) {
-            since = new Date().parse("yyyy-MM-dd H:m", params.since)
+            since = new Date().parse("yyyy-MM-dd HH:mm", params.since)
         }
         if(params.until) {
-            until = new Date().parse("yyyy-MM-dd H:m", params.until)
+            until = new Date().parse("yyyy-MM-dd HH:mm", params.until)
         }
         def posts = pageService.getTopPost(params.slug, params.fromId, params.toId, since, until, params.max)
         if(posts) {
@@ -170,10 +172,10 @@ class PageController {
             params.max = 10
         }
         if(params.since) {
-            since = new Date().parse("yyyy-MM-dd H:m", params.since)
+            since = new Date().parse("yyyy-MM-dd HH:mm", params.since)
         }
         if(params.until) {
-            until = new Date().parse("yyyy-MM-dd H:m", params.until)
+            until = new Date().parse("yyyy-MM-dd HH:mm", params.until)
         }
         def posts = pageService.getRecentPost(params.slug, params.fromId, params.toId, since, until, params.max)
         if(posts) {
@@ -294,7 +296,36 @@ class PageController {
             pageService.leavePage(userId, slug)
             ret = [status: 1, message: "user id: ${userId} left from page: ${slug}"]
             render ret as JSON
-        }        
+        }     
+    }
+
+    def removeUserFromPage() {
+        def userId = params.userId
+        def slug = params.slug
+        def ret
+        if(!userId || !slug) {
+            ret = [status: 0, message: "user id: ${userId} could not remove from page: ${slug}"]
+            render ret as JSON
+        } else {
+            pageService.removeUserFromPage(userId, slug)
+            ret = [status: 1, message: "user id: ${userId} removed from page: ${slug}"]
+            render ret as JSON
+        }
+    }
+
+    def setRelation() {
+        def userId = params.userId
+        def slug = params.slug
+        def relation = params.relation
+        def ret
+        if(!userId || !slug) {
+            ret = [status: 0, message: 'Can not change relation']
+            render ret as JSON
+        } else {
+            pageService.setRelation(userId, slug, relation)
+            ret = [status: 1, message: "user id: ${userId} had change relation to ${relation}"]
+            render ret as JSON
+        }
     }
 
     def postMessage() {
@@ -305,8 +336,9 @@ class PageController {
 
         def result = pageService.createMessagePost(userId, slug, message)
         ret = [post: [id :result.post.id, message: result.post.message, 
-        createdBy: result.post.createdBy, lastActived: result.post.lastActived], 
-        user: result.user.username, page: result.page.name, slug: result.page.slug]
+        createdBy: result.post.createdBy, dateCreated: result.post.dateCreated, 
+        lastActived: result.post.lastActived], user: result.user.username, 
+        page: result.page.name, slug: result.page.slug]
         ret.status = 1
         ret.message = "user: ${result.user.username} posted message in page: ${result.page.name}"
         render ret as JSON
@@ -405,7 +437,7 @@ class PageController {
 
     def disableComment() {
         def commentId = params.commentId
-        def userId = params.userId
+        def userId
         if(params.userId) {
             userId = params.long('userId')
         } else {
@@ -414,5 +446,26 @@ class PageController {
         //def userId = springSecurityService?.principal?.id
         def ret = pageService.disableComment(userId, commentId)
         render ret as JSON
+    }
+
+    def disablePost() {
+        def postId = params.postId
+        def userId
+        if(params.userId) {
+            userId = params.long('userId')
+        } else {
+            userId = springSecurityService?.principal?.id
+        } 
+        //def userId = springSecurityService?.principal?.id
+        def ret = pageService.disablePost(userId, postId)
+        render ret as JSON
+    }
+
+    def isOwner() {
+        def userId = params.userId
+        def slug = params.slug
+
+        def result = pageService.isOwner(userId, slug)
+        render result as JSON
     }
 }

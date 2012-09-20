@@ -2,7 +2,7 @@
     $post = PageHelper::getJSON($slug, "info");
     $needs = PageHelper::getJSON($slug, 'limit_need/4');
 ?>
-<div id="page-header-<?php echo $id; ?>" class='page-header'>
+<div id="page-header-<?php echo $id; ?>" class='page-header span10'>
     <div id="page-header-left-<?php echo $id; ?>">
         <div class="page-picture">
             <?php 

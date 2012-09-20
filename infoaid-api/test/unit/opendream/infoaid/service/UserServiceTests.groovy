@@ -33,10 +33,11 @@ class UserServiceTests {
     }
 
     void testCreateFail() {
-        def userparams = [username: "", password: "nut", firstname: 'firstname', 
+        def userparams = [username: "", password: "nutttttt", firstname: 'firstname', 
         lastname: 'lastname', dateCreated: new Date(), lastUpdated: new Date()]
-        def result = service.create(userparams)
-        assert "Password must have 7 to 20 character" == result.message
+        shouldFail(RuntimeException) {
+            service.create(userparams)
+        }
     }
 
     void testGetBasicInfo() {
@@ -72,7 +73,7 @@ class UserServiceTests {
 
     void testUpdatePassword() {   
         def updateparams = [id:user.id, oldPassword: 'password', 
-            newPassword: 'new-password', comfirmedPassword: 'new-password']
+            newPassword: 'new-password', confirmedPassword: 'new-password']
         def result = service.updatePassword(updateparams)        
         assert "password is updated" == result.message
 
@@ -82,22 +83,23 @@ class UserServiceTests {
 
     void testUpdatePasswordWithWrongOldPassword() {
         def updateparams = [id:user.id, oldPassword: 'passwordx', 
-            newPassword: 'new-password', comfirmedPassword: 'new-password']
+            newPassword: 'new-password', confirmedPassword: 'new-password']
         def result = service.updatePassword(updateparams)        
         assert "wrong password" == result.message
     }
 
     void testUpdatePasswordWithWrongNewPassword() {
         def updateparams = [id:user.id, oldPassword: 'password', 
-            newPassword: 'new-password', comfirmedPassword: 'new-passwordx']
+            newPassword: 'new-password', confirmedPassword: 'new-passwordx']
         def result = service.updatePassword(updateparams)        
         assert "password confirmation mismatch" == result.message
     }
 
     void testUpdatePasswordFail() {
-        def updateparams = [id:user.id, oldPassword: 'password', 
-            newPassword: '', comfirmedPassword: '']  
-        def result = service.updatePassword(updateparams)
-        assert "Password must have 7 to 20 character" == result.message
+        def updateparams = [id:10000000, oldPassword: 'password', 
+            newPassword: 'sssssss', confirmedPassword: 'sssssss']  
+        shouldFail(RuntimeException) {
+            service.updatePassword(updateparams)
+        }
     }
 }

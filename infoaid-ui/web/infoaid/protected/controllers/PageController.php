@@ -2,6 +2,7 @@
 
 class PageController extends IAController
 {
+
 	public $styles = array(
 		'page.scss',
 	);
@@ -36,6 +37,20 @@ class PageController extends IAController
 	public function actionSearch()
 	{
 		$this->render('search');
+	}
+
+	public function actionMembers($slug)
+	{
+		$this->render('members');
+	}
+
+	public function actionRemoveMember()
+	{
+		$resultRemoveMember = API::getJSON('page/removeUserFromPage', array(
+			'userId'=>$userId
+			)
+		);
+		$this->render('members');
 	}
 
 }

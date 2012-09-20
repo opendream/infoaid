@@ -175,10 +175,32 @@ class PageServiceIntegrationTests {
         def message = "need some help!"
         def user = User.findByUsername("nut")
         def result = pageService.createMessagePost(user.id, page.slug, message)
-        //[user: user, page: page, post: messagePost]
+
         assert 'nut' == result.user.username
         assert page.name == result.page.name
         assert "need some help!" == result.post.message
+    }
+
+    @Test
+    void testDisablePost() {
+        def post = Post.findByMessage("post1")
+        def user = User.findByUsername("nut")
+        def result = pageService.disablePost(user.id, post.id)
+
+        assert Post.Status.INACTIVE == post.status
+        assert 1 == result.status
+        assert post.id == result.id
+        assert "post ${post.id} is deleted" == result.message
+    }
+
+    @Test
+    void testDisablePostFail() {
+        def post = Post.findByMessage("post1")
+        def result = pageService.disablePost(0, post.id)
+
+        assert Post.Status.ACTIVE == post.status
+        assert 0 == result.status
+        assert "unauthorized user or not found post" == result.message
     }
 
     @Test

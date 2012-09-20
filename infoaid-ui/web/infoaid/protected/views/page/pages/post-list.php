@@ -1,3 +1,28 @@
+<div  ng-controller="PostMessageCtrl">
+	<div ng-init="memberId=8185"></div>
+<div class="tabbable">
+  <ul class="nav nav-pills">
+    <li class="active"><a href="#tab1" data-toggle="tab" class="btn btn-mini btn-link">info</a></li>
+    <li><a href="#tab2" data-toggle="tab" class="btn btn-mini btn-link">need</a></li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="tab1">
+    	<form name="postMsg" ng-submit="postMessage()">
+      		<input name="inputMsg" ng-model="message" ng-maxlength="140" type="text" 
+      		class="span5" placeholder="Type info..."></input>	      		
+      		<span class="error" ng-show="postMsg.inputMsg.$error.maxlength">
+      			Message must have 1 to 140 character 
+      		</span>
+      	</form>
+      					
+    </div>
+    <div class="tab-pane" id="tab2">
+      <input class="span5" ng-model='need' type="text" placeholder="..."></input>
+    </div>
+  </div>  
+</div>
+<div class="divider"></div>
+
 <ul class="page-posts">
 	<li ng-repeat="post in posts" id="post-{{post.id}}">
 		<div class="message-content">
@@ -17,6 +42,7 @@
 					<time class="timeago" datetime="{{post.dateCreated}}">
 						{{post.dateCreated}}
 					</time>
+					<button class="btn btn-mini btn-link" ng-click="deletePost(post)" type="button">delete</button>
 				</div>
 			</div>
 
@@ -26,7 +52,7 @@
 		<div class="message-comments" ng-controller="CommentCtrl">
 			<div class="load-more" ng-click="loadMore()">
 				<span class="label label-info">View all comments</span>
-				<div ng-init="memberId=8185"></div>
+				
 			</div>
 
 			<ul>
@@ -62,7 +88,7 @@
 		</div>
 	</li>
 </ul>
-
+</div>
 <div class="clear"></div>
 
 <div class="load-more">
