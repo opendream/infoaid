@@ -335,8 +335,9 @@ class PageController {
 
         def result = pageService.createMessagePost(userId, slug, message)
         ret = [post: [id :result.post.id, message: result.post.message, 
-        createdBy: result.post.createdBy, lastActived: result.post.lastActived], 
-        user: result.user.username, page: result.page.name, slug: result.page.slug]
+        createdBy: result.post.createdBy, dateCreated: result.post.dateCreated, 
+        lastActived: result.post.lastActived], user: result.user.username, 
+        page: result.page.name, slug: result.page.slug]
         ret.status = 1
         ret.message = "user: ${result.user.username} posted message in page: ${result.page.name}"
         render ret as JSON
