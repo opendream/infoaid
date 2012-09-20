@@ -33,10 +33,11 @@ class UserServiceTests {
     }
 
     void testCreateFail() {
-        def userparams = [username: "", password: "nut", firstname: 'firstname', 
+        def userparams = [username: "", password: "nutttttt", firstname: 'firstname', 
         lastname: 'lastname', dateCreated: new Date(), lastUpdated: new Date()]
-        def result = service.create(userparams)
-        assert "Password must have 7 to 20 character" == result.message
+        shouldFail(RuntimeException) {
+            service.create(userparams)
+        }
     }
 
     void testGetBasicInfo() {
@@ -95,9 +96,10 @@ class UserServiceTests {
     }
 
     void testUpdatePasswordFail() {
-        def updateparams = [id:user.id, oldPassword: 'password', 
-            newPassword: '', comfirmedPassword: '']  
-        def result = service.updatePassword(updateparams)
-        assert "Password must have 7 to 20 character" == result.message
+        def updateparams = [id:10000000, oldPassword: 'password', 
+            newPassword: 'sssssss', comfirmedPassword: 'sssssss']  
+        shouldFail(RuntimeException) {
+            service.updatePassword(updateparams)
+        }
     }
 }
