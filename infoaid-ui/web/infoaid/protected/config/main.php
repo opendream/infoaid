@@ -67,7 +67,11 @@ return array(
 				'api/post/<id:\d+>/<method:\w+>'=>'api/post',
 				'api/page/<slug:[^\/]*>/<method:\w+>'=>'api/page',
 				'api/members/<slug:[^\/]*>'=>'api/members',
+				'page/loadMoreMembers'=>'page/loadMoreMembers',
+				'page/setRelation'=>'page/setRelation',
+				'page/removeMemberFromPage'=>'page/removeMemberFromPage',
 				'page/search'=>'page/search',
+				'page/<slug:[^\/]*>/members'=>'page/members',
 				'page/<slug:[^\/]*>'=>'page/view',
 				'/api/comment'=>'/api/comment',
 				'/api/deleteComment/<commentId:\d+>'=>'/api/deleteComment',
@@ -144,7 +148,7 @@ return array(
 
 		'cache'=>array(
 			'class'=>'system.caching.CMemCache',
-			'useMemcached'=>true,
+			//'useMemcached'=>true,
 			'servers'=>array(
 				array('host'=>'localhost','port'=>11211),
 			),
