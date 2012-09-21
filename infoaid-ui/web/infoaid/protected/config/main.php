@@ -149,6 +149,12 @@ return array(
 				array('host'=>'localhost','port'=>11211),
 			),
 		),
+
+		'phpThumb'=>array(
+			'class'=>'ext.EPhpThumb.EPhpThumb',
+			'options'=>array(),
+		),
+
 	),
 
 	// application-level parameters that can be accessed

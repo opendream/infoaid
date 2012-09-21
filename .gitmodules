@@ -1,3 +1,9 @@
 [submodule "infoaid-ui/modules/jquery-timeago"]
 	path = infoaid-ui/modules/jquery-timeago
 	url = git://github.com/rmm5t/jquery-timeago.git
+[submodule "infoaid-ui/modules/jQuery-File-Upload"]
+	path = infoaid-ui/modules/jQuery-File-Upload
+	url = git://github.com/blueimp/jQuery-File-Upload.git
+[submodule "infoaid-ui/modules/jquery-ui"]
+	path = infoaid-ui/modules/jquery-ui
+	url = https://github.com/jquery/jquery-ui
