@@ -66,7 +66,7 @@ class PageController extends IAController
 		$slug = $_GET['slug'];
 		$username = $_GET['username'];
 		$totalLoad = $_GET['totalLoad'];
-		$membersUrl = $this->createUrl("page/$slug/members");
+		$membersUrl = $this->createUrl("page/$slug/members")."?totalLoad=$totalLoad";
 
 		$result = PageHelper::removeMemberFromPage($userId, $slug);
 		if($result->status == 1) {
