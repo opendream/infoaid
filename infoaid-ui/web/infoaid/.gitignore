@@ -7,3 +7,6 @@ protected/runtime/*
 protected/data/*.db
 .sass-cache
 protected/extensions/phamlp/vendors/phamlp/sass/sass-cache/
+media/*
+!media/.gitignore
+!media/.gitinclude

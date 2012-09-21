@@ -30,7 +30,11 @@
 			<a class="brand" href="<?php echo Yii::app()->homeUrl ?>"><?php echo CHtml::encode(Yii::app()->name); ?></a>
 
 			<ul class="nav actions">
-				<li><a href="#">Place</a></li>
+				<li>
+					<a href="<?php echo $this->createUrl('/page/search'); ?>">
+						Place
+					</a>
+				</li>
 				<li><a href="#">People</a></li>
 				<li><a href="#">Status</a></li>
 				<li><a href="/site/pages/about">About us</a></li>

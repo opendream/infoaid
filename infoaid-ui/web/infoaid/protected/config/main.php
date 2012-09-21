@@ -153,6 +153,12 @@ return array(
 				array('host'=>'localhost','port'=>11211),
 			),
 		),
+
+		'phpThumb'=>array(
+			'class'=>'ext.EPhpThumb.EPhpThumb',
+			'options'=>array(),
+		),
+
 	),
 
 	// application-level parameters that can be accessed
@@ -167,5 +173,31 @@ return array(
 		),
 
 		'allowed_language' => array('en', 'th'),
+
+		'profile' => array(
+			'photoUrlPrefix' => '/media/profiles/',
+			'photoDir' => dirname(__FILE__).'/../../media/profiles/',
+
+			'size' => array(
+				'original' => array(
+					'width' => '400',
+					'height' => '400',
+					'suffix' => '_o',
+				),
+
+				'large' => array(
+					'width' => '160',
+					'height' => '160',
+					'suffix' => '_l',
+				),
+
+				'small' => array(
+					'width' => '50',
+					'height' => '50',
+					'suffix' => '_s',
+				),
+			),
+
+		),
 	),
 );
