@@ -463,6 +463,42 @@ class PageControllerTests {
         assert 'hello world' == response.json.post.message        
     }
 
+    void testDisablePost() {
+        // param nut , postId
+        controller.pageService = new PageService()
+        def user = User.findByUsername('nut')
+        def post = Post.findByMessage('first post')
+
+        params.userId = user.id
+        params.postId = post.id
+        
+        // controller
+        controller.disablePost()
+
+        // expect
+        assert 1 == response.json.status
+        assert post.id == response.json.id
+        assert "post ${post.id} is deleted" == response.json.message
+        assert Post.Status.INACTIVE == post.status
+    }
+
+    void testDisablePostFail() {
+        // param nut , postId
+        controller.pageService = new PageService()
+        def post = Post.findByMessage('first post')
+
+        params.userId = 0
+        params.postId = post.id
+        
+        // controller
+        controller.disablePost()
+
+        // expect
+        assert 0 == response.json.status
+        assert "unauthorized user or not found post" == response.json.message
+        assert Post.Status.ACTIVE == post.status
+    }
+
     void testPostNeed() {
         // param nut , page-slug
         controller.pageService = new PageService()

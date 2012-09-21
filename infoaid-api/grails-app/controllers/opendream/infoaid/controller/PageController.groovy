@@ -336,8 +336,9 @@ class PageController {
 
         def result = pageService.createMessagePost(userId, slug, message)
         ret = [post: [id :result.post.id, message: result.post.message, 
-        createdBy: result.post.createdBy, lastActived: result.post.lastActived], 
-        user: result.user.username, page: result.page.name, slug: result.page.slug]
+        createdBy: result.post.createdBy, dateCreated: result.post.dateCreated, 
+        lastActived: result.post.lastActived], user: result.user.username, 
+        page: result.page.name, slug: result.page.slug]
         ret.status = 1
         ret.message = "user: ${result.user.username} posted message in page: ${result.page.name}"
         render ret as JSON
@@ -436,7 +437,7 @@ class PageController {
 
     def disableComment() {
         def commentId = params.commentId
-        def userId = params.userId
+        def userId
         if(params.userId) {
             userId = params.long('userId')
         } else {
@@ -444,6 +445,19 @@ class PageController {
         } 
         //def userId = springSecurityService?.principal?.id
         def ret = pageService.disableComment(userId, commentId)
+        render ret as JSON
+    }
+
+    def disablePost() {
+        def postId = params.postId
+        def userId
+        if(params.userId) {
+            userId = params.long('userId')
+        } else {
+            userId = springSecurityService?.principal?.id
+        } 
+        //def userId = springSecurityService?.principal?.id
+        def ret = pageService.disablePost(userId, postId)
         render ret as JSON
     }
 

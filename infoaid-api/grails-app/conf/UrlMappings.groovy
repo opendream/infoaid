@@ -24,6 +24,8 @@ class UrlMappings {
         "/page/$slug/update_page"(controller: "page", action: "updatePage")
         "/page/create_page"(controller: "page"){ action = [POST:"createPage"] }
         "/post/comment"(controller: "page"){action = [POST:"postComment"] }
+        "/post/$postId/comments"(controller: "post"){action = [GET:"comment"] }
+        "/post/$postId/delete"(controller: "page", action: "disablePost")
         "/comment/$commentId/delete"(controller: "page", action: "disableComment")
         "/home/$userId/recent-post"(controller: "home", action: "recentPost")
         "/home/$userId/top-post"(controller: "home", action: "topPost")

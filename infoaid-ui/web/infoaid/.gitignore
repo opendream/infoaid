@@ -1,6 +1,9 @@
 assets/*
 !assets/.gitignore
+!assets/.gitinclude
 protected/runtime/*
 !protected/runtime/.gitignore
+!protected/runtime/.gitinclude
 protected/data/*.db
 .sass-cache
+protected/extensions/phamlp/vendors/phamlp/sass/sass-cache/

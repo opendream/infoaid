@@ -1,4 +1,4 @@
-<div id='user-edit' class="container-fluid user-edit-wrapper">
+<div id='user-edit' class="container-fluid user-edit-wrapper" ng-app>
 <div class="row-fluid">
 
 	<div class="span3 well">
