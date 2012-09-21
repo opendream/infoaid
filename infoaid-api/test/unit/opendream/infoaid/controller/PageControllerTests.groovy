@@ -101,8 +101,7 @@ class PageControllerTests {
         controller.member()
 
         assert response.json['members'].size() == 2
-        assert 'nut' == response.json['members'][0].username
-        assert 'picSma' == response.json['members'][0].picSmall
+        assert 'nut2' == response.json['members'][0].username
         assert 1 == response.json.status
     }
 

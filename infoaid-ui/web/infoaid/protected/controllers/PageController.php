@@ -44,13 +44,55 @@ class PageController extends IAController
 		$this->render('members');
 	}
 
-	public function actionRemoveMember()
+	public function actionLoadMoreMembers($slug, $offset)
 	{
-		$resultRemoveMember = API::getJSON('page/removeUserFromPage', array(
-			'userId'=>$userId
-			)
-		);
-		$this->render('members');
+		$resultMembers = API::getJSON("page/$slug/members", array('offset'=>$offset));
+		$resultJson = array();
+		if(sizeOf($resultMembers->members) == 0) {
+		} else {
+			foreach($resultMembers->members as $el) {
+				$resultJson[] = array(
+					'body' => $el
+				);
+			}
+		}
+		$this->renderJSON($resultJson);
+
+	}
+
+	public function actionRemoveMemberFromPage()
+	{
+		$userId = $_GET['userId'];
+		$slug = $_GET['slug'];
+		$username = $_GET['username'];
+		$membersUrl = $this->createUrl("page/$slug/members");
+		$result = PageHelper::removeMemberFromPage($userId, $slug);
+		if($result->status == 1) {
+			Yii::app()->user->setFlash('success', "Removed $username from page");
+		} else {
+			Yii::app()->user->setFlash('error', "Can't removed $username from page");
+
+		}
+		$this->redirect($membersUrl);
+		
+	}
+
+	public function actionSetRelation()
+	{
+		$relation = $_GET['relation'];
+		$userId = $_GET['userId'];
+		$slug = $_GET['slug'];
+		$username = $_GET['username'];
+		//$membersUrl = $this->createUrl("page/$slug/members");
+
+		$result = PageHelper::setRelation($userId, $slug, $relation);
+
+		$resultJson = array();
+		$resultJson[] = array(
+				'status'=>$result->status,
+				'message'=>$result->message
+			);
+		$this->renderJSON($resultJson);
 	}
 
 }

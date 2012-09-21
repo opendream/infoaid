@@ -47,7 +47,7 @@ class Page {
     }
 
     def getUsers(offset=0) {
-        PageUser.findAllByPage(this).collect { [user: it.user, relation: it.relation] }
+        PageUser.findAllByPage(this,[sort: 'conversation', order: 'desc', offset: offset]).collect { [user: it.user, relation: it.relation] }
     }
 
     def beforeInsert() {
