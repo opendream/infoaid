@@ -1,6 +1,7 @@
 package opendream.infoaid.controller
 
 import grails.converters.JSON
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 class PageController {
     def pageService
@@ -36,7 +37,8 @@ class PageController {
     def member() {
         def ret = [:]
         def offset = params.offset ? params.offset : 0
-        def results = pageService.getMembers(params.slug, offset)
+        def max = params.max ? params.max : ConfigurationHolder.config.infoaid.api.allmember.limited
+        def results = pageService.getMembers(params.slug, offset, max)
         ret.status = 1
         ret.members = results.collect{
             [

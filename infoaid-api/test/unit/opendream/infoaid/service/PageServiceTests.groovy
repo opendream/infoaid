@@ -140,7 +140,7 @@ class PageServiceTests {
     }
 
     void testGetMembers() {
-        def member = service.getMembers("0", 0)
+        def member = service.getMembers("0", 0, 0)
         assert member.size() == 0
     }
 

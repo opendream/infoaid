@@ -568,7 +568,6 @@ class PageControllerTests {
         params.slug = 'page-slug'
 
         result = controller.isOwner()
-        println response.text
         assert response.json['isOwner'] == false
     }
 }

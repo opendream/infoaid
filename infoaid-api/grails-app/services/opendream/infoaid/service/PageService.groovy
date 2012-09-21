@@ -186,9 +186,9 @@ class PageService {
         [needs: needs, totalNeeds: needs.totalCount]
     }
 
-    def getMembers(slug, offset) {
+    def getMembers(slug, offset, max) {
         def page = Page.findBySlug(slug)
-        page.getUsers(offset)
+        page.getUsers(offset, max)
     }
 
     def getTopMembers(slug) {
@@ -350,16 +350,5 @@ class PageService {
             post.save(failOnError: true, flush:true)
             [status:1, message:"comment ${commentId} is deleted", id:commentId]
         } 
-    }
-
-    def disablePost(userId, postId) {
-        def post = Post.get(postId)
-        if(post?.createdBy?.id != userId) {
-            [status:0, message:'unauthorized user or not found post']
-        } else {
-            post.status = Post.Status.INACTIVE
-            post.save(failOnError: true, flush:true)
-            [status:1, message:"post ${postId} is deleted", id:postId]
-        }
     }
 }
