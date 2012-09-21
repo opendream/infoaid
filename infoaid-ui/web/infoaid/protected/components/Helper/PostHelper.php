@@ -16,7 +16,7 @@ class PostHelper
 
 	public static function getComments($id)
 	{
-		$result = self::getJSON($id, 'comment');
+		$result = self::getJSON($id, 'comments');
 		if (empty($result) || (isset($result->status) && ! $result->status)) {
 			return array();
 		}
