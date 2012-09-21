@@ -148,7 +148,7 @@ return array(
 
 		'cache'=>array(
 			'class'=>'system.caching.CMemCache',
-			//'useMemcached'=>true,
+			'useMemcached'=>true,
 			'servers'=>array(
 				array('host'=>'localhost','port'=>11211),
 			),
@@ -163,7 +163,7 @@ return array(
 
 		'api'=>array(
 			'server'=>'http://192.168.1.131:8080/infoaid-api/',
-			//'port'=>8080,
+			'port'=>8080,
 		),
 
 		'allowed_language' => array('en', 'th'),
