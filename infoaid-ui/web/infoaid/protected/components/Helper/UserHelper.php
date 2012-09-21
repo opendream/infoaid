@@ -67,4 +67,112 @@ class UserHelper
 
 		return $user_cache_data;
 	}
+
+	/**
+	 * Return profile image dir.
+	 */
+	public static function getProfilePhotoDir($userId)
+	{
+		$fileDir = Yii::app()->params['profile']['photoDir'] .'/'. $userId .'/';
+
+		// Remove double slashes.
+		$fileDir = str_replace('//', '/', $fileDir);
+		
+		return $fileDir;
+	}
+
+	/**
+	 * Return TRUE if process is success, otherwise error message.
+	 */
+	public static function processUploadedProfilePhoto($userId, $name)
+	{
+		$uploaded = &$_FILES['image'];
+
+		if (empty($uploaded['error'])) {
+			// Generate new unique filename
+			$newFilename = str_replace('.', '-', uniqid('p', $userId));
+
+			$fileDir = self::getProfilePhotoDir($userId);
+			// Make new directory if not exists.
+			if (! is_dir($fileDir)) {
+				if (! mkdir($fileDir)) {
+					return "Can not create directory for image file.";
+				}
+			}
+			// Merge with default profile photo path
+			$newFilepath = $fileDir . $newFilename;
+
+			if (move_uploaded_file($uploaded['tmp_name'], $newFilepath)) {
+				$return = self::processProfilePhoto($userId, $newFilepath);
+				if (! $return) {
+					return "Upload success but process fail.";
+				}
+				else {
+					return $return;
+				}
+			}
+			else {
+				return "Upload success but can not keep file in the system.";
+			}
+
+		}
+		else {
+			return $uploaded['error'];
+		}
+	}
+
+	public static function processProfilePhoto($userId, $filepath)
+	{
+		$fileDir = self::getProfilePhotoDir($userId);
+		$photos = self::convertProfilePhoto($filepath);
+
+		// Convert path to URL
+		$_photos = array();
+		$prefix = Yii::app()->params['profile']['photoUrlPrefix'];
+		foreach ($photos as $size =>$path) {
+			$_photos[$size] = array(
+				'path' => $path,
+				'url' => $prefix . $userId .'/'. basename($path),
+			);
+		}
+
+		return $_photos;
+	}
+
+	public static function convertProfilePhoto($filepath)
+	{
+		$dir = dirname($filepath);
+		$pathinfo = pathinfo($filepath);
+		$filename = $pathinfo['filename'];
+		$extension = $pathinfo['extension'];
+
+		$processed = array();
+		$profiles = Yii::app()->params['profile']['size'];
+		foreach ($profiles as $name => $config) {
+
+			// Load config
+			$width = $config['width'];
+			$height = $config['height'];
+			$suffix = $config['suffix'];
+
+			$destname = $filename . $suffix .'.png';
+			$destpath = $dir .'/'. $destname;
+
+			try {
+				$thumb = Yii::app()->phpThumb->create($filepath);
+
+				$thumb->adaptiveResize($width, $height);
+				$thumb->save($destpath, 'png');
+
+				$processed[$name] = $destpath;
+			}
+			catch (Exception $e) {
+				Yii::log($e, 'error', 'profile photo');
+				return false;
+			}
+
+		}
+
+		return $processed;
+	}
 }

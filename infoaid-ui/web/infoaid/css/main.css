@@ -417,3 +417,7 @@ div.search-form
 .form-group > legend {
 	text-indent: 12px;
 }
+
+.load-more {
+	clear: both;
+}

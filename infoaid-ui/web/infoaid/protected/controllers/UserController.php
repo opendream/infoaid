@@ -83,7 +83,7 @@ class UserController extends IAController
 		$info = UserHelper::basicInfo($userId);
 
 		if(! $info->id) {
-			throw new CHttpException(404, 'The specified account cannot be found.');
+			//throw new CHttpException(404, 'The specified account cannot be found.');
 		}
 
 		$section_map = array(
@@ -116,6 +116,9 @@ class UserController extends IAController
 				break;
 			case 'password':
 				$this->actionDoEditPassword($info);
+				break;
+			case 'photo':
+				$this->actionDoEditPhoto($info);
 				break;
 		}
 	}
@@ -207,6 +210,33 @@ class UserController extends IAController
 		}
 
 		$this->redirect($editPasswordUrl);
+	}
+
+	public function actionDoEditPhoto($info)
+	{
+		$editPhotoUrl = $this->createUrl('/user/edit/photo');
+
+		$photos = UserHelper::processUploadedProfilePhoto($info->id, 'image');
+		if (is_array($photos)) {
+			$info->picOriginal = $photos['original']['url'];
+			$info->picLarge = $photos['large']['url'];
+			$info->picSmall = $photos['small']['url'];
+			// TODO: use $id or $userId, to be adjusted.
+			$info->userId = $info->id;
+
+			$result = UserHelper::updateBasicInfo($userId, (array)$info);
+			if ($result) {
+				Yii::app()->user->setFlash('success', 'Update photo success.');
+			}
+			else {
+				Yii::app()->user->setFlash('error', $result->message ?: "There's something wrong, please try again");
+			}
+		}
+		else {
+			Yii::app()->user->setFlash('error', $photos);
+		}
+		
+		$this->redirect($editPhotoUrl);
 	}
 
 	public function actionLogin()

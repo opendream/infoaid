@@ -31,6 +31,8 @@
 		<div id='form-edit'>
 			<?php if ($section == 'password'): ?>
 				<form class="form-horizontal" method='POST' action='<?php echo $this->createUrl("user/doEdit/$section"); ?>' ng-controller="editPasswordController" ng-submit="submit()">
+			<?php elseif ($section == 'photo'): ?>
+				<form class="form-horizontal" method='POST' action='<?php echo $this->createUrl("user/doEdit/$section"); ?>' enctype="multipart/form-data">
 			<?php else: ?>
 				<form class="form-horizontal" method='POST' action='<?php echo $this->createUrl("user/doEdit/$section"); ?>'>
 			<?php endif; ?>
@@ -52,6 +54,7 @@
 
 				<?php elseif ($section == 'photo'): ?>
 					<?php $this->renderPartial('_form_photo', array(
+						'user' => $user,
 						'no_legend' => true,
 					)); ?>
 
