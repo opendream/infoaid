@@ -527,12 +527,6 @@ class PageControllerTests {
         params.word = ''
         controller.searchPage()
 
-        assert response.json['pages'][1].name == 'page'
-        assert response.json['pages'][0].name == 'second-page'
-
-        assert response.json['pages'][1].needs.size() == 2
-        assert response.json['pages'][0].needs.size() == 0
-
         assert response.json['status'] == 1
 
         assert response.json['totalResults'] == 2
