@@ -350,27 +350,34 @@ class CURL extends CComponent
 		return function_exists('curl_init');
 	}
 
-	public function debug()
+	public function debug($return = false)
 	{
-		echo "=============================================<br/>\n";
-		echo "<h2>CURL Test</h2>\n";
-		echo "=============================================<br/>\n";
-		echo "<h3>Response</h3>\n";
-		echo "<code>" . nl2br(htmlentities($this->response)) . "</code><br/>\n\n";
+		$output = "=============================================<br/>\n";
+		$output .= "<h2>CURL Test</h2>\n";
+		$output .= "=============================================<br/>\n";
+		$output .= "<h3>Response</h3>\n";
+		$output .= "<code>" . nl2br(htmlentities($this->response)) . "</code><br/>\n\n";
 
 		if ($this->error_string)
 		{
-			echo "=============================================<br/>\n";
-			echo "<h3>Errors</h3>";
-			echo "<strong>Code:</strong> " . $this->error_code . "<br/>\n";
-			echo "<strong>Message:</strong> " . $this->error_string . "<br/>\n";
+			$output .= "=============================================<br/>\n";
+			$output .= "<h3>Errors</h3>";
+			$output .= "<strong>Code:</strong> " . $this->error_code . "<br/>\n";
+			$output .= "<strong>Message:</strong> " . $this->error_string . "<br/>\n";
 		}
 
-		echo "=============================================<br/>\n";
-		echo "<h3>Info</h3>";
-		echo "<pre>";
-		print_r($this->info);
-		echo "</pre>";
+		$output .= "=============================================<br/>\n";
+		$output .= "<h3>Info</h3>";
+		$output .= "<pre>";
+		$output .= print_r($this->info, 1);
+		$output .= "</pre>";
+
+		if (! $return) {
+			Yii::log($output, 'debug', 'CURL');
+		}
+		else {
+			return $output;
+		}
 	}
 
 	public function debug_request()

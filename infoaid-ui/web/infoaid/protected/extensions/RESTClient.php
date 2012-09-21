@@ -166,6 +166,7 @@ class RESTClient extends CComponent
 
         // Execute and return the response from the REST server
         $response = $this->_curl->execute();
+        Yii::log(print_r($response, 1));
 
         // Format and return
 		if ($format !== NULL)
@@ -193,42 +194,49 @@ class RESTClient extends CComponent
 		return $this;
 	}
 
-	public function debug()
+	public function debug($return = false)
 	{
 		$request = $this->_curl->debug();
 
-		echo "=============================================<br/>\n";
-		echo "<h2>REST Test</h2>\n";
-		echo "=============================================<br/>\n";
-		echo "<h3>Request</h3>\n";
-		echo $request['url']."<br/>\n";
-		echo "=============================================<br/>\n";
-		echo "<h3>Response</h3>\n";
+		$output = "=============================================<br/>\n";
+		$output .= "<h2>REST Test</h2>\n";
+		$output .= "=============================================<br/>\n";
+		$output .= "<h3>Request</h3>\n";
+		$output .= $request['url']."<br/>\n";
+		$output .= "=============================================<br/>\n";
+		$output .= "<h3>Response</h3>\n";
 
 		if ($this->response_string)
 		{
-			echo "<code>".nl2br(htmlentities($this->response_string))."</code><br/>\n\n";
+			$output .= "<code>".nl2br(htmlentities($this->response_string))."</code><br/>\n\n";
 		}
 
 		else
 		{
-			echo "No response<br/>\n\n";
+			$output .= "No response<br/>\n\n";
 		}
 
-		echo "=============================================<br/>\n";
+		$output .= "=============================================<br/>\n";
 
 		if ($this->_curl->error_string)
 		{
-			echo "<h3>Errors</h3>";
-			echo "<strong>Code:</strong> ".$this->_curl->error_code."<br/>\n";
-			echo "<strong>Message:</strong> ".$this->_curl->error_string."<br/>\n";
-			echo "=============================================<br/>\n";
+			$output .= "<h3>Errors</h3>";
+			$output .= "<strong>Code:</strong> ".$this->_curl->error_code."<br/>\n";
+			$output .= "<strong>Message:</strong> ".$this->_curl->error_string."<br/>\n";
+			$output .= "=============================================<br/>\n";
 		}
 
-		echo "<h3>Call details</h3>";
-		echo "<pre>";
-		print_r($this->_curl->info);
-		echo "</pre>";
+		$output .= "<h3>Call details</h3>";
+		$output .= "<pre>";
+		$output .= print_r($this->_curl->info, 1);
+		$output .= "</pre>";
+
+		if (! $return) {
+			Yii::log($output, 'debug', 'REST');
+		}
+		else {
+			return $output;
+		}
 
 	}
 
