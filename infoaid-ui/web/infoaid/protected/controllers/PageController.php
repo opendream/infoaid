@@ -41,7 +41,7 @@ class PageController extends IAController
 
 	public function actionMembers($slug)
 	{
-		$this->render('members');
+		$this->render('members', array('slug'=>$slug));
 	}
 
 	public function actionLoadMoreMembers($slug, $offset)
@@ -65,12 +65,14 @@ class PageController extends IAController
 		$userId = $_GET['userId'];
 		$slug = $_GET['slug'];
 		$username = $_GET['username'];
+		$totalLoad = $_GET['totalLoad'];
 		$membersUrl = $this->createUrl("page/$slug/members");
+
 		$result = PageHelper::removeMemberFromPage($userId, $slug);
 		if($result->status == 1) {
-			Yii::app()->user->setFlash('success', "Removed $username from page");
+			Yii::app()->user->setFlash('success', "Removed user : $username from page");
 		} else {
-			Yii::app()->user->setFlash('error', "Can't removed $username from page");
+			Yii::app()->user->setFlash('error', "Can't removed user : $username from page");
 
 		}
 		$this->redirect($membersUrl);
@@ -83,16 +85,18 @@ class PageController extends IAController
 		$userId = $_GET['userId'];
 		$slug = $_GET['slug'];
 		$username = $_GET['username'];
-		//$membersUrl = $this->createUrl("page/$slug/members");
+		$totalLoad = $_GET['totalLoad'];
+		$membersUrl = $this->createUrl("page/$slug/members")."?totalLoad=$totalLoad";
 
 		$result = PageHelper::setRelation($userId, $slug, $relation);
 
-		$resultJson = array();
-		$resultJson[] = array(
-				'status'=>$result->status,
-				'message'=>$result->message
-			);
-		$this->renderJSON($resultJson);
+		if($result->status == 1) {
+			Yii::app()->user->setFlash('success', "Success change user : $username to $relation");
+		} else {
+			Yii::app()->user->setFlash('error', "Can not change user : $username to $relation");
+		}
+
+		$this->redirect($membersUrl);
 	}
 
 }
