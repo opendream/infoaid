@@ -67,7 +67,11 @@ return array(
 				'api/post/<id:\d+>/<method:\w+>'=>'api/post',
 				'api/page/<slug:[^\/]*>/<method:\w+>'=>'api/page',
 				'api/members/<slug:[^\/]*>'=>'api/members',
+				'page/loadMoreMembers'=>'page/loadMoreMembers',
+				'page/setRelation'=>'page/setRelation',
+				'page/removeMemberFromPage'=>'page/removeMemberFromPage',
 				'page/search'=>'page/search',
+				'page/<slug:[^\/]*>/members'=>'page/members',
 				'page/<slug:[^\/]*>'=>'page/view',
 				'/api/comment'=>'/api/comment',
 				'/api/deleteComment/<commentId:\d+>'=>'/api/deleteComment',
@@ -165,7 +169,7 @@ return array(
 
 		'api'=>array(
 			'server'=>'http://192.168.1.131:8080/infoaid-api/',
-			//'port'=>8080,
+			'port'=>8080,
 		),
 
 		'allowed_language' => array('en', 'th'),

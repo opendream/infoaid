@@ -52,4 +52,28 @@ class PageHelper
 		}
 	}
 
+	public static function getMembers($slug, $max)
+	{
+		$result = API::getJSON("page/member", array('max'=>$max, 'slug'=>$slug));
+		return $result;
+	}
+
+	public static function removeMemberFromPage($userId, $slug)
+	{
+		$result = API::getJSON("page/removeUserFromPage", array('userId'=>$userId, 'slug'=>$slug));
+		return $result;
+	}
+
+	public static function setRelation($userId, $slug, $relation)
+	{
+		$result = API::getJSON("page/setRelation", array('userId'=>$userId, 'slug'=>$slug, 'relation'=>$relation));
+		return $result;
+	}
+
+	public static function isOwner($userId, $slug)
+	{
+		$result = API::getJSON("page/isOwner", array('userId'=>$userId, 'slug'=>$slug));
+		return $result;
+	}
+
 }

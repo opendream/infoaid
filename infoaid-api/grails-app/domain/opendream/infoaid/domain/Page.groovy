@@ -46,8 +46,8 @@ class Page {
         }
     }
 
-    def getUsers(offset=0) {
-        PageUser.findAllByPage(this).collect { [user: it.user, relation: it.relation] }
+    def getUsers(offset=0, max=ConfigurationHolder.config.infoaid.api.allmember.limited) {
+        PageUser.findAllByPage(this,[max: max, sort: 'conversation', order: 'desc', offset: offset]).collect { [user: it.user, relation: it.relation] }
     }
 
     def beforeInsert() {

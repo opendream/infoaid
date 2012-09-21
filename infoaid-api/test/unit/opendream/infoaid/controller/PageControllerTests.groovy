@@ -101,8 +101,7 @@ class PageControllerTests {
         controller.member()
 
         assert response.json['members'].size() == 2
-        assert 'nut' == response.json['members'][0].username
-        assert 'picSma' == response.json['members'][0].picSmall
+        assert 'nut2' == response.json['members'][0].username
         assert 1 == response.json.status
     }
 
@@ -569,7 +568,6 @@ class PageControllerTests {
         params.slug = 'page-slug'
 
         result = controller.isOwner()
-        println response.text
         assert response.json['isOwner'] == false
     }
 }
