@@ -78,17 +78,16 @@ class UserController extends IAController
 	{
 		$this->scripts[] = 'main/editPassword.js';
 
-		$resultGetBasicInfo = API::getJSON('user/showBasicInfo', array(
-			'id' => Yii::app()->user->getId()
-		));
+		$userId = Yii::app()->user->getId();
 
-		if($resultGetBasicInfo->id == null) {
-			
+		$info = UserHelper::basicInfo($userId);
+
+		if(! $info->id) {
+			throw new CHttpException(404, 'The specified account cannot be found.');
 		}
 
 		$section_map = array(
 			'account' => 'Account',
-			'personal' => 'Personal Information',
 			'password' => 'Password',
 			'photo' => 'Profile Photo',
 		);
@@ -97,26 +96,71 @@ class UserController extends IAController
 			'section'=>$section,
 			'section_name'=>$section_map[$section],
 			'section_map'=>$section_map,
-			'id'=>$resultGetBasicInfo->id,
-			'username'=>$resultGetBasicInfo->username,
-			'firstname'=>$resultGetBasicInfo->firstname,
-			'lastname'=>$resultGetBasicInfo->lastname,
-			'email'=>$resultGetBasicInfo->email,
-			'tel'=>$resultGetBasicInfo->telNo,
-			'pic-original'=>$resultGetBasicInfo->picOriginal
+			'user'=>$info,
 		));
 	}
 
 	public function actionDoEdit($section='account')
 	{
+		$userId = Yii::app()->user->getId();
+
+		$info = UserHelper::basicInfo($userId);
+
+		if(! $info->id) {
+			throw new CHttpException(404, 'The specified account cannot be found.');
+		}
+
 		switch ($section) {
+			case 'account':
+				$this->actionDoEditAccount($info);
+				break;
 			case 'password':
-				$this->actionDoEditPassword();
+				$this->actionDoEditPassword($info);
 				break;
 		}
 	}
 
-	public function actionDoEditPassword()
+	public function actionDoEditAccount($info)
+	{
+		$userId = Yii::app()->user->getId();
+		$editAccountUrl = $this->createUrl("user/edit/account");
+
+		$username  = $_POST['username'];
+		$email     = $_POST['email'];
+		$firstname = $_POST['firstname'];
+		$lastname  = $_POST['lastname'];
+		$telNo     = $_POST['tel'];
+
+		if ($username == '') {
+			Yii::app()->user->setFlash('error', "Username cannot be blank");
+		}
+
+		if ($email == '') {
+			Yii::app()->user->setFlash('error', "Email cannot be blank");
+		}
+
+		$data = array(
+			'userId' => $userId,
+			'username' => $username,
+			'email' => $email,
+			'firstname' => $firstname,
+			'lastname' => $lastname,
+			'telNo' => $telNo,
+			'picOriginal' => $info->picOriginal,
+		);
+
+		$result = UserHelper::updateBasicInfo($userId, $data);
+		if ($result) {
+			Yii::app()->user->setFlash('success', 'Update account success.');
+			$this->redirect($editAccountUrl);
+		}
+		else {
+			Yii::app()->user->setFlash('error', $result->message ?: "There's something wrong, please try again");
+			$this->redirect($editAccountUrl);
+		}
+	}
+
+	public function actionDoEditPassword($info)
 	{
 		$editPasswordUrl = $this->createUrl("user/edit/password");
 

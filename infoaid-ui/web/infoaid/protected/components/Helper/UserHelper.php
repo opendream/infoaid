@@ -14,6 +14,11 @@ class UserHelper
 		return API::getJSON(self::$base . $id .'/'. $method);
 	}
 
+	public static function basicInfo($id)
+	{
+		return API::getJSON('user/showBasicInfo', array('userId' => $id));
+	}
+
 	public static function authenticate($username, $password)
 	{
 		API::$http_user = $username;
@@ -30,21 +35,36 @@ class UserHelper
 		}
 	}
 
-	public static function updateCachedPassword($user_id, $username, $password)
+	public static function updateCachedPassword($userId, $username, $password)
 	{
-		API::$http_user = $username;
-		API::$http_pass = $password;
-		API::$http_auth = "Basic";
-
-		$user_cache_key = 'user-'. $user_id;
-		$user_cache_data = Yii::app()->cache->get($user_cache_key);
-		if ($user_cache_data) {
+		if ($user_cache_data = self::getUserCachedData($userId)) {
 			$user_cache_data['password'] = $password;
 
 			Yii::app()->cache->set($user_cache_key, $user_cache_data);
+
+			return true;
 		}
 		else {
 			return false;
 		}
+	}
+
+	public static function updateBasicInfo($userId, $data)
+	{
+		$result = API::getJSON(self::$base .'updateBasicInfo', $data);
+		if ($result->status) {
+			return $result;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public static function getUserCachedData($userId)
+	{
+		$user_cache_key = 'user-'. $userId;
+		$user_cache_data = Yii::app()->cache->get($user_cache_key);
+
+		return $user_cache_data;
 	}
 }

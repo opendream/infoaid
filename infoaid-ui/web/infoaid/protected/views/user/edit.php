@@ -39,11 +39,12 @@
 				<input type="hidden" name="section" value="<?php echo $section; ?>" />
 
 				<?php if ($section == 'account'): ?>
-					<?php $this->renderPartial('_form_user_email'); ?>
+					<?php $this->renderPartial('_form_user_email', array(
+						'user' => $user,
+					)); ?>
 
-				<?php elseif ($section == 'personal'): ?>
 					<?php $this->renderPartial('_form_personal', array(
-						'no_legend' => true,
+						'user' => $user,
 					)); ?>
 
 				<?php elseif ($section == 'password'): ?>
