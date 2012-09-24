@@ -74,30 +74,30 @@
 		<?php $this->renderPartial('header', array('slug'=>$slug)); ?>
 	</div>
 </header>
+<div class='flash-message'>
+	<?php
+		if( Yii::app()->user->hasFlash('error') ) {
+	?>
+	<span class="alert alert-error">
+		<?php
+				echo Yii::app()->user->getFlash('error');
+			}
+		?>
+	</span>
+	<?php
+		if( Yii::app()->user->hasFlash('success') ) {
+	?>
+	<span class="alert alert-success">
+		<?php
+				echo Yii::app()->user->getFlash('success');
+			}
+		?>
+	</span>
+</div>
 <div id="page-members" ng-app="member" class="page-members" ng-controller="memberController">
 	<header>
 		<h1 class="header-members">Members</h1><div id='showing'>(Showing <?php echo $totalLoad;?> members)</div>
 	</header>
-	<div class='flash-message'>
-		<?php
-			if( Yii::app()->user->hasFlash('error') ) {
-		?>
-		<span class="alert alert-error">
-			<?php
-					echo Yii::app()->user->getFlash('error');
-				}
-			?>
-		</span>
-		<?php
-			if( Yii::app()->user->hasFlash('success') ) {
-		?>
-		<span class="alert alert-success">
-			<?php
-					echo Yii::app()->user->getFlash('success');
-				}
-			?>
-		</span>
-	</div>
 	<div id="page-members-body" class="page-members">
 			<?php
 				foreach ($members->members as $member) {
@@ -107,12 +107,14 @@
 	</div>
 
 
-	<div id="loading" class="ajax-loading"></div>
+	
 	<div class="load-more" id="load-more">
 		<button class="btn" ng-click="loadMore()" id="load-more-button">
 			<i class="icon icon-plus"></i> Load more
 		</button>
+		<div id="loading" class="ajax-loading"></div>
 	</div>
+
 </div>
 <script>
 	angular.module('memberService', ['ngResource']).
@@ -229,16 +231,16 @@
 		$scope.loadMore = function() {
 			var target = document.getElementById('loading');
 			var spinner = new Spinner(opts).spin(target);
-			$('#load-more').hide();
+			$('#load-more-button').hide();
 			Member.query({
 				slug: '<?php echo $slug; ?>',
 				offset: $scope.totalLoad
 			}, function(members) {
 				var totalMembers = members.length
 				if(totalMembers == 0) {
-					$('#load-more').hide();
+					$('#load-more-button').hide();
 				} else {
-					$('#load-more').show();
+					$('#load-more-button').show();
 					var ret = '';
 					$scope.totalLoad += members.length;
 					angular.forEach(members, function (member) {
