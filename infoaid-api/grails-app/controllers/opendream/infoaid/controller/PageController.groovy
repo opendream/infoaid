@@ -144,6 +144,7 @@ class PageController {
                     dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                     createdBy: it.createdBy.username,
                     userId: it.createdBy.id,
+                    conversation: it.conversation,
                     comments: it.previewComments.comments.collect {
                         [
                             message: it.message,
@@ -186,6 +187,7 @@ class PageController {
                     dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                     createdBy: it.createdBy.username,
                     userId: it.createdBy.id,
+                    conversation: it.conversation,
                     comments: it.previewComments.comments.collect {
                         [
                             id: it.id,
