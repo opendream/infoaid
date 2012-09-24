@@ -49,7 +49,8 @@ class IAController extends CController
 			Yii::app()->clientScript
 				->registerScriptFile(Yii::app()->baseUrl .'/js/angular.js/angular.js')
 				->registerScriptFile(Yii::app()->baseUrl .'/js/angular.js/angular-resource.js')
-				->registerScriptFile(Yii::app()->baseUrl .'/js/angular.js/angular-bootstrap.js');
+				->registerScriptFile(Yii::app()->baseUrl .'/js/angular.js/angular-bootstrap.js')
+				->registerScriptFile(Yii::app()->baseUrl .'/js/select2/select2.js');
 		}
 
 		if ($this->jquery && $this->angular) {
