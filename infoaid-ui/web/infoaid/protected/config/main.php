@@ -169,7 +169,7 @@ return array(
 
 		'api'=>array(
 			'server'=>'http://192.168.1.131:8080/infoaid-api/',
-			'port'=>8080,
+			//'port'=>8080,
 		),
 
 		'allowed_language' => array('en', 'th'),
