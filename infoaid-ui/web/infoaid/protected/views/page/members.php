@@ -1,7 +1,8 @@
 <?php
 	$session = new CHttpSession;
 	$session->open();
-	$userId = 8185;
+	//$userId = 8185;
+	$userId = Yii::app()->user->getId();
 	$totalLoad = $_GET['totalLoad'];
     $members = PageHelper::getMembers($slug, $totalLoad);
     $totalLoad = $members->totalMembers;
@@ -11,7 +12,7 @@
     	if($member->picOriginal == null) {
             echo '<img src='.Yii::app()->baseUrl.'/media/profiles/profile_default_small.png class="img-polaroid page-members-pic">';
         } else {
-            echo '<img src=' . Yii::app()->baseUrl . $member->picSmall . ' class="img-polaroid page-members-pic">';
+            echo '<img src=' .Yii::app()->baseUrl. $member->picSmall . ' class="img-polaroid page-members-pic">';
         }
     }
 
@@ -36,11 +37,11 @@
 				        <a href='#menu-page-member-$member->id' class='dropdown-toggle' data-toggle='dropdown'><i class='icon-wrench'></i></a>
 				        <ul class='dropdown-menu'>";
 				        if($member->relation == 'MEMBER') {
-				        	echo "<li>".CHtml::link('Change to Owner', array('page/setRelation','userId'=>$member->id, 'username'=>$member->username, 'slug'=>$slug, 'relation'=>'Owner', 'totalLoad'=>$totalLoad))."</li>";
+				        	echo "<li><a onclick='return confirm(\"Are you sure you want to change this user to Owner?\")' href=".Yii::app()->baseUrl.'/page/setRelation?userId='.$member->id.'&username='.$member->username.'&slug='.$slug.'&relation=Owner&totalLoad='.$totalLoad.">Change To Owner</a></li>";
 				        } else if($member->relation == 'OWNER') {
-				        	echo "<li>".CHtml::link('Change to Member', array('page/setRelation','userId'=>$member->id, 'username'=>$member->username, 'slug'=>$slug, 'relation'=>'Member', 'totalLoad'=>$totalLoad))."</li>";
+				        	echo "<li><a onclick='return confirm(\"Are you sure you want to change this user to Member?\")' href=".Yii::app()->baseUrl.'/page/setRelation?userId='.$member->id.'&username='.$member->username.'&slug='.$slug.'&relation=Member&totalLoad='.$totalLoad.">Change To Member</a></li>";
 				        }
-				        echo "<li>".CHtml::link('Remove from group', array('page/removeMemberFromPage','userId'=>$member->id, 'username'=>$member->username, 'slug'=>$slug, 'totalLoad'=>$totalLoad))."</li>
+				        echo "<li><a onclick='return confirm(\"Are you sure you want to remove this user from page?\")' href=".Yii::app()->baseUrl.'/page/removeMemberFromPage?userId='.$member->id.'&username='.$member->username.'&slug='.$slug.'&totalLoad='.$totalLoad.">Remove from group</a></li>
 				        </ul>
 				    </li>
 				</ul>
@@ -88,7 +89,7 @@
 </header>
 <div id="page-members" class='span9' ng-app="member" ng-controller="memberController">
 	<header>
-		<h1>Members</h1>
+		<h1 class="header-members">Members</h1><div id='showing'>(Showing <?php echo $totalLoad;?> members)</div>
 	</header>
 	<div class='flash-message'>
 		<?php
@@ -131,7 +132,7 @@
 	</table>
 	<div id="loading" class="ajax-loading"></div>
 	<div class="load-more" id="load-more">
-		<button class="btn" ng-click="loadMore()">
+		<button class="btn" ng-click="loadMore()" id="load-more-button">
 			<i class="icon icon-plus"></i> Load more
 		</button>
 	</div>
@@ -231,51 +232,69 @@
 			ret += "<a href='#menu-page-member-"+member.id+"'"+"class='dropdown-toggle' data-toggle='dropdown'><i class='icon-wrench'></i></a>";
 			ret += "<ul class='dropdown-menu'>";
 	        if(member.relation == 'MEMBER') {
-	        	ret += "<li><a href='"+baseUrl+"/page/setRelation?userId="+member.id+"&username="+member.username+"&slug="+slug+"&relation=Owner"+"&totalLoad="+$scope.totalLoad+"'>Change to Owner</a></li>";
+	        	ret += "<li><a onclick='return confirm(\"Are you sure you want to change this user to Owner?\")' href='"+baseUrl+"/page/setRelation?userId="+member.id+"&username="+member.username+"&slug="+slug+"&relation=Owner"+"&totalLoad="+$scope.totalLoad+"'>Change to Owner</a></li>";
 	        } else if(member.relation == 'OWNER') {
-	        	ret += "<li><a href='"+baseUrl+"/page/setRelation?userId="+member.id+"&username="+member.username+"&slug="+slug+"&relation=Member"+"&totalLoad="+$scope.totalLoad+"'>Change to Member</a></li>";
+	        	ret += "<li><a onclick='return confirm(\"Are you sure you want to remove this user to Member?\")' href='"+baseUrl+"/page/setRelation?userId="+member.id+"&username="+member.username+"&slug="+slug+"&relation=Member"+"&totalLoad="+$scope.totalLoad+"'>Change to Member</a></li>";
 	        }
-			ret += "<li><a href='"+baseUrl+"/page/removeMemberFromPage?userId="+member.id+"&username="+member.username+"&slug="+slug+"&totalLoad="+$scope.totalLoad+"'>Remove from Group</a></li></ul></li></ul></div>";
+			ret += "<li><a onclick='return confirm(\"Are you sure you want to remove this user from page?\")' href='"+baseUrl+"/page/removeMemberFromPage?userId="+member.id+"&username="+member.username+"&slug="+slug+"&totalLoad="+$scope.totalLoad+"'>Remove from Group</a></li></ul></li></ul></div>";
 			return ret;
+	    }
+
+	    $scope.checkIsOwnerEchoMenu = function(member) {
+	    	var isOwner = '<?php echo $isOwner->isOwner; ?>';
+	    	var ret = '';
+	    	if(isOwner == '1') {
+	    		ret = $scope.echoMenu(member,'<?php echo $slug;?>');
+	    	}
+	    	return ret;
 	    }
 	    
 		$scope.loadMore = function() {
 			var target = document.getElementById('loading');
 			var spinner = new Spinner(opts).spin(target);
+			$('#load-more').hide();
 			Member.query({
 				slug: '<?php echo $slug; ?>',
 				offset: $scope.totalLoad
 			}, function(members) {
-				var column = 0;
-				var ret = '';
-				$scope.totalLoad += members.length;
-				angular.forEach(members, function (member) {
-					var show = member.body;
-					if(column == 0) {
-						ret += '<tr class="page-members"><td class="span3">'+
-							$scope.echoPic(show.picSmall)+
-							$scope.echoProfile(show)+
-							$scope.echoMenu(show,'<?php echo $slug;?>')+
-							'</td>';
-						column++;
-					} else if(column == 2) {
-						ret += '<td class="span3">'+
-							$scope.echoPic(show.picSmall)+
-							$scope.echoProfile(show)+
-							$scope.echoMenu(show,'<?php echo $slug;?>')+
-							'</td></tr>';
-						column = 0;
-					} else {
-						ret += '<td class="span3">'+
-							$scope.echoPic(show.picSmall)+
-							$scope.echoProfile(show)+
-							$scope.echoMenu(show,'<?php echo $slug;?>')+
-							'</td>';
-						column++;
-					}
-				});
-				$('#page-members-body').append(ret);
-				ret = '';
+				var totalMembers = members.length
+				if(totalMembers == 0) {
+					$('#load-more').hide();
+				} else {
+					$('#load-more').show();
+					var column = 0;
+					var ret = '';
+					$scope.totalLoad += members.length;
+					angular.forEach(members, function (member) {
+						var show = member.body;
+						if(column == 0) {
+							ret += '<tr class="page-members"><td class="span3">'+
+								$scope.echoPic(show.picSmall)+
+								$scope.echoProfile(show)+
+								$scope.checkIsOwnerEchoMenu(show)+
+								'</td>';
+							column++;
+						} else if(column == 2) {
+							ret += '<td class="span3">'+
+								$scope.echoPic(show.picSmall)+
+								$scope.echoProfile(show)+
+								$scope.checkIsOwnerEchoMenu(show)+
+								'</td></tr>';
+							column = 0;
+						} else {
+							ret += '<td class="span3">'+
+								$scope.echoPic(show.picSmall)+
+								$scope.echoProfile(show)+
+								$scope.checkIsOwnerEchoMenu(show)+
+								'</td>';
+							column++;
+						}
+
+					});
+					$('#page-members-body').append(ret);
+					ret = '';
+					$('#showing').html('(Showing ' + $scope.totalLoad + ' members)');
+				}
 				spinner.stop();
 			});
 		};
