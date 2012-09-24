@@ -68,12 +68,18 @@ class PageController extends IAController
 		$totalLoad = $_GET['totalLoad'];
 		$membersUrl = $this->createUrl("page/$slug/members")."?totalLoad=$totalLoad";
 
-		$result = PageHelper::removeMemberFromPage($userId, $slug);
-		if($result->status == 1) {
-			Yii::app()->user->setFlash('success', "Removed user : $username from page");
+		$userLogin = Yii::app()->user->getId();
+		$isOwner = PageHelper::isOwner($userLogin, $slug);
+		if($isOwner->isOwner != 1) {
+			Yii::app()->user->setFlash('error', "Your permission is not enough to perform this action");
 		} else {
-			Yii::app()->user->setFlash('error', "Can't removed user : $username from page");
+			$result = PageHelper::removeMemberFromPage($userId, $slug);
+			if($result->status == 1) {
+				Yii::app()->user->setFlash('success', "Removed user : $username from page");
+			} else {
+				Yii::app()->user->setFlash('error', "Can't removed user : $username from page");
 
+			}
 		}
 		$this->redirect($membersUrl);
 		
@@ -88,14 +94,18 @@ class PageController extends IAController
 		$totalLoad = $_GET['totalLoad'];
 		$membersUrl = $this->createUrl("page/$slug/members")."?totalLoad=$totalLoad";
 
-		$result = PageHelper::setRelation($userId, $slug, $relation);
-
-		if($result->status == 1) {
-			Yii::app()->user->setFlash('success', "Success change user : $username to $relation");
+		$userLogin = Yii::app()->user->getId();
+		$isOwner = PageHelper::isOwner($userLogin, $slug);
+		if($isOwner->isOwner != 1) {
+			Yii::app()->user->setFlash('error', "Your permission is not enough to perform this action");
 		} else {
-			Yii::app()->user->setFlash('error', "Can not change user : $username to $relation");
+			$result = PageHelper::setRelation($userId, $slug, $relation);
+			if($result->status == 1) {
+				Yii::app()->user->setFlash('success', "Success change user : $username to $relation");
+			} else {
+				Yii::app()->user->setFlash('error', "Can not change user : $username to $relation");
+			}
 		}
-
 		$this->redirect($membersUrl);
 	}
 
