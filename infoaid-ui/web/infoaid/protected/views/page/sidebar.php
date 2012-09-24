@@ -1,7 +1,8 @@
 <?php
 	$session = new CHttpSession;
 	$session->open();
-	$userId = 8185;
+	$userId = Yii::app()->user->getId();
+	//$userId = 8185;
 	if($userId != null) {
     	$resultPages = API::getJSON('user/getPages', array('id'=>$userId));
     	$resultUserInfo = API::getJSON("user/$userId/basic_info");
@@ -15,7 +16,7 @@
 		?>
 			<div class='page-sidebar-joinus'>
 				<?php 
-				echo CHtml::link('Join Us',array('user/create'),array('class'=>'btn-info btn-large btn-joinus'));
+				echo CHtml::link('Register',array('user/create'),array('class'=>'btn-info btn-large btn-joinus'));
 				?>
 			</div>
 		<?php
