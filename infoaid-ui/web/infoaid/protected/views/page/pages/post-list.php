@@ -1,24 +1,44 @@
+<div class="modal hide fade" id="myModal" ng-controller="ModalCtrl">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="removeNewItem()">&times;</button>
+			<h3>Add New Item</h3>
+			</div>
+			<div class="modal-body">
+			<input ng-model="newItem" ng-maxlength="50" type="text" 
+      		class="span3" placeholder="Item Name..."></input>
+			</div>
+			<div class="modal-footer">
+			<a href="#" class="btn btn-mini btn-primary" ng-click="removeNewItem()" data-dismiss="modal" aria-hidden="true">Close</a>
+			<a href="#" class="btn btn-mini btn-primary" ng-click="setModel(newItem)" aria-hidden="true">Save</a>
+		</div>		   	
+	</div>
 <div  ng-controller="PostMessageCtrl">
 	<div ng-init="memberId=8185"></div>
 <div class="tabbable">
   <ul class="nav nav-pills">
-    <li class="active"><a href="#tab1" data-toggle="tab" class="btn btn-mini btn-link">info</a></li>
-    <li><a href="#tab2" data-toggle="tab" class="btn btn-mini btn-link">need</a></li>
+    <li class="active"><a href="#tabInfo" data-toggle="tab" class="btn btn-mini btn-link">info</a></li>
+    <li><a href="#tabNeed" data-toggle="tab" class="btn btn-mini btn-link">request</a></li>
   </ul>
   <div class="tab-content">
-    <div class="tab-pane active" id="tab1">
-    	<form name="postMsg" ng-submit="postMessage()">
+    <div class="tab-pane active" id="tabInfo">
+    	<form ng-submit="postMessage()">
       		<input name="inputMsg" ng-model="message" ng-maxlength="140" type="text" 
-      		class="span5" placeholder="Type info..."></input>	      		
-      		<span class="error" ng-show="postMsg.inputMsg.$error.maxlength">
-      			Message must have 1 to 140 character 
-      		</span>
+      		class="span5" placeholder="Type info..."></input>     		
       	</form>
       					
     </div>
-    <div class="tab-pane" id="tab2">
-      <input class="span5" ng-model='need' type="text" placeholder="..."></input>
-    </div>
+    <div class="tab-pane" id="tabNeed">
+    	<form validate ng-submit="postRequest()" class="form-inline">
+    		<select class="span3" id="requestPost" ng-model="request" 
+    		ng-options="i.id as i.name for i in items" required>
+		        <option value=""></option>		        
+		    </select>      		
+      		<input class="span2" ng-model='qty' type="text" required></input>
+      		<input class="btn btn-mini btn-primary" type="submit" id="submit" value="request" />  
+      		<a href="#myModal" openDialog role="button" class="btn  btn-mini btn-primary" data-toggle="modal">Add Item</a>    		
+      	</form> 
+      	  
+    </div>    
   </div>  
 </div>
 <div class="divider"></div>
@@ -41,7 +61,7 @@
 				<div class="meta">
 					<time class="timeago" datetime="{{post.dateCreated}}">
 						{{post.dateCreated}}
-					</time>
+					</time>					
 					<button class="btn btn-mini btn-link" ng-click="deletePost(post)" type="button">delete</button>
 				</div>
 			</div>
@@ -51,7 +71,7 @@
 
 		<div class="message-comments" ng-controller="CommentCtrl">
 			<div class="load-more" ng-click="loadMore()">
-				<span class="label label-info">View all comments</span>
+				<span class="label label-info" ng-show="post.conversation>3"><i class="icon-comment icon-white"></i>View all {{post.conversation}} comments</span>
 				
 			</div>
 
@@ -73,7 +93,7 @@
 							<time class="timeago" datetime="{{comment.lastUpdated}}"
 								title="{{comment.lastUpdated}}">
 								{{comment.lastUpdated}}
-							</time>
+							</time>							
 							<button class="btn btn-mini btn-link" ng-click="deleteComment(comment)" type="button">delete</button>
 						</div>
 					</div>
@@ -96,3 +116,11 @@
 		<i class="icon icon-plus"></i> Load more
 	</button>
 </div>
+<script>
+    $(document).ready(function() { 
+    	$("#requestPost").select2({
+    		placeholder: "Select a Need",
+    		allowClear: true
+    	});    	 
+    });
+</script>
