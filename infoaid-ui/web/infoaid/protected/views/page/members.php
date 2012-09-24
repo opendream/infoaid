@@ -153,30 +153,7 @@
 		};
 
 		$scope.totalLoad = parseInt('<?php echo $totalLoad; ?>');
-		/*
-		$scope.setRelation = function(userId, username, slug, relation) {
-			console.log($scope.setRelation)
-			console.log(userId, username, slug, relation)
-			Relation.query({
-				userId: userId,
-				slug: slug,
-				relation: relation
-			}, function(result) {
-					$('#page-member-relation-'+userId).html('('+relation+')')
-					var menu = '';
-					menu += "<a href='#menu-page-member-"+userId+"'"+"class='dropdown-toggle' data-toggle='dropdown'><i class='icon-wrench'></i></a>";
-					menu += "<ul class='dropdown-menu'>";
-					if(relation == 'Member') {
-			        	menu += "<li onclick='"+$scope.setRelation()+"'><a href='#'>Change to Owner</a></li>";
-			        } else if(relation == 'Owner') {
-			        	menu += "<li onclick='"+$scope.setRelation()+"'><a href='#'>Change to Member</a></li>";
-			        }
-			        menu += "<li><a href='#'>Remove from group</a></li></ul>";
-					$('#menu-page-member-'+userId).html(menu)
-				}
-			);
-		}
-		*/
+
 		$scope.echoPic = function(picUrl) {
 			var ret = '';
 			if(picUrl == null) {
@@ -252,7 +229,6 @@
 								'</div>';
 
 					});
-					console.log(ret)
 					$('#page-members-body').append(ret);
 					ret = '';
 					$('#showing').html('(Showing ' + $scope.totalLoad + ' members)');
