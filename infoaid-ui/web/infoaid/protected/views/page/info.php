@@ -23,7 +23,7 @@
 
 			<div class="span2">
 				<div id="members">
-				    <h2><?php echo CHtml::link('Members', array('page/members','slug'=>$slug)); ?></h2>
+				    <h2>Members</h2>
 
 				    <div ng-controller="MemberCtrl">               
 				        <ul class="unstyled">
@@ -31,7 +31,8 @@
 				                <span>{{member.username}}</span>
 				            </li>
 				        </ul>
-				    </div>				    
+				    </div>
+				    <div><span class='show-more-members'><?php echo CHtml::link('Show more ..', array('page/members','slug'=>$slug)); ?></span></div>
 				</div>				
 			</div>
 		</div>	

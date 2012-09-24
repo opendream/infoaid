@@ -425,3 +425,10 @@ div.search-form
 .header-members {
 	float: left;
 }
+
+.show-more-members
+{
+	font-size: 12px;
+	background: no-repeat url('/infoaid/media/icons/show_more_members.jpg');
+	padding-left: 20px;
+}
