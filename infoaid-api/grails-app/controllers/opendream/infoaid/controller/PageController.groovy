@@ -470,4 +470,12 @@ class PageController {
         def result = pageService.isOwner(userId, slug)
         render result as JSON
     }
+
+    def isJoined() {
+        def userId = params.userId
+        def slug = params.slug
+
+        def result = pageService.isJoined(userId, slug)
+        render result as JSON
+    }
 }

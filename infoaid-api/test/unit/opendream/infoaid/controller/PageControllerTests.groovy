@@ -194,8 +194,8 @@ class PageControllerTests {
         controller.joinUs()
 
         testPage = Page.findBySlug('page-slug')
-        assert 3 == testPage.getUsers(0).size()
-        assert PageUser.Relation.MEMBER == testPage.getUsers(0).last().relation
+        assert 3 == testPage.getUsers(0, 10).size()
+        assert PageUser.Relation.MEMBER == testPage.getUsers(0, 20).last().relation
         assert "nut3" == response.json.user
         assert "page" == response.json.page
         assert "page-slug" == response.json.pageSlug
@@ -563,5 +563,33 @@ class PageControllerTests {
 
         result = controller.isOwner()
         assert response.json['isOwner'] == false
+    }
+
+    void testIsJoined() {
+        controller.pageService = new PageService()
+
+        params.slug = 'page-slug'
+        def user1 = User.findByUsername('nut')
+        params.userId = user1.id
+
+        def result = controller.isJoined()
+        assert response.json['isJoined'] == true
+
+        response.reset()
+
+        def user2 = User.findByUsername('nut2')
+        params.slug = 'page-slug'
+        params.userId = user2.id
+
+        result = controller.isJoined()
+        assert response.json['isJoined'] == true
+
+        response.reset()
+
+        params.slug = 'page-slug'
+        params.userId = 12345633
+
+        result = controller.isJoined()
+        assert response.json['isJoined'] == false
     }
 }
