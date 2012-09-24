@@ -57,23 +57,10 @@
     	
     }
 
-    function echoTable($member, $slug, $isOwner, $type, $totalLoad) {
-    	//echo "<div class='span3'>";
-    	if($type == 'open') {
-    		echo "<tr class='page-members'>";
-			echo "<td class='span3'>";
+    function echoTable($member, $slug, $isOwner, $totalLoad) {
+    		echo "<div class='span3 page-member-margin'>";
 			echoContext($member, $slug, $isOwner, $totalLoad);
-			echo "</td>";
-    	} else if($type == 'normal') {
-    		echo "<td class='span3'>";
-			echoContext($member, $slug, $isOwner, $totalLoad);
-			echo "</td>";
-    	} else if($type == 'close') {
-    		echo "<td class='span3'>";
-			echoContext($member, $slug, $isOwner, $totalLoad);
-			echo "</td>";
-			echo "</tr>";
-    	}
+			echo "</div>";
     	//xattr_get(filename, name)echo "</div>";
     	
     }
@@ -84,10 +71,10 @@
 		<?php $this->renderPartial('sidebar'); ?>
 	</div>
 	<div>
-		<?php $this->renderPartial('header', array('slug'=>$slug,'id'=>$page->id)); ?>
+		<?php $this->renderPartial('header', array('slug'=>$slug)); ?>
 	</div>
 </header>
-<div id="page-members" class='span9' ng-app="member" ng-controller="memberController">
+<div id="page-members" ng-app="member" class="page-members" ng-controller="memberController">
 	<header>
 		<h1 class="header-members">Members</h1><div id='showing'>(Showing <?php echo $totalLoad;?> members)</div>
 	</header>
@@ -111,25 +98,15 @@
 			?>
 		</span>
 	</div>
-	<table class='page-members'>
-		<tbody id='page-members-body'>
+	<div id="page-members-body" class="page-members">
 			<?php
-				$column = 0;
 				foreach ($members->members as $member) {
-					if($column == 0) {
-						echoTable($member, $slug, $isOwner->isOwner, 'open', $totalLoad);
-				        $column++;
-					} else if($column == 2) {
-						echoTable($member, $slug, $isOwner->isOwner, 'close', $totalLoad);
-						$column = 0;
-					} else {
-						echoTable($member, $slug, $isOwner->isOwner, 'normal', $totalLoad);
-			            $column++;
-					}
+					echoTable($member, $slug, $isOwner->isOwner, $totalLoad);
 				}
 			?>
-		</tbody>
-	</table>
+	</div>
+
+
 	<div id="loading" class="ajax-loading"></div>
 	<div class="load-more" id="load-more">
 		<button class="btn" ng-click="loadMore()" id="load-more-button">
@@ -262,35 +239,18 @@
 					$('#load-more').hide();
 				} else {
 					$('#load-more').show();
-					var column = 0;
 					var ret = '';
 					$scope.totalLoad += members.length;
 					angular.forEach(members, function (member) {
 						var show = member.body;
-						if(column == 0) {
-							ret += '<tr class="page-members"><td class="span3">'+
+							ret += '<div class="span3 page-member-margin">'+
 								$scope.echoPic(show.picSmall)+
 								$scope.echoProfile(show)+
 								$scope.checkIsOwnerEchoMenu(show)+
-								'</td>';
-							column++;
-						} else if(column == 2) {
-							ret += '<td class="span3">'+
-								$scope.echoPic(show.picSmall)+
-								$scope.echoProfile(show)+
-								$scope.checkIsOwnerEchoMenu(show)+
-								'</td></tr>';
-							column = 0;
-						} else {
-							ret += '<td class="span3">'+
-								$scope.echoPic(show.picSmall)+
-								$scope.echoProfile(show)+
-								$scope.checkIsOwnerEchoMenu(show)+
-								'</td>';
-							column++;
-						}
+								'</div>';
 
 					});
+					console.log(ret)
 					$('#page-members-body').append(ret);
 					ret = '';
 					$('#showing').html('(Showing ' + $scope.totalLoad + ' members)');

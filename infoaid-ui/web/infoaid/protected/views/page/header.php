@@ -2,8 +2,8 @@
     $post = PageHelper::getJSON($slug, "info");
     $needs = PageHelper::getJSON($slug, 'limit_need/4');
 ?>
-<div id="page-header-<?php echo $id; ?>" class='page-header span10'>
-    <div id="page-header-left-<?php echo $id; ?>">
+<div id="page-header-<?php echo $post->id; ?>" class='page-header span10'>
+    <div id="page-header-left-<?php echo $post->id; ?>">
         <div class="page-picture">
             <?php 
                 if($post->picSmall == null) {
@@ -14,7 +14,7 @@
             ?>
         </div>
     </div>
-    <div id="page-header-right-<?php echo $id; ?>">
+    <div id="page-header-right-<?php echo $post->id; ?>">
         <div><span class='page-name'><?php echo CHtml::link($post->name, array("page/$slug")); ?></span></div>
         <div class='page-household-population'>
             <span>
