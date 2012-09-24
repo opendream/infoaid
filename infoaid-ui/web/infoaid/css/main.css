@@ -421,3 +421,7 @@ div.search-form
 .load-more {
 	clear: both;
 }
+
+.header-members {
+	float: left;
+}
