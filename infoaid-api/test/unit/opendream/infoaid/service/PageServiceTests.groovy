@@ -83,8 +83,8 @@ class PageServiceTests {
         def lat2 = 'lat2'
         def lng2 = 'lng2'
 
-        service.createPage(user.id, name1, lat1, lng1, location, null, null, null, 'picOri')
-        service.createPage(user.id, name2, lat2, lng2, null, null, null, null, null)
+        service.createPage(user.id, name1, lat1, lng1, location, null, null, null, 'picOri', 'picSmall', 'picLarge')
+        service.createPage(user.id, name2, lat2, lng2, null, null, null, null, null, null, null)
 
         assert Page.count() == 4
 
@@ -138,9 +138,9 @@ class PageServiceTests {
         def lat2 = 'lat2'
         def lng2 = 'lng2'
 
-        service.createPage(user.id, name2, lat2, lng2, null, null, null, null, null)
+        service.createPage(user.id, name2, lat2, lng2, null, null, null, null, null, null, null)
         shouldFail(ValidationException) {
-            service.createPage(user2.id, name2, lat2, lng2, null, null, null, null, null)
+            service.createPage(user2.id, name2, lat2, lng2, null, null, null, null, null, null, null)
         }
     }
 
@@ -296,7 +296,9 @@ class PageServiceTests {
     void testDisablePageEnablePage() {
         def page = Page.findBySlug("0")
         assert page.status == Page.Status.ACTIVE
-        service.disablePage("0")
+        def result = service.disablePage("0")
+
+        assert result.status == Page.Status.INACTIVE
 
         page = Page.findBySlug("0")
         assert page.status == Page.Status.INACTIVE

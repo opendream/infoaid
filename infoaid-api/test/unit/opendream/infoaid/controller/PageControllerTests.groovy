@@ -243,14 +243,8 @@ class PageControllerTests {
     void testCreatePage() {
         assert 2 == Page.count()
 
-        pageService.demand.createPage(1..1) { userId, name, lat, lng, location, household, population, about, picOriginal -> 
-            def page = new Page(name: name, lat: lat, lng: lng, location: location,
-            household: household, population: population, about: about, picOriginal: picOriginal).save()
-            def user = User.get(userId)
-            new PageUser(user: user, page: page, relation: PageUser.Relation.OWNER).save()
-            page
-        }
-        controller.pageService = pageService.createMock()
+        
+        controller.pageService = new PageService()
 
         params.userId = 1
         params.name = 'my page'

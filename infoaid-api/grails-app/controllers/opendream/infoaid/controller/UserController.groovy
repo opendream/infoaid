@@ -29,7 +29,8 @@ class UserController {
             result = userService.updateBasicInfo(params)
             render result as JSON
         } catch (e) {
-            result = [message: 'can not update user info', user: params]
+            log.error e
+            result = [status: 0, message: 'can not update user info', user: params]
             render result as JSON
         }
     }
@@ -40,7 +41,7 @@ class UserController {
             result = userService.updatePassword(params)
             render result as JSON
         } catch (e) {
-            result = [message: 'can not update password', user: params]
+            result = [status: 0, message: 'can not update password', user: params]
             render result as JSON
         }
     }

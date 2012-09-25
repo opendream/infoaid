@@ -9,6 +9,12 @@ class ItemController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def allItems() {
+        def items = Item.findAllByStatus(Item.Status.ACTIVE, [sort:"name"])
+        items = items.collect { [id: it.id, name: it.name] }
+        render items as JSON
+    }
+
     def list(Integer max) {
         def items = itemService.list(max)
         def ret = [:]

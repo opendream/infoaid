@@ -146,6 +146,7 @@ class PageController {
                     dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                     createdBy: it.createdBy.username,
                     userId: it.createdBy.id,
+                    conversation: it.conversation,
                     comments: it.previewComments.comments.collect {
                         [
                             message: it.message,
@@ -188,6 +189,7 @@ class PageController {
                     dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                     createdBy: it.createdBy.username,
                     userId: it.createdBy.id,
+                    conversation: it.conversation,
                     comments: it.previewComments.comments.collect {
                         [
                             id: it.id,
@@ -276,18 +278,21 @@ class PageController {
         def about = params.about
         def location = params.location
         def picOriginal = params.picOriginal
+        def picSmall = params.picSmall
+        def picLarge = params.picLarge
         def ret = [:]
 
         if(!userId || !name) {
             ret = [status:0, message: "user id: ${userId} could not create page: ${name}",
                     lat: lat, lng: lng, household: household, population: population,
-                    about: about, location: location, picOriginal: picOriginal]
+                    about: about, location: location, slug: slug, picOriginal: picOriginal, picSmall: picSmall, picLarge: picLarge]
             render ret as JSON
         } else {
-            def result = pageService.createPage(userId, name, lat, lng, location, household, population, about, picOriginal)
+            def result = pageService.createPage(userId, name, lat, lng, location, household, population, about, picOriginal, picSmall, picLarge)
             ret = [status:1, message: "user id: ${userId} created page: ${name}", userId: userId, 
                     name: result.name, lat: result.lat, lng: result.lng, household: result.household, 
-                    population: result.population, about: result.about, location: result.location, picOriginal: result.picOriginal, slug: result.slug]
+                    population: result.population, about: result.about, location: result.location, 
+                    picOriginal: result.picOriginal, picSmall: result.picSmall, picLarge: result.picLarge, slug: result.slug]
             render ret as JSON
         }
     }
@@ -356,12 +361,17 @@ class PageController {
 
     def postNeed() {
         def ret
-        def userId = params.userId
         def slug = params.slug
         def itemId = params.itemId
         def quantity = params.quantity
         def message = params.message
-
+        def userId
+        if(params.userId) {
+            userId = params.long('userId')
+        } else {
+            userId = springSecurityService?.principal?.id
+        }
+        println "userId $userId"
         def result = pageService.createNeed(userId, slug, itemId, quantity, message)
         ret = [post: [id :result.post.id, message: result.post.message,
         item: [id: result.post.item.id, name: result.post.item.name], quantity: result.post.quantity,
@@ -390,8 +400,8 @@ class PageController {
 
     def updatePage() {
         def slug = params.slug
-
-        pageService.updatePage(slug, params)
+        def result = pageService.updatePage(slug, params)
+        render result as JSON
     }
 
     def disablePage() {

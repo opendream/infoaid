@@ -112,5 +112,7 @@ grails.plugins.springsecurity.basic.realmName = "Infoaid"
 grails.plugins.springsecurity.filterChain.chainMap = [
    '/user**': 'JOINED_FILTERS,-exceptionTranslationFilter',
    '/user/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+   '/page**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+   '/page/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
    '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
 ]
