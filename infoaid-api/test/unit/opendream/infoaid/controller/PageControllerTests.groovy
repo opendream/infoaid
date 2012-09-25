@@ -181,12 +181,8 @@ class PageControllerTests {
         def user3 = new User(username: "nut3", password: "nut3", firstname: 'firstname3', lastname: 'lastname3').save(flush: true)
         def testPage = Page.findBySlug('page-slug')
         assert 2 == testPage.getUsers(0).size()
-        pageService.demand.joinPage(1..1) {userId, slug -> 
-            def user = User.get(userId)
-            def page = Page.findBySlug(slug)
-            new PageUser(user: user, page: page, relation: PageUser.Relation.MEMBER).save(flush: true)
-        }
-        controller.pageService = pageService.createMock()
+        
+        controller.pageService = new PageService()
 
         params.userId = 3
         params.slug = 'page-slug'
@@ -196,10 +192,7 @@ class PageControllerTests {
         testPage = Page.findBySlug('page-slug')
         assert 3 == testPage.getUsers(0, 10).size()
         assert PageUser.Relation.MEMBER == testPage.getUsers(0, 20).last().relation
-        assert "nut3" == response.json.user
-        assert "page" == response.json.page
-        assert "page-slug" == response.json.pageSlug
-        assert "MEMBER" == response.json.relation
+        assert 1 == response.json['status']
     }    
 
     void testTopPost() {
