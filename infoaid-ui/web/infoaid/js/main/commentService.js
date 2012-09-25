@@ -30,9 +30,25 @@ angular.module('commentService', ['ngResource']).
 	factory('PostRequest', function ($resource) {
 		var PostRequest = $resource(baseUrl + '/api/postNeed/');
 		return PostRequest;
+	}).
+	factory('RefreshPost', function (Post) {
+		var RefreshPost = function(scope) {
+			Post.query({slug:scope.slug}, function (posts) {					 
+				var i = 0;
+				angular.forEach(posts, function(post) {
+					if(scope.posts.length > i) {
+						scope.posts.splice(i, 1, post);
+					} else {
+						scope.posts.push(post);
+					}
+					i++;
+				});					
+			});
+		};		
+		return RefreshPost;
 	});
 
-function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post) {
+function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post, RefreshPost) {
 
 	var lastRowLastUpdated = function () {
 		var comments = $($scope.comments);
@@ -78,7 +94,7 @@ function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post) {
 			};
 			
 			PostComment.get(options, function (ret) {	
-				refresh();	
+				RefreshPost($scope);
 				$scope.comment = '';		
 				var comment = {'id':ret.commentId, 'picSmall':ret.picSmall, 'createdBy':ret.user, 
 								'message':ret.comment, 'lastUpdated':ret.lastUpdated};
@@ -92,7 +108,7 @@ function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post) {
 		if(comment.id) {
 			var options = { commentId: comment.id, userId: this.memberId };
 			DeleteComment.get(options, function (ret) {	
-				refresh();			
+				RefreshPost($scope);
 				for (var i = 0, ii = $scope.comments.length; i < ii; i++) {
 					if($scope.comments[i].id == ret.id) {
 						$scope.comments.splice(i, 1);
@@ -103,32 +119,14 @@ function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post) {
 
 		}		
 	}
-
-	
-
-	function refresh() {
-		Post.query({slug:$scope.slug}, function (posts) {					 
-			var i = 0;
-			angular.forEach(posts, function(post) {
-				if($scope.posts.length > i) {
-					$scope.posts.splice(i, 1, post);
-				} else {
-					$scope.posts.push(post);
-				}
-				i++;
-			});					
-		});
-	}
 }
 
 
-function PostMessageCtrl($scope, PostMessage, PostRequest, Post, DeletePost, Items) {
+function PostMessageCtrl($scope, PostMessage, PostRequest, Post, DeletePost, Items, RefreshPost) {
 	$scope.items = [];
 	if($scope.items.length===0) {
 		Items.query(function(ret) {
 			angular.forEach(ret, function(i) {
-				//console.log(i.name);
-				//$scope.items.unshift(i);
 				$scope.items.push(i);
 			});
 		});
@@ -143,7 +141,7 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, DeletePost, Ite
 			};
 			
 			PostMessage.get(options, function (ret) {	
-				refresh();	
+				RefreshPost($scope);
 				$scope.message = '';				
 			});							
 		}
@@ -154,7 +152,7 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, DeletePost, Ite
 		if(post.id) {
 			var options = { postId: post.id, userId: this.memberId };
 			DeletePost.get(options, function (ret) {	
-				refresh();					
+				RefreshPost($scope);
 			});
 		}
 	}
@@ -167,29 +165,14 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, DeletePost, Ite
 				quantity: $scope.qty
 			};
 		PostRequest.get(options, function (ret) {	
-				refresh();	
+				RefreshPost($scope);;	
 				$scope.request = '';
 				$scope.qty = '';			
 		});
 		//$scope.request = '';
 		//$scope.qty = '';
 		// /page/$slug/post_need/$userId
-	}	
-
-	function refresh() { // duplicated function need to fix!
-		Post.query({slug:$scope.slug}, function (posts) {					 
-			var i = 0;CreateItem
-			angular.forEach(posts, function(post) {
-				if($scope.posts.length > i) {
-					$scope.posts.splice(i, 1, post);
-				} else {
-					$scope.posts.push(post);
-				}
-				i++;
-			});					
-		});
 	}
-
 }
 
 function ModalCtrl($scope, CreateItem) {
