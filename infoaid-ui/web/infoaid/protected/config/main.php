@@ -205,5 +205,20 @@ return array(
 				),
 			),
 		),
+		'post' => array(
+			'photo' => array(
+				'prefixUrl' => '/media/posts/',
+				'destinationDir' => dirname(__FILE__).'/../../media/posts/',
+
+				'size' => array(
+					'original' => array(
+						'width' => '400',
+						'height' => '400',
+						'suffix' => '_o',
+					),
+				)
+			),
+		),
+
 	),
 );
