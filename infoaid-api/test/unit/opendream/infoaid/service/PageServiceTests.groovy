@@ -296,7 +296,9 @@ class PageServiceTests {
     void testDisablePageEnablePage() {
         def page = Page.findBySlug("0")
         assert page.status == Page.Status.ACTIVE
-        service.disablePage("0")
+        def result = service.disablePage("0")
+
+        assert result.status == Page.Status.INACTIVE
 
         page = Page.findBySlug("0")
         assert page.status == Page.Status.INACTIVE
