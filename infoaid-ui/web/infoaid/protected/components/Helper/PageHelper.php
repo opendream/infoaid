@@ -76,4 +76,22 @@ class PageHelper
 		return $result;
 	}
 
+	public static function isJoined($userId, $slug)
+	{
+		$result = API::getJSON("page/isJoined", array('userId'=>$userId, 'slug'=>$slug));
+		return $result;
+	}
+
+	public static function leavePage($userId, $slug)
+	{
+		$result = API::getJSON("page/leavePage", array('userId'=>$userId, 'slug'=>$slug));
+		return $result;
+	}
+
+	public static function joinPage($userId, $slug)
+	{
+		$result = API::getJSON("page/joinUs", array('userId'=>$userId, 'slug'=>$slug));
+		return $result;
+	}
+
 }

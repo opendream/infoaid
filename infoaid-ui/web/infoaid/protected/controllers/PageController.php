@@ -109,4 +109,20 @@ class PageController extends IAController
 		$this->redirect($membersUrl);
 	}
 
+	public function actionLeavePage()
+	{
+		$userId = $_GET['userId'];
+		$slug = $_GET['slug'];
+		$result = PageHelper::leavePage($userId, $slug);
+		$this->renderJSON($result);
+	}
+
+	public function actionJoinPage()
+	{
+		$userId = $_GET['userId'];
+		$slug = $_GET['slug'];
+		$result = PageHelper::joinPage($userId, $slug);
+		$this->renderJSON($result);
+	}
+
 }

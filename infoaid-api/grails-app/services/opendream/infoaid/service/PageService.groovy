@@ -110,11 +110,15 @@ class PageService {
     }
 
     def joinPage(userId, slug) {
-
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
-
-        PageUser.joinPage(user, page)
+        try{
+            PageUser.joinPage(user, page)    
+        } catch (e) {
+            log.error e
+            throw e
+        }
+        
     }
 
     def leavePage(userId, slug) {
