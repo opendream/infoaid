@@ -16,7 +16,7 @@
             ?>
         </div>
     </div>
-    <div id="page-header-right-<?php echo $post->id; ?>">
+    <div id="page-header-right-<?php echo $post->id; ?>" class="page-header-right">
         <div><span class='page-name'><?php echo CHtml::link($post->name, array("page/$slug")); ?></span></div>
         <div class='page-household-population'>
             <span>
@@ -73,8 +73,8 @@
             </span>
         </div>
     </div>
-    <div id="join-leave-page-loading-<?php echo $post->id?>">
-    <div id="page-header-join-leave-<?php echo $post->id; ?>">
+    
+    <div id="page-header-join-leave-<?php echo $post->id; ?>" class="page-header-join-leave">
         <?php
             if($userId != null) {
                 if($isJoined->isJoined == 1) {
@@ -86,8 +86,7 @@
         ?>
         
     </div>
-    
-    </div>
+    <div id="join-leave-page-loading-<?php echo $post->id?>"></div>
 </div>
 <script>
     var spinner

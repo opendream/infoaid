@@ -238,13 +238,23 @@ div.search-form
 {
 	margin-top: 5px;
 	font-size: 14px;
-	margin-left: 80px;
 }
 
 .page-header
 {
 	padding-top: 10px;
 	background-color: #F2F2F2;
+}
+
+.page-header-right
+{
+	float: left;
+}
+
+.page-header-join-leave
+{
+	float: right;
+	margin-right: 100px;
 }
 
 .page-picture
