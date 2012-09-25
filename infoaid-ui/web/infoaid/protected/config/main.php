@@ -173,7 +173,7 @@ return array(
 		'adminEmail'=>'webmaster@example.com',
 
 		'api'=>array(
-			'server'=>'http://localhost:8080/infoaid-api/',
+			'server'=>'http://192.168.1.131:8080/infoaid-api/',
 			//'port'=>8080,
 		),
 
