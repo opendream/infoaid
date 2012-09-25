@@ -146,6 +146,7 @@ class PageController {
                     dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                     createdBy: it.createdBy.username,
                     userId: it.createdBy.id,
+                    conversation: it.conversation,
                     comments: it.previewComments.comments.collect {
                         [
                             message: it.message,
@@ -188,6 +189,7 @@ class PageController {
                     dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                     createdBy: it.createdBy.username,
                     userId: it.createdBy.id,
+                    conversation: it.conversation,
                     comments: it.previewComments.comments.collect {
                         [
                             id: it.id,
@@ -356,12 +358,17 @@ class PageController {
 
     def postNeed() {
         def ret
-        def userId = params.userId
         def slug = params.slug
         def itemId = params.itemId
         def quantity = params.quantity
         def message = params.message
-
+        def userId
+        if(params.userId) {
+            userId = params.long('userId')
+        } else {
+            userId = springSecurityService?.principal?.id
+        }
+        println "userId $userId"
         def result = pageService.createNeed(userId, slug, itemId, quantity, message)
         ret = [post: [id :result.post.id, message: result.post.message,
         item: [id: result.post.item.id, name: result.post.item.name], quantity: result.post.quantity,

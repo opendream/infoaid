@@ -33,33 +33,34 @@ class UserService {
     }
 
     def updateBasicInfo(updateparams) {
-        def user = User.get(updateparams.id)
-        user.properties['username', 'firstname', 'lastname', 'email', 'telNo', 'picOriginal'] = updateparams
+        def user = User.get(updateparams.userId)
+        user.properties['username', 'firstname', 'lastname', 'email', 'telNo', 'picOriginal', 'picLarge', 'picSmall'] = updateparams
         if(!user.save()) {
             log.error user.errors
             throw new RuntimeException("${user.errors}")
         }
-        [username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, telNo:user.telNo, picOriginal: user.picOriginal]
+        [status:1, username:user.username, firstname:user.firstname, lastname:user.lastname, email:user.email, 
+        telNo:user.telNo, picOriginal: user.picOriginal, picLarge: user.picLarge, picSmall: user.picSmall]
     }
 
     def updatePassword(updateparams) {
         def passLength = updateparams['newPassword'].size()
         if(passLength < 7 || passLength > 20) {
             log.error "password confirmation mismatch"
-            return [message: "Password must have 7 to 20 character"]
+            return [status: 0, message: "Password must have 7 to 20 character"]
         }
         if(updateparams.newPassword != updateparams.confirmedPassword) {
             log.error "password confirmation mismatch"
             //throw RuntimeException("password confirmation mismatch")
-            return [message: "password confirmation mismatch"]
+            return [status: 0, message: "password confirmation mismatch"]
         }
 
-        def user = User.get(updateparams.id)
+        def user = User.get(updateparams.userId)
 
         if(user.password != springSecurityService.encodePassword(updateparams.oldPassword)) {
             log.error "wrong password"
             //throw RuntimeException("wrong password")
-            return [message: "wrong password"]
+            return [status: 0, message: "wrong password"]
         }
         user.password = updateparams.newPassword
         

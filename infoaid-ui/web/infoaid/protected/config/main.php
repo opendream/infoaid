@@ -78,7 +78,10 @@ return array(
 				'/api/comment'=>'/api/comment',
 				'/api/deleteComment/<commentId:\d+>'=>'/api/deleteComment',
 				'/api/postMessage'=>'/api/postMessage',
+				'/api/postNeed/'=>'/api/postNeed/',
 				'/api/deletePost/<postId:\d+>'=>'/api/deletePost',
+				'/api/createItem/'=>'/api/createItem',
+				//'/api/items'=>'/api/items',
 
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
@@ -170,7 +173,7 @@ return array(
 		'adminEmail'=>'webmaster@example.com',
 
 		'api'=>array(
-			'server'=>'http://192.168.1.131:8080/infoaid-api/',
+			'server'=>'http://localhost:8080/infoaid-api/',
 			//'port'=>8080,
 		),
 

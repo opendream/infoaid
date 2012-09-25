@@ -393,3 +393,25 @@ http://localhost:8080/infoaid-api/user/8185/password
 Example Response
 --------------------------------------------------------------
 --------------------------------------------------------------
+
+Resource URL
+http://localhost:8080/infoaid-api/page/$slug/post_need/
+
+Method: POST
+
+Paramters
+Post values:
+itemId
+example value: 8185
+quantity
+example value: 81
+
+
+http://localhost:8080/infoaid-api/item/createItem
+
+Method: POST
+
+Paramters
+Post values:
+itemName
+example value: egg
