@@ -67,7 +67,13 @@ return array(
 				'api/post/<id:\d+>/<method:\w+>'=>'api/post',
 				'api/page/<slug:[^\/]*>/<method:\w+>'=>'api/page',
 				'api/members/<slug:[^\/]*>'=>'api/members',
+				'page/joinPage'=>'page/joinPage',
+				'page/leavePage'=>'page/leavePage',
+				'page/loadMoreMembers'=>'page/loadMoreMembers',
+				'page/setRelation'=>'page/setRelation',
+				'page/removeMemberFromPage'=>'page/removeMemberFromPage',
 				'page/search'=>'page/search',
+				'page/<slug:[^\/]*>/members'=>'page/members',
 				'page/<slug:[^\/]*>'=>'page/view',
 				'/api/comment'=>'/api/comment',
 				'/api/deleteComment/<commentId:\d+>'=>'/api/deleteComment',
@@ -152,6 +158,12 @@ return array(
 				array('host'=>'localhost','port'=>11211),
 			),
 		),
+
+		'phpThumb'=>array(
+			'class'=>'ext.EPhpThumb.EPhpThumb',
+			'options'=>array(),
+		),
+
 	),
 
 	// application-level parameters that can be accessed
@@ -166,5 +178,31 @@ return array(
 		),
 
 		'allowed_language' => array('en', 'th'),
+
+		'profile' => array(
+			'photoUrlPrefix' => '/media/profiles/',
+			'photoDir' => dirname(__FILE__).'/../../media/profiles/',
+
+			'size' => array(
+				'original' => array(
+					'width' => '400',
+					'height' => '400',
+					'suffix' => '_o',
+				),
+
+				'large' => array(
+					'width' => '160',
+					'height' => '160',
+					'suffix' => '_l',
+				),
+
+				'small' => array(
+					'width' => '50',
+					'height' => '50',
+					'suffix' => '_s',
+				),
+			),
+
+		),
 	),
 );

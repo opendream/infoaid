@@ -110,11 +110,15 @@ class PageService {
     }
 
     def joinPage(userId, slug) {
-
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
-
-        PageUser.joinPage(user, page)
+        try{
+            PageUser.joinPage(user, page)    
+        } catch (e) {
+            log.error e
+            throw e
+        }
+        
     }
 
     def leavePage(userId, slug) {
@@ -186,9 +190,9 @@ class PageService {
         [needs: needs, totalNeeds: needs.totalCount]
     }
 
-    def getMembers(slug, offset) {
+    def getMembers(slug, offset, max) {
         def page = Page.findBySlug(slug)
-        page.getUsers(offset)
+        page.getUsers(offset, max)
     }
 
     def getTopMembers(slug) {
@@ -206,17 +210,29 @@ class PageService {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
 
-        def pageUsers = PageUser.findByUserAndPage(user, page)
-        if(!pageUsers) {
+        def pageUser = PageUser.findByUserAndPage(user, page)
+        if(!pageUser) {
             [isOwner: false]
         } else {
-            if(pageUsers.relation == PageUser.Relation.OWNER) {
+            if(pageUser.relation == PageUser.Relation.OWNER) {
                 [isOwner: true]
             } else {
                 [isOwner: false]
             }
         }
         
+    }
+
+    def isJoined(userId, slug) {
+        def user = User.get(userId)
+        def page = Page.findBySlug(slug)
+
+        def pageUser = PageUser.findByUserAndPage(user, page)
+        if(!pageUser) {
+            [isJoined: false]
+        } else {
+            [isJoined: true]
+        }
     }
 
     def createNeed(userId, slug, itemId, quantity, message = "") {
@@ -352,14 +368,14 @@ class PageService {
         } 
     }
 
-    def disablePost(userId, postId) {
-        def post = Post.get(postId)
+    def disablePost(userId, postId) {    
+        def post = Post.get(postId)  
         if(post?.createdBy?.id != userId) {
             [status:0, message:'unauthorized user or not found post']
-        } else {
+        } else {  
             post.status = Post.Status.INACTIVE
-            post.save(failOnError: true, flush:true)
-            [status:1, message:"post ${postId} is deleted", id:postId]
-        }
+            post.save(failOnError: true, flush:true) 
+            [status:1, message:"post ${postId} is deleted", id:postId] 
+        } 
     }
 }

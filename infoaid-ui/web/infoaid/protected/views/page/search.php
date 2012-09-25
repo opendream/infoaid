@@ -12,16 +12,17 @@
 		</form>
 		<div id='result-search'>
 			<ul class="unstyled">
-				<li ng-repeat="page in pages" ng-bind-html-unsafe="page.body"></li>
+				<div><li ng-repeat="page in pages" ng-bind-html-unsafe="page.body"></li></div>
 			<ul>
 		</div>
 		<div id='result-search-error'></div>
-		<div id="loading" class="ajax-loading"></div>
+		
 		<div class="load-more" id="load-more" ng-show="pages.length">
 			<button class="btn" ng-click="loadMore()">
 				<i class="icon icon-plus"></i> Load more
 			</button>
 		</div>
+		<div id="loading" class="ajax-loading"></div>
 	</div>
 </div>
 <script>
@@ -64,6 +65,7 @@
 					word: $scope.word,
 					offset: 0
 				}, function(resp) {
+					console.log(resp)
 					if(resp.length == 0) {
 						//$('#load-more').hide();
 						$('#result-search-error').addClass("text-error");

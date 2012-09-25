@@ -31,7 +31,8 @@
 				                <span>{{member.username}}</span>
 				            </li>
 				        </ul>
-				    </div>				    
+				    </div>
+				    <div><span class='show-more-members'><?php echo CHtml::link('Show more ..', array('page/members','slug'=>$slug)); ?></span></div>
 				</div>				
 			</div>
 		</div>	

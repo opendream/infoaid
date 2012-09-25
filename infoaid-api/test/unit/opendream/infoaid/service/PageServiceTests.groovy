@@ -107,6 +107,11 @@ class PageServiceTests {
 
         service.joinPage(user2.id, "tmpSlug")
         assert page.getUsers(0).size() == 2
+        def isJoined = service.isJoined(user2.id, 'tmpSlug')
+        assert isJoined.isJoined == true
+        isJoined = service.isJoined(123456789, 'tmpSlug')
+        assert isJoined.isJoined == false
+        
 
         service.inactivePage(user.id, "tmpSlug")
         def pageStatus = Page.get(page.id).status
@@ -140,7 +145,7 @@ class PageServiceTests {
     }
 
     void testGetMembers() {
-        def member = service.getMembers("0", 0)
+        def member = service.getMembers("0", 0, 0)
         assert member.size() == 0
     }
 

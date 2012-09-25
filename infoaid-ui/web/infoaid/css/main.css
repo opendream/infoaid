@@ -393,10 +393,12 @@ div.search-form
 	margin-left:35px;
 }
 
-<<<<<<< HEAD
 .page-members
 {
-	margin: 20px 5px 20px 5px;
+	margin: 0px 5px 0px 5px;
+	float: left;
+	width: 750px;
+	margin-left: 0px;
 }
 
 .page-members-text
@@ -416,4 +418,32 @@ div.search-form
 
 .form-group > legend {
 	text-indent: 12px;
+}
+
+.load-more {
+	clear: both;
+}
+
+.header-members {
+	float: left;
+	margin-left: 15px;
+}
+
+.show-more-members
+{
+	font-size: 12px;
+	background: no-repeat url('/infoaid/media/icons/show_more_members.jpg');
+	padding-left: 20px;
+}
+
+.span-page-members
+{
+	float: left;
+	width: 700px;
+	margin-left: 0px;
+}
+
+.page-member-margin
+{
+	margin-top: 20px;
 }

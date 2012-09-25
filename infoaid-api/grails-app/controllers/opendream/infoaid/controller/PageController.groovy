@@ -1,6 +1,7 @@
 package opendream.infoaid.controller
 
 import grails.converters.JSON
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 class PageController {
     def pageService
@@ -36,7 +37,8 @@ class PageController {
     def member() {
         def ret = [:]
         def offset = params.offset ? params.offset : 0
-        def results = pageService.getMembers(params.slug, offset)
+        def max = params.max ? params.max : ConfigurationHolder.config.infoaid.api.allmember.limited
+        def results = pageService.getMembers(params.slug, offset, max)
         ret.status = 1
         ret.members = results.collect{
             [
@@ -249,16 +251,21 @@ class PageController {
     }
 
     def joinUs() {
-        def ret
         def userId = params.userId
-        if(!userId) {
-            return
+        def slug = params.slug
+        def ret
+
+        if(!userId || !slug) {
+            ret = [status: 0, message: "user id: ${userId} could not be join page: ${slug}"]
         } else {
-            def pageuser = pageService.joinPage(userId, params.slug)
-            ret = [user: pageuser.user.username, page: pageuser.page.name, 
-                    pageSlug: pageuser.page.slug, relation: pageuser.relation.toString()]
+            try {
+                pageService.joinPage(userId, slug)
+                ret = [status: 1, message: "user id: ${userId} joined page: ${slug}"]
+            } catch (e) {
+                ret = [status: 0, message: "user id: ${userId} could not be join page: ${slug}"]
+            }            
         }
-        render ret as JSON       
+        render ret as JSON
     }
 
     def createPage() {
@@ -293,12 +300,15 @@ class PageController {
         def ret
         if(!userId || !slug) {
             ret = [status: 0, message: "user id: ${userId} could not be left from page: ${slug}"]
-            render ret as JSON
         } else {
-            pageService.leavePage(userId, slug)
-            ret = [status: 1, message: "user id: ${userId} left from page: ${slug}"]
-            render ret as JSON
-        }     
+            try {
+                pageService.leavePage(userId, slug)
+                ret = [status: 1, message: "user id: ${userId} left from page: ${slug}"]
+            } catch (e) {
+                ret = [status: 0, message: "user id: ${userId} could not be left from page: ${slug}"]
+            }            
+        }
+        render ret as JSON
     }
 
     def removeUserFromPage() {
@@ -473,6 +483,14 @@ class PageController {
         def slug = params.slug
 
         def result = pageService.isOwner(userId, slug)
+        render result as JSON
+    }
+
+    def isJoined() {
+        def userId = params.userId
+        def slug = params.slug
+
+        def result = pageService.isJoined(userId, slug)
         render result as JSON
     }
 }
