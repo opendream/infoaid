@@ -73,22 +73,25 @@
             </span>
         </div>
     </div>
+    <div id="join-leave-page-loading-<?php echo $post->id?>">
     <div id="page-header-join-leave-<?php echo $post->id; ?>">
         <?php
-            if($isJoined->isJoined == 1) {
-                echo '<a class="btn" onclick="leavePage()" href="#">Leave Page</a>';
-            } else {
-                echo '<a class="btn" onclick="joinPage()" href="#">Join Page</a>';
+            if($userId != null) {
+                if($isJoined->isJoined == 1) {
+                    echo "<button class='btn' onclick=\"leavePage("."'".$slug."',".$post->id.")\" >Leave Page</button>";
+                } else {
+                    echo "<button class='btn' onclick=\"joinPage("."'".$slug."',".$post->id.")\" >Join Page</button>";
+                }
             }
         ?>
         
     </div>
-    <div id="join-leave-page-loading">
+    
     </div>
 </div>
 <script>
-    var target = document.getElementById('join-leave-page-loading');
     var spinner
+    
     var opts = {
         lines: 13, // The number of lines to draw
         length: 7, // The length of each line
@@ -107,35 +110,37 @@
         left: 'auto' // Left position relative to parent in px
     };
 
-    function ajaxLoading() {
+    function ajaxLoading(pageId) {
+        $('#page-header-join-leave-'+pageId).hide();
+        var target = document.getElementById('join-leave-page-loading-'+pageId);
         spinner = new Spinner(opts).spin(target);
     }
 
-    function leavePage() {
-        $('#page-header-join-leave'+'<?php echo $post->id; ?>').hide();
-        ajaxLoading();
+    function leavePage(slug, pageId) {
+        ajaxLoading(pageId);
 
-        $.getJSON('<?php echo $this->createUrl("page/leavePage"); ?>', {userId: '<?php echo $userId; ?>', slug: '<?php echo $slug;?>'}, function(resp) {
+        $.getJSON('<?php echo $this->createUrl("page/leavePage"); ?>', {userId: '<?php echo $userId; ?>', slug: slug}, function(resp) {
             console.log(resp)
             if(resp.status == 1) {
-                $('#page-header-join-leave-'+'<?php echo $post->id; ?>').html('<a class="btn" onclick="joinPage()" href="#">Join Page</a>');
+                $('#page-header-join-leave-'+pageId).html('<button class="btn" onclick="joinPage('+"'"+slug+"'"+","+pageId+')">Join Page</button>');
             } else {
             }
-            $('#page-header-join-leave-'+'<?php echo $post->id; ?>').show();
+            $('#page-header-join-leave-'+pageId).show();
             spinner.stop();
         })
     }
 
-    function joinPage() {
-        $('#page-header-join-leave'+'<?php echo $post->id; ?>').hide();
-        ajaxLoading();
+    function joinPage(slug, pageId) {
+        ajaxLoading(pageId);
 
-        $.getJSON('<?php echo $this->createUrl("page/joinPage"); ?>', {userId: '<?php echo $userId; ?>', slug: '<?php echo $slug;?>'}, function(resp) {
+        $.getJSON('<?php echo $this->createUrl("page/joinPage"); ?>', {userId: '<?php echo $userId; ?>', slug: slug}, function(resp) {
+            console.log(slug)
+            console.log(resp)
             if(resp.status == 1) {
-                $('#page-header-join-leave-'+'<?php echo $post->id; ?>').html('<a class="btn" onclick="leavePage()" href="#">Leave Page</a>');
+                $('#page-header-join-leave-'+pageId).html('<button class="btn" onclick="leavePage('+"'"+slug+"'"+","+pageId+')">Leave Page</button>');
             } else {
             }
-            $('#page-header-join-leave-'+'<?php echo $post->id; ?>').show();
+            $('#page-header-join-leave-'+pageId).show();
             spinner.stop();
         })
     }

@@ -112,23 +112,34 @@ class PageService {
     def joinPage(userId, slug) {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
-        try{
-            PageUser.joinPage(user, page)    
-        } catch (e) {
-            log.error e
-            throw e
+        def isJoined = isJoined(userId, slug)
+        if(isJoined['isJoined']) {
+            return [message: 'Already joined this page']
+        } else {
+            try{
+                PageUser.joinPage(user, page)    
+            } catch (e) {
+                log.error e
+                throw e
+            }
         }
+        
         
     }
 
     def leavePage(userId, slug) {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
-        try {
-            PageUser.leavePage(user, page)
-        } catch (e) {
-            log.error e
-            throw e
+        def isJoined = isJoined(userId, slug)
+        if(!isJoined['isJoined']) {
+            return [message: 'Already leaved this page']
+        } else {
+            try {
+                PageUser.leavePage(user, page)
+            } catch (e) {
+                log.error e
+                throw e
+            }
         }
     }
 
