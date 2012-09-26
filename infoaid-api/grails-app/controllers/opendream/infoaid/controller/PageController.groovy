@@ -375,7 +375,7 @@ class PageController {
 
     def postMessage() {
         def ret
-        def userId = params.userId
+        def userId = springSecurityService?.principal?.id
         def slug = params.slug
         def message = params.message
         def picOriginal = params.picOriginal
