@@ -153,11 +153,11 @@ return array(
 		),
 
 		'cache'=>array(
-			'class'=>'system.caching.CMemCache',
-			'useMemcached'=>true,
-			'servers'=>array(
-				array('host'=>'localhost','port'=>11211),
-			),
+			'class'=>'system.caching.CApcCache',
+			//'useMemcached'=>true,
+			//'servers'=>array(
+			//	array('host'=>'localhost','port'=>11211),
+			//),
 		),
 
 		'phpThumb'=>array(
@@ -214,6 +214,33 @@ return array(
 				'prefixUrl' => '/media/page/logo/',
 				'destinationDir' => dirname(__FILE__).'/../../media/page/logo/',
 
+				'size' => array(
+					'original' => array(
+						'width' => '400',
+						'height' => '400',
+						'suffix' => '_o',
+					),
+
+					'large' => array(
+						'width' => '160',
+						'height' => '160',
+						'suffix' => '_l',
+					),
+
+					'small' => array(
+						'width' => '50',
+						'height' => '50',
+						'suffix' => '_s',
+					),
+				),
+			),
+		),
+
+		'post' => array(
+			'photo' => array(
+				'prefixUrl' => '/media/posts/',
+				'destinationDir' => dirname(__FILE__).'/../../media/posts/',
+				
 				'size' => array(
 					'original' => array(
 						'width' => '400',

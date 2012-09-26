@@ -10,6 +10,7 @@ class Post {
     Status status = Status.ACTIVE
     Page page
     Integer conversation = 0
+    String picOriginal
 
     public enum Status {
         ACTIVE,
@@ -24,6 +25,7 @@ class Post {
     static constraints = {
         status inList: Status.list()
         message blank: false, nullable: false
+        picOriginal nullable: true
     }
 
     static mapping = {

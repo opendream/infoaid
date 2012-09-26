@@ -8,7 +8,9 @@ class IAController extends CController
 
 	public $scripts = array();
 
-	public $styles = array();
+	public $styles = array(
+		'page.scss',
+	);
 
 	public $jsLocale = array(
 		'timeago',

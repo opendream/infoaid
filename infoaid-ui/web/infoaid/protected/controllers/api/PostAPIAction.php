@@ -2,9 +2,9 @@
 
 class PostAPIAction extends CAction
 {
-	public function comments($id)
+	public function comments($id, $params)
 	{
-		$this->controller->renderJSON(PostHelper::getComments($id));
+		$this->controller->renderJSON(PostHelper::getComments($id, $params));
 	}
 
 	public function runWithParams($params)
@@ -14,7 +14,7 @@ class PostAPIAction extends CAction
 			switch($params['method']) {
 
 				case "comments":
-					return $this->comments($params['id']);
+					return $this->comments($params['id'], $params);
 					break;
 
 			}

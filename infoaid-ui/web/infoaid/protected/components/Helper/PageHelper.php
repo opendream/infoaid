@@ -30,9 +30,9 @@ class PageHelper
 		}
 	}
 
-	public static function getRecentPost($slug)
+	public static function getRecentPost($slug, $params)
 	{
-		$result = self::getJSON($slug, 'recent_post');
+		$result = self::getJSON($slug, 'recent_post', $params);
 		if (empty($result) || (isset($result->status) && ! $result->status)) {
 			return array();
 		}
