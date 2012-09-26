@@ -71,7 +71,7 @@ class UserHelper
 	/**
 	 * Return TRUE if process is success, otherwise error message.
 	 */
-	public static function processUploadedProfilePhoto($userId)
+	public static function processUploadedProfilePhoto($userId, $fieldName)
 	{
 		$settings = Yii::app()->params['profile']['photo'];
 		$newFilename = str_replace('.', '-', uniqid('p', $userId));
@@ -79,7 +79,7 @@ class UserHelper
 		$imageHelper = new ImageHelper($settings);
 		$imageHelper->specific = $userId;
 
-		return $imageHelper->processUploadedFile('image', $newFilename);
+		return $imageHelper->processUploadedFile($fieldName, $newFilename);
 	}
 
 	public static function getCurrentUserId()

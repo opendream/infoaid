@@ -28,7 +28,14 @@ class ImageHelper
 	public function getSpecificDestinationDir()
 	{
 		return preg_replace('#/+#', '/',
-					$this->destinationDir . '/' . $this->specific);
+					$this->destinationDir . '/' . $this->specific . '/');
+	}
+
+	public function getSpecificDestinationUrl($filename = '')
+	{
+		return preg_replace('#/+#', '/',
+					$this->settings['prefixUrl']
+					. '/' . $this->specific . '/' . $filename);
 	}
 
 	public static function generateDir($dir)
@@ -87,7 +94,7 @@ class ImageHelper
 		foreach ($photos as $size =>$path) {
 			$_photos[$size] = array(
 				'path' => $path,
-				'url' => $prefix . $userId .'/'. basename($path),
+				'url' => $this->getSpecificDestinationUrl(basename($path)),
 			);
 		}
 
