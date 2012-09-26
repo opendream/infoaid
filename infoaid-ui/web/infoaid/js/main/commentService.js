@@ -176,10 +176,9 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, DeletePost, Ite
 	}
 
 	$scope.postMessage = function() {
-		if ($scope.message && $scope.memberId) {	
+		if ($scope.message) {	
 			var options = {
 				slug: $scope.slug,
-				userId: $scope.memberId, 
 				message: $scope.message
 			};
 			
