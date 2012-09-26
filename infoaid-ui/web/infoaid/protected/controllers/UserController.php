@@ -5,11 +5,14 @@ class UserController extends IAController
 	public $jquery = TRUE;
 
 	public $angular = TRUE;
-
-	public $styles = array(
-		'user.scss',
-	);
-
+	
+	public function init()
+	{
+		parent::init();
+		
+		$this->styles[] = 'user.scss';
+	}
+	
 	public function actionCreate()
 	{
 		$this->render('create');

@@ -172,10 +172,11 @@
 body {
 	h1 { font-size: 20px; }
 	h2 { font-size: 18px; }
-	a { color: #AE1725; }
+	a, .btn-link { color: #AE1725; }
 }
 .span5 {
 	margin: 0;
+	width: 540px;
 }
 /*--------- Navigation Bar ---------*/
 .navbar-inner {
@@ -193,13 +194,47 @@ body {
 		a {
 			color: white;
 			text-shadow: none;
+			&:hover {
+				color: white;
+			}
+		}
+		.dropdown {
+			&.open {
+				a {
+					background: white;
+					color: #ae1725;
+				}
+			}
+			.dropdown-menu {
+				a {
+					&:hover {
+						background: #AE1725;
+						color: white;
+					}
+				}
+			}
 		}
 	}
 	.navbar-text {
 		color: white;
+		margin-right: 10px;
+	}
+	.dropdown {
+		a {
+			color: #AE1725;
+			&:hover {
+				color: white;
+				background: #AE1725;
+			}
+		}
 	}
 }
 /*--------- Page Info ---------*/
+.page-header {
+	background-color: #fbf7ee;
+	border-bottom: none;
+}
+
 .page-name {
 	a {
 		color: #AE1725;
@@ -226,6 +261,9 @@ body {
 		}
 	}
 }
+#s2id_requestPost {
+	margin: 0;
+}
 .page-posts {
 	padding: 10px 10px;
 	border: 1px solid #eee;
@@ -233,6 +271,48 @@ body {
 		img {
 			border: 2px solid #ccc;
 			margin-right: 15px;
+		}
+	}
+}
+
+/*--------- page-sidebar ---------*/
+.page-sidebar {
+	li {
+		padding: 0;
+	}
+	.page-sidebar-places-header {
+		p {
+			font-size: 15px;
+			padding-left: 10px;
+		}
+	}
+}
+.span2 {
+	padding: 0 20px;
+	border: 1px solid #EEE;
+	#members {
+		padding: 0 0 10px;
+	}
+	.show-more-members {
+		padding: 0;
+	}
+}
+
+/*--------- page-search ---------*/
+.page-search {
+	.search-header {
+		font-size: 20px;
+	}
+	.page-header {
+		margin: 0 0 2px;
+		width: 920px;
+		background-color: #fbf7ee;
+		border-bottom: none;
+		.page-name {
+			font-size: 18px;
+		}
+		.page-household-population {
+			font-size: 14px;
 		}
 	}
 }

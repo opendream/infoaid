@@ -8,7 +8,9 @@ class IAController extends CController
 
 	public $scripts = array();
 
-	public $styles = array();
+	public $styles = array(
+		'page.scss',
+	);
 
 	public $jsLocale = array(
 		'timeago',
@@ -62,7 +64,7 @@ class IAController extends CController
 			Yii::app()->clientScript
 				->registerScriptFile(Yii::app()->baseUrl .'/js/'. $script);
 		}
-
+		
 		foreach ($this->styles as $style) {
 
 			if (pathinfo($style, PATHINFO_EXTENSION) === 'scss') {
