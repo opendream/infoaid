@@ -9,14 +9,14 @@ class PostHelper
 		return API::get(self::$base . $id .'/'. $method);
 	}
 
-	public static function getJSON($id, $method)
+	public static function getJSON($id, $method, $params)
 	{
-		return API::getJSON(self::$base . $id .'/'. $method);
+		return API::getJSON(self::$base . $id .'/'. $method, $params);
 	}
 
-	public static function getComments($id)
+	public static function getComments($id, $params)
 	{
-		$result = self::getJSON($id, 'comments');
+		$result = self::getJSON($id, 'comments', $params);
 		if (empty($result) || (isset($result->status) && ! $result->status)) {
 			return array();
 		}
