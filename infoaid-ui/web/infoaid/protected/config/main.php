@@ -152,11 +152,11 @@ return array(
 		),
 
 		'cache'=>array(
-			'class'=>'system.caching.CMemCache',
-			'useMemcached'=>true,
-			'servers'=>array(
-				array('host'=>'localhost','port'=>11211),
-			),
+			'class'=>'system.caching.CApcCache',
+			//'useMemcached'=>true,
+			//'servers'=>array(
+			//	array('host'=>'localhost','port'=>11211),
+			//),
 		),
 
 		'phpThumb'=>array(
