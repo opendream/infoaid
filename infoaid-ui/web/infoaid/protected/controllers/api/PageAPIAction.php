@@ -2,9 +2,9 @@
 
 class PageAPIAction extends CAction
 {
-	public function recentPost($slug)
+	public function recentPost($slug, $params)
 	{
-		$this->controller->renderJSON(PageHelper::getRecentPost($slug));
+		$this->controller->renderJSON(PageHelper::getRecentPost($slug, $params));
 	}
 
 	public function runWithParams($params)
@@ -14,7 +14,7 @@ class PageAPIAction extends CAction
 			switch($params['method']) {
 
 				case "recent_post":
-					return $this->recentPost($params['slug']);
+					return $this->recentPost($params['slug'], $params);
 					break;
 
 			}

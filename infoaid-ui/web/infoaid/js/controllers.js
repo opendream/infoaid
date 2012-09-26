@@ -1,8 +1,14 @@
-function ListCtrl($scope, Post) {
+function ListCtrl($scope, Post, RearrangePost) {
     var slug = $scope.slug;
 
     var lastRowDateCreated = function () {
-        return $($scope.posts).last().get(0).dateCreated;
+        var date = new Date($($scope.posts).last().get(0).lastActived);
+        var yyyy = date.getFullYear();
+        var m = date.getMonth()+1;
+        var dd = date.getDate();
+        var hh = date.getHours();
+        var mm = date.getMinutes();
+        return yyyy+'-'+m+'-'+dd+' '+hh+':'+mm;        
     };
 
     $scope.posts = Post.query({slug: slug});
@@ -13,15 +19,12 @@ function ListCtrl($scope, Post) {
             until: lastRowDateCreated(),
             limit: 10
         }, function (posts) {
-            angular.forEach(posts, function (post) {
-                $scope.posts.push(post);
-            });
+            RearrangePost($scope, posts);            
         });
     };
 }
 
 function MemberCtrl($scope, $http) {  
-    console.log('hello: '+$scope.slug);
     $http.get(baseUrl + '/api/members/'+$scope.slug).success(function(data) {
         $scope.members = data.topMembers;
     });

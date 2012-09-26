@@ -12,11 +12,11 @@ class PageHelper
 		return API::get(self::$base . $slug .'/'. $method);
 	}
 
-	public static function getJSON($slug, $method)
+	public static function getJSON($slug, $method, $params)
 	{
 		// Unicode support for slug
 		$slug = urlencode($slug);
-		return API::getJSON(self::$base . $slug .'/'. $method);
+		return API::getJSON(self::$base . $slug .'/'. $method, $params);
 	}
 
 	public static function getInfoBySlug($slug)
@@ -30,9 +30,9 @@ class PageHelper
 		}
 	}
 
-	public static function getRecentPost($slug)
+	public static function getRecentPost($slug, $params)
 	{
-		$result = self::getJSON($slug, 'recent_post');
+		$result = self::getJSON($slug, 'recent_post', $params);
 		if (empty($result) || (isset($result->status) && ! $result->status)) {
 			return array();
 		}

@@ -72,6 +72,7 @@ class PageService {
             if(until) {
                 le('dateCreated', until)
             }
+            eq('enabled', true)
     		order('dateCreated', 'asc')
     	}
 
@@ -362,7 +363,7 @@ class PageService {
             comment.enabled = false
             comment.save(failOnError: true, flush:true)
             def post = comment.post
-            post.conversation --
+            post.conversation--
             post.save(failOnError: true, flush:true)
             [status:1, message:"comment ${commentId} is deleted", id:commentId]
         } 
