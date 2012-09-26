@@ -114,5 +114,9 @@ grails.plugins.springsecurity.filterChain.chainMap = [
    '/user/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
    '/page**': 'JOINED_FILTERS,-exceptionTranslationFilter',
    '/page/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+   '/comment**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+   '/comment/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+   '/post**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+   '/post/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
    '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
 ]
