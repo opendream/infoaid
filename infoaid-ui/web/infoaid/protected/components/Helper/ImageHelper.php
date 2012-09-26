@@ -34,9 +34,9 @@ class ImageHelper
 	public static function generateDir($dir)
 	{
 		// Make new directory if not exists.
-		Yii::log("Making directory : $dir", 'debug', 'Image');
 		if (! is_dir($dir)) {
-			if (! mkdir($dir)) {
+			Yii::log("Making directory : $dir", 'debug', 'Image');
+			if (! mkdir($dir, 0777, true)) {
 				Yii::log("Making directory : $dir .. Failed", 'debug', 'Image');
 				return false;
 			}

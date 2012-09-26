@@ -81,4 +81,19 @@ class UserHelper
 
 		return $imageHelper->processUploadedFile('image', $newFilename);
 	}
+
+	public static function getCurrentUserId()
+	{
+		return Yii::app()->user->getId();
+	}
+
+	public static function getCurrentUserName()
+	{
+		return Yii::app()->user->getName();
+	}
+
+	public static function getCurrentUserData()
+	{
+		return self::getUserCachedData(self::getCurrentUserId());
+	}
 }

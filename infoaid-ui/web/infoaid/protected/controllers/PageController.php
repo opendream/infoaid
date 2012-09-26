@@ -125,4 +125,40 @@ class PageController extends IAController
 		$this->renderJSON($result);
 	}
 
+	public function actionCreate()
+	{
+		$this->scripts[] = 'leaflet/leaflet-src.js';
+		$this->scripts[] = 'expanding.js';
+		$this->scripts[] = 'main/create-page.js';
+		$this->styles[] = '/js/leaflet/leaflet.css';
+
+		$userId = UserHelper::getCurrentUserId();
+
+		if ($_POST['op'] == 'create') {
+			$params = $_POST;
+			$params['userId'] = $userId;
+
+			// Process image via helper
+			$photos = PageHelper::processUploadedPageLogo('logo');
+			$params['picOriginal'] = $photos['original']['url'];
+			$params['picLarge'] = $photos['large']['url'];
+			$params['picSmall'] = $photos['small']['url'];
+
+			if (! is_array($photos)) {
+				flash($photos, 'error');
+			}
+			else {
+				$result = PageHelper::createPage($userId, $params);
+				if ($result->status) {
+					flash($result->message, 'success');
+				}
+				else {
+					flash($result->message, 'error');
+				}
+			}
+		}
+
+		$this->render('create', array('page' => (object)$params));
+	}
+
 }

@@ -63,15 +63,23 @@ class IAController extends CController
 				->registerScriptFile(Yii::app()->baseUrl .'/js/'. $script);
 		}
 
-		foreach ($this->styles as $style) {
+		foreach ($this->styles as $style) {			
+			if (substr($style, 0, 1) === '/') {
+				$url = rtrim(Yii::app()->baseUrl, '/');
+				$path = rtrim(Yii::app()->basePath, '/');
+			}
+			else {
+				$url = rtrim(Yii::app()->baseUrl, '/') .'/css/';
+				$path = rtrim(Yii::app()->basePath, '/') .'/../css/';
+			}
 
 			if (pathinfo($style, PATHINFO_EXTENSION) === 'scss') {
 				$publishedURL = Yii::app()->getAssetManager()->publish(
-					Yii::app()->basePath .'/../css/'. $style
+					$path . $style
 				);
 			}
 			else {
-				$publishedURL = Yii::app()->baseUrl .'/css/'. $style;
+				$publishedURL = $url . $style;
 			}
 
 			Yii::app()->clientScript
