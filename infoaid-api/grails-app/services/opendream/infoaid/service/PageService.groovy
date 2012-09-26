@@ -104,7 +104,13 @@ class PageService {
         def page = new Page(name: name, lat: lat, lng: lng, location: location,
             household: household, population: population, about: about, 
             picOriginal: picOriginal, picSmall: picSmall, picLarge: picLarge)
-        page.save(failOnError: true)
+        try {
+            page.save(failOnError: true, flush: true)
+        }
+        catch (e) {
+            log.error e
+            throw e
+        }
         def user = User.get(userId)
         PageUser.createPage(user, page)
         page

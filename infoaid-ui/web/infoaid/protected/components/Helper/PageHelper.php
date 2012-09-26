@@ -4,19 +4,19 @@ class PageHelper
 {
 	private static $base = 'page/';
 
-	public static function get($slug, $method)
+	public static function get($slug, $method, $params = array())
 	{
 		// Unicode support for slug
 		$slug = urlencode($slug);
 		
-		return API::get(self::$base . $slug .'/'. $method);
+		return API::get(self::$base . $slug .'/'. $method, $params);
 	}
 
-	public static function getJSON($slug, $method)
+	public static function getJSON($slug, $method, $params = array())
 	{
 		// Unicode support for slug
 		$slug = urlencode($slug);
-		return API::getJSON(self::$base . $slug .'/'. $method);
+		return API::getJSON(self::$base . $slug .'/'. $method, $params);
 	}
 
 	public static function getInfoBySlug($slug)
@@ -26,7 +26,7 @@ class PageHelper
 			return NULL;
 		}
 		else {
-			return $result;
+			return $result->page;
 		}
 	}
 
@@ -92,6 +92,31 @@ class PageHelper
 	{
 		$result = API::getJSON("page/joinUs", array('userId'=>$userId, 'slug'=>$slug));
 		return $result;
+	}
+
+	public static function createPage($params)
+	{
+		$result = API::postJSON("page/create_page", $params);
+		return $result;
+	}
+
+	public static function updatePage($params)
+	{
+		$result = API::postJSON("page/". urlencode($params['slug']) . "/update_page", $params);
+		return $result;
+	}
+
+	/**
+	 * Return TRUE if process is success, otherwise error message.
+	 */
+	public static function processUploadedPageLogo($fieldName)
+	{
+		$settings = Yii::app()->params['page']['logo'];
+		$newFilename = str_replace('.', '-', uniqid('logo'));
+
+		$imageHelper = new ImageHelper($settings);
+
+		return $imageHelper->processUploadedFile($fieldName, $newFilename);
 	}
 
 }

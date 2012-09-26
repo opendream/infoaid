@@ -59,7 +59,8 @@
 				<li class="dropdown">
 					<a href="" class="dropdown-toggle" data-toggle="dropdown"> <i class="icon-user icon-black"></i> <?php echo Yii::app()->user->getName(); ?> <b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="<?php echo $this->createUrl('user/edit'); ?>">Edit Profile</a></li>                                
+						<li><a href="<?php echo $this->createUrl('user/edit'); ?>">Edit Profile</a></li>
+						<li><a href="<?php echo $this->createUrl('page/create'); ?>">Create Page</a></li>                             
 						<li class="divider"></li>
 						<li><a href="<?php echo $this->createUrl('user/logout'); ?>">Logout</a></li>
 					</ul>

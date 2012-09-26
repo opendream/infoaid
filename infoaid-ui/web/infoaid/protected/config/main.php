@@ -67,13 +67,14 @@ return array(
 				'api/post/<id:\d+>/<method:\w+>'=>'api/post',
 				'api/page/<slug:[^\/]*>/<method:\w+>'=>'api/page',
 				'api/members/<slug:[^\/]*>'=>'api/members',
+				'page/create'=>'page/create',
 				'page/joinPage'=>'page/joinPage',
 				'page/leavePage'=>'page/leavePage',
 				'page/loadMoreMembers'=>'page/loadMoreMembers',
 				'page/setRelation'=>'page/setRelation',
 				'page/removeMemberFromPage'=>'page/removeMemberFromPage',
 				'page/search'=>'page/search',
-				'page/<slug:[^\/]*>/members'=>'page/members',
+				'page/<slug:[^\/]*>/<method:\w+>'=>'page/<method>',
 				'page/<slug:[^\/]*>'=>'page/view',
 				'/api/comment'=>'/api/comment',
 				'/api/deleteComment/<commentId:\d+>'=>'/api/deleteComment',
@@ -134,7 +135,7 @@ return array(
 			// delete options below in production
 			'ugly' => false,
 			'style' => 'nested',
-			'debug' => true,
+			'debug' => false,
 			'cache' => false,
 		),
 
@@ -173,7 +174,9 @@ return array(
 		'adminEmail'=>'webmaster@example.com',
 
 		'api'=>array(
-			'server'=>'http://192.168.1.131:8080/infoaid-api/',
+			// 'server'=>'http://192.168.1.131:8080/infoaid-api/',
+			// 'port'=>8080,
+			'server'=>'http://localhost:8080/infoaid-api/',
 			//'port'=>8080,
 		),
 
@@ -183,6 +186,33 @@ return array(
 			'photo' => array(
 				'prefixUrl' => '/media/profiles/',
 				'destinationDir' => dirname(__FILE__).'/../../media/profiles/',
+
+				'size' => array(
+					'original' => array(
+						'width' => '400',
+						'height' => '400',
+						'suffix' => '_o',
+					),
+
+					'large' => array(
+						'width' => '160',
+						'height' => '160',
+						'suffix' => '_l',
+					),
+
+					'small' => array(
+						'width' => '50',
+						'height' => '50',
+						'suffix' => '_s',
+					),
+				),
+			),
+		),
+
+		'page' => array(
+			'logo' => array(
+				'prefixUrl' => '/media/page/logo/',
+				'destinationDir' => dirname(__FILE__).'/../../media/page/logo/',
 
 				'size' => array(
 					'original' => array(
