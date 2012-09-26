@@ -31,21 +31,46 @@ angular.module('commentService', ['ngResource']).
 		var PostRequest = $resource(baseUrl + '/api/postNeed/');
 		return PostRequest;
 	}).
-	factory('RefreshPost', function (Post) {
+	factory('FindPost', function () {
+		var FindPost = function(scope, newpost) {
+			var result = {status:false};
+			
+			for(var i=0; i<scope.posts.length; i++){
+				if(scope.posts[i].id == newpost.id ) {
+					result.status =  true;
+					result.index = i;
+					return result;
+				}
+			}			
+			return result;
+		};
+		return FindPost;
+	}).
+	factory('RefreshPost', function (Post, FindPost, RearrangePost) {
 		var RefreshPost = function(scope) {
-			Post.query({slug:scope.slug}, function (posts) {					 
-				var i = 0;
-				angular.forEach(posts, function(post) {
-					if(scope.posts.length > i) {
-						scope.posts.splice(i, 1, post);
-					} else {
-						scope.posts.push(post);
-					}
-					i++;
-				});					
+			Post.query({slug:scope.slug}, function (newposts) {					 
+				RearrangePost(scope, newposts);				
 			});
 		};		
 		return RefreshPost;
+	}).
+	factory('RearrangePost', function (FindPost) {
+		var RearrangePost = function(scope, newPosts) {
+			angular.forEach(newPosts, function(post) {
+				var result = FindPost(scope, post);
+				if(!result.status) {
+					if( $(scope.posts).first().get(0).lastActived < post.lastActived ) {
+						scope.posts.unshift(post);
+					}
+					if( $(scope.posts).last().get(0).lastActived > post.lastActived ) {
+						scope.posts.push(post);
+					}					
+				} else {
+					scope.posts.splice(result.index, 1, post);
+				}								
+			});								
+		};		
+		return RearrangePost;
 	});
 
 function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post, RefreshPost) {
@@ -64,10 +89,10 @@ function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post, RefreshP
 		$scope.comments = $scope.post.comments.slice(0, 3).reverse();
 	}
 
-	$scope.loadMore = function() {
+	$scope.loadMore = function(id) {
 		var options = {
 				postId: $scope.post.id,
-				limit: 10 
+				limit: 10				
 			},
 			lastUpdated = lastRowLastUpdated()
 		;
@@ -75,20 +100,28 @@ function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post, RefreshP
 		if (lastUpdated) {
 			options.until = lastUpdated;
 		}
-
+		
 		$scope.comments = $scope.comments || [];
+
 		Comment.query(options, function (comments) {
-			angular.forEach(comments, function (comment) {
-				$scope.comments.unshift(comment);
-				//$scope.comments.push(comment);
+			angular.forEach(comments, function (newcomment) {
+				if(findComment(newcomment)==false) {
+					$scope.comments.unshift(newcomment);
+				}
+								
 			});
+
+			if(id && ($scope.post.conversation == $scope.comments.length)) {
+				var element = angular.element(id);
+				element.css('visibility', 'hidden'); //visible
+				//element.css('display', 'none');//none inherit block
+			}
 		});
 	}
-	
+
 	$scope.submitComment = function() {
-		if (this.comment && this.memberId && this.post.id) {	
+		if (this.comment && this.post.id) {	
 			var options = {
-				userId: this.memberId, 
 				postId: this.post.id, 
 				message: this.comment
 			};
@@ -106,7 +139,7 @@ function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post, RefreshP
 
 	$scope.deleteComment = function(comment) {
 		if(comment.id) {
-			var options = { commentId: comment.id, userId: this.memberId };
+			var options = { commentId: comment.id };
 			DeleteComment.get(options, function (ret) {	
 				RefreshPost($scope);
 				for (var i = 0, ii = $scope.comments.length; i < ii; i++) {
@@ -118,6 +151,16 @@ function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post, RefreshP
 			});
 
 		}		
+	}
+
+	function findComment(newcomment) {
+		var isfound = false;
+		angular.forEach($scope.comments, function (comment) {
+			if(comment.id == newcomment.id ) {
+				isfound =  true;
+			}
+		});
+		return isfound;
 	}
 }
 
@@ -148,7 +191,6 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, DeletePost, Ite
 	}
 
 	$scope.deletePost = function(post) {
-		console.log(post.id, this.memberId);
 		if(post.id) {
 			var options = { postId: post.id, userId: this.memberId };
 			DeletePost.get(options, function (ret) {	
@@ -158,7 +200,6 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, DeletePost, Ite
 	}
 
 	$scope.postRequest = function() {
-		console.log($scope.request, $scope.qty, $scope.slug);
 		var options = {
 				slug: $scope.slug,
 				itemId: $scope.request, 
@@ -168,10 +209,7 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, DeletePost, Ite
 				RefreshPost($scope);;	
 				$scope.request = '';
 				$scope.qty = '';			
-		});
-		//$scope.request = '';
-		//$scope.qty = '';
-		// /page/$slug/post_need/$userId
+		});		
 	}
 }
 
@@ -184,8 +222,7 @@ function ModalCtrl($scope, CreateItem) {
    		CreateItem.get(options, function (ret) {
    			$scope.newItem = '';							
 		});
-        element.modal('hide');
-        //console.log($scope.posts.length);      
+        element.modal('hide');        
    }
 
    $scope.removeNewItem = function() {
