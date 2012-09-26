@@ -349,12 +349,13 @@ class PageController {
         def slug = params.slug
         def message = params.message
         def picOriginal = params.picOriginal
+        def picSmall = params.picSmall
 
-        def result = pageService.createMessagePost(userId, slug, message, picOriginal)
+        def result = pageService.createMessagePost(userId, slug, message, picOriginal, picSmall)
         if(result) {
             ret = [post: [id :result.post.id, message: result.post.message,
             createdBy: result.post.createdBy, dateCreated: result.post.dateCreated, 
-            lastActived: result.post.lastActived, picOriginal: result.post.picOriginal], user: result.user.username, 
+            lastActived: result.post.lastActived, picOriginal: result.post.picOriginal, picSmall: result.post.picSmall], user: result.user.username, 
             page: result.page.name, slug: result.page.slug]
             ret.status = 1
             ret.message = "user: ${result.user.username} posted message in page: ${result.page.name}"

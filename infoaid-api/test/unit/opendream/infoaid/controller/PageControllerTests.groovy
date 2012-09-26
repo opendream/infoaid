@@ -441,6 +441,7 @@ class PageControllerTests {
         params.slug = page.slug
         params.message = 'hello world'
         params.picOriginal = 'picOri'
+        params.picSmall = 'picSma'
 
         // controller
         controller.postMessage()
@@ -450,6 +451,7 @@ class PageControllerTests {
         assert "user: ${user.username} posted message in page: ${page.name}" == response.json.message
         assert 'hello world' == response.json.post.message
         assert 'picOri' == response.json.post.picOriginal
+        assert 'picSma' == response.json.post.picSmall
     }
 
     void testDisablePost() {

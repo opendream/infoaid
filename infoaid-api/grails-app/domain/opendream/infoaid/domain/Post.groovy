@@ -11,6 +11,7 @@ class Post {
     Page page
     Integer conversation = 0
     String picOriginal
+    String picSmall
 
     public enum Status {
         ACTIVE,
@@ -26,6 +27,7 @@ class Post {
         status inList: Status.list()
         message blank: false, nullable: false
         picOriginal nullable: true
+        picSmall nullable: true
     }
 
     static mapping = {

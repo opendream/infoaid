@@ -238,7 +238,7 @@ class PageServiceTests {
 
         def pageUser = new PageUser(page: page, user: user1, relation: PageUser.Relation.MEMBER).save(flush: true)
 
-        def result = service.createMessagePost(1, "0", message, 'picOri')
+        def result = service.createMessagePost(1, "0", message, 'picOri', 'picSma')
         def pageUserAfterCreateMessagePost = PageUser.get(1)
         assert pageUserAfterCreateMessagePost.conversation == 1
 
@@ -248,6 +248,7 @@ class PageServiceTests {
         assert page.id == result.page.id
         assert message == result.post.message
         assert 'picOri' == result.post.picOriginal
+        assert 'picSma' == result.post.picSmall
     }
 
     void testGetAbout() {
