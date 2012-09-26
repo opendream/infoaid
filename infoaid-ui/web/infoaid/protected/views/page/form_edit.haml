@@ -39,5 +39,9 @@
 					= $page->about
 		=$this->renderPartial('_form_photo', array('page' => $page))
 		.form-actions
-			%button.btn{:value => "create", :name => "op"}
-				Create
+			- if ($op == 'create')
+				%button.btn{:value => "create", :name => "op"}
+					Create
+			- if ($op == 'edit')
+				%button.btn{:value => "edit", :name => "op"}
+					Save

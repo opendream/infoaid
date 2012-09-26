@@ -26,7 +26,7 @@ class PageHelper
 			return NULL;
 		}
 		else {
-			return $result;
+			return $result->page;
 		}
 	}
 
@@ -94,9 +94,15 @@ class PageHelper
 		return $result;
 	}
 
-	public static function createPage($userId, $params)
+	public static function createPage($params)
 	{
 		$result = API::postJSON("page/create_page", $params);
+		return $result;
+	}
+
+	public static function updatePage($params)
+	{
+		$result = API::postJSON("page/". urlencode($params['slug']) . "/update_page", $params);
 		return $result;
 	}
 

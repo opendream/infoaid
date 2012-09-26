@@ -132,33 +132,98 @@ class PageController extends IAController
 		$this->scripts[] = 'main/create-page.js';
 		$this->styles[] = '/js/leaflet/leaflet.css';
 
-		$userId = UserHelper::getCurrentUserId();
-
+		$page = new stdClass();
 		if ($_POST['op'] == 'create') {
-			$params = $_POST;
-			$params['userId'] = $userId;
+			$this->doCreatePage($page);
+			$this->redirect("/page/$slug");
+		}
 
-			// Process image via helper
+		$this->render('form_edit', array(
+			'page' => $page,
+			'op' => 'create',
+		));
+	}
+
+	public function actionEdit($slug)
+	{
+		$this->scripts[] = 'leaflet/leaflet-src.js';
+		$this->scripts[] = 'expanding.js';
+		$this->scripts[] = 'main/create-page.js';
+		$this->styles[] = '/js/leaflet/leaflet.css';
+
+		$page = PageHelper::getInfoBySlug($slug);
+		if (! $page) {
+			throw new CHttpException(404, 'The specified page cannot be found.');
+		}
+
+		if ($_POST['op'] == 'edit') {
+			$result = $this->doUpdatePage($page);
+		}
+
+		if ($result->status) {
+			flash($result->message, 'success');
+			$page = $result;
+			$this->redirect("/page/$slug");
+		}
+		else {
+			flash($result->message, 'error');
+		}
+
+		$this->render('form_edit', array(
+			'page' => $page,
+			'op' => 'edit',
+		));
+	}
+
+	private function doCreatePage(&$page)
+	{
+		$params = $_POST;
+		$params['userId'] = user()->getId();
+
+		// Process image via helper
+		if (! empty($_FILES['logo'])) {
 			$photos = PageHelper::processUploadedPageLogo('logo');
-			$params['picOriginal'] = $photos['original']['url'];
-			$params['picLarge'] = $photos['large']['url'];
-			$params['picSmall'] = $photos['small']['url'];
 
 			if (! is_array($photos)) {
 				flash($photos, 'error');
 			}
 			else {
-				$result = PageHelper::createPage($userId, $params);
-				if ($result->status) {
-					flash($result->message, 'success');
-				}
-				else {
-					flash($result->message, 'error');
-				}
+				$params['picOriginal'] = $photos['original']['url'];
+				$params['picLarge'] = $photos['large']['url'];
+				$params['picSmall'] = $photos['small']['url'];
 			}
 		}
+		
+		return $result = PageHelper::createPage($params);
+	}
 
-		$this->render('create', array('page' => (object)$params));
+	private function doUpdatePage(&$page)
+	{
+		$params = $_POST;
+		$params['userId'] = user()->getId();
+
+		// Process image via helper
+		if (! empty($_FILES['logo'])) {
+			$photos = PageHelper::processUploadedPageLogo('logo');
+
+			if (! is_array($photos)) {
+				flash($photos, 'error');
+			}
+			else {
+				$params['picOriginal'] = $photos['original']['url'];
+				$params['picLarge'] = $photos['large']['url'];
+				$params['picSmall'] = $photos['small']['url'];
+			}
+		}
+		else {
+			$params['picOriginal'] = $post->picOriginal;
+			$params['picLarge'] = $post->picLarge;
+			$params['picSmall'] = $post->picSmall;
+		}
+
+		$params['slug'] = $page->slug;
+
+		return $result = PageHelper::updatePage($params);
 	}
 
 }

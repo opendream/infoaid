@@ -74,7 +74,7 @@ return array(
 				'page/setRelation'=>'page/setRelation',
 				'page/removeMemberFromPage'=>'page/removeMemberFromPage',
 				'page/search'=>'page/search',
-				'page/<slug:[^\/]*>/members'=>'page/members',
+				'page/<slug:[^\/]*>/<method:\w+>'=>'page/<method>',
 				'page/<slug:[^\/]*>'=>'page/view',
 				'/api/comment'=>'/api/comment',
 				'/api/deleteComment/<commentId:\d+>'=>'/api/deleteComment',
@@ -135,7 +135,7 @@ return array(
 			// delete options below in production
 			'ugly' => false,
 			'style' => 'nested',
-			'debug' => true,
+			'debug' => false,
 			'cache' => false,
 		),
 

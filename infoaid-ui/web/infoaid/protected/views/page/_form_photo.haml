@@ -9,5 +9,5 @@
 			Logo
 		.controls
 			- if ($page->picLarge)
-				%img.img-polariod(src="#{Yii::app()->baseUrl . $page->picLarge}")
+				%img.img-polaroid(src="#{Yii::app()->baseUrl . $page->picLarge}")
 			%input#input-image(type="file" name="logo")

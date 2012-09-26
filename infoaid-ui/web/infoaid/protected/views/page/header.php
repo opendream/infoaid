@@ -1,5 +1,5 @@
 <?php
-    $post = PageHelper::getJSON($slug, "info");
+    $post = PageHelper::getInfoBySlug($slug);
     $needs = PageHelper::getJSON($slug, 'limit_need/4');
     $userId = Yii::app()->user->getId();
     $isJoined = PageHelper::isJoined($userId, $slug);
