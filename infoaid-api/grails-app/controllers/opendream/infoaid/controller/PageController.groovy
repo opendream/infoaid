@@ -280,18 +280,21 @@ class PageController {
         def about = params.about
         def location = params.location
         def picOriginal = params.picOriginal
+        def picSmall = params.picSmall
+        def picLarge = params.picLarge
         def ret = [:]
 
         if(!userId || !name) {
             ret = [status:0, message: "user id: ${userId} could not create page: ${name}",
                     lat: lat, lng: lng, household: household, population: population,
-                    about: about, location: location, picOriginal: picOriginal]
+                    about: about, location: location, slug: slug, picOriginal: picOriginal, picSmall: picSmall, picLarge: picLarge]
             render ret as JSON
         } else {
-            def result = pageService.createPage(userId, name, lat, lng, location, household, population, about, picOriginal)
+            def result = pageService.createPage(userId, name, lat, lng, location, household, population, about, picOriginal, picSmall, picLarge)
             ret = [status:1, message: "user id: ${userId} created page: ${name}", userId: userId, 
                     name: result.name, lat: result.lat, lng: result.lng, household: result.household, 
-                    population: result.population, about: result.about, location: result.location, picOriginal: result.picOriginal, slug: result.slug]
+                    population: result.population, about: result.about, location: result.location, 
+                    picOriginal: result.picOriginal, picSmall: result.picSmall, picLarge: result.picLarge, slug: result.slug]
             render ret as JSON
         }
     }
@@ -347,14 +350,21 @@ class PageController {
         def userId = params.userId
         def slug = params.slug
         def message = params.message
+        def picOriginal = params.picOriginal
 
-        def result = pageService.createMessagePost(userId, slug, message)
-        ret = [post: [id :result.post.id, message: result.post.message, 
-        createdBy: result.post.createdBy, dateCreated: result.post.dateCreated, 
-        lastActived: result.post.lastActived], user: result.user.username, 
-        page: result.page.name, slug: result.page.slug]
-        ret.status = 1
-        ret.message = "user: ${result.user.username} posted message in page: ${result.page.name}"
+        def result = pageService.createMessagePost(userId, slug, message, picOriginal)
+        if(result) {
+            ret = [post: [id :result.post.id, message: result.post.message,
+            createdBy: result.post.createdBy, dateCreated: result.post.dateCreated, 
+            lastActived: result.post.lastActived, picOriginal: result.post.picOriginal], user: result.user.username, 
+            page: result.page.name, slug: result.page.slug]
+            ret.status = 1
+            ret.message = "user: ${result.user.username} posted message in page: ${result.page.name}"
+        } else {
+            ret.status = 0
+            ret.message = "Error, Can't post this message"
+        }
+        
         render ret as JSON
     }
 
@@ -399,8 +409,8 @@ class PageController {
 
     def updatePage() {
         def slug = params.slug
-
-        pageService.updatePage(slug, params)
+        def result = pageService.updatePage(slug, params)
+        render result as JSON
     }
 
     def disablePage() {

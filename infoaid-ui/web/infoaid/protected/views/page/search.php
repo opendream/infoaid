@@ -18,7 +18,7 @@
 		<div id='result-search-error'></div>
 		
 		<div class="load-more" id="load-more" ng-show="pages.length">
-			<button class="btn" ng-click="loadMore()">
+			<button id="load-more-button" class="btn" ng-click="loadMore()">
 				<i class="icon icon-plus"></i> Load more
 			</button>
 		</div>
@@ -65,7 +65,6 @@
 					word: $scope.word,
 					offset: 0
 				}, function(resp) {
-					console.log(resp)
 					if(resp.length == 0) {
 						//$('#load-more').hide();
 						$('#result-search-error').addClass("text-error");
@@ -96,12 +95,16 @@
 		}
 
 		$scope.loadMore = function() {
+			$('#load-more-button').hide();
 			var target = document.getElementById('loading');
 			var spinner = new Spinner(opts).spin(target);
 			Page.query({
 				word: $scope.word,
 				offset: $scope.pages.length
 			}, function (pages) {
+				if(pages.length != 0) {
+					$('#load-more-button').show();	
+				}
 				angular.forEach(pages, function (page) {
 					$scope.pages.push(page);
 				});

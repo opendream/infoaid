@@ -101,9 +101,10 @@ class PageService {
         [user: user, post: post, comment: comment]
     }
 
-    def createPage(userId, name, lat, lng, location, household, population, about, picOriginal) {
+    def createPage(userId, name, lat, lng, location, household, population, about, picOriginal, picSmall, picLarge) {
         def page = new Page(name: name, lat: lat, lng: lng, location: location,
-            household: household, population: population, about: about, picOriginal: picOriginal)
+            household: household, population: population, about: about, 
+            picOriginal: picOriginal, picSmall: picSmall, picLarge: picLarge)
         page.save(failOnError: true)
         def user = User.get(userId)
         PageUser.createPage(user, page)
@@ -113,23 +114,34 @@ class PageService {
     def joinPage(userId, slug) {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
-        try{
-            PageUser.joinPage(user, page)    
-        } catch (e) {
-            log.error e
-            throw e
+        def isJoined = isJoined(userId, slug)
+        if(isJoined['isJoined']) {
+            return [message: 'Already joined this page']
+        } else {
+            try{
+                PageUser.joinPage(user, page)    
+            } catch (e) {
+                log.error e
+                throw e
+            }
         }
+        
         
     }
 
     def leavePage(userId, slug) {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
-        try {
-            PageUser.leavePage(user, page)
-        } catch (e) {
-            log.error e
-            throw e
+        def isJoined = isJoined(userId, slug)
+        if(!isJoined['isJoined']) {
+            return [message: 'Already leaved this page']
+        } else {
+            try {
+                PageUser.leavePage(user, page)
+            } catch (e) {
+                log.error e
+                throw e
+            }
         }
     }
 
@@ -252,19 +264,20 @@ class PageService {
         return [user: user, page: page, post: need]
     }
 
-    def createMessagePost(userId, slug, message) {
+    def createMessagePost(userId, slug, message, picOriginal) {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
         def pageUser = PageUser.findByUserAndPage(user, page)
         if(pageUser) {
-            pageUser.conversation++
-            pageUser.save()
+            def date = new Date()
+            def messagePost = new MessagePost(lastActived: date, createdBy: user, updatedBy: user, expiredDate: date+14, message: message, picOriginal: picOriginal)
+            page.addToPosts(messagePost)
+            if(page.save(failOnError: true, flush: true)) {
+                pageUser.conversation++
+                pageUser.save()
+                return [user: user, page: page, post: messagePost]
+            }
         }
-        def date = new Date()
-        def messagePost = new MessagePost(lastActived: date, createdBy: user, updatedBy: user, expiredDate: date+14, message: message)
-        page.addToPosts(messagePost)
-        page.save(failOnError: true, flush: true)
-        return [user: user, page: page, post: messagePost]
     }
 
     def getAbout(slug) {
@@ -279,19 +292,21 @@ class PageService {
     def updatePage(slug, data) {
         def page = Page.findBySlug(slug)
         if(!page) {
-            return
+            return [status: 0, message: 'Page not found', data: data]
         }
         if(data.version) {
             def version = data.version.toLong()
             if (page.version > version) {
                 page.errors.rejectValue("version", "default.optimistic.locking.failure")
-                return "Another user has updated this Page while you were editing"
+                return [status: 0, message: "Another user has updated this Page while you were editing", data: data]
             }
         }
-        page.properties['name', 'lat', 'lng', 'location', 'status', 'household', 'population', 'about', 'version', 'picOriginal'] = data
+        page.properties['name', 'lat', 'lng', 'location', 'status', 'household', 'population', 'about', 'version', 
+        'picOriginal', 'picSmall', 'picLarge'] = data
         if(!page.save()) {
-            return
+            return [status: 0, message: 'Cannot update this page', data: data]
         }
+        return [status: 1, message: 'This page was updated', data: data]
     }
 
     def disablePage(slug) {

@@ -243,14 +243,8 @@ class PageControllerTests {
     void testCreatePage() {
         assert 2 == Page.count()
 
-        pageService.demand.createPage(1..1) { userId, name, lat, lng, location, household, population, about, picOriginal -> 
-            def page = new Page(name: name, lat: lat, lng: lng, location: location,
-            household: household, population: population, about: about, picOriginal: picOriginal).save()
-            def user = User.get(userId)
-            new PageUser(user: user, page: page, relation: PageUser.Relation.OWNER).save()
-            page
-        }
-        controller.pageService = pageService.createMock()
+        
+        controller.pageService = new PageService()
 
         params.userId = 1
         params.name = 'my page'
@@ -446,6 +440,7 @@ class PageControllerTests {
         params.userId = user.id
         params.slug = page.slug
         params.message = 'hello world'
+        params.picOriginal = 'picOri'
 
         // controller
         controller.postMessage()
@@ -453,7 +448,8 @@ class PageControllerTests {
         // expect
         assert 1 == response.json.status
         assert "user: ${user.username} posted message in page: ${page.name}" == response.json.message
-        assert 'hello world' == response.json.post.message        
+        assert 'hello world' == response.json.post.message
+        assert 'picOri' == response.json.post.picOriginal
     }
 
     void testDisablePost() {

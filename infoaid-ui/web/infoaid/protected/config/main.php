@@ -152,11 +152,11 @@ return array(
 		),
 
 		'cache'=>array(
-			'class'=>'system.caching.CMemCache',
-			'useMemcached'=>true,
-			'servers'=>array(
-				array('host'=>'localhost','port'=>11211),
-			),
+			'class'=>'system.caching.CApcCache',
+			//'useMemcached'=>true,
+			//'servers'=>array(
+			//	array('host'=>'localhost','port'=>11211),
+			//),
 		),
 
 		'phpThumb'=>array(
@@ -173,36 +173,52 @@ return array(
 		'adminEmail'=>'webmaster@example.com',
 
 		'api'=>array(
-			'server'=>'http://localhost:8080/infoaid-api/',
+			'server'=>'http://192.168.1.131:8080/infoaid-api/',
 			//'port'=>8080,
 		),
 
 		'allowed_language' => array('en', 'th'),
 
 		'profile' => array(
-			'photoUrlPrefix' => '/media/profiles/',
-			'photoDir' => dirname(__FILE__).'/../../media/profiles/',
+			'photo' => array(
+				'prefixUrl' => '/media/profiles/',
+				'destinationDir' => dirname(__FILE__).'/../../media/profiles/',
 
-			'size' => array(
-				'original' => array(
-					'width' => '400',
-					'height' => '400',
-					'suffix' => '_o',
-				),
+				'size' => array(
+					'original' => array(
+						'width' => '400',
+						'height' => '400',
+						'suffix' => '_o',
+					),
 
-				'large' => array(
-					'width' => '160',
-					'height' => '160',
-					'suffix' => '_l',
-				),
+					'large' => array(
+						'width' => '160',
+						'height' => '160',
+						'suffix' => '_l',
+					),
 
-				'small' => array(
-					'width' => '50',
-					'height' => '50',
-					'suffix' => '_s',
+					'small' => array(
+						'width' => '50',
+						'height' => '50',
+						'suffix' => '_s',
+					),
 				),
 			),
-
 		),
+		'post' => array(
+			'photo' => array(
+				'prefixUrl' => '/media/posts/',
+				'destinationDir' => dirname(__FILE__).'/../../media/posts/',
+
+				'size' => array(
+					'original' => array(
+						'width' => '400',
+						'height' => '400',
+						'suffix' => '_o',
+					),
+				)
+			),
+		),
+
 	),
 );
