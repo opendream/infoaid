@@ -263,19 +263,20 @@ class PageService {
         return [user: user, page: page, post: need]
     }
 
-    def createMessagePost(userId, slug, message) {
+    def createMessagePost(userId, slug, message, picOriginal) {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
         def pageUser = PageUser.findByUserAndPage(user, page)
         if(pageUser) {
-            pageUser.conversation++
-            pageUser.save()
+            def date = new Date()
+            def messagePost = new MessagePost(lastActived: date, createdBy: user, updatedBy: user, expiredDate: date+14, message: message, picOriginal: picOriginal)
+            page.addToPosts(messagePost)
+            if(page.save(failOnError: true, flush: true)) {
+                pageUser.conversation++
+                pageUser.save()
+                return [user: user, page: page, post: messagePost]
+            }
         }
-        def date = new Date()
-        def messagePost = new MessagePost(lastActived: date, createdBy: user, updatedBy: user, expiredDate: date+14, message: message)
-        page.addToPosts(messagePost)
-        page.save(failOnError: true, flush: true)
-        return [user: user, page: page, post: messagePost]
     }
 
     def getAbout(slug) {

@@ -348,14 +348,21 @@ class PageController {
         def userId = params.userId
         def slug = params.slug
         def message = params.message
+        def picOriginal = params.picOriginal
 
-        def result = pageService.createMessagePost(userId, slug, message)
-        ret = [post: [id :result.post.id, message: result.post.message, 
-        createdBy: result.post.createdBy, dateCreated: result.post.dateCreated, 
-        lastActived: result.post.lastActived], user: result.user.username, 
-        page: result.page.name, slug: result.page.slug]
-        ret.status = 1
-        ret.message = "user: ${result.user.username} posted message in page: ${result.page.name}"
+        def result = pageService.createMessagePost(userId, slug, message, picOriginal)
+        if(result) {
+            ret = [post: [id :result.post.id, message: result.post.message,
+            createdBy: result.post.createdBy, dateCreated: result.post.dateCreated, 
+            lastActived: result.post.lastActived, picOriginal: result.post.picOriginal], user: result.user.username, 
+            page: result.page.name, slug: result.page.slug]
+            ret.status = 1
+            ret.message = "user: ${result.user.username} posted message in page: ${result.page.name}"
+        } else {
+            ret.status = 0
+            ret.message = "Error, Can't post this message"
+        }
+        
         render ret as JSON
     }
 
