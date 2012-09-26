@@ -13,7 +13,7 @@
 	</div>		   	
 </div>
 <div  ng-controller="PostMessageCtrl">
-	<div ng-init="memberId=8185"></div>
+	
 	<div class="tabbable">
 	    <ul class="nav nav-pills">
 	       	<li class="active"><a href="#tabInfo" data-toggle="tab" class="btn btn-mini btn-link">info</a></li>
