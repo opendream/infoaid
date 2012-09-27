@@ -1,9 +1,27 @@
-/*
-.page-posts {
-
-	list-style: none;
+@mixin btn {
+	background-color: #AE1724;
+	background-image: linear-gradient(to bottom, #E6515E, #AE1724);
+	background-image: -webkit-linear-gradient(top, #E6515E, #AE1724);
+	background-image: -o-linear-gradient(top, #E6515E, #AE1724);
+	background-image: -moz-linear-gradient(top, #E6515E, #AE1724);
+	color: white;
+	text-shadow: none;
+}
+h1 {
 	margin: 0;
-
+}
+.page-posts {
+	list-style: none;
+	margin: 10px 0 0;
+	padding: 10px 10px;
+	border: 1px solid #eee;
+	.comment-body {
+		width: 85%;
+		overflow: hidden;
+	}
+	.ng-pristine {
+		width: 380px;
+	}
 	time {
 		color: #999;
 		font-size: 12px;
@@ -12,16 +30,16 @@
 	.meta {
 		margin-top: 4px;
 	}
-
 	.message-picture {
 		float: left;
-
 		img {
-			width: 50px;
-			height: 50px;
+			width: 40px;
+			height: 40px;
+			border: 1px solid #ccc;
+			margin-right: 15px;
+			padding: 3px;
 		}
 	}
-
 	.message-details {
 		margin-left: 50px;
 		padding: 0 12px;
@@ -30,41 +48,35 @@
 			padding: 12px 0;
 		}
 	}
-
 	.message-comments {
 		padding: 8px 0 18px 62px;
 		font-size: 13px;
-
 		.comment-picture {
 			float: left;
-
 			img {
 				width: 40px;
 				height: 40px;
+				margin-right: 10px;
 			}
 		}
-
 		.comment-details {
 			margin-left: 40px;
 			padding: 0 12px;
-
 			.comment-poster-name {
 				float: left;
 				margin-right: 8px;
 				font-weight: bolder;
+				width: 300px;
 			}
-
 			.comment-body {
 				padding: 0;
 			}
 		}
-
 		.load-more {
 			cursor: pointer;
 			margin: 4px 0;
 		}
 	}
-
 	li {
 		border-bottom: 1px solid #DDD;
 		margin-bottom: 18px;
@@ -78,92 +90,6 @@
 		}
 	}
 }
-
-.load-more {
-	text-align: center;
-}
-*/
-
-.page-posts {
-
-	list-style: none;
-	margin: 0;
-
-	time {
-		color: #999;
-		font-size: 12px;
-	}
-
-	.meta {
-		margin-top: 4px;
-	}
-
-	.message-picture {
-		float: left;
-
-		img {
-			width: 50px;
-			height: 50px;
-		}
-	}
-
-	.message-details {
-		margin-left: 50px;
-		padding: 0 12px;
-
-		.message-body {
-			padding: 12px 0;
-		}
-	}
-
-	.message-comments {
-		padding: 8px 0 18px 62px;
-		font-size: 13px;
-
-		.comment-picture {
-			float: left;
-
-			img {
-				width: 40px;
-				height: 40px;
-			}
-		}
-
-		.comment-details {
-			margin-left: 40px;
-			padding: 0 12px;
-
-			.comment-poster-name {
-				float: left;
-				margin-right: 8px;
-				font-weight: bolder;
-			}
-
-			.comment-body {
-				padding: 0;
-			}
-		}
-
-		.load-more {
-			cursor: pointer;
-			margin: 4px 0;
-		}
-	}
-
-	li {
-		border-bottom: 1px solid #DDD;
-		margin-bottom: 18px;
-	}
-
-	ul {
-		list-style: none;
-
-		li {
-			margin-bottom: 6px;
-		}
-	}
-}
-
 .load-more {
 	text-align: center;
 }
@@ -173,12 +99,34 @@ body {
 	h1 { font-size: 20px; }
 	h2 { font-size: 18px; }
 	a, .btn-link { color: #AE1725; }
+	#footer {
+		margin: 0;
+		border-top: 1px solid #ccc;
+	}
 }
 .span5 {
 	margin: 0;
-	width: 540px;
+	width: 480px;
+}
+.span7 { 
+	width: 480px; 
+	margin-left: 0;
+	padding-right: 20px;
+}
+.span10 { width: 740px; }
+legend {
+	margin-bottom: 0px; 
+	text-indent: 0 !important;
+	font-size: 18px;
+}
+/*--------- Page ---------*/
+#page {
+	border: 1px solid #ccc;
 }
 /*--------- Navigation Bar ---------*/
+.nav {
+	margin-bottom: 10px;
+}
 .navbar-inner {
 	background: #ae1725;
 	a {
@@ -194,8 +142,10 @@ body {
 		a {
 			color: white;
 			text-shadow: none;
+			padding: 10px 10px 10px;
 			&:hover {
-				color: white;
+				color: #AE1725;
+				background-color: white;
 			}
 		}
 		.dropdown {
@@ -213,6 +163,11 @@ body {
 					}
 				}
 			}
+		}
+	}
+	.nav.actions {
+		a {
+			padding: 10px 15px 10px;
 		}
 	}
 	.navbar-text {
@@ -243,6 +198,7 @@ body {
 .nav-pills {
 	li {
 		a { 
+			text-shadow: none;
 			font-size: 15px;
 			color: #AE1725; 
 			&:hover {
@@ -262,34 +218,70 @@ body {
 	}
 }
 #s2id_requestPost {
-	margin: 0;
+	margin: 0 5px 0 0;
 }
+/*
 .page-posts {
 	padding: 10px 10px;
 	border: 1px solid #eee;
-	.message-picture {
-		img {
-			border: 2px solid #ccc;
-			margin-right: 15px;
-		}
+	.ng-pristine {
+		width: 380px;
 	}
 }
+*/
 
 /*--------- page-sidebar ---------*/
 .page-sidebar {
+	* {
+		padding: 0;
+		margin: 0;
+	}
+	width: 190px;
+	padding-left: 20px;
+	padding-right: 20px;
+	margin-right: 0;
+	margin-top: 10px;
+	#page-sidebar-profile {
+		margin-bottom: 10px;
+		img {
+			margin-right: 10px;
+			padding: 5px;
+		}
+	}
+	#page-sidebar-places {
+		margin-top: 10px;
+		p {
+			font-size: 15px;
+		}
+	}
+/*
 	li {
 		padding: 0;
 	}
 	.page-sidebar-places-header {
 		p {
 			font-size: 15px;
-			padding-left: 10px;
 		}
 	}
+	.page-sidebar-profile {
+		margin: 0;
+		padding: 0;
+
+	}
+	#page-sidebar-menu, #page-sidebar-places {
+		margin: 0;
+		padding: 0;
+	}
+*/
 }
+
+
 .span2 {
 	padding: 0 20px;
 	border: 1px solid #EEE;
+	float: right;
+	margin-right: 20px;
+	margin-left: 0;
 	#members {
 		padding: 0 0 10px;
 	}
@@ -314,5 +306,121 @@ body {
 		.page-household-population {
 			font-size: 14px;
 		}
+	}
+}
+
+/*--------- page-login ---------*/
+#user-login {
+	background-color: #FBF7EE;
+	.page-header {
+		margin: 0;
+		h1 {
+			padding: 0 20px;
+		}
+	}
+	.form-actions {
+		background: none;
+		border-top: none;
+		margin: 0;
+	}
+	.form-horizontal {
+		margin: 0;
+	}
+	.flash-message-error {
+		width: 500px;
+		padding: 10px 70px;
+		margin: 0 0 0 20px;
+		text-align: center;
+	}
+	.btn { padding: 5px 14px; }
+}
+.btn-primary, .btn-info {
+	padding: 9px 14px;
+	background-color: #AE1724;
+	background-image: linear-gradient(to bottom, #E6515E, #AE1724);
+	background-image: -webkit-linear-gradient(top, #E6515E, #AE1724);
+	background-image: -o-linear-gradient(top, #E6515E, #AE1724);
+	background-image: -moz-linear-gradient(top, #E6515E, #AE1724);
+	&:hover, &:active, &.active, &.disabled, &[disabled] {
+		background-color: #AE1724;
+	}
+}
+/*--------- Selected need form ---------*/
+.select2-results .select2-highlighted {
+	background: #AE1725;
+}
+
+/*--------- span5: Status Update content ---------*/
+.tab-content {
+	overflow: hidden;
+		.btn-primary, .btn-info {
+		padding: 5px 8px;
+	}
+}
+
+/*--------- span10: Header Info ---------*/
+.span10 {
+	width: 690px;
+}
+.load-more {
+	margin: 10px 0;
+}
+/*--------- Input ---------*/
+form {
+	margin: 0;
+}
+input, textarea, uneditable {
+	&.span2 {
+		width: 106px;
+		margin-right: 5px;
+	}
+	&.span5 {
+		margin-bottom: 0;
+	}
+}
+/*--------- MAP ---------*/
+.flash-message-success {
+	margin: 0;
+}
+/*--------- span3 ---------*/
+.span3 {
+	background-color: #FBF7EE;
+	.nav-list > .active > a, .nav-list > .active > a:hover {
+		background-color: #AE1725;
+	}
+	.nav > li > a:hover {
+		background-color: #EED9D9;
+		color: #AE1725;
+	}
+}
+/*--------- Edit Account ---------*/
+#user-edit {
+	.page-header {
+		margin-bottom: 0;
+	}
+	.form-horizontal .control-group {
+		margin-bottom: 10px;
+	}
+}
+#load-more-button {
+	margin-top: 10px;
+}
+
+/*--------- User Create ---------*/
+#user-create {
+	padding: 0 20px;
+	background-color: #fbf7ee;
+	.page-header {
+		margin: 0;
+	}
+	.flash-message-error {
+		margin: 0;
+	}
+	.form-actions {
+		background-color: transparent;
+		margin-bottom: 0;
+	}
+	.btn {
+		@include btn;
 	}
 }

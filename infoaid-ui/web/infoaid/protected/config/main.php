@@ -175,9 +175,13 @@ return array(
 		'adminEmail'=>'webmaster@example.com',
 
 		'api'=>array(
+<<<<<<< HEAD
 			// 'server'=>'http://192.168.1.131:8080/infoaid-api/',
 			// 'port'=>8080,
 			'server'=>'http://localhost:8080/infoaid-api/',
+=======
+			'server'=>'http://Khandhas.local:8080/infoaid-api/',
+>>>>>>> แก้Nav bar, Login Page, Register Page, Update Page
 			//'port'=>8080,
 			'log_request'=>true,
 			'debug_rest'=>false,
