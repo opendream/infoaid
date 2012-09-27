@@ -207,6 +207,12 @@ return array(
 						'height' => '50',
 						'suffix' => '_s',
 					),
+
+					'ss' => array(
+						'width' => '25',
+						'height' => '25',
+						'suffix' => '_ss',
+					),
 				),
 			),
 		),
