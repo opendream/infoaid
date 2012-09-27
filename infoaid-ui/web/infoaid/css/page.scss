@@ -7,18 +7,23 @@
 	color: white;
 	text-shadow: none;
 }
-h1 {
+h1, h2 {
 	margin: 0;
+}
+h2 {
+	padding: 20px;
+	margin: 0;
+	background-color: #FBF7EE;
+}
+.error {
+	padding: 0 20px 20px;
+	background-color: #FBF7EE;
 }
 .page-posts {
 	list-style: none;
 	margin: 10px 0 0;
 	padding: 10px 10px;
 	border: 1px solid #eee;
-	.comment-body {
-		width: 85%;
-		overflow: hidden;
-	}
 	.ng-pristine {
 		width: 380px;
 	}
@@ -66,10 +71,11 @@ h1 {
 				float: left;
 				margin-right: 8px;
 				font-weight: bolder;
-				width: 300px;
 			}
 			.comment-body {
 				padding: 0;
+				width: 85%;
+				overflow: hidden;
 			}
 		}
 		.load-more {
@@ -254,25 +260,11 @@ legend {
 			font-size: 15px;
 		}
 	}
-/*
-	li {
-		padding: 0;
-	}
-	.page-sidebar-places-header {
-		p {
-			font-size: 15px;
+	#page-sidebar-menu, #page-sidebar-places {
+		.left-side-bar {
+			padding-left: 20px;
 		}
 	}
-	.page-sidebar-profile {
-		margin: 0;
-		padding: 0;
-
-	}
-	#page-sidebar-menu, #page-sidebar-places {
-		margin: 0;
-		padding: 0;
-	}
-*/
 }
 
 
@@ -284,9 +276,14 @@ legend {
 	margin-left: 0;
 	#members {
 		padding: 0 0 10px;
+		h2 {
+			padding: 0;
+			background-color: transparent;
+		}
 	}
 	.show-more-members {
 		padding: 0;
+		a { padding-left: 17px; }
 	}
 }
 
