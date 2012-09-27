@@ -19,6 +19,9 @@ h2 {
 	padding: 0 20px 20px;
 	background-color: #FBF7EE;
 }
+.flash-message-error {
+	margin: 0;
+}
 .page-header-join-leave { margin-right: 10px; }
 .page-posts {
 	list-style: none;
@@ -382,7 +385,7 @@ input, textarea, uneditable {
 }
 /*--------- span3 ---------*/
 .span3 {
-	background-color: #FBF7EE;
+	background-color: white;
 	.nav-list > .active > a, .nav-list > .active > a:hover {
 		background-color: #AE1725;
 	}
@@ -393,6 +396,7 @@ input, textarea, uneditable {
 }
 /*--------- Edit Account ---------*/
 #user-edit {
+	background-color: #FBF7EE;
 	.page-header {
 		margin-bottom: 0;
 	}
@@ -409,9 +413,6 @@ input, textarea, uneditable {
 	padding: 0 20px;
 	background-color: #fbf7ee;
 	.page-header {
-		margin: 0;
-	}
-	.flash-message-error {
 		margin: 0;
 	}
 	.form-actions {
@@ -433,4 +434,20 @@ input, textarea, uneditable {
 	}
 	.span3 { background-color: transparent; }
 	.header-members { margin: 0 10px; }
+}
+
+#page-create {
+	background-color: #FBF7EE;
+	padding: 0 20px;
+	.page-header {
+		margin: 0;
+		background-color: transparent;
+	}
+	.form-actions { 
+		background-color: transparent;
+		margin: 0;
+	}
+}
+hr {
+	border: none;
 }
