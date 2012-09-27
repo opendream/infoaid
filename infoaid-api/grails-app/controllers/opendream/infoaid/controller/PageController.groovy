@@ -194,7 +194,6 @@ class PageController {
                     userPicSmall: it.createdBy.picSmall,
                     userId: it.createdBy.id,
                     conversation: it.conversation,
-                    picSmall: it.createdBy.picSmall,
                     lastActived: it.lastActived.time,
                     comments: it.previewComments.comments.collect {
                         [

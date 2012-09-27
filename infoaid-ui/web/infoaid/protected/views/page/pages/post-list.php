@@ -51,7 +51,7 @@
 	<li ng-repeat="post in posts" id="post-{{post.id}}">
 		<div class="message-content">
 			<div class="message-picture">
-				<img src="{{post.userPicSmall}}"></img>
+				<img ng-show="post.picSmall.length" src="<?php echo Yii::app()->baseUrl; ?>{{post.userPicSmall}}"></img>
 			</div>
 
 			<div class="message-details">
@@ -60,7 +60,7 @@
 				</div>
 				<div class="message-body">
 					<div class="message-body-message">{{post.message}}</div>
-					<div class="message-body-image"><img src="{{post.picSmall}}"></img></div>
+					<div class="message-body-image"><img ng-show="post.picSmall.length" src="<?php echo Yii::app()->baseUrl; ?>{{post.picOriginal}}"></img></div>
 				</div>
 
 				<div class="meta">
@@ -135,6 +135,7 @@
 		    url: '<?php echo $this->createUrl("page/doUploadImagePost"); ?>',
 		    dataType: 'json',
 		    done: function (e, data) {
+		    	console.log(data)
 		        var imgSmall = data.result.small
 		        var imgOriginal = data.result.original
 		        $('#previewImg').html("<img src="+baseUrl+imgSmall.url+">");
