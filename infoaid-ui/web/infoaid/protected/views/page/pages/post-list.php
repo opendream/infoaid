@@ -56,7 +56,7 @@
 
 			<div class="message-details">
 				<div class="message-poster-name">
-					<a href="">{{post.user}}</a>
+					<a href="">{{post.createdBy}}</a>
 				</div>
 				<div class="message-body">
 					<div class="message-body-message">{{post.message}}</div>

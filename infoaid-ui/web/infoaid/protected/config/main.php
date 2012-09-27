@@ -179,6 +179,8 @@ return array(
 			// 'port'=>8080,
 			'server'=>'http://localhost:8080/infoaid-api/',
 			//'port'=>8080,
+			'log_request'=>true,
+			'debug_rest'=>false,
 		),
 
 		'allowed_language' => array('en', 'th'),
