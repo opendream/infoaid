@@ -36,10 +36,11 @@ class PageController {
 
     def member() {
         def ret = [:]
+        ret.status = 0
         def offset = params.offset ? params.offset : 0
         def max = params.max ? params.max : ConfigurationHolder.config.infoaid.api.allmember.limited
         def results = pageService.getMembers(params.slug, offset, max)
-        ret.status = 1
+        
         ret.members = results.collect{
             [
                 id: it.user.id,
@@ -52,15 +53,16 @@ class PageController {
                 picOriginal: it.user.picOriginal,
                 picLarge: it.user.picLarge,
                 picSmall: it.user.picSmall,
-                relation: it.relation.toString()
             ]
         }
+        ret.status = 1
         ret.totalMembers = results.size()
         render ret as JSON
     }
 
     def topMember() {
         def ret = [:]
+        ret.status = 0
         def results = pageService.getTopMembers(params.slug)
         ret.topMembers = results.pageUsers.collect {
             [   
@@ -192,6 +194,7 @@ class PageController {
                     dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                     createdBy: it.createdBy.username,
                     userPicSmall: it.createdBy.picSmall,
+                    userPicOriginal: it.createdBy.picOriginal,
                     userId: it.createdBy.id,
                     conversation: it.conversation,
                     lastActived: it.lastActived.time,
@@ -219,14 +222,32 @@ class PageController {
         def results = pageService.getAllNeeds(params.slug)
         ret.status = 1
         ret.needs = results.needs.collect {
-            [
+            [   
+                id: it.id,
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                 createdBy: it.createdBy.username,
+                userPicSmall: it.createdBy.picSmall,
+                userPicOriginal: it.createdBy.picOriginal,
                 userId: it.createdBy.id,
                 expiredDate: it.expiredDate.format('yyyy-MM-dd HH:mm'),
                 quantity: it.quantity,
-                item: it.item.name
+                itemId: it.item.id,
+                item: it.item.name,
+                conversation: it.conversation,
+                lastActived: it.lastActived.time,
+                comments: it.previewComments.comments.collect {
+                    [
+                        id: it.id,
+                        message: it.message,
+                        createdBy: it.user.username,
+                        userId: it.user.id,
+                        picOriginal: it.user.picOriginal,
+                        picLarge: it.user.picLarge,
+                        picSmall: it.user.picSmall,
+                        lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
+                    ]
+                }
             ]
         }
         ret.totalNeeds = results.totalNeeds
@@ -240,7 +261,18 @@ class PageController {
         ret.needs = results.needs.collect {
             [
                 id: it.id,
-                message: it.message
+                message: it.message,
+                dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
+                createdBy: it.createdBy.username,
+                userPicSmall: it.createdBy.picSmall,
+                userPicOriginal: it.createdBy.picOriginal,
+                userId: it.createdBy.id,
+                expiredDate: it.expiredDate.format('yyyy-MM-dd HH:mm'),
+                quantity: it.quantity,
+                itemId: it.item.id,
+                item: it.item.name,
+                conversation: it.conversation,
+                lastActived: it.lastActived.time
             ]
         }
         ret.totalNeeds = results.totalNeeds
