@@ -123,6 +123,8 @@ function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post) {
 
 
 function PostMessageCtrl($scope, PostMessage, PostRequest, Post, DeletePost, Items) {
+	$scope.picSmall = '';
+	$scope.baseUrl = baseUrl;
 	$scope.items = [];
 	if($scope.items.length===0) {
 		Items.query(function(ret) {
@@ -139,12 +141,17 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, DeletePost, Ite
 			var options = {
 				slug: $scope.slug,
 				userId: $scope.memberId, 
-				message: $scope.message
+				message: $scope.message,
+				picOriginal: $('#picOriginal').val(),
+				picSmall: $('#picSmall').val()
 			};
 			
-			PostMessage.get(options, function (ret) {	
+			PostMessage.get(options, function (ret) {
 				refresh();	
-				$scope.message = '';				
+				$scope.message = '';
+				$('#previewImg').html('');
+				$('#picSmall').val('');
+		        $('#picOriginal').val('');
 			});							
 		}
 	}
@@ -178,7 +185,7 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, DeletePost, Ite
 
 	function refresh() { // duplicated function need to fix!
 		Post.query({slug:$scope.slug}, function (posts) {					 
-			var i = 0;CreateItem
+			var i = 0;
 			angular.forEach(posts, function(post) {
 				if($scope.posts.length > i) {
 					$scope.posts.splice(i, 1, post);

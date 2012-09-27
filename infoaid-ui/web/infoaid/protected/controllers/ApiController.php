@@ -64,8 +64,8 @@ class ApiController extends IAController
 		$this->renderJSON($resultJson);
 	}
 
-	public function actionPostMessage($slug, $userId, $message) {
-		$params = array('message'=>$message);
+	public function actionPostMessage($slug, $userId, $message, $picOriginal, $picSmall) {
+		$params = array('message'=>$message, 'picOriginal'=>$picOriginal, 'picSmall'=>$picSmall);
 		$resultJson = API::post('page/'.urlencode($slug).'/post_message/'.$userId, $params, 'json');
 		$this->renderJSON($resultJson);
 	}
