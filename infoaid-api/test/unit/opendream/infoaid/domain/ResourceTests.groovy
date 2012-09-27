@@ -8,23 +8,22 @@ import org.junit.*
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@TestFor(Need)
-class NeedTests extends DomainTestTemplate {
+@TestFor(Resource)
+class ResourceTests extends DomainTestTemplate {
 
     def requiredProperties() {
         ['expiredDate', 'quantity', 'item']
     }
 
     def domainClass() {
-        Need.class
+        Resource.class
     }
 
     void testValidateQuantity() {
-        mockForConstraintsTests(Need)
+        mockForConstraintsTests(Resource)
 
-        def need = new Need()
+        def resource = new Resource()
 
-        verifyPass(need, 'quantity')
+        verifyPass(resource, 'quantity')
     }
-    
 }
