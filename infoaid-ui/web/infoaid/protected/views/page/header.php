@@ -119,7 +119,6 @@
         ajaxLoading(pageId);
 
         $.getJSON('<?php echo $this->createUrl("page/leavePage"); ?>', {userId: '<?php echo $userId; ?>', slug: slug}, function(resp) {
-            console.log(resp)
             if(resp.status == 1) {
                 $('#page-header-join-leave-'+pageId).html('<button class="btn" onclick="joinPage('+"'"+slug+"'"+","+pageId+')">Join Page</button>');
             } else {
@@ -133,8 +132,6 @@
         ajaxLoading(pageId);
 
         $.getJSON('<?php echo $this->createUrl("page/joinPage"); ?>', {userId: '<?php echo $userId; ?>', slug: slug}, function(resp) {
-            console.log(slug)
-            console.log(resp)
             if(resp.status == 1) {
                 $('#page-header-join-leave-'+pageId).html('<button class="btn" onclick="leavePage('+"'"+slug+"'"+","+pageId+')">Leave Page</button>');
             } else {
