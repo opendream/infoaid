@@ -9,9 +9,9 @@
         <div class="page-picture">
             <?php 
                 if($post->picSmall == null) {
-                    echo '<img src='.Yii::app()->baseUrl.'/media/pages/page_default_small.jpg class="img-polaroid">';
+                    echo '<a href="'.Yii::app()->baseUrl.'/page/'.$slug.'"><img src='.Yii::app()->baseUrl.'/media/pages/page_default_small.jpg class="img-polaroid"></a>';
                 } else {
-                    echo '<img src=' . Yii::app()->baseUrl . $post->picSmall . ' class="img-polaroid">';
+                    echo '<a href="'.Yii::app()->baseUrl.'/page/'.$slug.'"><img src=' . Yii::app()->baseUrl . $post->picSmall . ' class="img-polaroid"></a>';
                 }
             ?>
         </div>

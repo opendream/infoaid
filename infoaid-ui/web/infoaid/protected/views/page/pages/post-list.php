@@ -83,7 +83,7 @@
 			<ul>
 				<li class="thumbnail" ng-repeat="comment in comments">
 					<div class="comment-picture">
-						<img src="{{comment.picSmall}}"></img>
+						<img src="<?php echo Yii::app()->baseUrl; ?>{{comment.picSmall}}"></img>
 					</div>
 
 					<div class="comment-details">
