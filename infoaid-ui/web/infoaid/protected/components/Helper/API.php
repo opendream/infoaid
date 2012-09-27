@@ -99,19 +99,25 @@ class API
 
 		if (self::isMethodAllowed($method)) {
 			$result = $rest->$method($uri, $params, $format);
-			$rest->debug();
+
+			$api_params = param('api');
+			if ($api_params['debug_rest']) {
+				$rest->debug();
+			}
 
 			$dbg_msg  = strtoupper($method) ." $uri";
 			$dbg_msg .= "\nAUTHENTICATION = ";
 			$dbg_msg .= "\nuser : ". $rest->http_user;
 			$dbg_msg .= "\npass : ". $rest->http_pass;
 			$dbg_msg .= "\nauth : ". $rest->http_auth;
-			$dbg_msg .= "\nPARAMS = ";
+			$dbg_msg .= "\nPARAMS = \n";
 			$dbg_msg .= print_r($params, 1);
-			$dbg_msg .= "\nRESULTS = ";
+			$dbg_msg .= "\nRESULTS = HEADER (". $rest->status() .")\n";
 			$dbg_msg .= print_r($result, 1);
 
-			Yii::log($dbg_msg, 'debug', 'API');
+			if ($api_params['log_request']) {
+				Yii::log($dbg_msg, 'debug', 'API');
+			}
 
 			if ($rest->status() != 200) {
 				return false;
