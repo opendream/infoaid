@@ -28,15 +28,22 @@ class ImageHelper
 	public function getSpecificDestinationDir()
 	{
 		return preg_replace('#/+#', '/',
-					$this->destinationDir . '/' . $this->specific);
+					$this->destinationDir . '/' . $this->specific . '/');
+	}
+
+	public function getSpecificDestinationUrl($filename = '')
+	{
+		return preg_replace('#/+#', '/',
+					$this->settings['prefixUrl']
+					. '/' . $this->specific . '/' . $filename);
 	}
 
 	public static function generateDir($dir)
 	{
 		// Make new directory if not exists.
-		Yii::log("Making directory : $dir", 'debug', 'Image');
 		if (! is_dir($dir)) {
-			if (! mkdir($dir)) {
+			Yii::log("Making directory : $dir", 'debug', 'Image');
+			if (! mkdir($dir, 0777, true)) {
 				Yii::log("Making directory : $dir .. Failed", 'debug', 'Image');
 				return false;
 			}
@@ -87,7 +94,7 @@ class ImageHelper
 		foreach ($photos as $size =>$path) {
 			$_photos[$size] = array(
 				'path' => $path,
-				'url' => $prefix . $userId .'/'. basename($path),
+				'url' => $this->getSpecificDestinationUrl(basename($path)),
 			);
 		}
 

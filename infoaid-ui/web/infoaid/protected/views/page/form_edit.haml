@@ -1,0 +1,47 @@
+#page-create
+	%header.page-header
+		%h1 Create page
+	
+	#{$this->renderPartial('/_flash')}
+
+	%form.form-horizontal{:method => "POST", :enctype => "multipart/form-data"}
+		%legend
+			Basic Information
+		.control-group
+			%label.control-label{:for => "name"}
+				Name
+			.controls
+				%input.input-xlarge#name{:type => "text", :value => "#{$page->name}", :required => true, :name => "name", :placeholder => "Page title", :autofocus => true}
+		.control-group
+			%label.control-label
+				Location
+			.controls
+				#map(style="height:220px;")
+				%input#lat{:type => "hidden", :value => "#{$page->lat}", :name => "lat"}
+				%input#lng{:type => "hidden", :value => "#{$page->lng}", :name => "lng"}
+		.control-group
+			%label.control-label{:for => "population"}
+				Social Statistics
+			.controls
+				%p
+					.input-append
+						%input.input-large#household{:type => "number", :value => "#{$page->household}", :name => "household", :placeholder => "Number of household", :min => '"0"'}
+						%span.add-on Household
+				%p
+					.input-append
+						%input.input-large#population{:type => "number", :value => "#{$page->population}", :name => "population", :placeholder => "Number of population", :min => '"0"'}
+						%span.add-on People
+		.control-group
+			%label.control-label{:for => "about"}
+				About
+			.controls
+				%textarea.input-xlarge.expanding#about{:name => "about", :placeholder => "Description of this area, geographic, people culture or anything"}
+					= $page->about
+		=$this->renderPartial('_form_photo', array('page' => $page))
+		.form-actions
+			- if ($op == 'create')
+				%button.btn{:value => "create", :name => "op"}
+					Create
+			- if ($op == 'edit')
+				%button.btn{:value => "edit", :name => "op"}
+					Save

@@ -1,0 +1,10 @@
+.flash-message-error
+	- if (hasFlash('error'))
+		%div.alert.alert-error
+			= getFlash('error')
+	- if (hasFlash('info'))
+		%div.alert.alert-info
+			= getFlash('info')
+	- if (hasFlash('success'))
+		%div.alert.alert-success
+			= getFlash('success')

@@ -1,5 +1,5 @@
 <?php
-    $post = PageHelper::getJSON($slug, "info");
+    $post = PageHelper::getInfoBySlug($slug);
     $needs = PageHelper::getJSON($slug, 'limit_need/4');
     $userId = Yii::app()->user->getId();
     $isJoined = PageHelper::isJoined($userId, $slug);
@@ -17,7 +17,17 @@
         </div>
     </div>
     <div id="page-header-right-<?php echo $post->id; ?>" class="page-header-right">
-        <div><span class='page-name'><?php echo CHtml::link($post->name, array("page/$slug")); ?></span></div>
+        <div>
+            <span class='page-name'>
+                <?php echo CHtml::link($post->name, array("page/$slug")); ?>
+            </span>
+            --
+            <?php if (PageHelper::isOwner($userId, $slug)): ?>
+                <span class="edit">
+                    <?php echo l("Edit", "/page/$slug/edit"); ?>
+                </span>
+            <?php endif; ?>
+        </div>
         <div class='page-household-population'>
             <span>
                 <?php

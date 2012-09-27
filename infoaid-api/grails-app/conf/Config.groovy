@@ -73,9 +73,9 @@ environments {
 log4j = {
     // Example of changing the log pattern for the default console appender:
     //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
+    appenders {
+        console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+    }
 
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
@@ -114,5 +114,9 @@ grails.plugins.springsecurity.filterChain.chainMap = [
    '/user/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
    '/page**': 'JOINED_FILTERS,-exceptionTranslationFilter',
    '/page/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+   '/comment**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+   '/comment/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+   '/post**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+   '/post/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
    '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
 ]

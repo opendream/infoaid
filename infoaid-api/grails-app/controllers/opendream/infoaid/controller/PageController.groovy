@@ -14,9 +14,9 @@ class PageController {
         ret.status = 0
         def info = pageService.getInfo(params.slug)
         if(info) {
-            ret = [id: info.id, name: info.name, lat: info.lat, lng: info.lng, dateCreated: info.dateCreated.format('yyyy-MM-dd HH:mm'), 
-            lastUpdated: info.lastUpdated.format('yyyy-MM-dd HH:mm'), picSmall: info.picSmall, household: info.household, 
-            population: info.population, status: 1, slug: info.slug
+            ret = [
+                status: 1,
+                page: info
             ]
         }
         
@@ -194,6 +194,8 @@ class PageController {
                     userPicSmall: it.createdBy.picSmall,
                     userId: it.createdBy.id,
                     conversation: it.conversation,
+                    picSmall: it.createdBy.picSmall,
+                    lastActived: it.lastActived.time,
                     comments: it.previewComments.comments.collect {
                         [
                             id: it.id,
@@ -286,16 +288,44 @@ class PageController {
         def ret = [:]
 
         if(!userId || !name) {
-            ret = [status:0, message: "user id: ${userId} could not create page: ${name}",
+            ret = [status:0, message: "Can not create page",
                     lat: lat, lng: lng, household: household, population: population,
-                    about: about, location: location, slug: slug, picOriginal: picOriginal, picSmall: picSmall, picLarge: picLarge]
+                    about: about, location: location, picOriginal: picOriginal, picSmall: picSmall, picLarge: picLarge]
             render ret as JSON
         } else {
-            def result = pageService.createPage(userId, name, lat, lng, location, household, population, about, picOriginal, picSmall, picLarge)
-            ret = [status:1, message: "user id: ${userId} created page: ${name}", userId: userId, 
-                    name: result.name, lat: result.lat, lng: result.lng, household: result.household, 
-                    population: result.population, about: result.about, location: result.location, 
-                    picOriginal: result.picOriginal, picSmall: result.picSmall, picLarge: result.picLarge, slug: result.slug]
+            def errors
+            def result
+            try {
+                result = pageService.createPage(userId, name, lat, lng, location, household, population, about, picOriginal, picSmall, picLarge)
+            }
+            catch (e) {
+                errors = e
+            }
+
+            if (errors || ! result) {
+                ret = [
+                    status: 0,
+                    message: "Can not save page"
+                ]
+            }
+            else {
+                ret = [
+                    status: 1,
+                    message: "Create page success",
+                    userId: userId, 
+                    name: result.name,
+                    lat: result.lat,
+                    lng: result.lng,
+                    household: result.household, 
+                    population: result.population,
+                    about: result.about,
+                    location: result.location, 
+                    picOriginal: result.picOriginal,
+                    picSmall: result.picSmall, 
+                    picLarge: result.picLarge, 
+                    slug: result.slug
+                ]
+            }
             render ret as JSON
         }
     }
@@ -347,9 +377,8 @@ class PageController {
     }
 
     def postMessage() {
-        println params
         def ret
-        def userId = params.userId
+        def userId = springSecurityService?.principal?.id
         def slug = params.slug
         def message = params.message
         def picOriginal = params.picOriginal
@@ -383,7 +412,7 @@ class PageController {
         } else {
             userId = springSecurityService?.principal?.id
         }
-        println "userId $userId"
+        
         def result = pageService.createNeed(userId, slug, itemId, quantity, message)
         ret = [post: [id :result.post.id, message: result.post.message,
         item: [id: result.post.item.id, name: result.post.item.name], quantity: result.post.quantity,
@@ -395,7 +424,7 @@ class PageController {
     }
 
     def postComment(){
-        def userId = params.userId
+        def userId = springSecurityService?.principal?.id
         def postId = params.postId
         def message = params.message
         def ret

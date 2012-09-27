@@ -135,4 +135,9 @@ class API
 	{
 		return self::call('post', $uri, $params, $format);
 	}
+
+	public static function postJSON($uri, $params = array())
+	{
+		return self::call('post', $uri, $params, 'json');
+	}
 }

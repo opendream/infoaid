@@ -1,0 +1,13 @@
+%fieldset.form-group
+
+	- if (! $no_legend)
+		%legend
+			Page logo
+
+	.control-group
+		%label.control-label(for="input-image")
+			Logo
+		.controls
+			- if ($page->picLarge)
+				%img.img-polaroid(src="#{Yii::app()->baseUrl . $page->picLarge}")
+			%input#input-image(type="file" name="logo")

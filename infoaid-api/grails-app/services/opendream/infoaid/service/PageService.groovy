@@ -72,6 +72,7 @@ class PageService {
             if(until) {
                 le('dateCreated', until)
             }
+            eq('enabled', true)
     		order('dateCreated', 'asc')
     	}
 
@@ -104,7 +105,13 @@ class PageService {
         def page = new Page(name: name, lat: lat, lng: lng, location: location,
             household: household, population: population, about: about, 
             picOriginal: picOriginal, picSmall: picSmall, picLarge: picLarge)
-        page.save(failOnError: true)
+        try {
+            page.save(failOnError: true, flush: true)
+        }
+        catch (e) {
+            log.error e
+            throw e
+        }
         def user = User.get(userId)
         PageUser.createPage(user, page)
         page
@@ -378,7 +385,7 @@ class PageService {
             comment.enabled = false
             comment.save(failOnError: true, flush:true)
             def post = comment.post
-            post.conversation --
+            post.conversation--
             post.save(failOnError: true, flush:true)
             [status:1, message:"comment ${commentId} is deleted", id:commentId]
         } 

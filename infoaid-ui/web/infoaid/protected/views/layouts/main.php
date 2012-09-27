@@ -15,8 +15,7 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/bootstrap/css/bootstrap.min.css" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/select2/select2.css" />
-
+	
 	<script>
 		var baseUrl = '<?php echo Yii::app()->baseUrl; ?>';
 	</script>
@@ -59,7 +58,8 @@
 				<li class="dropdown">
 					<a href="" class="dropdown-toggle" data-toggle="dropdown"> <i class="icon-user icon-black"></i> <?php echo Yii::app()->user->getName(); ?> <b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="<?php echo $this->createUrl('user/edit'); ?>">Edit Profile</a></li>                                
+						<li><a href="<?php echo $this->createUrl('user/edit'); ?>">Edit Profile</a></li>
+						<li><a href="<?php echo $this->createUrl('page/create'); ?>">Create Page</a></li>                             
 						<li class="divider"></li>
 						<li><a href="<?php echo $this->createUrl('user/logout'); ?>">Logout</a></li>
 					</ul>

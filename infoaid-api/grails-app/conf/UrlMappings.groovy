@@ -15,7 +15,7 @@ class UrlMappings {
         "/page/$slug/map"(controller: "page", action: "map")
         "/page/$slug/members"(controller: "page", action: "member")
         "/page/$slug/need"(controller: "page", action: "need")        
-        "/page/$slug/post_message/$userId"(controller: "page"){ action =[POST:"postMessage"] }
+        "/page/$slug/post_message"(controller: "page"){ action =[POST:"postMessage"] }
         "/page/$slug/post_need"(controller: "page"){ action =[POST:"postNeed"] }
         "/page/$slug/recent_post"(controller: "page", action: "recentPost")
         "/page/$slug/status"(controller: "page", action: "status") // default by recent posts
