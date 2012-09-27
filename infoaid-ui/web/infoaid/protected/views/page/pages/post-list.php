@@ -51,7 +51,7 @@
 	<li ng-repeat="post in posts" id="post-{{post.id}}">
 		<div class="message-content">
 			<div class="message-picture">
-				<img ng-show="post.picSmall.length" src="<?php echo Yii::app()->baseUrl; ?>{{post.userPicSmall}}"></img>
+				<img src="<?php echo Yii::app()->baseUrl; ?>{{post.userPicSmall}}"></img>
 			</div>
 
 			<div class="message-details">
