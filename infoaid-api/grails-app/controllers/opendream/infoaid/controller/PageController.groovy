@@ -377,7 +377,7 @@ class PageController {
     }
 
     def postMessage() {
-        def ret
+        def ret = [:]
         def userId = springSecurityService?.principal?.id
         def slug = params.slug
         def message = params.message
@@ -427,7 +427,8 @@ class PageController {
         def userId = springSecurityService?.principal?.id
         def postId = params.postId
         def message = params.message
-        def ret
+        def ret = [:]
+        ret.status = 0
 
         if(userId && postId && message) {
             def result = pageService.postComment(userId, postId, message)

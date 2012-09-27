@@ -76,10 +76,10 @@ class PageControllerTests {
         params.slug = 'page-slug'
         
         controller.info()
-        assert response.json['picSmall'] == 'picSma'
-        assert response.json['name'] == 'page'
-        assert response.json['household'] == 1
-        assert response.json['population'] == 11
+        assert response.json['page']['picSmall'] == 'picSma'
+        assert response.json['page']['name'] == 'page'
+        assert response.json['page']['household'] == 1
+        assert response.json['page']['population'] == 11
     }
 
     void testMap() {
@@ -324,12 +324,13 @@ class PageControllerTests {
         def thisPost = Post.get(1)
         assert thisPost.conversation == 0
         assert 2 == Comment.count()
+        
         pageService.demand.postComment(1..1) { userId, postId, message -> 
             def user = User.get(userId)
             def commentDate = new Date()
             def post = Post.get(postId)
             
-            def comment = new Comment(message: message, dateCreated: commentDate)
+            def comment = new Comment(message: message, dateCreated: commentDate, user: user)
             post.addToComments(comment)
             post.lastActived = commentDate
             post.conversation++
@@ -345,19 +346,20 @@ class PageControllerTests {
         }
 
         controller.pageService = pageService.createMock()
-        
+
+        def nut = User.findByUsername("nut")
+        controller.springSecurityService  = [principal:[id:nut.id]]
+
         params.message = 'this is my comment'
         params.postId = 1
-        params.userId = 1
         controller.postComment()
-        def user = User.get(1)
+        
         def post = Post.get(1)
-        def pageUser = PageUser.findByPageAndUser(post.page, user)
+        def pageUser = PageUser.findByPageAndUser(post.page, nut)
 
         thisPost = Post.get(1)
-        assert pageUser.conversation == 2
-        assert thisPost.conversation == 1
-        assert 3 == Comment.count()        
+        //assert response.json[]
+        assert response.json['status'] == 1
     }   
 
     void testDisableComment() {
@@ -437,7 +439,8 @@ class PageControllerTests {
         def user = User.findByUsername('nut')
         def page = Page.findBySlug('page-slug')
 
-        params.userId = user.id
+        controller.springSecurityService  = [principal:[id: user.id]]
+        //params.userId = user.id
         params.slug = page.slug
         params.message = 'hello world'
         params.picOriginal = 'picOri'
@@ -447,7 +450,7 @@ class PageControllerTests {
         controller.postMessage()
 
         // expect
-        assert 1 == response.json.status
+        assert 1 == response.json['status']
         assert "user: ${user.username} posted message in page: ${page.name}" == response.json.message
         assert 'hello world' == response.json.post.message
         assert 'picOri' == response.json.post.picOriginal
