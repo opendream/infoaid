@@ -67,6 +67,7 @@ return array(
 				'api/post/<id:\d+>/<method:\w+>'=>'api/post',
 				'api/page/<slug:[^\/]*>/<method:\w+>'=>'api/page',
 				'api/members/<slug:[^\/]*>'=>'api/members',
+				'page/doUploadImagePost'=>'page/doUploadImagePost',
 				'page/create'=>'page/create',
 				'page/joinPage'=>'page/joinPage',
 				'page/leavePage'=>'page/leavePage',
