@@ -145,6 +145,7 @@ class PageController {
                     message: it.message,
                     dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                     createdBy: it.createdBy.username,
+                    userPicSmall: it.createdBy.picSmall,
                     userId: it.createdBy.id,
                     conversation: it.conversation,
                     comments: it.previewComments.comments.collect {
@@ -186,8 +187,11 @@ class PageController {
                 [
                     id: it.id,
                     message: it.message,
+                    picSmall: it.picSmall,
+                    picOriginal: it.picOriginal,
                     dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                     createdBy: it.createdBy.username,
+                    userPicSmall: it.createdBy.picSmall,
                     userId: it.createdBy.id,
                     conversation: it.conversation,
                     comments: it.previewComments.comments.collect {
@@ -206,7 +210,6 @@ class PageController {
             }
             ret.status = 1
         }
-        
         render ret as JSON
     }
 
@@ -344,6 +347,7 @@ class PageController {
     }
 
     def postMessage() {
+        println params
         def ret
         def userId = params.userId
         def slug = params.slug
