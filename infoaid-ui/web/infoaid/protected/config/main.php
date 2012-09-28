@@ -173,11 +173,9 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
-
+		
 		'api'=>array(
-			// 'server'=>'http://192.168.1.131:8080/infoaid-api/',
-			// 'port'=>8080,
-			'server'=>'http://localhost:8080/infoaid-api/',
+			'server'=>'http://Khandhas.local:8080/infoaid-api/',
 			//'port'=>8080,
 			'log_request'=>true,
 			'debug_rest'=>false,
