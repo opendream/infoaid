@@ -100,6 +100,7 @@ infoaid.api.search.max = 10
 infoaid.api.getPage.max = 10
 infoaid.api.allmember.limited = 2
 infoaid.api.getResource.max = 10
+infoaid.api.user.role = 'ROLE_USER'
 
 
 // Added by the Spring Security Core plugin:

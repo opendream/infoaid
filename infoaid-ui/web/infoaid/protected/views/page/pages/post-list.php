@@ -1,3 +1,8 @@
+<?php
+    $post = PageHelper::getInfoBySlug($slug);    
+    $userId = Yii::app()->user->getId();
+    $isJoined = PageHelper::isJoined($userId, $slug);
+?>
 <div class="modal hide fade" id="myModal" ng-controller="ModalCtrl">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="removeNewItem()">&times;</button>
@@ -12,9 +17,10 @@
 		<a href="#" class="btn btn-mini btn-primary" ng-click="setModel(newItem)" aria-hidden="true">Save</a>
 	</div>		   	
 </div>
-<div  ng-controller="PostMessageCtrl">
-	<div class="tabbable">
-	    <ul class="nav nav-pills">
+
+<div ng-controller="PostMessageCtrl">	
+	<div class="tabbable" ng-init="userId='<?php echo $userId; ?>'; isjoined='<?php echo $isJoined->isJoined; ?>'">
+		<ul class="nav nav-pills">
 	       	<li class="active"><a href="#tabInfo" data-toggle="tab" class="btn btn-mini btn-link">info</a></li>
 	       	<li><a href="#tabNeed" data-toggle="tab" class="btn btn-mini btn-link">request</a></li>
 	    </ul>
@@ -73,7 +79,7 @@
 
 <ul class="page-posts">
 	<li ng-repeat="post in posts" id="post-{{post.id}}">
-		<div post></div>
+		<div post ng-controller="PostBodyCtrl"></div>
 
 		<div class="message-comments" ng-controller="CommentCtrl">
 			<div id="loadmore-{{post.id}}" class="load-more" ng-click="loadMore('#loadmore-'+post.id)">

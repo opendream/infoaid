@@ -70,8 +70,8 @@ class ApiController extends IAController
 		$this->renderJSON($resultJson);
 	}
 
-	public function actionDeletePost($postId, $userId) {
-		$resultJson = API::getJSON('post/'.$postId.'/delete', array('userId'=>$userId));
+	public function actionDeletePost($postId) {
+		$resultJson = API::getJSON('post/'.$postId.'/delete');
 		$this->renderJSON($resultJson);
 	}
 

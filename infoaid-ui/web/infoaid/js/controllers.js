@@ -1,3 +1,19 @@
+angular.module('headerService', ['ngResource']).
+    factory('JoinPage', function ($resource) {
+        var JoinPage = $resource(baseUrl + '/page/joinPage');
+        return JoinPage;
+    }).
+    factory('LeavePage', function ($resource) {
+        var LeavePage = $resource(baseUrl + '/page/leavePage');
+        return LeavePage;
+    }).
+    filter('JoinLabel', function() {
+        return function(input) {
+        return input ? 'Leave Page' : 'Join Page';
+        };
+    });
+
+
 function ListCtrl($scope, Post, RearrangePost) {
     var slug = $scope.slug;
 
@@ -28,4 +44,27 @@ function MemberCtrl($scope, $http) {
     $http.get(baseUrl + '/api/members/'+$scope.slug).success(function(data) {
         $scope.members = data.topMembers;
     });
+}
+
+function HeaderCtrl($scope, JoinPage, LeavePage) {    
+
+    $scope.handleClick = function() {
+        var options = {
+                slug: $scope.slug
+            };
+
+        if($scope.isjoined==1) {
+            LeavePage.get(options, function (ret) {   
+                if(ret.status==1) {
+                    $scope.isjoined = 0; 
+                }
+            });
+        } else {
+            JoinPage.get(options, function (ret) { 
+                if(ret.status==1) {
+                    $scope.isjoined = 1; 
+                }
+            });
+        }        
+    }
 }

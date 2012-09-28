@@ -46,14 +46,6 @@ angular.module('commentService', ['ngResource']).
 		};
 		return FindPost;
 	}).
-	factory('RefreshPost', function (Post, FindPost, RearrangePost) {
-		var RefreshPost = function(scope) {
-			Post.query({slug:scope.slug}, function (newposts) {					 
-				RearrangePost(scope, newposts);				
-			});
-		};		
-		return RefreshPost;
-	}).
 	factory('RearrangePost', function (FindPost) {
 		var RearrangePost = function(scope, newPosts) {
 			angular.forEach(newPosts, function(post) {
@@ -71,10 +63,37 @@ angular.module('commentService', ['ngResource']).
 			});								
 		};		
 		return RearrangePost;
+	}).
+	factory('RefreshPost', function (Post, FindPost, RearrangePost) {
+		var RefreshPost = function(scope) {
+			Post.query({slug:scope.slug}, function (newposts) {					 
+				RearrangePost(scope, newposts);				
+			});
+		};		
+		return RefreshPost;
 	});
 
-function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post, RefreshPost) {
+function PostBodyCtrl($scope, DeletePost, RefreshPost) {
 
+	$scope.deletePost = function(post) {
+		if(post.id) {
+			var options = { postId: post.id };
+			DeletePost.get(options, function (ret) {	
+				if(ret.status==1) {
+					RefreshPost($scope);
+					for (var i = 0, ii = $scope.posts.length; i < ii; i++) {
+						if($scope.posts[i].id == ret.id) {
+							$scope.posts.splice(i, 1);
+							return;
+						}
+					}
+				}
+			});
+		}
+	}
+}
+
+function CommentCtrl($scope, Comment, DeletePost, PostComment, DeleteComment, Post, RefreshPost) {
 	var lastRowLastUpdated = function () {
 		var comments = $($scope.comments);
 		if (comments.length === 0) {
@@ -105,12 +124,11 @@ function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post, RefreshP
 
 		Comment.query(options, function (comments) {
 			angular.forEach(comments, function (newcomment) {
-				if(findComment(newcomment)==false) {
+				if(!findComment(newcomment)) {
 					$scope.comments.unshift(newcomment);
 				}
 								
 			});
-
 			if(id && ($scope.post.conversation == $scope.comments.length)) {
 				var element = angular.element(id);
 				element.css('visibility', 'hidden'); //visible
@@ -135,7 +153,7 @@ function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post, RefreshP
 				$scope.comments.splice(0, 1);				
 			});							
 		}
-	}
+	}	
 
 	$scope.deleteComment = function(comment) {
 		if(comment.id) {
@@ -164,7 +182,7 @@ function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post, RefreshP
 	}
 }
 
-function PostMessageCtrl($scope, PostMessage, PostRequest, Post, DeletePost, Items, RefreshPost) {
+function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshPost) {
 	$scope.items = [];
 	if($scope.items.length===0) {
 		Items.query(function(ret) {
@@ -190,15 +208,6 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, DeletePost, Ite
 				$('#picSmall').val();
 		        $('#picOriginal').val();
 			});							
-		}
-	}
-
-	$scope.deletePost = function(post) {
-		if(post.id) {
-			var options = { postId: post.id, userId: this.memberId };
-			DeletePost.get(options, function (ret) {	
-				RefreshPost($scope);
-			});
 		}
 	}
 

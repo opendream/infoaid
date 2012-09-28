@@ -288,7 +288,7 @@ class PageController {
     }
 
     def joinUs() {
-        def userId = params.userId
+        def userId = springSecurityService?.principal?.id
         def slug = params.slug
         def ret
 
@@ -363,7 +363,7 @@ class PageController {
     }
 
     def leavePage() {
-        def userId = params.userId
+        def userId = springSecurityService?.principal?.id
         def slug = params.slug
         def ret
         if(!userId || !slug) {
@@ -556,7 +556,7 @@ class PageController {
     }
 
     def isOwner() {
-        def userId = params.userId
+        def userId = springSecurityService?.principal?.id
         def slug = params.slug
 
         def result = pageService.isOwner(userId, slug)
@@ -564,7 +564,7 @@ class PageController {
     }
 
     def isJoined() {
-        def userId = params.userId
+        def userId = springSecurityService?.principal?.id
         def slug = params.slug
 
         def result = pageService.isJoined(userId, slug)
