@@ -21,8 +21,8 @@
             <span class='page-name'>
                 <?php echo CHtml::link($post->name, array("page/$slug")); ?>
             </span>
-            --
-            <?php if (PageHelper::isOwner($userId, $slug)): ?>
+            <?php if (PageHelper::isOwner($userId, $slug)->isOwner == 1): ?>
+                --
                 <span class="edit">
                     <?php echo l("Edit", "/page/$slug/edit"); ?>
                 </span>
