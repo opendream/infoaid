@@ -1,6 +1,8 @@
 package opendream.infoaid.service
 
 import opendream.infoaid.domain.User
+import opendream.infoaid.domain.Role
+import opendream.infoaid.domain.UserRole
 
 class UserService {
     def springSecurityService
@@ -18,6 +20,12 @@ class UserService {
             log.error user.errors
             throw new RuntimeException("${user.errors}")
         }
+        def roleUser = grailsApplication.config.infoaid.api.user.role
+        def role = Role.findByAuthority(roleUser)
+        if(!UserRole.create(user, role)) {
+            throw new RuntimeException("can not assign role to user: ${user.id}")
+        }
+
         user
     }
 

@@ -1,4 +1,4 @@
-<div id="page-<?php echo $page->id; ?>" class="page-info">
+<div id="page-<?php echo $page->id; ?>" class="page-info" ng-app="post">
 
 		<header class="info">
 			<div>
@@ -9,7 +9,7 @@
 			</div>
 		</header>
 		
-		<div class="row" ng-app="post">				
+		<div class="row">				
 			<div ng-init="slug='<?php echo $slug ?>'"></div>
 			<div class="span7">
 				<section class="posts" >
