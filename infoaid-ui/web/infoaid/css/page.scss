@@ -39,13 +39,17 @@ h2 {
 	.meta {
 		margin-top: 4px;
 	}
-	.message-picture {
+	.message-poster-avatar {
 		float: left;
-		img {
+		min-height: 43px;
+		min-width: 43px;
+		min-height: 43px;
+		min-width: 43px;
+		border: 1px solid #ccc;
+		margin-right: 15px;
+		img {			
 			width: 40px;
 			height: 40px;
-			border: 1px solid #ccc;
-			margin-right: 15px;
 			padding: 3px;
 		}
 	}
