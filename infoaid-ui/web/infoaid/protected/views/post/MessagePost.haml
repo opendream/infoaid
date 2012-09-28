@@ -1,0 +1,20 @@
+.message-content(ngCloak='')
+	.message-poster-avatar
+		%img(src="{{post.createdBy.picSmall}}")
+
+	.message-details
+		.message-poster-name
+			%a(href="")
+				{{post.createdBy}}
+		.message-body
+			{{post.message}}
+		.message-picture-preview
+			%img(src="{{baseUrl + post.picOriginal}}")
+
+		.meta
+			%time.timeago(datetime="{{post.dateCreated}}")
+				{{post.dateCreated}}		
+			%button.btn.btn-mini.btn-link(ng-click="deletePost(post)" type="button")
+				delete
+
+	.clear

@@ -21,6 +21,7 @@ return array(
 		'application.components.*',
 		'application.components.Helper.*',
 		'application.components.Infoaid.*',
+		'application.components.Modules.*',
 		'application.extensions.*',
 	),
 
@@ -117,11 +118,11 @@ return array(
 				),
 				// uncomment the following to show log messages on web pages
 				
-				array(
-					'class'=>'CWebLogRoute',
-					'ignoreAjaxInFireBug'=>true,
-					'showInFireBug'=>true,
-				),
+				// array(
+				// 	'class'=>'CWebLogRoute',
+				// 	'ignoreAjaxInFireBug'=>true,
+				// 	'showInFireBug'=>true,
+				// ),
 				
 			),
 		),
@@ -206,6 +207,12 @@ return array(
 						'width' => '50',
 						'height' => '50',
 						'suffix' => '_s',
+					),
+
+					'ss' => array(
+						'width' => '25',
+						'height' => '25',
+						'suffix' => '_ss',
 					),
 				),
 			),
