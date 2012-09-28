@@ -142,7 +142,6 @@
 		    url: '<?php echo $this->createUrl("page/doUploadImagePost"); ?>',
 		    dataType: 'json',
 		    done: function (e, data) {
-		    	console.log(data)
 		        var imgSmall = data.result.small
 		        var imgOriginal = data.result.original
 		        $('#previewImg').html("<img src="+baseUrl+imgSmall.url+">");

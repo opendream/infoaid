@@ -144,9 +144,9 @@ function CommentCtrl($scope, Comment, DeletePost, PostComment, DeleteComment, Po
 				message: this.comment
 			};
 			
-			PostComment.get(options, function (ret) {	
+			PostComment.get(options, function (ret) {
 				RefreshPost($scope);
-				$scope.comment = '';		
+				$scope.comment = '';
 				var comment = {'id':ret.commentId, 'picSmall':ret.picSmall, 'createdBy':ret.user, 
 								'message':ret.comment, 'lastUpdated':ret.lastUpdated};
 				$scope.comments.push(comment);	
@@ -205,8 +205,8 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 				RefreshPost($scope);
 				$scope.message = '';
 				$('#previewImg').html('');
-				$('#picSmall').val();
-		        $('#picOriginal').val();
+				$('#picSmall').val('');
+		        $('#picOriginal').val('');
 			});							
 		}
 	}
