@@ -187,8 +187,8 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, DeletePost, Ite
 				RefreshPost($scope);
 				$scope.message = '';
 				$('#previewImg').html('');
-				$('#picSmall').val('');
-		        $('#picOriginal').val('');
+				$('#picSmall').val();
+		        $('#picOriginal').val();
 			});							
 		}
 	}

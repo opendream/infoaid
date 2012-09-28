@@ -54,7 +54,7 @@ h2 {
 		padding: 0 12px;
 
 		.message-body {
-			padding: 12px 0;
+			padding: 0;
 		}
 	}
 	.message-comments {
@@ -66,6 +66,7 @@ h2 {
 				width: 40px;
 				height: 40px;
 				margin-right: 10px;
+				border-radius: 20px;
 			}
 		}
 		.comment-details {
@@ -198,6 +199,10 @@ legend {
 .page-header {
 	background-color: #fbf7ee;
 	border-bottom: none;
+	.page-household-population, .page-lat-lng {
+		margin-top: 0;
+		font-size: 14px;
+	}
 }
 
 .page-name {
@@ -267,6 +272,7 @@ legend {
 	#page-sidebar-menu, #page-sidebar-places {
 		.left-side-bar {
 			padding-left: 20px;
+			background-position-y: 2px;
 		}
 	}
 }
@@ -302,7 +308,7 @@ legend {
 		background-color: #fbf7ee;
 		border-bottom: none;
 		.page-name {
-			font-size: 18px;
+			font-size: 16px;
 		}
 		.page-household-population {
 			font-size: 14px;
@@ -354,8 +360,13 @@ legend {
 /*--------- span5: Status Update content ---------*/
 .tab-content {
 	overflow: hidden;
-		.btn-primary, .btn-info {
+	.btn-primary, .btn-info {
 		padding: 5px 8px;
+	}
+	#tabInfo {
+		#fileupload {
+			margin-bottom: 5px;
+		}
 	}
 }
 
@@ -402,6 +413,14 @@ input, textarea, uneditable {
 	}
 	.form-horizontal .control-group {
 		margin-bottom: 10px;
+		.img-polaroid {
+			float: left;
+		}
+		#input-image {
+			float: left;
+			clear: both;
+			margin-top: 10px;
+		}
 	}
 }
 #load-more-button {
@@ -425,15 +444,27 @@ input, textarea, uneditable {
 }
 /*--------- page-members-body ---------*/
 #page-members {
-	width: 700px;
-	#showing { line-height: 42px; }
+	.header-members { margin: 0 5px 0 0; }
+	#showing { line-height: 46px; }
 	#page-members-body {
+		.span3 { 
+			margin: 0;
+			width: 340px;
+			margin: 0 10px 10px 0;
+		}
 		.span {
 			background-color: transparent;
 		}
 	}
-	.span3 { background-color: transparent; }
-	.header-members { margin: 0 10px; }
+	.span3 { 
+		background-color: transparent;
+		img { 
+			margin-right: 10px;
+		}
+		.page-members-text {
+			margin: 0 5px 0 0;
+		}
+	}
 }
 
 #page-create {
@@ -450,4 +481,10 @@ input, textarea, uneditable {
 }
 hr {
 	border: none;
+}
+/*--------- page-create ---------*/
+#page-create {
+	#map {
+		border: 4px solid white;
+	}
 }
