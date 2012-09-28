@@ -49,30 +49,7 @@
 
 <ul class="page-posts">
 	<li ng-repeat="post in posts" id="post-{{post.id}}">
-		<div class="message-content">
-			<div class="message-picture">
-				<img src="<?php echo Yii::app()->baseUrl; ?>{{post.userPicSmall}}"></img>
-			</div>
-
-			<div class="message-details">
-				<div class="message-poster-name">
-					<a href="">{{post.createdBy}}</a>
-				</div>
-				<div class="message-body">
-					<div class="message-body-message">{{post.message}}</div>
-					<div class="message-body-image"><img ng-show="post.picSmall.length" src="<?php echo Yii::app()->baseUrl; ?>{{post.picOriginal}}"></img></div>
-				</div>
-
-				<div class="meta">
-					<time class="timeago" datetime="{{post.dateCreated}}">
-						{{post.dateCreated}}
-					</time>					
-					<button class="btn btn-mini btn-link" ng-click="deletePost(post)" type="button">delete</button>
-				</div>
-			</div>
-
-			<div class="clear"></div>
-		</div>
+		<div post></div>
 
 		<div class="message-comments" ng-controller="CommentCtrl">
 			<div id="loadmore-{{post.id}}" class="load-more" ng-click="loadMore('#loadmore-'+post.id)">

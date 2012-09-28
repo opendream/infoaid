@@ -16,6 +16,9 @@ class IAController extends CController
 		'timeago',
 	);
 
+	private $modules = array();
+	private $_modules = array();
+
 	protected $_app;
 
 	public function renderJSON($content)
@@ -30,13 +33,16 @@ class IAController extends CController
 	public function init()
 	{
 		parent::init();
+		$this->_app = Yii::app();
+		$this->initModule();
+		$this->runModule('init');
+
 		$this->initLang();
 	}
 
 	public function beforeRender($view)
 	{
 		parent::beforeRender($view);
-		$this->_app = Yii::app();
 		$this->injectLocale();
 
 		if ($this->jquery == TRUE) {
@@ -88,6 +94,8 @@ class IAController extends CController
 				->registerCssFile($publishedURL);
 		}
 
+		$this->runModule('afterBeforeRender');
+
 		return true;
 	}
 
@@ -132,6 +140,32 @@ class IAController extends CController
 				$app->clientScript
 					->registerScript($key,$messages,CClientScript::POS_HEAD);
 			}
+		}
+	}
+
+	public function loadModule($module)
+	{
+		$this->modules[$module] = $module;
+	}
+
+	public function unloadModule($module)
+	{
+		unset($this->modules[$module]);
+	}
+
+	public function initModule()
+	{
+		foreach ($this->modules as $module) {
+			if (! isset($this->_modules[$module])) {
+				$this->_modules[$module] = new $module();
+			}
+		}
+	}
+
+	public function runModule($context)
+	{
+		foreach ($this->modules as $module) {
+			$this->_modules[$module]->$context($this);
 		}
 	}
 
