@@ -115,7 +115,7 @@ class IAController extends CController
 		if (! empty($this->jsLocale)) {
 
 			$app->clientScript
-				->registerScript('locale',"jQuery.locale={};",CClientScript::POS_BEGIN);
+				->registerScript('locale',"jQuery.locale={};",CClientScript::POS_HEAD);
 
 			$coreMessages = $app->coreMessages;
 			foreach ($this->jsLocale as $category) {
@@ -130,7 +130,7 @@ class IAController extends CController
 				$key = 'locale-'. $category;
 
 				$app->clientScript
-					->registerScript($key,$messages,CClientScript::POS_BEGIN);
+					->registerScript($key,$messages,CClientScript::POS_HEAD);
 			}
 		}
 	}
