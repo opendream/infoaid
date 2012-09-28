@@ -86,7 +86,7 @@
 			<li class='left-side-bar li-add-group'>
 				<?php
 					if($userId != null) { 
-						echo CHtml::link('Add Group..');
+						echo CHtml::link('Add Group..', array("page/create"));
 					}
 				?>
 			</li>
