@@ -6,7 +6,7 @@
 		<div id="user-header-left-pic-<?php echo $userId; ?>" class="user-header-picture">
 			<?php 
                 if($user->picOriginal == null) {
-                    echo '<a href="'.Yii::app()->baseUrl.'/user/profile/'.$userId.'"><img src='.Yii::app()->baseUrl.'/media/profiles/profile_default_small.png class="img-polaroid"></a>';
+                    echo '<a href="'.Yii::app()->baseUrl.'/user/profile/'.$userId.'"><img src='.Yii::app()->baseUrl.'/media/profiles/profile_default_large.png class="img-polaroid"></a>';
                 } else {
                     echo '<a href="'.Yii::app()->baseUrl.'/user/profile/'.$userId.'"><img src='.Yii::app()->baseUrl . $user->picLarge . ' class="img-polaroid"></a>';
                 }
