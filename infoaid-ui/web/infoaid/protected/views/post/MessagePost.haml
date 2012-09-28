@@ -1,13 +1,14 @@
 .message-content(ngCloak='')
 	.message-poster-avatar
-		%img(src="#{Yii::app()->baseUrl}{{post.userPicSmall}}")
+		%a(href="#{Yii::app()->baseUrl.'/user/profile/'}{{post.userId}}")
+			%img(src="#{Yii::app()->baseUrl}{{post.userPicSmall}}")
 	.message-details
 		.message-poster-name
-			%a(href="")
+			%a(href="#{Yii::app()->baseUrl.'/user/profile/'}{{post.userId}}")
 				{{post.createdBy}}
 		.message-body
 			{{post.message}}
-		.message-picture-preview
+		.message-picture-preview(ng-show="post.picOriginal.length")
 			%img(src="#{Yii::app()->baseUrl}{{post.picOriginal}}")
 		.meta
 			%time.timeago(datetime="{{post.dateCreated}}")

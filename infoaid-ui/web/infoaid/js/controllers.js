@@ -9,7 +9,7 @@ angular.module('headerService', ['ngResource']).
     }).
     filter('JoinLabel', function() {
         return function(input) {
-        return input ? 'Leave Page' : 'Join Page';
+            return input ? 'Leave Page' : 'Join Page';
         };
     });
 
