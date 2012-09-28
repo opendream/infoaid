@@ -5,7 +5,7 @@ angular.module('postService', ['ngResource']).
 		return Post;
 	});
 
-angular.module('post', ['postService', 'commentService', 'time'], function ($routeProvider) {
+angular.module('post', ['postService', 'commentService', 'time', 'headerService'], function ($routeProvider) {
 		$routeProvider.
 			when('/', {
 				controller: ListCtrl,
