@@ -99,6 +99,7 @@ infoaid.api.member.max = 5
 infoaid.api.search.max = 10
 infoaid.api.getPage.max = 10
 infoaid.api.allmember.limited = 2
+infoaid.api.getResource.max = 10
 
 
 // Added by the Spring Security Core plugin:

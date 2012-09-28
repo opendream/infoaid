@@ -569,4 +569,21 @@ class PageController {
         def result = pageService.isJoined(userId, slug)
         render result as JSON
     }
+
+    def createResource() {
+        def result = pageService.createResource(params)
+        render result as JSON
+    }
+
+    def getResource() {
+        if(params.since) {
+            params.since = new Date().parse("yyyy-MM-dd HH:mm", params.since)
+        }
+        if(params.until) {
+            params.until = new Date().parse("yyyy-MM-dd HH:mm", params.until)
+        }
+
+        def result = pageService.getResource(params)
+        render result as JSON
+    }
 }

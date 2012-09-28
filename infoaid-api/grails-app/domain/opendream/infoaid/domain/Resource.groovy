@@ -2,6 +2,7 @@ package opendream.infoaid.domain
 
 class Resource extends Need {
 
-    static constraints = {
+    def beforeInsert() {
+        this.message = "${item.name} $quantity"
     }
 }
