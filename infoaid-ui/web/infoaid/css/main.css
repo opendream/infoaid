@@ -462,3 +462,14 @@ div.search-form
 {
 	min-height: 6em;
 }
+
+.user-header-picture
+{
+	float: left;
+	margin-right: 20px;
+}
+
+.user-header-lastname
+{
+	margin-left: 10px;
+}
