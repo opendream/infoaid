@@ -13,7 +13,6 @@
 	</div>		   	
 </div>
 <div  ng-controller="PostMessageCtrl">
-	
 	<div class="tabbable">
 	    <ul class="nav nav-pills">
 	       	<li class="active"><a href="#tabInfo" data-toggle="tab" class="btn btn-mini btn-link">info</a></li>
@@ -21,9 +20,15 @@
 	    </ul>
 	    <div class="tab-content">
 	        <div class="tab-pane active" id="tabInfo">
+	        	<form id="fileupload" method="POST" enctype="multipart/form-data">
+		    		<div id="previewImg"></div>
+		      		<input id="fileupload" type="file" name="image">
+		      	</form>
 	      	    <form ng-submit="postMessage()">
 	        		<input name="inputMsg" ng-model="message" ng-maxlength="140" type="text" 
-	        		class="span5" placeholder="Type info..."></input>     		
+	        		class="span5" placeholder="Type info..."></input>
+	        		<input name="picSmall" ng-model="picSmall" type="hidden" id="picSmall" />
+		      		<input name="picOriginal" ng-model="picOriginal" type="hidden" id="picOriginal" />		
 	        	</form>
 	        					
 	        </div>
@@ -46,7 +51,7 @@
 	<li ng-repeat="post in posts" id="post-{{post.id}}">
 		<div class="message-content">
 			<div class="message-picture">
-				<img src="{{post.picSmall}}"></img>
+				<img src="<?php echo Yii::app()->baseUrl; ?>{{post.userPicSmall}}"></img>
 			</div>
 
 			<div class="message-details">
@@ -54,7 +59,8 @@
 					<a href="">{{post.createdBy}}</a>
 				</div>
 				<div class="message-body">
-					{{post.message}}
+					<div class="message-body-message">{{post.message}}</div>
+					<div class="message-body-image"><img ng-show="post.picSmall.length" src="<?php echo Yii::app()->baseUrl; ?>{{post.picOriginal}}"></img></div>
 				</div>
 
 				<div class="meta">
@@ -77,7 +83,7 @@
 			<ul>
 				<li class="thumbnail" ng-repeat="comment in comments">
 					<div class="comment-picture">
-						<img src="{{comment.picSmall}}"></img>
+						<img src="<?php echo Yii::app()->baseUrl; ?>{{comment.picSmall}}"></img>
 					</div>
 
 					<div class="comment-details">
@@ -122,4 +128,20 @@
     		allowClear: true
     	});    	 
     });
+</script>
+<script>
+    $(function () {
+		$('#fileupload').fileupload({
+		    url: '<?php echo $this->createUrl("page/doUploadImagePost"); ?>',
+		    dataType: 'json',
+		    done: function (e, data) {
+		    	console.log(data)
+		        var imgSmall = data.result.small
+		        var imgOriginal = data.result.original
+		        $('#previewImg').html("<img src="+baseUrl+imgSmall.url+">");
+		        $('#picSmall').val(imgSmall.url)
+		        $('#picOriginal').val(imgOriginal.url)
+		    }
+		});
+	});
 </script>

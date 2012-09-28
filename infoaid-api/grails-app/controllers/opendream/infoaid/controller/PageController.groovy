@@ -36,10 +36,11 @@ class PageController {
 
     def member() {
         def ret = [:]
+        ret.status = 0
         def offset = params.offset ? params.offset : 0
         def max = params.max ? params.max : ConfigurationHolder.config.infoaid.api.allmember.limited
         def results = pageService.getMembers(params.slug, offset, max)
-        ret.status = 1
+        
         ret.members = results.collect{
             [
                 id: it.user.id,
@@ -52,15 +53,16 @@ class PageController {
                 picOriginal: it.user.picOriginal,
                 picLarge: it.user.picLarge,
                 picSmall: it.user.picSmall,
-                relation: it.relation.toString()
             ]
         }
+        ret.status = 1
         ret.totalMembers = results.size()
         render ret as JSON
     }
 
     def topMember() {
         def ret = [:]
+        ret.status = 0
         def results = pageService.getTopMembers(params.slug)
         ret.topMembers = results.pageUsers.collect {
             [   
@@ -145,6 +147,7 @@ class PageController {
                     message: it.message,
                     dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                     createdBy: it.createdBy.username,
+                    userPicSmall: it.createdBy.picSmall,
                     userId: it.createdBy.id,
                     conversation: it.conversation,
                     comments: it.previewComments.comments.collect {
@@ -186,11 +189,14 @@ class PageController {
                 [
                     id: it.id,
                     message: it.message,
+                    picSmall: it.picSmall,
+                    picOriginal: it.picOriginal,
                     dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                     createdBy: it.createdBy.username,
+                    userPicSmall: it.createdBy.picSmall,
+                    userPicOriginal: it.createdBy.picOriginal,
                     userId: it.createdBy.id,
                     conversation: it.conversation,
-                    picSmall: it.createdBy.picSmall,
                     lastActived: it.lastActived.time,
                     comments: it.previewComments.comments.collect {
                         [
@@ -208,7 +214,6 @@ class PageController {
             }
             ret.status = 1
         }
-        
         render ret as JSON
     }
 
@@ -217,14 +222,32 @@ class PageController {
         def results = pageService.getAllNeeds(params.slug)
         ret.status = 1
         ret.needs = results.needs.collect {
-            [
+            [   
+                id: it.id,
                 message: it.message,
                 dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                 createdBy: it.createdBy.username,
+                userPicSmall: it.createdBy.picSmall,
+                userPicOriginal: it.createdBy.picOriginal,
                 userId: it.createdBy.id,
                 expiredDate: it.expiredDate.format('yyyy-MM-dd HH:mm'),
                 quantity: it.quantity,
-                item: it.item.name
+                itemId: it.item.id,
+                item: it.item.name,
+                conversation: it.conversation,
+                lastActived: it.lastActived.time,
+                comments: it.previewComments.comments.collect {
+                    [
+                        id: it.id,
+                        message: it.message,
+                        createdBy: it.user.username,
+                        userId: it.user.id,
+                        picOriginal: it.user.picOriginal,
+                        picLarge: it.user.picLarge,
+                        picSmall: it.user.picSmall,
+                        lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
+                    ]
+                }
             ]
         }
         ret.totalNeeds = results.totalNeeds
@@ -238,7 +261,18 @@ class PageController {
         ret.needs = results.needs.collect {
             [
                 id: it.id,
-                message: it.message
+                message: it.message,
+                dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
+                createdBy: it.createdBy.username,
+                userPicSmall: it.createdBy.picSmall,
+                userPicOriginal: it.createdBy.picOriginal,
+                userId: it.createdBy.id,
+                expiredDate: it.expiredDate.format('yyyy-MM-dd HH:mm'),
+                quantity: it.quantity,
+                itemId: it.item.id,
+                item: it.item.name,
+                conversation: it.conversation,
+                lastActived: it.lastActived.time
             ]
         }
         ret.totalNeeds = results.totalNeeds
@@ -374,17 +408,18 @@ class PageController {
     }
 
     def postMessage() {
-        def ret
+        def ret = [:]
         def userId = springSecurityService?.principal?.id
         def slug = params.slug
         def message = params.message
         def picOriginal = params.picOriginal
+        def picSmall = params.picSmall
 
-        def result = pageService.createMessagePost(userId, slug, message, picOriginal)
+        def result = pageService.createMessagePost(userId, slug, message, picOriginal, picSmall)
         if(result) {
             ret = [post: [id :result.post.id, message: result.post.message,
             createdBy: result.post.createdBy, dateCreated: result.post.dateCreated, 
-            lastActived: result.post.lastActived, picOriginal: result.post.picOriginal], user: result.user.username, 
+            lastActived: result.post.lastActived, picOriginal: result.post.picOriginal, picSmall: result.post.picSmall], user: result.user.username, 
             page: result.page.name, slug: result.page.slug]
             ret.status = 1
             ret.message = "user: ${result.user.username} posted message in page: ${result.page.name}"
@@ -423,7 +458,8 @@ class PageController {
         def userId = springSecurityService?.principal?.id
         def postId = params.postId
         def message = params.message
-        def ret
+        def ret = [:]
+        ret.status = 0
 
         if(userId && postId && message) {
             def result = pageService.postComment(userId, postId, message)
@@ -531,6 +567,23 @@ class PageController {
         def slug = params.slug
 
         def result = pageService.isJoined(userId, slug)
+        render result as JSON
+    }
+
+    def createResource() {
+        def result = pageService.createResource(params)
+        render result as JSON
+    }
+
+    def getResource() {
+        if(params.since) {
+            params.since = new Date().parse("yyyy-MM-dd HH:mm", params.since)
+        }
+        if(params.until) {
+            params.until = new Date().parse("yyyy-MM-dd HH:mm", params.until)
+        }
+
+        def result = pageService.getResource(params)
         render result as JSON
     }
 }

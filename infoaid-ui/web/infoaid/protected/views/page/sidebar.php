@@ -29,7 +29,7 @@
 
 				<?php
 					if($userId != null) {
-						if($post->picSmall == null) {
+						if($resultUserInfo->picSmall == null) {
 			                echo '<img src='.Yii::app()->baseUrl.'/media/profiles/profile_default_small.png class="img-polaroid">';
 			            } else {
 			                echo '<img src=' . Yii::app()->baseUrl . $resultUserInfo->picSmall . ' class="img-polaroid">';
@@ -86,7 +86,7 @@
 			<li class='left-side-bar li-add-group'>
 				<?php
 					if($userId != null) { 
-						echo CHtml::link('Add Group..');
+						echo CHtml::link('Add Group..', array("page/create"));
 					}
 				?>
 			</li>

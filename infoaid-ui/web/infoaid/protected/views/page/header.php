@@ -9,9 +9,9 @@
         <div class="page-picture">
             <?php 
                 if($post->picSmall == null) {
-                    echo '<img src='.Yii::app()->baseUrl.'/media/pages/page_default_small.jpg class="img-polaroid">';
+                    echo '<a href="'.Yii::app()->baseUrl.'/page/'.$slug.'"><img src='.Yii::app()->baseUrl.'/media/pages/page_default_small.jpg class="img-polaroid"></a>';
                 } else {
-                    echo '<img src=' . Yii::app()->baseUrl . $post->picSmall . ' class="img-polaroid">';
+                    echo '<a href="'.Yii::app()->baseUrl.'/page/'.$slug.'"><img src=' . Yii::app()->baseUrl . $post->picSmall . ' class="img-polaroid"></a>';
                 }
             ?>
         </div>
@@ -21,8 +21,8 @@
             <span class='page-name'>
                 <?php echo CHtml::link($post->name, array("page/$slug")); ?>
             </span>
-            --
-            <?php if (PageHelper::isOwner($userId, $slug)): ?>
+            <?php if (PageHelper::isOwner($userId, $slug)->isOwner == 1): ?>
+                --
                 <span class="edit">
                     <?php echo l("Edit", "/page/$slug/edit"); ?>
                 </span>
@@ -129,7 +129,6 @@
         ajaxLoading(pageId);
 
         $.getJSON('<?php echo $this->createUrl("page/leavePage"); ?>', {userId: '<?php echo $userId; ?>', slug: slug}, function(resp) {
-            console.log(resp)
             if(resp.status == 1) {
                 $('#page-header-join-leave-'+pageId).html('<button class="btn" onclick="joinPage('+"'"+slug+"'"+","+pageId+')">Join Page</button>');
             } else {
@@ -143,8 +142,6 @@
         ajaxLoading(pageId);
 
         $.getJSON('<?php echo $this->createUrl("page/joinPage"); ?>', {userId: '<?php echo $userId; ?>', slug: slug}, function(resp) {
-            console.log(slug)
-            console.log(resp)
             if(resp.status == 1) {
                 $('#page-header-join-leave-'+pageId).html('<button class="btn" onclick="leavePage('+"'"+slug+"'"+","+pageId+')">Leave Page</button>');
             } else {

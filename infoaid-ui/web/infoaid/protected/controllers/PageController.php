@@ -17,22 +17,25 @@ class PageController extends IAController
 	}
 	
 	public function actionView($slug)
-	{
-       $this->scripts[] = 'main/postService.js';
-       $this->scripts[] = 'main/commentService.js';
-       $this->scripts[] = 'controllers.js';
+    {
+        $this->scripts[] = 'fileupload/vendor/jquery.ui.widget.js';
+        $this->scripts[] = 'fileupload/jquery.iframe-transport.js';
+        $this->scripts[] = 'fileupload/jquery.fileupload.js';
+        $this->scripts[] = 'main/postService.js';
+        $this->scripts[] = 'main/commentService.js';
+        $this->scripts[] = 'controllers.js';
 
-		$result = PageHelper::getInfoBySlug($slug);
-		if ($result) {
-			$this->render('info', array(
-				'page'=>$result,
-				'slug'=>$slug,
-			));
-		}
-		else {
-			$this->renderText('Page not found');
-		}
-	}
+        $result = PageHelper::getInfoBySlug($slug);
+        if ($result) {
+            $this->render('info', array(
+                'page'=>$result,
+                'slug'=>$slug,
+            ));
+        }
+        else {
+            $this->renderText('Page not found');
+        }
+    }
 
 	public function actionSearch()
 	{
@@ -226,4 +229,13 @@ class PageController extends IAController
 		return $result = PageHelper::updatePage($params);
 	}
 
+    public function actionDoUploadImagePost()
+    {
+        $userId = Yii::app()->user->getId();
+        $info = UserHelper::basicInfo($userId);
+
+        $photos = UserHelper::processUploadedPostPhoto($info->id, 'image');
+
+        $this->renderJSON($photos);
+    }
 }

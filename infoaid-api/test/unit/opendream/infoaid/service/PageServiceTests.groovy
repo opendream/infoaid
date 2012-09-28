@@ -12,13 +12,14 @@ import opendream.infoaid.domain.User
 import opendream.infoaid.domain.Need
 import opendream.infoaid.domain.MessagePost
 import opendream.infoaid.domain.Item
+import opendream.infoaid.domain.Resource
 
 import grails.validation.ValidationException
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 @TestFor(PageService)
-@Mock([Page, Post, Comment, Location, PageUser, User, Need, MessagePost, Item])
+@Mock([Page, Post, Comment, Location, PageUser, User, Need, MessagePost, Item, Resource])
 class PageServiceTests {
     def date
     def number = 0
@@ -238,7 +239,7 @@ class PageServiceTests {
 
         def pageUser = new PageUser(page: page, user: user1, relation: PageUser.Relation.MEMBER).save(flush: true)
 
-        def result = service.createMessagePost(1, "0", message, 'picOri')
+        def result = service.createMessagePost(1, "0", message, 'picOri', 'picSma')
         def pageUserAfterCreateMessagePost = PageUser.get(1)
         assert pageUserAfterCreateMessagePost.conversation == 1
 
@@ -248,6 +249,7 @@ class PageServiceTests {
         assert page.id == result.page.id
         assert message == result.post.message
         assert 'picOri' == result.post.picOriginal
+        assert 'picSma' == result.post.picSmall
     }
 
     void testGetAbout() {
@@ -347,5 +349,111 @@ class PageServiceTests {
         assert pages.size() == 2
         assert pages[0].name == 'page2'
         assert pages[1].name == 'page1'
+    }
+
+    void testGetResource() {
+        def user = User.findByUsername('nut')
+        def item = new Item(name: 'item').save(flush: true)
+        def page = Page.findBySlug('0')
+        def page2 = Page.findBySlug('1')
+        def newResource = new Resource(page: page, item: item, lastActived: date, createdBy: user, updatedBy: user, expiredDate: date, message: 'message', quantity: 10).save(flush: true)
+        def newResource2 = new Resource(page: page, item: item, lastActived: date, createdBy: user, updatedBy: user, expiredDate: date, message: 'message', quantity: 10).save(flush: true)
+        def params = [slug:'0']
+        def result = service.getResource(params)
+
+        assert result.resources[0] == newResource
+        assert result.totalResources == 2
+
+        def newResource3 = new Resource(page: page2, item: item, lastActived: date, createdBy: user, updatedBy: user, expiredDate: date, message: 'message', quantity: 10).save(flush: true)
+
+        params = [slug: '1']
+
+        result = service.getResource(params)
+        assert result.totalResources == 1
+
+        params = [since: new Date()-30]
+        result = service.getResource(params)
+        assert result.totalResources == 3
+
+        params = [since: new Date()]
+        result = service.getResource(params)
+        assert result.totalResources == 0
+
+        params = [until: new Date()-30]
+        result = service.getResource(params)
+        assert result.totalResources == 0
+
+        params = [slug: '0', until: new Date()]
+        result = service.getResource(params)
+        assert result.totalResources == 2
+
+        params = [fromId: 1234545555]
+        result = service.getResource(params)
+        assert result.totalResources == 0
+
+        params = [toId: 12345666]
+        result = service.getResource(params)
+        assert result.totalResources == 3
+
+        params = [slug: '1', toId: 10101010101]
+        result = service.getResource(params)
+        assert result.totalResources == 1
+
+        params = [max: 1]
+        result = service.getResource(params)
+        assert result.totalResources == 1
+
+        params = [itemName: 'item']
+        result = service.getResource(params)
+        assert result.totalResources == 3
+
+        params = [userId: user.id]
+        result = service.getResource(params)
+        assert result.totalResources == 3
+
+        params = [sort: 'dateCreated', order: 'desc']
+        result = service.getResource(params)
+        assert result.totalResources == 3
+        assert result.resources[0] == newResource3
+
+        params = [sort: 'dateCreated', order: 'asc']
+        result = service.getResource(params)
+        assert result.totalResources == 3
+        assert result.resources[0] == newResource
+    }
+
+    void testCreateResource() {
+        assert Resource.count() == 0
+        def user = User.findByUsername('nut')
+        def item = new Item(name: 'item').save(flush: true)
+        def page = Page.findBySlug('0')
+        def page2 = Page.findBySlug('1')
+
+        def pageUser = new PageUser(page: page, user: user, relation: PageUser.Relation.OWNER, conversation: 1).save()
+
+        def params = [:]
+        def result = service.createResource(params)
+        assert result.status == 0
+        assert result.message == 'User Id not found'
+
+        params = [userId: user.id]
+        result = service.createResource(params)
+        assert result.status == 0
+        assert result.message == 'Page not found'
+
+        params = [userId: user.id, slug: page.slug]
+        result = service.createResource(params)
+        assert result.message == 'Item not found'
+
+        params = [userId: user.id, slug: page.slug, itemId: item.id]
+        result = service.createResource(params)
+        assert result.status == 1
+        assert result.user == user
+        assert result.page == page
+        assert result.post.quantity == 0
+        assert result.pageUser == pageUser
+        println result
+
+        assert Resource.count() == 1
     }
 }

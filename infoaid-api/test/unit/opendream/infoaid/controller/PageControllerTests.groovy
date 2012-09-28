@@ -12,11 +12,12 @@ import opendream.infoaid.domain.Item.Status
 import opendream.infoaid.domain.Need
 import opendream.infoaid.domain.MessagePost
 import opendream.infoaid.domain.Comment
+import opendream.infoaid.domain.Resource
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(PageController)
-@Mock([Page, PageService, User, PageUser, MessagePost, Post, Item, Need, Comment])
+@Mock([Page, PageService, User, PageUser, MessagePost, Post, Item, Need, Comment, Resource])
 class PageControllerTests {
     def pageService
     def date
@@ -76,10 +77,10 @@ class PageControllerTests {
         params.slug = 'page-slug'
         
         controller.info()
-        assert response.json['picSmall'] == 'picSma'
-        assert response.json['name'] == 'page'
-        assert response.json['household'] == 1
-        assert response.json['population'] == 11
+        assert response.json['page']['picSmall'] == 'picSma'
+        assert response.json['page']['name'] == 'page'
+        assert response.json['page']['household'] == 1
+        assert response.json['page']['population'] == 11
     }
 
     void testMap() {
@@ -324,12 +325,13 @@ class PageControllerTests {
         def thisPost = Post.get(1)
         assert thisPost.conversation == 0
         assert 2 == Comment.count()
+        
         pageService.demand.postComment(1..1) { userId, postId, message -> 
             def user = User.get(userId)
             def commentDate = new Date()
             def post = Post.get(postId)
             
-            def comment = new Comment(message: message, dateCreated: commentDate)
+            def comment = new Comment(message: message, dateCreated: commentDate, user: user)
             post.addToComments(comment)
             post.lastActived = commentDate
             post.conversation++
@@ -345,19 +347,20 @@ class PageControllerTests {
         }
 
         controller.pageService = pageService.createMock()
-        
+
+        def nut = User.findByUsername("nut")
+        controller.springSecurityService  = [principal:[id:nut.id]]
+
         params.message = 'this is my comment'
         params.postId = 1
-        params.userId = 1
         controller.postComment()
-        def user = User.get(1)
+        
         def post = Post.get(1)
-        def pageUser = PageUser.findByPageAndUser(post.page, user)
+        def pageUser = PageUser.findByPageAndUser(post.page, nut)
 
         thisPost = Post.get(1)
-        assert pageUser.conversation == 2
-        assert thisPost.conversation == 1
-        assert 3 == Comment.count()        
+        //assert response.json[]
+        assert response.json['status'] == 1
     }   
 
     void testDisableComment() {
@@ -437,19 +440,22 @@ class PageControllerTests {
         def user = User.findByUsername('nut')
         def page = Page.findBySlug('page-slug')
 
-        params.userId = user.id
+        controller.springSecurityService  = [principal:[id: user.id]]
+        //params.userId = user.id
         params.slug = page.slug
         params.message = 'hello world'
         params.picOriginal = 'picOri'
+        params.picSmall = 'picSma'
 
         // controller
         controller.postMessage()
 
         // expect
-        assert 1 == response.json.status
+        assert 1 == response.json['status']
         assert "user: ${user.username} posted message in page: ${page.name}" == response.json.message
         assert 'hello world' == response.json.post.message
         assert 'picOri' == response.json.post.picOriginal
+        assert 'picSma' == response.json.post.picSmall
     }
 
     void testDisablePost() {
@@ -580,5 +586,157 @@ class PageControllerTests {
 
         result = controller.isJoined()
         assert response.json['isJoined'] == false
+    }
+
+    void testCreateResource() {
+        controller.pageService = new PageService()
+
+        def user1 = User.findByUsername('nut')
+        def item1 = Item.findByName('item')
+
+        controller.createResource()
+        assert response.json['status'] == 0
+        assert response.json['message'] == 'User Id not found'
+
+        response.reset()
+
+        params.userId = user1.id
+        controller.createResource()
+        assert response.json['status'] == 0
+        assert response.json['message'] == 'Page not found'
+
+        response.reset()
+        params.slug = 'page-slug'
+        controller.createResource()
+        assert response.json['status'] == 0
+        assert response.json['message'] == 'Item not found'
+
+        response.reset()
+        params.itemId = item1.id
+        controller.createResource()
+        assert response.json['status'] == 1
+        assert response.json['user'].username == 'nut'
+        assert response.json['page'].slug == 'page-slug'
+        assert response.json['post'].message == 'item 0'
+        assert response.json['pageUser'].conversation == 2
+    }
+
+    void testGetResource() {
+        controller.pageService = new PageService()
+        def user = User.findByUsername('nut')
+        def user2 = User.findByUsername('nut2')
+        def item = Item.findByName('item')
+        def page = Page.findBySlug('page-slug')
+
+        def newResource = new Resource(page: page, item: item, lastActived: date, createdBy: user, updatedBy: user, message: 'message', expiredDate: date, quantity: 10).save(flush: true)
+        def newResource2 = new Resource(page: page, item: item, lastActived: date, createdBy: user, updatedBy: user, message: 'message', expiredDate: date, quantity: 10).save(flush: true)
+        def newResource3 = new Resource(page: page, item: item, lastActived: date, createdBy: user2, updatedBy: user2, message: 'message', expiredDate: date, quantity: 10).save(flush: true)
+        controller.getResource()
+        assert response.json['status'] == 1
+        assert response.json['resources'].size() == 3
+        assert response.json['totalResources'] == 3
+
+        response.reset()
+        params.slug = 'abc'
+        controller.getResource()
+        assert response.json['status'] == 1
+        assert response.json['resources'].size() == 0
+        assert response.json['totalResources'] == 0
+
+        response.reset()
+        params.slug = 'page-slug'
+        params.userId = user.id
+        controller.getResource()
+        assert response.json['status'] == 1
+        assert response.json['resources'].size() == 2
+        assert response.json['totalResources'] == 2
+
+        response.reset()
+        params.userId = user2.id
+        controller.getResource()
+        assert response.json['status'] == 1
+        assert response.json['resources'].size() == 1
+        assert response.json['totalResources'] == 1
+
+        response.reset()
+        params.fromId = 0
+        params.toId = 1111111111
+        controller.getResource()
+        assert response.json['status'] == 1
+        assert response.json['resources'].size() == 1
+        assert response.json['totalResources'] == 1
+
+        response.reset()
+        params.userId = null
+        params.fromId = 0
+        params.toId = 11111
+        controller.getResource()
+        assert response.json['status'] == 1
+        assert response.json['resources'].size() == 3
+
+        response.reset()
+        params.userId = user.id
+        params.since = '2012-12-12 00:00'
+        controller.getResource()
+        assert response.json['status'] == 1
+        assert response.json['totalResources'] == 0
+
+        response.reset()
+        params.since = '2012-09-27 00:00'
+        controller.getResource()
+        assert response.json['status'] == 1
+        assert response.json['totalResources'] == 2
+
+        response.reset()
+        params.since = '2011-09-27 00:00'
+        params.until = '2012-09-27 00:00'
+        controller.getResource()
+        assert response.json['status'] == 1
+        assert response.json['totalResources'] == 0
+
+        response.reset()
+        params.since = '2011-09-27 00:00'
+        params.until = '2013-09-27 00:00'
+        controller.getResource()
+        assert response.json['status'] == 1
+        assert response.json['totalResources'] == 2
+
+        response.reset()
+        params.since = null
+        params.until = null
+
+        params.itemName = 'item'
+        controller.getResource()
+        assert response.json['status'] == 1
+        assert response.json['totalResources'] == 2
+
+        response.reset()
+        params.itemName = 'itemmmmm'
+        controller.getResource()
+        assert response.json['status'] == 1
+        assert response.json['totalResources'] == 0
+
+        params.itemName = null
+        response.reset()
+        params.userId = null
+        params.sort = 'dateCreated'
+        controller.getResource()
+        assert response.json['status'] == 1
+        assert response.json['totalResources'] == 3
+        assert response.json['resources'][0].createdBy.id == user.id
+
+        response.reset()
+        params.sort = 'dateCreated'
+        params.order = 'desc'
+        controller.getResource()
+        assert response.json['status'] == 1
+        assert response.json['totalResources'] == 3
+        assert response.json['resources'][0].createdBy.id == user2.id
+
+        response.reset()
+        params.max = 2
+        controller.getResource()
+        assert response.json['status'] == 1
+        assert response.json['totalResources'] == 2
     }
 }

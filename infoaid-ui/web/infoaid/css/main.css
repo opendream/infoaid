@@ -362,7 +362,7 @@ div.search-form
 
 .li-place
 {
-	background: no-repeat url('/infoaid/media/pages/icon_page.png');
+	background: no-repeat url('../img/icons/icon_page.png');
 	margin-bottom: 10px;
 }
 
@@ -384,18 +384,18 @@ div.search-form
 
 .li-feeds
 {
-	background: no-repeat url('/infoaid/media/icons/new_feeds.png');
+	background: no-repeat url('../img/icons/new_feeds.png');
 }
 
 .li-private-message
 {
-	background: no-repeat url('/infoaid/media/icons/private_messages.gif');
+	background: no-repeat url('../img/icons/private_messages.gif');
 }
 
 .li-add-group
 {
 	margin-top: 10px;
-	background: no-repeat url('/infoaid/media/icons/add_group.gif');
+	background: no-repeat url('../img/icons/add_group.gif');
 }
 
 .btn-joinus
@@ -442,7 +442,7 @@ div.search-form
 .show-more-members
 {
 	font-size: 12px;
-	background: no-repeat url('/infoaid/media/icons/show_more_members.jpg');
+	background: no-repeat url('../img/icons/show_more_members.jpg');
 	padding-left: 20px;
 }
 
@@ -461,4 +461,15 @@ div.search-form
 .expanding, .textareaClone
 {
 	min-height: 6em;
+}
+
+.user-header-picture
+{
+	float: left;
+	margin-right: 20px;
+}
+
+.user-header-lastname
+{
+	margin-left: 10px;
 }

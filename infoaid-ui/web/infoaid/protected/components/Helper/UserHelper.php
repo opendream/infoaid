@@ -96,4 +96,15 @@ class UserHelper
 	{
 		return self::getUserCachedData(self::getCurrentUserId());
 	}
+
+	public static function processUploadedPostPhoto($userId)
+	{
+		$settings = Yii::app()->params['post']['photo'];
+		$newFilename = str_replace('.', '-', uniqid('p', $userId));
+
+		$imageHelper = new ImageHelper($settings);
+		$imageHelper->specific = $userId;
+
+		return $imageHelper->processUploadedFile('image', $newFilename);
+	}
 }

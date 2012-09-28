@@ -63,10 +63,12 @@ return array(
 				'user/register'=>'user/create',
 				'user/doEdit/<section:\w+>'=>'user/doEdit',
 				'user/edit/<section:\w+>'=>'user/edit',
+				'user/profile/<userId:\d+>'=>'user/profile',
 
 				'api/post/<id:\d+>/<method:\w+>'=>'api/post',
 				'api/page/<slug:[^\/]*>/<method:\w+>'=>'api/page',
 				'api/members/<slug:[^\/]*>'=>'api/members',
+				'page/doUploadImagePost'=>'page/doUploadImagePost',
 				'page/create'=>'page/create',
 				'page/joinPage'=>'page/joinPage',
 				'page/leavePage'=>'page/leavePage',
@@ -172,10 +174,8 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
-
+		
 		'api'=>array(
-			// 'server'=>'http://192.168.1.131:8080/infoaid-api/',
-			// 'port'=>8080,
 			'server'=>'http://localhost:8080/infoaid-api/',
 			//'port'=>8080,
 			'log_request'=>true,

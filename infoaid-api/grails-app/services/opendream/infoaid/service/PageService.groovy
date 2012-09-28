@@ -8,6 +8,9 @@ import opendream.infoaid.domain.PageUser
 import opendream.infoaid.domain.User
 import opendream.infoaid.domain.Need
 import opendream.infoaid.domain.MessagePost
+import opendream.infoaid.domain.Resource
+
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 class PageService {
     def grailsApplication
@@ -264,19 +267,20 @@ class PageService {
             pageUser.save()
         }
         def date = new Date()
-        def need = new Need(lastActived: date, createdBy: user, updatedBy: user, expiredDate: date, message: message, item: item, quantity: quantity)
+        def need = new Need(lastActived: date, createdBy: user, updatedBy: user, expiredDate: date+14, message: message, item: item, quantity: quantity)
         page.addToPosts(need)
         page.save(failOnError: true, flush: true)
         return [user: user, page: page, post: need]
     }
 
-    def createMessagePost(userId, slug, message, picOriginal) {
+    def createMessagePost(userId, slug, message, picOriginal, picSmall) {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
         def pageUser = PageUser.findByUserAndPage(user, page)
         if(pageUser) {
             def date = new Date()
-            def messagePost = new MessagePost(lastActived: date, createdBy: user, updatedBy: user, expiredDate: date+14, message: message, picOriginal: picOriginal)
+            def messagePost = new MessagePost(lastActived: date, createdBy: user, updatedBy: user, expiredDate: date+14, message: message, 
+                picOriginal: picOriginal, picSmall: picSmall)
             page.addToPosts(messagePost)
             if(page.save(failOnError: true, flush: true)) {
                 pageUser.conversation++
@@ -398,6 +402,104 @@ class PageService {
             post.status = Post.Status.INACTIVE
             post.save(failOnError: true, flush:true) 
             [status:1, message:"post ${postId} is deleted", id:postId] 
-        } 
+        }
+    }
+
+    def getResource(params) {
+        def max = params.max ? params.max : ConfigurationHolder.config.infoaid.api.getResource.max
+        params.order = params.order ? params.order : 'asc'
+        def ret = [:]
+        ret.status = 0
+        def resources = Resource.createCriteria().list() {
+            maxResults(max)
+            if(params.slug) {
+                page {
+                    eq('slug', params.slug)
+                }
+            }
+            if(params.userId) {
+                createdBy {
+                    eq('id', params.userId)
+                }
+            }
+            if(params.itemName) {
+                item {
+                    eq('name', params.itemName)
+                }
+            }
+            if(params.fromId) {
+                ge('id', params.fromId)
+            }
+            if(params.toId) {
+                le('id', params.toId)
+            }
+            if(params.since) {
+                ge('dateCreated', params.since)
+            }
+            if(params.until) {
+                le('dateCreated', params.until)
+            }
+            if(params.sort) {
+                order(params.sort, params.order)
+            }
+        }
+        ret = [status: 1, resources: resources, totalResources: resources.size()]
+
+        return ret
+    }
+
+    def createResource(params) {
+        def ret = [:]
+        ret.status = 0
+        
+        def quantity = params.quantity ? params.quantity : 0
+        def message = params.message
+
+        def user = User.get(params.userId)
+        if(!user) {
+            ret.message = 'User Id not found'
+            return ret
+        }
+
+        if(!params.slug) {
+            ret.message = 'Page not found'
+            return ret
+        }
+        def page = Page.findBySlug(params.slug)
+        if(!page) {
+            ret.message = 'Page not found'
+            return ret
+        }
+
+        def item = Item.get(params.itemId)
+        if(!item) {
+            ret.message = 'Item not found'
+            return ret
+        }
+
+        def pageUser = PageUser.findByUserAndPage(user, page)
+        if(!pageUser) {
+            ret.message = 'Please join this page'
+            return ret
+        }
+        pageUser.conversation++
+        pageUser.save()
+
+        def date = new Date()
+        def resource = new Resource(page: page, lastActived: date, createdBy: user, 
+            updatedBy: user, expiredDate: date+14, message: message, item: item, quantity: quantity)
+        page.addToPosts(resource)
+        page.validate()
+        if(!page.save(flush: true)) {
+            ret.message = 'Error, Can not save this resource'
+            return ret
+        }
+        ret.status = 1
+        ret.user = user
+        ret.page = page
+        ret.post = resource
+        ret.pageUser = pageUser
+
+        return ret
     }
 }

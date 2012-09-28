@@ -175,12 +175,14 @@ class PageServiceIntegrationTests {
         def message = "need some help!"
         def user = User.findByUsername("nut")
         def picOriginal = 'picOri'
-        def result = pageService.createMessagePost(user.id, page.slug, message, picOriginal)
+        def picSmall = 'picSma'
+        def result = pageService.createMessagePost(user.id, page.slug, message, picOriginal, picSmall)
 
         assert 'nut' == result.user.username
         assert page.name == result.page.name
         assert 'need some help!' == result.post.message
         assert 'picOri' == result.post.picOriginal
+        assert 'picSma' == result.post.picSmall
     }
 
     @Test

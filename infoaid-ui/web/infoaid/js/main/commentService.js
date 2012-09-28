@@ -164,7 +164,6 @@ function CommentCtrl($scope, Comment, PostComment, DeleteComment, Post, RefreshP
 	}
 }
 
-
 function PostMessageCtrl($scope, PostMessage, PostRequest, Post, DeletePost, Items, RefreshPost) {
 	$scope.items = [];
 	if($scope.items.length===0) {
@@ -179,12 +178,17 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, DeletePost, Ite
 		if ($scope.message) {	
 			var options = {
 				slug: $scope.slug,
-				message: $scope.message
+				message: $scope.message,
+				picOriginal: $('#picOriginal').val(),
+				picSmall: $('#picSmall').val()
 			};
 			
-			PostMessage.get(options, function (ret) {	
+			PostMessage.get(options, function (ret) {
 				RefreshPost($scope);
-				$scope.message = '';				
+				$scope.message = '';
+				$('#previewImg').html('');
+				$('#picSmall').val('');
+		        $('#picOriginal').val('');
 			});							
 		}
 	}
@@ -208,7 +212,7 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, DeletePost, Ite
 				RefreshPost($scope);;	
 				$scope.request = '';
 				$scope.qty = '';			
-		});		
+		});
 	}
 }
 
