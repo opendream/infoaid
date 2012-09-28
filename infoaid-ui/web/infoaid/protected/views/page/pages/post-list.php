@@ -20,16 +20,40 @@
 	    </ul>
 	    <div class="tab-content">
 	        <div class="tab-pane active" id="tabInfo">
-	        	<form id="fileupload" method="POST" enctype="multipart/form-data">
-		    		<div id="previewImg"></div>
-		      		<input id="fileupload" type="file" name="image">
-		      	</form>
-	      	    <form ng-submit="postMessage()">
-	        		<input name="inputMsg" ng-model="message" ng-maxlength="140" type="text" 
-	        		class="span5" placeholder="Type info..."></input>
-	        		<input name="picSmall" ng-model="picSmall" type="hidden" id="picSmall" />
-		      		<input name="picOriginal" ng-model="picOriginal" type="hidden" id="picOriginal" />		
-	        	</form>
+
+	        	<div class="post-form">
+		      	    <form ng-submit="postMessage()" class="message-post-form">
+		        		<textarea name="inputMsg" ng-model="message" ng-maxlength="140" type="text" class="expanding span5" placeholder="Type info..."></textarea>
+		        		<script>
+		        			$('textarea.expanding')
+		        				.expandingTextarea()
+		        				.focus(function (event) {
+		        					$('.upload-form-wrapper').slideDown();
+		        				});
+		        		</script>
+		        		<input name="picSmall" ng-model="picSmall" type="hidden" id="picSmall" />
+			      		<input name="picOriginal" ng-model="picOriginal" type="hidden" id="picOriginal" />
+		        	</form>
+
+		        	<div class="upload-form-wrapper hide">
+			        	<form id="fileupload" class="upload-form" method="POST" enctype="multipart/form-data">
+				    		<div id="previewImg"></div>
+
+				    		<label for="fileUpload">
+				    			<strong>Select an image or video file on your computer.</strong>
+				    		</label>
+				      		<input id="fileupload" type="file" name="image">
+
+				      		<div class="clear"></div>
+				      	</form>
+
+				      	<div class="post-button">
+					      	<button ng-click="postMessage()" class="btn btn-inverse pull-right">
+				      			Post
+				      		</button>
+				      	</div>
+				      </div>
+			      </div>
 	        					
 	        </div>
 	        <div class="tab-pane" id="tabNeed">

@@ -26,6 +26,7 @@ class PageController extends IAController
         $this->scripts[] = 'fileupload/jquery.fileupload.js';
 		$this->scripts[] = 'main/postService.js';
 		$this->scripts[] = 'main/commentService.js';
+		$this->scripts[] = 'expanding.js';
 		$this->scripts[] = 'controllers.js';
 
 		$result = PageHelper::getInfoBySlug($slug);
