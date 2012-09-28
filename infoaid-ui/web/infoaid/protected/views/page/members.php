@@ -10,14 +10,14 @@
 
     function echoPic($member) {
     	if($member->picOriginal == null) {
-            echo '<img src='.Yii::app()->baseUrl.'/media/profiles/profile_default_small.png class="img-polaroid page-members-pic">';
+            echo '<a href="'.Yii::app()->baseUrl.'/user/profile/'.$member->id.'"><img src='.Yii::app()->baseUrl.'/media/profiles/profile_default_small.png class="img-polaroid page-members-pic"></a>';
         } else {
-            echo '<img src=' .Yii::app()->baseUrl. $member->picSmall . ' class="img-polaroid page-members-pic">';
+            echo '<a href="'.Yii::app()->baseUrl.'/user/profile/'.$member->id.'"><img src=' .Yii::app()->baseUrl. $member->picSmall . ' class="img-polaroid page-members-pic"></a>';
         }
     }
 
     function echoProfile($member) {
-    	echo '<div><span class="page-members-text">'.CHtml::link($member->username, array()).'</span>';
+    	echo '<div><span class="page-members-text">'.CHtml::link($member->username, array("user/profile/$member->id")).'</span>';
     	if($member->relation == 'OWNER') {
     		$relation = 'Owner';
     	} else {
