@@ -30,16 +30,16 @@
 				<?php
 					if($userId != null) {
 						if($resultUserInfo->picSmall == null) {
-			                echo '<img src='.Yii::app()->baseUrl.'/media/profiles/profile_default_small.png class="img-polaroid">';
+			                echo '<a href="'.Yii::app()->baseUrl.'/user/profile/'.$resultUserInfo->id.'"><img src='.Yii::app()->baseUrl.'/media/profiles/profile_default_small.png class="img-polaroid"></a>';
 			            } else {
-			                echo '<img src=' . Yii::app()->baseUrl . $resultUserInfo->picSmall . ' class="img-polaroid">';
+			                echo '<a href="'.Yii::app()->baseUrl.'/user/profile/'.$resultUserInfo->id.'"><img src=' . Yii::app()->baseUrl . $resultUserInfo->picSmall . ' class="img-polaroid"></a>';
 			            }
 		        	}
 				?>
 			</span>
 			<span class='page-sidebar-profile-username'>
 				<?php
-	                echo CHtml::link($resultUserInfo->username);
+	                echo CHtml::link($resultUserInfo->username, array("user/profile/$resultUserInfo->id"));
 				?>
 			</span>
 		</div>

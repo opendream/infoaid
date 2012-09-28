@@ -144,6 +144,7 @@ class PageController {
             ret.posts = posts.collect{
                 [
                     id: it.id,
+                    class: it.class.name.tokenize('.')[-1],
                     message: it.message,
                     dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                     createdBy: it.createdBy.username,

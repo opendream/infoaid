@@ -21,6 +21,7 @@ return array(
 		'application.components.*',
 		'application.components.Helper.*',
 		'application.components.Infoaid.*',
+		'application.components.Modules.*',
 		'application.extensions.*',
 	),
 
@@ -63,6 +64,7 @@ return array(
 				'user/register'=>'user/create',
 				'user/doEdit/<section:\w+>'=>'user/doEdit',
 				'user/edit/<section:\w+>'=>'user/edit',
+				'user/profile/<userId:\d+>'=>'user/profile',
 
 				'api/post/<id:\d+>/<method:\w+>'=>'api/post',
 				'api/page/<slug:[^\/]*>/<method:\w+>'=>'api/page',
@@ -116,11 +118,11 @@ return array(
 				),
 				// uncomment the following to show log messages on web pages
 				
-				array(
-					'class'=>'CWebLogRoute',
-					'ignoreAjaxInFireBug'=>true,
-					'showInFireBug'=>true,
-				),
+				// array(
+				// 	'class'=>'CWebLogRoute',
+				// 	'ignoreAjaxInFireBug'=>true,
+				// 	'showInFireBug'=>true,
+				// ),
 				
 			),
 		),
@@ -175,7 +177,7 @@ return array(
 		'adminEmail'=>'webmaster@example.com',
 		
 		'api'=>array(
-			'server'=>'http://Khandhas.local:8080/infoaid-api/',
+			'server'=>'http://localhost:8080/infoaid-api/',
 			//'port'=>8080,
 			'log_request'=>true,
 			'debug_rest'=>false,
@@ -205,6 +207,12 @@ return array(
 						'width' => '50',
 						'height' => '50',
 						'suffix' => '_s',
+					),
+
+					'ss' => array(
+						'width' => '25',
+						'height' => '25',
+						'suffix' => '_ss',
 					),
 				),
 			),

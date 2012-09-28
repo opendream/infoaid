@@ -17,25 +17,29 @@ class PageController extends IAController
 	}
 	
 	public function actionView($slug)
-    {
-        $this->scripts[] = 'fileupload/vendor/jquery.ui.widget.js';
+	{
+		$this->loadModule('PageModule');
+		$this->initModule();
+
+		$this->scripts[] = 'fileupload/vendor/jquery.ui.widget.js';
         $this->scripts[] = 'fileupload/jquery.iframe-transport.js';
         $this->scripts[] = 'fileupload/jquery.fileupload.js';
-        $this->scripts[] = 'main/postService.js';
-        $this->scripts[] = 'main/commentService.js';
-        $this->scripts[] = 'controllers.js';
+		$this->scripts[] = 'main/postService.js';
+		$this->scripts[] = 'main/commentService.js';
+		$this->scripts[] = 'expanding.js';
+		$this->scripts[] = 'controllers.js';
 
-        $result = PageHelper::getInfoBySlug($slug);
-        if ($result) {
-            $this->render('info', array(
-                'page'=>$result,
-                'slug'=>$slug,
-            ));
-        }
-        else {
-            $this->renderText('Page not found');
-        }
-    }
+		$result = PageHelper::getInfoBySlug($slug);
+		if ($result) {
+			$this->render('info', array(
+				'page'=>$result,
+				'slug'=>$slug,
+			));
+		}
+		else {
+			$this->renderText('Page not found');
+		}
+	}
 
 	public function actionSearch()
 	{

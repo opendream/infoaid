@@ -271,4 +271,9 @@ class UserController extends IAController
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
+
+	public function actionProfile($userId)
+	{
+		$this->render('profile', array('userId'=>$userId));
+	}
 }
