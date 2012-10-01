@@ -8,11 +8,12 @@
 				{{post.createdBy}}
 		.message-body
 			{{post.message}}
-		.message-picture-preview(ng-show="post.picOriginal.length")
+		.message-picture-preview.img-polaroid(ng-show="post.picOriginal.length")
 			%img(src="#{Yii::app()->baseUrl}{{post.picOriginal}}")
 		.meta
 			%time.timeago(datetime="{{post.dateCreated}}")
-				{{post.dateCreated}}		
-			%button.btn.btn-mini.btn-link(ng-click="deletePost(post)" type="button")
+				{{post.dateCreated}}
+			=" - "
+			%a(ng-click="deletePost(post)" type="button")
 				delete
 	.clear
