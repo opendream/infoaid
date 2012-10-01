@@ -12,12 +12,21 @@
 		<div class="row">				
 			<div ng-init="slug='<?php echo $slug ?>'"></div>
 			<div class="span7">
-				<section class="posts" >
+				<section class="posts" ng-controller="PostListCtrl">
 					<header>
 						<h1>Status Update</h1>
 					</header>
 
-					<div ng-view class="span5"></div>
+					<div class="page-post-form">
+						<?php $this->renderPartial('_form_post_message', array(
+							'userId' => user()->getId(),
+							'isJoined' => PageHelper::isJoined(user()->getId(), $slug),
+						)); ?>
+					</div>
+
+					<div class="span5">
+						<?php $this->renderPartial('pages/post-list'); ?>
+					</div>
 				</section>
 			</div>	
 
