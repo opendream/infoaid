@@ -29,20 +29,14 @@
 
 	        	<div class="post-form">
 		      	    <form ng-submit="postMessage()" class="message-post-form">
+		      	    	<a class="close hide" title="Clear form, delete text you just typed">&times;</a>
 		        		<textarea name="inputMsg" ng-model="message" ng-maxlength="140" type="text" class="expanding span5" placeholder="Type info..."></textarea>
-		        		<script>
-		        			$('textarea.expanding')
-		        				.expandingTextarea()
-		        				.focus(function (event) {
-		        					$('.upload-form-wrapper').slideDown();
-		        				});
-		        		</script>
 		        		<input name="picSmall" ng-model="picSmall" type="hidden" id="picSmall" />
 			      		<input name="picOriginal" ng-model="picOriginal" type="hidden" id="picOriginal" />
 		        	</form>
 
 		        	<div class="upload-form-wrapper hide">
-			        	<form id="fileupload" class="upload-form" method="POST" enctype="multipart/form-data">
+			        	<form id="fileupload-form" class="upload-form" method="POST" enctype="multipart/form-data">
 				    		<div id="previewImg"></div>
 
 				    		<label for="fileUpload">
@@ -138,15 +132,52 @@
 </script>
 <script>
     $(function () {
+    	var $messageform = $('form.message-post-form'),
+    		$uploadform = $('#fileupload-form')
+    	;
+
+    	// Text area initialize.
+    	$('textarea.expanding')
+			.expandingTextarea()
+			.focus(function (event) {
+				var $uploadFormWrapper = $('.upload-form-wrapper');
+				$uploadFormWrapper.slideDown();
+				$('a.close', $messageform)
+					.fadeIn()
+					.tooltip()
+					.click(function (event) {
+						$(this).fadeOut();
+						$uploadFormWrapper.slideUp();
+						$('textarea', $messageform).val('');
+						$('.expandingText').find('div').text(' ');
+					});
+			});
+
 		$('#fileupload').fileupload({
 		    url: '<?php echo $this->createUrl("page/doUploadImagePost"); ?>',
 		    dataType: 'json',
 		    done: function (e, data) {
+		    	// Clear error
+		    	$('.alert', $uploadform).hide();
 		        var imgSmall = data.result.small
 		        var imgOriginal = data.result.original
 		        $('#previewImg').html("<img src="+baseUrl+imgSmall.url+">");
 		        $('#picSmall').val(imgSmall.url)
 		        $('#picOriginal').val(imgOriginal.url)
+		    },
+		    fail: function (e, data) {
+		    	var $span = $('span', $uploadform),
+		    		$previewImg = $('#previewImg')
+		    	;
+
+		    	$previewImg.html('');
+
+		    	if ($span.length === 0) {
+		    		$uploadform.prepend('<div class="alert alert-error hide"><span></span><a class="close" data-dismiss="alert" href="#">&times;</a></div>');
+		    	}
+		    	$span = $('span', $form);
+		    	$span.text(data.jqXHR.responseText);
+		    	$('.alert-error', $form).show().alert();
 		    }
 		});
 	});
