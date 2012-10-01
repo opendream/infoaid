@@ -17,12 +17,12 @@
 			<ul>
 				<li class="thumbnail" ng-repeat="comment in comments">
 					<div class="comment-picture">
-						<img src="<?php echo Yii::app()->baseUrl; ?>{{comment.picSmall}}"></img>
+						<a href="<?php echo Yii::app()->baseUrl."/user/profile/{{comment.userId}}";?>"><img src="<?php echo Yii::app()->baseUrl; ?>{{comment.picSmall}}"></img></a>
 					</div>
 
 					<div class="comment-details">
 						<div class="comment-poster-name">
-							<a href="">{{comment.createdBy}}</a>
+							<a href="<?php echo Yii::app()->baseUrl."/user/profile/{{comment.userId}}";?>">{{comment.createdBy}}</a>
 						</div>
 						<div class="comment-body">
 							{{comment.message}}

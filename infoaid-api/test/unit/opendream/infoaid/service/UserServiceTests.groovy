@@ -1,6 +1,8 @@
 package opendream.infoaid.service
 
 import opendream.infoaid.domain.User
+import opendream.infoaid.domain.Role
+import opendream.infoaid.domain.UserRole
 
 import grails.test.mixin.*
 import org.junit.*
@@ -9,7 +11,7 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 @TestFor(UserService)
-@Mock([User])
+@Mock([User, Role, UserRole])
 class UserServiceTests {
     def user
 
@@ -21,12 +23,14 @@ class UserServiceTests {
         user = new User(username: 'admin', password: 'password', 
             firstname: 'thawatchai', lastname: 'jong', picOriginal: 'picOri').save(flush:true)
 
+        def role = new Role(authority: 'ROLE_USER').save(flush: true)
+
         service.springSecurityService = [encodePassword: {pwd -> pwd?pwd+'password':''}]
     }
 
     void testCreate() {
         def userparams = [username: "nut", password: "nuttttt", firstname: 'firstname', 
-        lastname: 'lastname']
+        lastname: 'lastname', accountExpired: false, accountLocked: false, passwordExpired: false]
         service.create(userparams)
         assert 2 == User.count()
         assert 'nut' == User.findByUsername('nut').username
