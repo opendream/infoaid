@@ -11,7 +11,7 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 @TestFor(UserService)
-@Mock([User])
+@Mock([User, Role, UserRole])
 class UserServiceTests {
     def user
 
@@ -22,6 +22,8 @@ class UserServiceTests {
 
         user = new User(username: 'admin', password: 'password', 
             firstname: 'thawatchai', lastname: 'jong', picOriginal: 'picOri').save(flush:true)
+
+        def role = new Role(authority: 'ROLE_USER').save(flush: true)
 
         service.springSecurityService = [encodePassword: {pwd -> pwd?pwd+'password':''}]
     }
