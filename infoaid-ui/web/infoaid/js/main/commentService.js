@@ -50,16 +50,24 @@ angular.module('commentService', ['ngResource']).
 		var RearrangePost = function(scope, newPosts) {
 			angular.forEach(newPosts, function(post) {
 				var result = FindPost(scope, post);
-				if(!result.status) {
-					if( $(scope.posts).first().get(0).lastActived < post.lastActived ) {
-						scope.posts.unshift(post);
-					}
-					if( $(scope.posts).last().get(0).lastActived > post.lastActived ) {
-						scope.posts.push(post);
-					}					
-				} else {
-					scope.posts.splice(result.index, 1, post);
-				}								
+				var postCount = $(scope.posts).length;
+
+				if (postCount === 0) {
+					scope.posts.push(post);
+				}
+				else {
+					if(!result.status) {
+						if($(scope.posts).first().get(0).lastActived < post.lastActived) {
+							scope.posts.unshift(post);
+						}
+						if($(scope.posts).last().get(0).lastActived > post.lastActived ) {
+							scope.posts.push(post);
+						}
+
+					} else {
+						scope.posts.splice(result.index, 1, post);
+					}		
+				}						
 			});								
 		};		
 		return RearrangePost;
