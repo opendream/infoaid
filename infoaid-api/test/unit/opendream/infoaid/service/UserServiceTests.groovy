@@ -1,6 +1,8 @@
 package opendream.infoaid.service
 
 import opendream.infoaid.domain.User
+import opendream.infoaid.domain.Role
+import opendream.infoaid.domain.UserRole
 
 import grails.test.mixin.*
 import org.junit.*
@@ -26,7 +28,7 @@ class UserServiceTests {
 
     void testCreate() {
         def userparams = [username: "nut", password: "nuttttt", firstname: 'firstname', 
-        lastname: 'lastname']
+        lastname: 'lastname', accountExpired: false, accountLocked: false, passwordExpired: false]
         service.create(userparams)
         assert 2 == User.count()
         assert 'nut' == User.findByUsername('nut').username

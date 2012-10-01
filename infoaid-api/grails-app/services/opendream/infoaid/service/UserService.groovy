@@ -3,6 +3,7 @@ package opendream.infoaid.service
 import opendream.infoaid.domain.User
 import opendream.infoaid.domain.Role
 import opendream.infoaid.domain.UserRole
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 class UserService {
     def springSecurityService
@@ -15,12 +16,13 @@ class UserService {
             return [message: "Password must have 7 to 20 character"]
         }
         def user = new User()
-        user.properties['username', 'password', 'firstname', 'lastname', 'email', 'telNo'] = userparams
+        user.properties['username', 'password', 'firstname', 'lastname', 'email', 'telNo', 'accountExpired', 'accountLocked', 'passwordExpired'] = userparams
         if(!user.save()) {
             log.error user.errors
             throw new RuntimeException("${user.errors}")
         }
-        def roleUser = grailsApplication.config.infoaid.api.user.role
+        def roleUser = ConfigurationHolder.config.infoaid.api.user.role
+
         def role = Role.findByAuthority(roleUser)
         if(!UserRole.create(user, role)) {
             throw new RuntimeException("can not assign role to user: ${user.id}")
