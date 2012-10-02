@@ -571,7 +571,9 @@ class PageController {
         render result as JSON
     }
 
-    def createResource() {
+    def postResource() {
+        def userId
+        params.userId = springSecurityService?.principal?.id
         def result = pageService.createResource(params)
         render result as JSON
     }

@@ -591,32 +591,33 @@ class PageControllerTests {
         assert response.json['isJoined'] == false
     }
 
-    void testCreateResource() {
+    void testPostResource() {
         controller.pageService = new PageService()
 
         def user1 = User.findByUsername('nut')
         def item1 = Item.findByName('item')
 
-        controller.createResource()
+        controller.postResource()
         assert response.json['status'] == 0
         assert response.json['message'] == 'User Id not found'
 
         response.reset()
 
-        params.userId = user1.id
-        controller.createResource()
+        controller.springSecurityService  = [principal:[id:user1.id]]
+
+        controller.postResource()
         assert response.json['status'] == 0
         assert response.json['message'] == 'Page not found'
 
         response.reset()
         params.slug = 'page-slug'
-        controller.createResource()
+        controller.postResource()
         assert response.json['status'] == 0
         assert response.json['message'] == 'Item not found'
 
         response.reset()
         params.itemId = item1.id
-        controller.createResource()
+        controller.postResource()
         assert response.json['status'] == 1
         assert response.json['user'].username == 'nut'
         assert response.json['page'].slug == 'page-slug'
