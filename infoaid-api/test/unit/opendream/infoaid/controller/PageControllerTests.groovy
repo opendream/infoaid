@@ -519,8 +519,10 @@ class PageControllerTests {
 
     void testSearchPage() {
         def pageService = new PageService()
-        pageService.grailsApplication = [config:[infoaid:[api:[search:[max:10]]]]]
-        controller.pageService = pageService
+        controller.pageService = new PageService()
+
+        def user1 = User.findByUsername('nut')
+        controller.springSecurityService  = [principal:[id:user1.id]]
 
         params.word = ''
         controller.searchPage()

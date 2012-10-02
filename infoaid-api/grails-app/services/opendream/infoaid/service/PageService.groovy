@@ -357,7 +357,7 @@ class PageService {
     }
 
     def searchPage(word = null, offset = 0) {
-        def max = grailsApplication.config.infoaid.api.search.max
+        def max = ConfigurationHolder.config.infoaid.api.getResource.max
         def offsetInt = offset.toInteger()
         def pages
         if(!word) {
