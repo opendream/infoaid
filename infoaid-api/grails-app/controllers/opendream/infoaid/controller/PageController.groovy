@@ -495,6 +495,7 @@ class PageController {
     }
 
     def searchPage() {
+        def printcipal = springSecurityService?.principal        
         def ret = [:]
         ret.status = 0
         def word = params.word
@@ -512,6 +513,8 @@ class PageController {
                     about: it.about,
                     picSmall: it.picSmall,
                     slug: it.slug,
+                    isJoined: printcipal instanceof String? false:pageService.isJoined(printcipal.id, it.slug).isJoined,
+                    isOwner: printcipal instanceof String? false:pageService.isOwner(printcipal.id, it.slug).isOwner,
 
                     needs: pageService.getLimitNeeds(it.slug, 4).needs.collect {
                        [
