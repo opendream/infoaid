@@ -575,7 +575,7 @@ hr {
 	}
 }
 
-.message-need {
+@mixin message-base {
 
 	.message-card {
 		background: none repeat scroll 0 0 #FFFFFF;
@@ -598,7 +598,6 @@ hr {
 			}
 
 			.item-quantity {
-				color: #C00;
 				font-size: 4em;
 				font-weight: bolder;
 				height: 108px;
@@ -628,4 +627,20 @@ hr {
 		}
 	}
 
+}
+
+.message-need {
+	@include message-base;
+
+	.item-quantity {
+		color: #C00;
+	}
+}
+
+.message-resource {
+	@include message-base;
+
+	.item-quantity {
+		color: #009;
+	}
 }
