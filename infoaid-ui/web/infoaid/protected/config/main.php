@@ -23,6 +23,7 @@ return array(
 		'application.components.Infoaid.*',
 		'application.components.Modules.*',
 		'application.extensions.*',
+		'application.extensions.phamlp.PBMAssetManager',
 	),
 
 	'modules'=>array(
@@ -144,7 +145,9 @@ return array(
 		),
 
 		'assetManager' => array(
-			'class' => 'ext.phamlp.PBMAssetManager',
+			//'class' => 'ext.phamlp.PBMAssetManager',
+			'class' => 'application.components.Infoaid.IAAssetManager',
+			'force' => true,
 			'parsers' => array(
 				'scss' => array(
 					'class' => 'ext.phamlp.Sass',

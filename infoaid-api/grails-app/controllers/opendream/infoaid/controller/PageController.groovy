@@ -3,6 +3,9 @@ package opendream.infoaid.controller
 import grails.converters.JSON
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
+import opendream.infoaid.domain.Need
+import opendream.infoaid.domain.Resource
+
 class PageController {
     def pageService
     def springSecurityService
@@ -187,8 +190,9 @@ class PageController {
         def posts = pageService.getRecentPost(params.slug, params.fromId, params.toId, since, until, params.max)
         if(posts) {
             ret.posts = posts.collect{
-                [
+                def post = [
                     id: it.id,
+                    class: it.class.name.tokenize('.')[-1],
                     message: it.message,
                     picSmall: it.picSmall,
                     picOriginal: it.picOriginal,
@@ -212,6 +216,13 @@ class PageController {
                         ]
                     }
                 ]
+                if (it instanceof Need || it instanceof Resource) {
+                    post.item = it.item
+                    post.quantity = it.quantity
+                    post.expiredDate = it.expiredDate
+                }
+
+                post
             }
             ret.status = 1
         }
