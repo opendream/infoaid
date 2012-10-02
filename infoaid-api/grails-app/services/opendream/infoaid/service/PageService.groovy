@@ -486,10 +486,15 @@ class PageService {
         pageUser.save()
 
         def date = new Date()
+        def previousSumQuantity = 0
+        Resource.findAllByItem(item).each {
+            previousSumQuantity += it.quantity
+        }
+
         def resource = new Resource(page: page, lastActived: date, createdBy: user, 
-            updatedBy: user, expiredDate: date+14, message: message, item: item, quantity: quantity)
+            updatedBy: user, expiredDate: date+14, message: message, item: item, 
+            quantity: quantity, previousSumQuantity: previousSumQuantity)
         page.addToPosts(resource)
-        page.validate()
         if(!page.save(flush: true)) {
             ret.message = 'Error, Can not save this resource'
             return ret
@@ -498,6 +503,7 @@ class PageService {
         ret.user = user
         ret.page = page
         ret.post = resource
+        ret.post.previousSumQuantity = previousSumQuantity
         ret.pageUser = pageUser
 
         return ret
