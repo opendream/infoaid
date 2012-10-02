@@ -42,7 +42,10 @@ class PageController extends IAController
 	}
 
 	public function actionSearch()
-	{
+	{	
+		$this->scripts[] = 'controllers.js';
+		$this->scripts[] = 'main/search-page.js';
+		
 		$this->render('search');
 	}
 
