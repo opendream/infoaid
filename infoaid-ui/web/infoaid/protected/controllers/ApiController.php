@@ -39,11 +39,13 @@ class ApiController extends IAController
 		$resultJson = array();
 		if(sizeOf($resultSearch->pages) == 0) {
 		} else {
-			foreach($resultSearch->pages as $el) {
+			/*foreach($resultSearch->pages as $el) {
 				$resultJson[] = array(
 					'body' => $this->renderPartial('/page/header', array('slug'=>$el->slug, 'id'=>$el->id), true)
 				);
 			}
+			*/
+			$resultJson = $resultSearch->pages;
 		}
 		$this->renderJSON($resultJson);
 	}
