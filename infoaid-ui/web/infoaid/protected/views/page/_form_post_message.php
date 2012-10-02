@@ -58,7 +58,7 @@
 		      		ng-options="i.id as i.name for i in items" required>
 		  	  	        <option value=""></option>		        
 			  	    </select>      		
-		        	<input class="span2" ng-model='qty' type="text" required></input>
+		        	<input class="span2" ng-model='qty' type="text" required placeholder="Quantity.."></input>
 		        	<input class="btn btn-mini btn-primary" type="submit" id="submit" value="request" />  
 		        	<a href="#myModal" openDialog role="button" class="btn  btn-mini btn-primary" data-toggle="modal">Add Item</a>    		
 		        </form>        	  
