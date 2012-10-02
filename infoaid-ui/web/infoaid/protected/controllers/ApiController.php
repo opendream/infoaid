@@ -86,6 +86,13 @@ class ApiController extends IAController
 		$this->renderJSON($resultJson);
 	}
 
+	public function actionPostResource($slug, $itemId, $quantity) {
+		$params = array('itemId'=>$itemId, 'quantity'=>$quantity);
+		$resultJson = API::post('page/'.urlencode($slug).'/post_resource', $params, 'json');
+		$this->renderJSON($resultJson);
+
+	}
+
 	public function actionCreateItem($newItem) {
 		$params = array('name'=>$newItem);
 		$resultJson = API::post('item/createItem', $params, 'json');
