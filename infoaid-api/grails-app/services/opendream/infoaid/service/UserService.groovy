@@ -17,6 +17,9 @@ class UserService {
         }
         def user = new User()
         user.properties['username', 'password', 'firstname', 'lastname', 'email', 'telNo', 'accountExpired', 'accountLocked', 'passwordExpired'] = userparams
+        user.picSmall = '/media/profiles/profile_default_Small.png'
+        user.picOriginal = '/media/profiles/profile_default_Original.png'
+        user.picLarge = '/media/profiles/profile_default_large.png'
         if(!user.save()) {
             log.error user.errors
             throw new RuntimeException("${user.errors}")
@@ -45,6 +48,11 @@ class UserService {
     def updateBasicInfo(updateparams) {
         def user = User.get(updateparams.userId)
         user.properties['username', 'firstname', 'lastname', 'email', 'telNo', 'picOriginal', 'picLarge', 'picSmall'] = updateparams
+        if(!updateparams['picOriginal'] || !updateparams['picLarge'] || !updateparams['picSmall']) {
+            user.picSmall = '/media/profiles/profile_default_Small.png'
+            user.picOriginal = '/media/profiles/profile_default_Original.png'
+            user.picLarge = '/media/profiles/profile_default_large.png'
+        }
         if(!user.save()) {
             log.error user.errors
             throw new RuntimeException("${user.errors}")
