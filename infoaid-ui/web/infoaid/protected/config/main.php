@@ -83,6 +83,7 @@ return array(
 				'/api/deleteComment/<commentId:\d+>'=>'/api/deleteComment',
 				'/api/postMessage'=>'/api/postMessage',
 				'/api/postNeed/'=>'/api/postNeed/',
+				'/api/postResource/'=>'/api/postResource',
 				'/api/deletePost/<postId:\d+>'=>'/api/deletePost',
 				'/api/createItem/'=>'/api/createItem',
 				//'/api/items'=>'/api/items',
