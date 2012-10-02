@@ -12,6 +12,7 @@ class FrontPageController {
         def pages = pageNeedActive.collect {
             [
                 name: it.name,
+                slug: it.slug,
                 lat: it.lat,
                 lng: it.lng,
                 
