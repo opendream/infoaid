@@ -187,6 +187,7 @@ class PageControllerTests {
 
         params.userId = 3
         params.slug = 'page-slug'
+        controller.springSecurityService  = [principal:[id:user3.id]]
 
         controller.joinUs()
 
@@ -274,6 +275,7 @@ class PageControllerTests {
 
     void testLeavePage() {
         assert 3 == PageUser.count()
+        def user1 = User.findByUsername('nut')
 
         pageService.demand.leavePage(1..1) { userId, slug -> 
             def user = User.get(userId)
@@ -282,8 +284,9 @@ class PageControllerTests {
             pageUser.delete()
         }
         controller.pageService = pageService.createMock()
+        controller.springSecurityService  = [principal:[id:user1.id]]
 
-        params.userId = 1
+        params.userId = user1.id
         params.slug = 'page-slug'
         controller.leavePage()
 
@@ -545,7 +548,7 @@ class PageControllerTests {
 
         params.slug = 'page-slug'
         def user1 = User.findByUsername('nut')
-        params.userId = user1.id
+        controller.springSecurityService  = [principal:[id:user1.id]]
 
         def result = controller.isOwner()
         assert response.json['isOwner'] == true
@@ -554,7 +557,7 @@ class PageControllerTests {
 
         def user2 = User.findByUsername('nut2')
         params.userId = user2.id
-        params.slug = 'page-slug'
+        controller.springSecurityService  = [principal:[id:user2.id]]
 
         result = controller.isOwner()
         assert response.json['isOwner'] == false
@@ -565,7 +568,7 @@ class PageControllerTests {
 
         params.slug = 'page-slug'
         def user1 = User.findByUsername('nut')
-        params.userId = user1.id
+        controller.springSecurityService  = [principal:[id:user1.id]]
 
         def result = controller.isJoined()
         assert response.json['isJoined'] == true
@@ -574,7 +577,7 @@ class PageControllerTests {
 
         def user2 = User.findByUsername('nut2')
         params.slug = 'page-slug'
-        params.userId = user2.id
+        controller.springSecurityService  = [principal:[id:user2.id]]
 
         result = controller.isJoined()
         assert response.json['isJoined'] == true
@@ -582,7 +585,7 @@ class PageControllerTests {
         response.reset()
 
         params.slug = 'page-slug'
-        params.userId = 12345633
+        controller.springSecurityService  = [principal:[id:12345633]]
 
         result = controller.isJoined()
         assert response.json['isJoined'] == false
@@ -630,7 +633,7 @@ class PageControllerTests {
 
         def newResource = new Resource(page: page, item: item, lastActived: date, createdBy: user, updatedBy: user, message: 'message', expiredDate: date, quantity: 10).save(flush: true)
         def newResource2 = new Resource(page: page, item: item, lastActived: date, createdBy: user, updatedBy: user, message: 'message', expiredDate: date, quantity: 10).save(flush: true)
-        def newResource3 = new Resource(page: page, item: item, lastActived: date, createdBy: user2, updatedBy: user2, message: 'message', expiredDate: date, quantity: 10).save(flush: true)
+        def newResource3 = new Resource(dateCreated: new Date()+1, page: page, item: item, lastActived: date, createdBy: user2, updatedBy: user2, message: 'message', expiredDate: date, quantity: 10).save(flush: true)
         controller.getResource()
         assert response.json['status'] == 1
         assert response.json['resources'].size() == 3

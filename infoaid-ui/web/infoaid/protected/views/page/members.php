@@ -10,14 +10,14 @@
 
     function echoPic($member) {
     	if($member->picOriginal == null) {
-            echo '<img src='.Yii::app()->baseUrl.'/media/profiles/profile_default_small.png class="img-polaroid page-members-pic">';
+            echo '<a href="'.Yii::app()->baseUrl.'/user/profile/'.$member->id.'"><img src='.Yii::app()->baseUrl.'/media/profiles/profile_default_small.png class="img-polaroid page-members-pic"></a>';
         } else {
-            echo '<img src=' .Yii::app()->baseUrl. $member->picSmall . ' class="img-polaroid page-members-pic">';
+            echo '<a href="'.Yii::app()->baseUrl.'/user/profile/'.$member->id.'"><img src=' .Yii::app()->baseUrl. $member->picSmall . ' class="img-polaroid page-members-pic"></a>';
         }
     }
 
     function echoProfile($member) {
-    	echo '<div><span class="page-members-text">'.CHtml::link($member->username, array()).'</span>';
+    	echo '<div><span class="page-members-text">'.CHtml::link($member->username, array("user/profile/$member->id")).'</span>';
     	if($member->relation == 'OWNER') {
     		$relation = 'Owner';
     	} else {
@@ -154,12 +154,12 @@
 
 		$scope.totalLoad = parseInt('<?php echo $totalLoad; ?>');
 
-		$scope.echoPic = function(picUrl) {
+		$scope.echoPic = function(member) {
 			var ret = '';
-			if(picUrl == null) {
-				ret = '<img src="'+baseUrl+'/media/profiles/profile_default_small.png" class="img-polaroid page-members-pic">';
+			if(member.picSmall == null) {
+				ret = '<a href="'+baseUrl+'/user/profile/'+member.id+'"><img src="'+baseUrl+'/media/profiles/profile_default_small.png" class="img-polaroid page-members-pic"></a>';
 			} else {
-				ret = '<img src="'+baseUrl+'/'+picUrl+'" class="img-polaroid page-members-pic">';
+				ret = '<a href="'+baseUrl+'/user/profile/'+member.id+'"><img src="'+baseUrl+'/'+member.picSmall+'" class="img-polaroid page-members-pic"></a>';
 			}
 			return ret;
 		}
@@ -223,7 +223,7 @@
 					angular.forEach(members, function (member) {
 						var show = member.body;
 							ret += '<div class="span3 page-member-margin">'+
-								$scope.echoPic(show.picSmall)+
+								$scope.echoPic(show)+
 								$scope.echoProfile(show)+
 								$scope.checkIsOwnerEchoMenu(show)+
 								'</div>';

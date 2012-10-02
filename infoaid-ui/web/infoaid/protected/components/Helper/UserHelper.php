@@ -105,6 +105,12 @@ class UserHelper
 		$imageHelper = new ImageHelper($settings);
 		$imageHelper->specific = $userId;
 
-		return $imageHelper->processUploadedFile('image', $newFilename);
+		$result = $imageHelper->processUploadedFile('image', $newFilename);
+		if (is_array($result)) {
+			return $result;
+		}
+		else {
+			throw new CHttpException(415, $result);
+		}
 	}
 }

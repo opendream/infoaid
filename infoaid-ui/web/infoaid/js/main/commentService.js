@@ -50,16 +50,24 @@ angular.module('commentService', ['ngResource']).
 		var RearrangePost = function(scope, newPosts) {
 			angular.forEach(newPosts, function(post) {
 				var result = FindPost(scope, post);
-				if(!result.status) {
-					if( $(scope.posts).first().get(0).lastActived < post.lastActived ) {
-						scope.posts.unshift(post);
-					}
-					if( $(scope.posts).last().get(0).lastActived > post.lastActived ) {
-						scope.posts.push(post);
-					}					
-				} else {
-					scope.posts.splice(result.index, 1, post);
-				}								
+				var postCount = $(scope.posts).length;
+
+				if (postCount === 0) {
+					scope.posts.push(post);
+				}
+				else {
+					if(!result.status) {
+						if($(scope.posts).first().get(0).lastActived < post.lastActived) {
+							scope.posts.unshift(post);
+						}
+						if($(scope.posts).last().get(0).lastActived > post.lastActived ) {
+							scope.posts.push(post);
+						}
+
+					} else {
+						scope.posts.splice(result.index, 1, post);
+					}		
+				}						
 			});								
 		};		
 		return RearrangePost;
@@ -144,9 +152,9 @@ function CommentCtrl($scope, Comment, DeletePost, PostComment, DeleteComment, Po
 				message: this.comment
 			};
 			
-			PostComment.get(options, function (ret) {	
+			PostComment.get(options, function (ret) {
 				RefreshPost($scope);
-				$scope.comment = '';		
+				$scope.comment = '';
 				var comment = {'id':ret.commentId, 'picSmall':ret.picSmall, 'createdBy':ret.user, 
 								'message':ret.comment, 'lastUpdated':ret.lastUpdated};
 				$scope.comments.push(comment);	
@@ -205,8 +213,8 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 				RefreshPost($scope);
 				$scope.message = '';
 				$('#previewImg').html('');
-				$('#picSmall').val();
-		        $('#picOriginal').val();
+				$('#picSmall').val('');
+		        $('#picOriginal').val('');
 			});							
 		}
 	}

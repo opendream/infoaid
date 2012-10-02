@@ -14,7 +14,7 @@ angular.module('headerService', ['ngResource']).
     });
 
 
-function ListCtrl($scope, Post, RearrangePost) {
+function PostListCtrl($scope, Post, RearrangePost) {
     var slug = $scope.slug;
 
     var lastRowDateCreated = function () {

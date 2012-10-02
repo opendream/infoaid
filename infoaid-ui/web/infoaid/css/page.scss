@@ -27,7 +27,7 @@ h2 {
 	list-style: none;
 	margin: 10px 0 0;
 	padding: 10px 10px;
-	border: 1px solid #eee;
+	// border: 1px solid #eee;
 	.ng-pristine {
 		width: 380px;
 	}
@@ -38,23 +38,35 @@ h2 {
 
 	.meta {
 		margin-top: 4px;
+		font-size: 12px;
 	}
-	.message-picture {
+	.message-poster-avatar {
 		float: left;
-		img {
-			width: 40px;
-			height: 40px;
-			border: 1px solid #ccc;
-			margin-right: 15px;
+		min-height: 43px;
+		min-width: 43px;
+		min-height: 43px;
+		min-width: 43px;
+		// border: 1px solid #ddd;
+		// border-radius: 30px;
+		margin-right: 0;
+		img {			
+			width: 50px;
+			height: 50px;
 			padding: 3px;
+			border: 0 none;
+			border-radius: 30px;
 		}
 	}
 	.message-details {
 		margin-left: 50px;
-		padding: 0 12px;
+		padding: 0 0 0 12px;
 
 		.message-body {
 			padding: 0;
+		}
+
+		.message-picture-preview {
+			margin-top: 12px;
 		}
 	}
 	.message-comments {
@@ -79,8 +91,9 @@ h2 {
 			}
 			.comment-body {
 				padding: 0;
-				width: 85%;
+				// width: 85%;
 				overflow: hidden;
+				display: inline;
 			}
 		}
 		.load-more {
@@ -91,6 +104,10 @@ h2 {
 	li {
 		border-bottom: 1px solid #DDD;
 		margin-bottom: 18px;
+
+		&:last-child {
+			border-bottom: none;
+		}
 	}
 
 	ul {
@@ -497,6 +514,18 @@ hr {
 		border-radius: 4px 4px 4px 4px;
 		padding: 2px 2px 10px 2px;
 		position: relative;
+
+		a.close {
+			display: block;
+			position: absolute;
+			top: 0;
+			right: 5px;
+			z-index: 9999;
+		}
+
+		a.close.hide {
+			display: none;
+		}
 	}
 
 	.upload-form {

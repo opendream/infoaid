@@ -452,7 +452,6 @@ class PageServiceTests {
         assert result.page == page
         assert result.post.quantity == 0
         assert result.pageUser == pageUser
-        println result
 
         assert Resource.count() == 1
     }

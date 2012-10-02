@@ -52,6 +52,19 @@ class ImageHelper
 		return true;
 	}
 
+	public function checkMimeType($filepath)
+	{
+		$finfo = finfo_open(FILEINFO_MIME_TYPE);
+		$mime = finfo_file($finfo, $filepath);
+		
+		if (preg_match('/^image\/.*/', $mime)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	public function processUploadedFile($fieldName, $newFilename)
 	{
 		$uploaded = &$_FILES[$fieldName];
@@ -64,6 +77,10 @@ class ImageHelper
 				return "Can not create directory for image file.";
 			}
 			$newFilepath = $fileDir . $newFilename;
+
+			if (! $this->checkMimeType($uploaded['tmp_name'])) {
+				return "File type not supported";
+			}
 
 			if (move_uploaded_file($uploaded['tmp_name'], $newFilepath)) {
 				$return = $this->process($newFilepath);

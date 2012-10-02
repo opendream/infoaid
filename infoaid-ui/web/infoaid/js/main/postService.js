@@ -5,14 +5,8 @@ angular.module('postService', ['ngResource']).
 		return Post;
 	});
 
-angular.module('post', ['postService', 'commentService', 'time', 'headerService'], function ($routeProvider) {
-		$routeProvider.
-			when('/', {
-				controller: ListCtrl,
-				templateUrl: baseUrl + '/page/static/view/post-list'
-			}).
-			otherwise({redirectTo: '/'});
-	})
+angular
+	.module('post', ['postService', 'commentService', 'time', 'headerService'])
 	.directive('post', function ($compile) {
 		return {
 			restrict: 'A',
