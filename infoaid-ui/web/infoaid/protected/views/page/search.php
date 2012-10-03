@@ -50,7 +50,7 @@
 						        </div>
 						        <div>
 						            <span class='page-needs'>
-						                <b>Need :</b><b ng-repeat="need in page.needs">{{need.item}} {{need.quantity}}</b>
+						                <b>Need : </b><span ng-repeat="need in page.needs">{{need.item}} {{need.quantity}} </span>
 						            </span>
 						        </div>
 						    </div>						    

@@ -49,7 +49,7 @@ class UserController {
     def getPages() {
         def ret = [:]
         ret.status = 0
-        def user = User.get(params.id)
+        def user = User.get(params.user.id)
         def pages = user.getPages()
         if(pages) {
             ret.totalPages = pages.size()

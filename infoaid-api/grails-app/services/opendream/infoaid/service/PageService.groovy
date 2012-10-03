@@ -47,17 +47,46 @@ class PageService {
         return posts
     }
 
-    def getTopPost(slug, fromId=null, toId=null, since=null, until=null, max=null) {
-        max = max?:grailsApplication.config.infoaid.api.post.max
-        getPosts(slug, fromId, toId, since, until, max, 'top')
+    def getPageAuthority(user, slug) {
+        def author = [:]
+        author.isJoined = user instanceof String? false:isJoined(user.id, slug).isJoined
+        author.isOwner = user instanceof String? false:isOwner(user.id, slug).isOwner
+        
+        author
     }
 
-    def getRecentPost(slug, fromId=null, toId=null, since=null, until=null, max=null) {
-        max = max?:grailsApplication.config.infoaid.api.post.max
-        getPosts(slug, fromId, toId, since, until, max, 'recent')
+    def getPostAuthority(user, postId) {
+        def post = Post.get(postId)
+        def author = [:]
+        author.isJoined = user instanceof String? false:isJoined(user.id, post?.page?.slug).isJoined
+        author.isOwner = user instanceof String? false:isOwner(user.id, post?.page?.slug).isOwner
+        
+        author
     }
 
-    def getComments(postId, fromId=null, toId=null, since=null, until=null) {
+    def canDelete(userId, currentUser, isOwner) {
+        if(currentUser instanceof String) {
+            return false
+        } else if(isOwner==true) {
+            return true
+        }else {
+            return userId == currentUser.id
+        }
+    }
+
+    def getTopPost(user, slug, fromId=null, toId=null, since=null, until=null, max=null) {
+        max = max?:grailsApplication.config.infoaid.api.post.max
+        [posts: getPosts(slug, fromId, toId, since, until, max, 'top'),
+        author: getPageAuthority(user, slug)]
+    }
+
+    def getRecentPost(user, slug, fromId=null, toId=null, since=null, until=null, max=null) {
+        max = max?:grailsApplication.config.infoaid.api.post.max
+        [posts: getPosts(slug, fromId, toId, since, until, max, 'recent'), 
+        author: getPageAuthority(user, slug)]
+    }
+
+    def getComments(user, postId, fromId=null, toId=null, since=null, until=null) {
         def max = grailsApplication.config.infoaid.api.comment.limited
         def comments = Comment.createCriteria().list(max: max) {
     		post {
@@ -79,7 +108,8 @@ class PageService {
     		order('dateCreated', 'asc')
     	}
 
-    	[comments: comments, totalComments: comments.totalCount]
+    	[comments: comments, totalComments: comments.totalCount, author:getPostAuthority(user, postId)]
+
     }
 
     def getLimitComments(postId) {
