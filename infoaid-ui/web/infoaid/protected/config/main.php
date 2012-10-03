@@ -85,6 +85,7 @@ return array(
 				'/api/postNeed/'=>'/api/postNeed/',
 				'/api/deletePost/<postId:\d+>'=>'/api/deletePost',
 				'/api/createItem/'=>'/api/createItem',
+				'/api/getPages/'=>'/api/getPages',
 				//'/api/items'=>'/api/items',
 
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
@@ -177,7 +178,7 @@ return array(
 		'adminEmail'=>'webmaster@example.com',
 		
 		'api'=>array(
-			'server'=>'http://192.168.1.129:8080/infoaid-api/',
+			'server'=>'http://localhost:8080/infoaid-api/',
 			//'port'=>8080,
 			'log_request'=>true,
 			'debug_rest'=>false,
