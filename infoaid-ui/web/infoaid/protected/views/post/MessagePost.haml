@@ -14,6 +14,6 @@
 			%time.timeago(datetime="{{post.dateCreated}}")
 				{{post.dateCreated}}
 			=" - "
-			%a(ng-click="deletePost(post)" type="button")
+			%a(ng-click="deletePost(post)" type="button"  ng-show="post.canDelete")
 				delete
 	.clear
