@@ -1,17 +1,10 @@
-<?php
-    $post = PageHelper::getInfoBySlug($slug);    
-    $userId = Yii::app()->user->getId();
-    $isJoined = PageHelper::isJoined($userId, $slug);
-?>
-
 <ul class="page-posts" ng-show="posts.length">
 	<li ng-repeat="post in posts" id="post-{{post.id}}">
 		<div post ng-controller="PostBodyCtrl"></div>
-
-		<div class="message-comments" ng-controller="CommentCtrl">
+		<div class="message-comments" ng-controller="CommentCtrl" ng-init="isjoined='<?php echo $isJoined->isJoined; ?>';">
 			<div id="loadmore-{{post.id}}" class="load-more" ng-click="loadMore('#loadmore-'+post.id)">
-				<span class="label label-info" ng-show="post.conversation>3"><i class="icon-comment icon-white"></i>View all {{post.conversation}} comments</span>
-				
+				<span class="label label-info" ng-show="post.conversation>3">
+					<i class="icon-comment icon-white"></i>View all {{post.conversation}} comments</span>
 			</div>
 
 			<ul>
@@ -34,14 +27,15 @@
 								{{comment.lastUpdated}}
 							</time>			
 							-				
-							<a ng-click="deleteComment(comment)" type="button">delete</a>
+							<a ng-click="deleteComment(comment)" type="button" ng-show="comment.canDelete">delete</a>
 						</div>
 					</div>
 					<div class="clear"></div>					
 				</li>				
 			</ul>
 			<div>
-				<form ng-submit="submitComment()">
+				<form ng-submit="submitComment()" ng-show="isjoined">
+					
 					<input ng-model='comment' type="text" placeholder="Type a comment..."></input>					
 				</form>
 			</div>
