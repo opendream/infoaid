@@ -10,13 +10,16 @@ class PageController {
     def index() { }
 
     def info() {
+        def user = params.user
         def ret = [:]
         ret.status = 0
         def info = pageService.getInfo(params.slug)
         if(info) {
             ret = [
                 status: 1,
-                page: info
+                page: info,
+                isJoined: user instanceof String? false:pageService.isJoined(user.id, info.slug).isJoined,
+                isOwner: user instanceof String? false:pageService.isOwner(user.id, info.slug).isOwner
             ]
         }
         
@@ -139,7 +142,7 @@ class PageController {
         if(params.until) {
             until = new Date().parse("yyyy-MM-dd HH:mm", params.until)
         }
-        def posts = pageService.getTopPost(params.slug, params.fromId, params.toId, since, until, params.max)
+        def posts = pageService.getTopPost(params.user, params.slug, params.fromId, params.toId, since, until, params.max)
         if(posts) {
             ret.posts = posts.collect{
                 [
@@ -151,6 +154,7 @@ class PageController {
                     userPicSmall: it.createdBy.picSmall,
                     userId: it.createdBy.id,
                     conversation: it.conversation,
+                    canDelete: pageService.canDelete(it.createdBy.id, params.user, page.author.isOwner),
                     comments: it.previewComments.comments.collect {
                         [
                             message: it.message,
@@ -159,7 +163,8 @@ class PageController {
                             picOriginal: it.user.picOriginal,
                             picLarge: it.user.picLarge,
                             picSmall: it.user.picSmall,
-                            lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
+                            lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm'),
+                            canDelete: pageService.canDelete(it.user.id, params.user, page.author.isOwner)
                         ]
                     }
                 ]
@@ -175,18 +180,16 @@ class PageController {
         def since
         def until
         ret.status = 0
-        if(!params.max) {
-            params.max = 10
-        }
+
         if(params.since) {
             since = new Date().parse("yyyy-MM-dd HH:mm", params.since)
         }
         if(params.until) {
             until = new Date().parse("yyyy-MM-dd HH:mm", params.until)
         }
-        def posts = pageService.getRecentPost(params.slug, params.fromId, params.toId, since, until, params.max)
-        if(posts) {
-            ret.posts = posts.collect{
+        def page = pageService.getRecentPost(params.user, params.slug, params.fromId, params.toId, since, until, params.max)
+        if(page) {
+            ret.posts = page.posts.collect{
                 [
                     id: it.id,
                     message: it.message,
@@ -199,6 +202,7 @@ class PageController {
                     userId: it.createdBy.id,
                     conversation: it.conversation,
                     lastActived: it.lastActived.time,
+                    canDelete: pageService.canDelete(it.createdBy.id, params.user, page.author.isOwner),
                     comments: it.previewComments.comments.collect {
                         [
                             id: it.id,
@@ -208,12 +212,15 @@ class PageController {
                             picOriginal: it.user.picOriginal,
                             picLarge: it.user.picLarge,
                             picSmall: it.user.picSmall,
-                            lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm')
+                            lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm'),
+                            canDelete: pageService.canDelete(it.user.id, params.user, page.author.isOwner)
                         ]
                     }
                 ]
             }
             ret.status = 1
+            ret.isJoined = page.author.isJoined
+            ret.isOwner = page.author.isOwner
         }
         render ret as JSON
     }
@@ -296,8 +303,8 @@ class PageController {
             ret = [status: 0, message: "user id: ${userId} could not be join page: ${slug}"]
         } else {
             try {
-                pageService.joinPage(userId, slug)
-                ret = [status: 1, message: "user id: ${userId} joined page: ${slug}"]
+                def result = pageService.joinPage(userId, slug)
+                ret = [status: 1, message: "user id: ${userId} joined page: ${slug}", slug: slug, page:result.page, user:result.user]
             } catch (e) {
                 ret = [status: 0, message: "user id: ${userId} could not be join page: ${slug}"]
             }            
@@ -371,9 +378,9 @@ class PageController {
         } else {
             try {
                 pageService.leavePage(userId, slug)
-                ret = [status: 1, message: "user id: ${userId} left from page: ${slug}"]
+                ret = [status: 1, message: "user id: ${userId} left from page: ${slug}", slug: slug, userId: userId]
             } catch (e) {
-                ret = [status: 0, message: "user id: ${userId} could not be left from page: ${slug}"]
+                ret = [status: 0, message: "user id: ${userId} could not be left from page: ${slug}", slug: slug]
             }            
         }
         render ret as JSON
@@ -495,7 +502,8 @@ class PageController {
     }
 
     def searchPage() {
-        def printcipal = springSecurityService?.principal        
+        def user = params.user
+        def maxNeed = grailsApplication.config.infoaid.api.need.max 
         def ret = [:]
         ret.status = 0
         def word = params.word
@@ -513,10 +521,10 @@ class PageController {
                     about: it.about,
                     picSmall: it.picSmall,
                     slug: it.slug,
-                    isJoined: printcipal instanceof String? false:pageService.isJoined(printcipal.id, it.slug).isJoined,
-                    isOwner: printcipal instanceof String? false:pageService.isOwner(printcipal.id, it.slug).isOwner,
+                    isJoined: user instanceof String? false:pageService.isJoined(user.id, it.slug).isJoined,
+                    isOwner: user instanceof String? false:pageService.isOwner(user.id, it.slug).isOwner,
 
-                    needs: pageService.getLimitNeeds(it.slug, 4).needs.collect {
+                    needs: pageService.getLimitNeeds(it.slug, maxNeed).needs.collect {
                        [
                             id: it.id,
                             item: it.item.name,
