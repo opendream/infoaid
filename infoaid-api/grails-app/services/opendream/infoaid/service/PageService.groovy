@@ -487,7 +487,7 @@ class PageService {
 
         def date = new Date()
         def previousSumQuantity = 0
-        Resource.findAllByItem(item).each {
+        Resource.findAllByItemAndPageAndStatus(item, page, Post.Status.ACTIVE).each {
             previousSumQuantity += it.quantity
         }
 
