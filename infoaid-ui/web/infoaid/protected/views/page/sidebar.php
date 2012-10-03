@@ -1,13 +1,8 @@
 <?php
-	$session = new CHttpSession;
-	$session->open();
-	$userId = Yii::app()->user->getId();
-	//$userId = 8185;
 	if($userId != null) {
-    	$resultPages = API::getJSON('user/getPages', array('id'=>$userId));
+    	//$resultPages = API::getJSON('user/getPages', array('id'=>$userId));
     	$resultUserInfo = API::getJSON("user/$userId/basic_info");
-	}
-    $session->close();
+	}    
 ?>
 <div id='page-sidebar' class='page-sidebar'>
 	<div id='page-sidebar-joinus'>
@@ -63,7 +58,7 @@
 
 		</ul>
 	</div>
-	<div id='page-sidebar-places'>
+	<div id='page-sidebar-places' ng-controller="SidebarCtrl">
 		<div id='page-sidebar-places' class='page-sidebar-places-header'><p class='muted'>
 			<?php
 				if($userId != null) {
@@ -74,15 +69,12 @@
 			?>
 			</p></div>
 		<ul class='unstyled ul-list'>
-		<?php 
-			if($userId != null) {
-				foreach($resultPages->pages as $el) {
-		?>
-					<li class='left-side-bar li-place'><?php echo CHtml::link($el->name, array("page/$el->slug")); ?></li>
-		<?php
-				}
-			}
-		?>
+			<li class='left-side-bar li-place' ng-repeat="page in pages">
+				<a href="<?php echo Yii::app()->baseUrl."/page/{{page.slug}}";?>">
+					{{page.name}}
+				</a>
+			</li>
+		
 			<li class='left-side-bar li-add-group'>
 				<?php
 					if($userId != null) { 
