@@ -567,18 +567,28 @@ class PageController {
     }
 
     def isOwner() {
-        def userId = springSecurityService?.principal?.id
         def slug = params.slug
-
-        def result = pageService.isOwner(userId, slug)
+        def user = params.user
+        def result
+        if(user instanceof String) {
+            result = [isOwner: false]
+        } else {
+            result = pageService.isOwner(user.id, slug)
+        }
+        
         render result as JSON
     }
 
     def isJoined() {
-        def userId = springSecurityService?.principal?.id
         def slug = params.slug
-
-        def result = pageService.isJoined(userId, slug)
+        def user = params.user
+        def result
+        if(user instanceof String) {
+            result = [isJoined: false]
+        } else {
+            result = pageService.isJoined(user.id, slug)
+        }
+        
         render result as JSON
     }
 
