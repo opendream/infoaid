@@ -452,6 +452,11 @@ class PageService {
                     eq('id', params.userId)
                 }
             }
+            if(params.itemId) {
+                item {
+                    eq('id', params.itemId)
+                }
+            }
             if(params.itemName) {
                 item {
                     eq('name', params.itemName)
