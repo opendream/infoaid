@@ -85,7 +85,7 @@ angular.module('commentService', ['ngResource']).
 		return PostResource;
 	});
 
-function PostBodyCtrl($scope, DeletePost, RefreshPost) {
+function PostBodyCtrl($scope, DeletePost, RefreshPost, SharedService) {	
 
 	$scope.deletePost = function(post) {
 		if(post.id) {
@@ -105,7 +105,7 @@ function PostBodyCtrl($scope, DeletePost, RefreshPost) {
 	}
 }
 
-function CommentCtrl($scope, Comment, DeletePost, PostComment, DeleteComment, Post, RefreshPost) {
+function CommentCtrl($scope, Comment, DeletePost, PostComment, DeleteComment, Post, RefreshPost, SharedService) {
 	var lastRowLastUpdated = function () {
 		var comments = $($scope.comments);
 		if (comments.length === 0) {
@@ -119,6 +119,10 @@ function CommentCtrl($scope, Comment, DeletePost, PostComment, DeleteComment, Po
 	if (! angular.isUndefined($scope.post.comments)) {
 		$scope.comments = $scope.post.comments.slice(0, 3).reverse();
 	}
+
+	$scope.$on('isJoinedBroadcast', function() {
+        $scope.isjoined = SharedService.isJoined;
+    });
 
 	$scope.loadMore = function(id) {
 		var options = {
@@ -194,7 +198,7 @@ function CommentCtrl($scope, Comment, DeletePost, PostComment, DeleteComment, Po
 	}
 }
 
-function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshPost, PostResource) {
+function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshPost, PostResource, SharedService) {
 	$scope.items = [];
 	if($scope.items.length===0) {
 		Items.query(function(ret) {
@@ -203,6 +207,10 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 			});
 		});
 	}
+
+	$scope.$on('isJoinedBroadcast', function() {
+        $scope.isjoined = SharedService.isJoined;
+    });
 
 	$scope.postMessage = function() {
 		if ($scope.message) {	

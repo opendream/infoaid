@@ -2,7 +2,9 @@
 
 		<header class="info">
 			<div>
-				<?php $this->renderPartial('sidebar'); ?>
+				<?php $this->renderPartial('sidebar', array(
+							'userId' => user()->getId()						
+						)); ?>
 			</div>
 			<div>
 				<?php $this->renderPartial('header', array('slug'=>$slug,'id'=>$page->id)); ?>
@@ -17,7 +19,7 @@
 						<h1>Status Update</h1>
 					</header>
 
-					<div class="page-post-form">
+					<div class="page-post-form" >
 						<?php $this->renderPartial('_form_post_message', array(
 							'userId' => user()->getId(),
 							'isJoined' => PageHelper::isJoined(user()->getId(), $slug),
@@ -25,7 +27,10 @@
 					</div>
 
 					<div class="span5">
-						<?php $this->renderPartial('pages/post-list'); ?>
+						<?php $this->renderPartial('pages/post-list', array(
+							'userId' => user()->getId(),
+							'isJoined' => PageHelper::isJoined(user()->getId(), $slug),
+						)); ?>
 					</div>
 				</section>
 			</div>	

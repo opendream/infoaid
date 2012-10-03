@@ -26,7 +26,7 @@ h2 {
 .page-posts {
 	list-style: none;
 	margin: 10px 0 0;
-	padding: 10px 10px;
+	padding: 5px;
 	// border: 1px solid #eee;
 	.ng-pristine {
 		width: 380px;
@@ -572,5 +572,75 @@ hr {
 #page-create {
 	#map {
 		border: 4px solid white;
+	}
+}
+
+@mixin message-base {
+
+	.message-card {
+		background: none repeat scroll 0 0 #FFFFFF;
+		border: 1px solid #DDD;
+		border-radius: 3px 3px 3px 3px;
+		box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.2);
+		padding: 15px;
+		margin-left: 0;
+		text-rendering: optimizelegibility;
+
+		.message-poster-name {
+			font-weight: bolder;
+		}
+
+		.message-body {
+			margin-top: 12px;
+
+			.item-icon-wrapper {
+				float: left;
+			}
+
+			.item-quantity {
+				font-size: 4em;
+				font-weight: bolder;
+				height: 108px;
+				line-height: 1em;
+				padding: 10px 10px 10px 148px;
+			}
+		}
+	}
+
+	.item-icon {
+		width: 128px;
+		height: 128px;
+		display: inline-block;
+		background-size: cover;
+		background-repeat: no-repeat;
+
+		&.item-icon-food {
+			background-image: url(../img/icons/items/item-7.png);
+		}
+
+		&.item-icon-water {
+			background-image: url(../img/icons/items/item-8.png);
+		}
+
+		&.item-icon-man {
+			background-image: url(../img/icons/items/item-3.png);
+		}
+	}
+
+}
+
+.message-need {
+	@include message-base;
+
+	.item-quantity {
+		color: #C00;
+	}
+}
+
+.message-resource {
+	@include message-base;
+
+	.item-quantity {
+		color: #009;
 	}
 }

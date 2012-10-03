@@ -14,7 +14,7 @@
 </div>
 
 <div ng-controller="PostMessageCtrl">
-	<div class="tabbable" ng-init="userId='<?php echo $userId; ?>'; isjoined='<?php echo $isJoined->isJoined; ?>';">
+	<div class="tabbable" ng-init="userId='<?php echo $userId; ?>'; isjoined='<?php echo $isJoined->isJoined; ?>';" ng-show="isjoined">
 		<ul class="nav nav-pills">
 	       	<li class="active"><a href="#tabInfo" data-toggle="tab" class="btn btn-mini btn-link">info</a></li>
 	       	<li><a href="#tabNeed" data-toggle="tab" class="btn btn-mini btn-link">request</a></li>

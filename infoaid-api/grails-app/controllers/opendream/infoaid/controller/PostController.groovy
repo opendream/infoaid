@@ -19,7 +19,7 @@ class PostController {
             until = new Date().parse("yyyy-MM-dd H:m", params.until)
         }
         if(params.postId) {
-            def comments = pageService.getComments(params.long('postId'), params.fromId, params.toId, since, until)
+            def comments = pageService.getComments(params.user, params.long('postId'), params.fromId, params.toId, since, until)
             ret.comments = comments.comments.collect{
                 [
                     id: it.id,
@@ -32,6 +32,7 @@ class PostController {
                     picLarge: it.user.picLarge,
                     dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                     lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm'),
+                    canDelete: pageService.canDelete(it.user.id, params.user, comments.author.isOwner)                    
                 ]
             }
             ret.totalComments = comments.totalComments
@@ -55,6 +56,7 @@ class PostController {
                     picLarge: it.user.picLarge,
                     dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                     lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm'),
+                    canDelete: it.user.id == params.user?.id ?true:false
                 ]
             } 
             ret.totalComments = comments.totalComments

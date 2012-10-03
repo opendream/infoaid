@@ -23,6 +23,7 @@ return array(
 		'application.components.Infoaid.*',
 		'application.components.Modules.*',
 		'application.extensions.*',
+		'application.extensions.phamlp.PBMAssetManager',
 	),
 
 	'modules'=>array(
@@ -86,6 +87,7 @@ return array(
 				'/api/postResource/'=>'/api/postResource',
 				'/api/deletePost/<postId:\d+>'=>'/api/deletePost',
 				'/api/createItem/'=>'/api/createItem',
+				'/api/getPages/'=>'/api/getPages',
 				//'/api/items'=>'/api/items',
 
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
@@ -144,7 +146,9 @@ return array(
 		),
 
 		'assetManager' => array(
-			'class' => 'ext.phamlp.PBMAssetManager',
+			//'class' => 'ext.phamlp.PBMAssetManager',
+			'class' => 'application.components.Infoaid.IAAssetManager',
+			'force' => true,
 			'parsers' => array(
 				'scss' => array(
 					'class' => 'ext.phamlp.Sass',
@@ -178,7 +182,7 @@ return array(
 		'adminEmail'=>'webmaster@example.com',
 		
 		'api'=>array(
-			'server'=>'http://192.168.1.129:8080/infoaid-api/',
+			'server'=>'http://localhost:8080/infoaid-api/',
 			//'port'=>8080,
 			'log_request'=>true,
 			'debug_rest'=>false,

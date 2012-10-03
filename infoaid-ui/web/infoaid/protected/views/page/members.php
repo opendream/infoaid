@@ -7,6 +7,7 @@
     $members = PageHelper::getMembers($slug, $totalLoad);
     $totalLoad = $members->totalMembers;
     $isOwner = PageHelper::isOwner($userId, $slug);
+    $page = PageHelper::getInfoBySlug($slug);
 
     function echoPic($member) {
     	if($member->picOriginal == null) {
@@ -66,12 +67,14 @@
     }
 
 ?>
-<header class="info">
+<header class="info" ng-app='member'>
 	<div>
-		<?php $this->renderPartial('sidebar'); ?>
+		<?php $this->renderPartial('sidebar', array(
+							'userId' => $userId						
+						)); ?>
 	</div>
 	<div>
-		<?php $this->renderPartial('header', array('slug'=>$slug)); ?>
+		<?php $this->renderPartial('header', array('slug'=>$slug, 'id'=>$page->id)); ?>
 	</div>
 </header>
 <div class='flash-message'>
@@ -129,7 +132,7 @@
 			return Relation;
 		});
 
-	angular.module('member', ['memberService']);
+	angular.module('member', ['memberService', 'headerService']);
 
 	
 

@@ -1,4 +1,4 @@
-.message-content(ngCloak='')
+.message-content(ng-cloak='')
 	.message-poster-avatar
 		%a(href="#{Yii::app()->baseUrl.'/user/profile/'}{{post.userId}}")
 			%img(src="#{Yii::app()->baseUrl}{{post.userPicSmall}}")
@@ -14,6 +14,6 @@
 			%time.timeago(datetime="{{post.dateCreated}}")
 				{{post.dateCreated}}
 			=" - "
-			%a(ng-click="deletePost(post)" type="button")
+			%a(ng-click="deletePost(post)" type="button"  ng-show="post.canDelete")
 				delete
 	.clear

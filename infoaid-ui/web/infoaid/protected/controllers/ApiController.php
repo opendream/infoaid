@@ -100,4 +100,9 @@ class ApiController extends IAController
 		$resultJson = API::post('item/createItem', $params, 'json');
 		$this->renderJSON($resultJson);
 	}
+
+	public function actionGetPages() {
+		$resultJson = API::getJSON('user/getPages');
+		$this->renderJSON($resultJson);
+	}
 }

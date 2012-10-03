@@ -20,6 +20,8 @@ class PageModule
 
 		$postTypes = array(
 			'text' => 'MessagePost',
+			'need' => 'Need',
+			'resource' => 'Resource',
 		);
 
 		foreach ($postTypes as $type => $layoutFile) {
