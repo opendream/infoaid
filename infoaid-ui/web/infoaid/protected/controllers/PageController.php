@@ -52,6 +52,7 @@ class PageController extends IAController
 
 	public function actionMembers($slug)
 	{
+		$this->scripts[] = 'controllers.js';
 		$this->render('members', array('slug'=>$slug));
 	}
 
