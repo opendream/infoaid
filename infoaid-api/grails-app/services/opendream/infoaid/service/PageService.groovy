@@ -452,6 +452,11 @@ class PageService {
                     eq('id', params.userId)
                 }
             }
+            if(params.itemId) {
+                item {
+                    eq('id', params.itemId)
+                }
+            }
             if(params.itemName) {
                 item {
                     eq('name', params.itemName)
@@ -517,7 +522,7 @@ class PageService {
 
         def date = new Date()
         def previousSumQuantity = 0
-        Resource.findAllByItem(item).each {
+        Resource.findAllByItemAndPageAndStatus(item, page, Post.Status.ACTIVE).each {
             previousSumQuantity += it.quantity
         }
 
