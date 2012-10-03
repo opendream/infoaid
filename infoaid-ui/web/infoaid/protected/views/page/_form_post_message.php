@@ -18,6 +18,7 @@
 		<ul class="nav nav-pills">
 	       	<li class="active"><a href="#tabInfo" data-toggle="tab" class="btn btn-mini btn-link">info</a></li>
 	       	<li><a href="#tabNeed" data-toggle="tab" class="btn btn-mini btn-link">request</a></li>
+	       	<li><a href="#tabResource" data-toggle="tab" class="btn btn-mini btn-link">I have</a></li>
 	    </ul>
 	    <div class="tab-content">
 	        <div class="tab-pane active" id="tabInfo">
@@ -57,11 +58,22 @@
 		      		ng-options="i.id as i.name for i in items" required>
 		  	  	        <option value=""></option>		        
 			  	    </select>      		
-		        	<input class="span2" ng-model='qty' type="text" required></input>
+		        	<input class="span2" ng-model='qty' type="text" required placeholder="Quantity.."></input>
 		        	<input class="btn btn-mini btn-primary" type="submit" id="submit" value="request" />  
 		        	<a href="#myModal" openDialog role="button" class="btn  btn-mini btn-primary" data-toggle="modal">Add Item</a>    		
 		        </form>        	  
-	      	</div>    
+	      	</div>
+	      	<div class="tab-pane" id="tabResource">
+	      	    <form validate ng-submit="postResource()" class="form-inline">
+		      		<select class="span3" id="resourcePost" ng-model="resource" 
+		      		ng-options="i.id as i.name for i in items" required>
+		  	  	        <option value=""></option>		        
+			  	    </select>      		
+		        	<input class="span2" ng-model='resourceQty' type="text" required placeholder="Quantity.."></input>
+		        	<input class="btn btn-mini btn-primary" type="submit" id="submitResource" value="Post" />  
+		        	<a href="#myModal" openDialog role="button" class="btn  btn-mini btn-primary" data-toggle="modal">Add Item</a>
+		        </form>        	  
+	      	</div>
 	    </div>  
 	</div>
 </div>

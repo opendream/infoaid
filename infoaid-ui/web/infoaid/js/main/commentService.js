@@ -79,6 +79,10 @@ angular.module('commentService', ['ngResource']).
 			});
 		};		
 		return RefreshPost;
+	}).
+	factory('PostResource', function ($resource) {
+		var PostResource = $resource(baseUrl + '/api/postResource/');
+		return PostResource;
 	});
 
 function PostBodyCtrl($scope, DeletePost, RefreshPost, SharedService) {	
@@ -194,7 +198,7 @@ function CommentCtrl($scope, Comment, DeletePost, PostComment, DeleteComment, Po
 	}
 }
 
-function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshPost, SharedService) {
+function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshPost, PostResource, SharedService) {
 	$scope.items = [];
 	if($scope.items.length===0) {
 		Items.query(function(ret) {
@@ -237,6 +241,19 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 				RefreshPost($scope);;	
 				$scope.request = '';
 				$scope.qty = '';			
+		});
+	}
+
+	$scope.postResource = function() {
+		var options = {
+				slug: $scope.slug,
+				itemId: $scope.resource,
+				quantity: $scope.resourceQty
+			};
+		PostResource.get(options, function (ret) {
+			RefreshPost($scope);
+			$scope.resource = '';
+			$scope.resourceQty = '';
 		});
 	}
 }

@@ -2,7 +2,11 @@ $(document).ready(function() {
 	$("#requestPost").select2({
 		placeholder: "Select a Need",
 		allowClear: true
-	});    	 
+	});
+	$("#resourcePost").select2({
+		placeholder: "Select a Resource",
+		allowClear: true
+	});
 });
 
 $(function () {

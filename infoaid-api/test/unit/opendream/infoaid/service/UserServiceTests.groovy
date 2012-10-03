@@ -56,7 +56,7 @@ class UserServiceTests {
 
     void testUpdateBasicInfo() {
         def updateparams = [userId:user.id, username: 'admin', firstname: 'thawatchai', 
-        lastname: 'jong', email:'boyone@opendream.co.th', telNo:'12345678', picOriginal: 'picOri2']
+        lastname: 'jong', email:'boyone@opendream.co.th', telNo:'12345678', picOriginal: 'picOri2', picSmall: 'picSma2', picLarge: 'picLar2']
         
         def result = service.updateBasicInfo(updateparams)
         assert 'admin' == result.username

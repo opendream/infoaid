@@ -451,8 +451,39 @@ class PageServiceTests {
         assert result.user == user
         assert result.page == page
         assert result.post.quantity == 0
+        assert result.post.previousSumQuantity == 0
         assert result.pageUser == pageUser
 
         assert Resource.count() == 1
+
+        params = [userId: user.id, slug: page.slug, itemId: item.id, quantity: 10]
+        result = service.createResource(params)
+        assert result.status == 1
+        assert result.user == user
+        assert result.page == page
+        assert result.post.quantity == 10
+        assert result.post.previousSumQuantity == 0
+        assert result.pageUser == pageUser
+        assert Resource.count() == 2
+
+        params = [userId: user.id, slug: page.slug, itemId: item.id, quantity: 11]
+        result = service.createResource(params)
+        assert result.status == 1
+        assert result.user == user
+        assert result.page == page
+        assert result.post.quantity == 11
+        assert result.post.previousSumQuantity == 10
+        assert result.pageUser == pageUser
+        assert Resource.count() == 3
+
+        params = [userId: user.id, slug: page.slug, itemId: item.id, quantity: 12]
+        result = service.createResource(params)
+        assert result.status == 1
+        assert result.user == user
+        assert result.page == page
+        assert result.post.quantity == 12
+        assert result.post.previousSumQuantity == 21
+        assert result.pageUser == pageUser
+        assert Resource.count() == 4
     }
 }

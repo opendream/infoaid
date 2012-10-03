@@ -23,6 +23,7 @@ return array(
 		'application.components.Infoaid.*',
 		'application.components.Modules.*',
 		'application.extensions.*',
+		'application.extensions.phamlp.PBMAssetManager',
 	),
 
 	'modules'=>array(
@@ -83,6 +84,7 @@ return array(
 				'/api/deleteComment/<commentId:\d+>'=>'/api/deleteComment',
 				'/api/postMessage'=>'/api/postMessage',
 				'/api/postNeed/'=>'/api/postNeed/',
+				'/api/postResource/'=>'/api/postResource',
 				'/api/deletePost/<postId:\d+>'=>'/api/deletePost',
 				'/api/createItem/'=>'/api/createItem',
 				'/api/getPages/'=>'/api/getPages',
@@ -144,7 +146,9 @@ return array(
 		),
 
 		'assetManager' => array(
-			'class' => 'ext.phamlp.PBMAssetManager',
+			//'class' => 'ext.phamlp.PBMAssetManager',
+			'class' => 'application.components.Infoaid.IAAssetManager',
+			'force' => true,
 			'parsers' => array(
 				'scss' => array(
 					'class' => 'ext.phamlp.Sass',

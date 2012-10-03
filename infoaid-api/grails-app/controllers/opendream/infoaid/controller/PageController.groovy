@@ -3,6 +3,9 @@ package opendream.infoaid.controller
 import grails.converters.JSON
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
+import opendream.infoaid.domain.Need
+import opendream.infoaid.domain.Resource
+
 class PageController {
     def pageService
     def springSecurityService
@@ -142,9 +145,9 @@ class PageController {
         if(params.until) {
             until = new Date().parse("yyyy-MM-dd HH:mm", params.until)
         }
-        def posts = pageService.getTopPost(params.user, params.slug, params.fromId, params.toId, since, until, params.max)
-        if(posts) {
-            ret.posts = posts.collect{
+        def page = pageService.getTopPost(params.user, params.slug, params.fromId, params.toId, since, until, params.max)
+        if(page) {
+            ret.posts = page.posts.collect{
                 [
                     id: it.id,
                     class: it.class.name.tokenize('.')[-1],
@@ -187,11 +190,13 @@ class PageController {
         if(params.until) {
             until = new Date().parse("yyyy-MM-dd HH:mm", params.until)
         }
+
         def page = pageService.getRecentPost(params.user, params.slug, params.fromId, params.toId, since, until, params.max)
         if(page) {
             ret.posts = page.posts.collect{
-                [
+                def post = [
                     id: it.id,
+                    class: it.class.name.tokenize('.')[-1],
                     message: it.message,
                     picSmall: it.picSmall,
                     picOriginal: it.picOriginal,
@@ -217,6 +222,13 @@ class PageController {
                         ]
                     }
                 ]
+                if (it instanceof Need || it instanceof Resource) {
+                    post.item = it.item
+                    post.quantity = it.quantity
+                    post.expiredDate = it.expiredDate
+                }
+
+                post
             }
             ret.status = 1
             ret.isJoined = page.author.isJoined
@@ -592,7 +604,9 @@ class PageController {
         render result as JSON
     }
 
-    def createResource() {
+    def postResource() {
+        def userId
+        params.userId = springSecurityService?.principal?.id
         def result = pageService.createResource(params)
         render result as JSON
     }
