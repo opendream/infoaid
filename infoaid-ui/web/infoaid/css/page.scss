@@ -1,7 +1,6 @@
-body {
-	background: url('../img/bg-infoaid.png') repeat;
-	background-color: #f0eede;
-}
+/*********************************************************
+		All @mixin
+**********************************************************/
 @mixin btn {
 	background-color: #AE1724;
 	background-image: linear-gradient(to bottom, #E6515E, #AE1724);
@@ -11,27 +10,95 @@ body {
 	color: white;
 	text-shadow: none;
 }
+@mixin img-shadow {
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+@mixin message-base {
+	.message-card {
+		background: none repeat scroll 0 0 #FFFFFF;
+		border: 1px solid #DDD;
+		border-radius: 3px 3px 3px 3px;
+		//box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.2);
+		padding: 15px;
+		margin-left: 0;
+		text-rendering: optimizelegibility;
+		.message-poster-name {
+			font-weight: bolder;
+		}
+		.message-body {
+			margin-top: 12px;
+			.item-icon-wrapper {
+				float: left;
+			}
+			.item-quantity {
+				font-size: 4em;
+				font-weight: bolder;
+				height: 108px;
+				line-height: 1em;
+				padding: 0;
+			}
+		}
+	}
+	.item-icon {
+		width: 128px;
+		height: 128px;
+		display: inline-block;
+		background-size: cover;
+		background-repeat: no-repeat;
+		&.item-icon-food { background-image: url(../img/icons/items/item-7.png); }
+		&.item-icon-water {	background-image: url(../img/icons/items/item-8.png);	}
+		&.item-icon-man {	background-image: url(../img/icons/items/item-3.png);	}
+	}
+}
+
+
+/*********************************************************
+		Structure
+**********************************************************/
+body {
+	background: url('../img/bg-infoaid.png') repeat;
+	background-color: #f0eede;
+}
 h1, h2 {
 	margin: 0;
+	font-size: 20px;
 }
 h2 {
 	padding: 20px;
 	margin: 0;
 	background-color: #FBF7EE;
+	font-size: 18px;
 }
 .error {
 	padding: 0 20px 20px;
 	background-color: #FBF7EE;
 }
-.flash-message-error {
-	margin: 0;
+.flash-message-error { margin: 0; }
+/*--------- Page ---------*/
+#page {
+	border: 1px solid #ccc;
 }
+/*--------- Join page ---------*/
 .page-header-join-leave { margin-right: 10px; }
+body {
+	
+	a, .btn-link { color: #AE1725; }
+	#footer {
+		margin: 0;
+		border-top: 1px solid #ccc;
+	}
+}
+
+/*********************************************************
+		Page Post, Update Status
+**********************************************************/
 .page-posts {
 	list-style: none;
 	margin: 10px 0 0;
 	padding: 5px;
-	// border: 1px solid #eee;
 	.ng-pristine {
 		width: 380px;
 	}
@@ -47,27 +114,20 @@ h2 {
 		float: left;
 		min-height: 43px;
 		min-width: 43px;
-		min-height: 43px;
-		min-width: 43px;
-		// border: 1px solid #ddd;
-		// border-radius: 30px;
 		margin-right: 0;
 		img {			
-			width: 50px;
-			height: 50px;
-			//padding: 3px;
-			border: 0 none;
-			border-radius: 30px;
+			width: 40px;
+			height: 40px;
+			padding: 3px;
+			border: 1px solid #ccc;
+			background-color: white;
+			@include img-shadow;
 		}
 	}
 	.message-details {
 		margin-left: 50px;
 		padding: 0 0 0 12px;
-
-		.message-body {
-			padding: 0;
-		}
-
+		.message-body { padding: 0; }
 		.message-picture-preview {
 			margin-top: 12px;
 		}
@@ -93,8 +153,7 @@ h2 {
 				font-weight: bolder;
 			}
 			.comment-body {
-				padding: 0;
-				// width: 85%;
+				padding: 0; 
 				overflow: hidden;
 				display: inline;
 			}
@@ -107,34 +166,16 @@ h2 {
 	li {
 		border-bottom: 1px solid #DDD;
 		margin-bottom: 18px;
-
-		&:last-child {
-			border-bottom: none;
-		}
+		&:last-child { border-bottom: none; }
 	}
-
 	ul {
 		list-style: none;
-
-		li {
-			margin-bottom: 6px;
-		}
+		li { margin-bottom: 6px; }
 	}
 }
-.load-more {
-	text-align: center;
-}
+.load-more { text-align: center; }
 
 /*---------------- New Style ----------------*/
-body {
-	h1 { font-size: 20px; }
-	h2 { font-size: 18px; }
-	a, .btn-link { color: #AE1725; }
-	#footer {
-		margin: 0;
-		border-top: 1px solid #ccc;
-	}
-}
 .span5 {
 	margin: 0;
 	width: 480px;
@@ -150,11 +191,10 @@ legend {
 	text-indent: 0 !important;
 	font-size: 18px;
 }
-/*--------- Page ---------*/
-#page {
-	border: 1px solid #ccc;
-}
-/*--------- Navigation Bar ---------*/
+
+/*********************************************************
+		Navigation Bar
+**********************************************************/
 .nav {
 	margin-bottom: 10px;
 }
@@ -197,9 +237,7 @@ legend {
 		}
 	}
 	.nav.actions {
-		a {
-			padding: 10px 15px 10px;
-		}
+		a { padding: 10px 15px 10px; }
 	}
 	.navbar-text {
 		color: white;
@@ -215,7 +253,10 @@ legend {
 		}
 	}
 }
-/*--------- Page Info ---------*/
+
+/*********************************************************
+	 Page Info
+**********************************************************/
 .page-header {
 	background-color: #fbf7ee;
 	border-bottom: none;
@@ -224,11 +265,8 @@ legend {
 		font-size: 14px;
 	}
 }
-
 .page-name {
-	a {
-		color: #AE1725;
-	}
+	a {	color: #AE1725; }
 }
 .nav-pills {
 	li {
@@ -252,13 +290,11 @@ legend {
 		}
 	}
 }
-#s2id_requestPost {
-	margin: 0 5px 0 0;
-}
-#s2id_resourcePost {
-	margin: 0 5px 0 0;
-}
-/*------ Request & I have ------*/
+#s2id_requestPost {	margin: 0 5px 0 0; }
+#s2id_resourcePost { margin: 0 5px 0 0; }
+/*********************************************************
+		Request & I have
+**********************************************************/
 .message-need, .message-resource {
 	.message-card {
 		padding: 0;
@@ -272,16 +308,14 @@ legend {
 		padding: 0;
 		color: #8FC13E;
 	}
-	.message-body {
-		margin-top: 0;
-	}
+	.message-body { margin-top: 0; }
 }
-.message-need .item-quantity {
-	color: #DA534F;
-}
+.message-need .item-quantity { color: #DA534F; }
 
 
-/*--------- page-sidebar ---------*/
+/*********************************************************
+		Page Sidebar
+**********************************************************/
 .page-sidebar {
 	* {
 		padding: 0;
@@ -292,7 +326,6 @@ legend {
 	padding-right: 20px;
 	margin-right: 0;
 	margin-top: 10px;
-	line-height: 24px;
 	#page-sidebar-profile {
 		margin-bottom: 10px;
 		img {
@@ -304,17 +337,20 @@ legend {
 		margin-top: 10px;
 		p {
 			font-size: 15px;
+			margin-bottom: 10px;
 		}
 	}
 	#page-sidebar-menu, #page-sidebar-places {
 		.left-side-bar {
 			padding-left: 20px;
 			background-position-y: 2px;
+			line-height: 24px;
 		}
 	}
 }
-
-
+/*********************************************************
+		Sidebar right : Member (Span2)
+**********************************************************/
 .span2 {
 	padding: 0 20px;
 	border: 1px solid #EEE;
@@ -334,42 +370,36 @@ legend {
 	}
 }
 
-/*--------- page-search ---------*/
+/*********************************************************
+		Search Page
+**********************************************************/
 .page-search {
-	.search-header {
-		font-size: 20px;
-	}
+	.search-header { font-size: 20px; }
 	.page-header {
 		margin: 0 0 2px;
 		width: 920px;
 		background-color: #fbf7ee;
 		border-bottom: none;
-		.page-name {
-			font-size: 16px;
-		}
-		.page-household-population {
-			font-size: 14px;
-		}
+		.page-name { font-size: 16px; }
+		.page-household-population { font-size: 14px; }
 	}
 }
 
-/*--------- page-login ---------*/
+/*********************************************************
+		Login Page
+**********************************************************/
 #user-login {
 	background-color: #FBF7EE;
 	.page-header {
 		margin: 0;
-		h1 {
-			padding: 0 20px;
-		}
+		h1 { padding: 0 20px; }
 	}
 	.form-actions {
 		background: none;
 		border-top: none;
 		margin: 0;
 	}
-	.form-horizontal {
-		margin: 0;
-	}
+	.form-horizontal { margin: 0;	}
 	.flash-message-error {
 		width: 500px;
 		padding: 10px 70px;
@@ -389,12 +419,17 @@ legend {
 		background-color: #AE1724;
 	}
 }
-/*--------- Selected need form ---------*/
+
+/*********************************************************
+		Selected need form (Post Page)
+**********************************************************/
 .select2-results .select2-highlighted {
 	background: #AE1725;
 }
 
-/*--------- span5: Status Update content ---------*/
+/*********************************************************
+		Post Page : Status Update Content (Span5)
+**********************************************************/
 .tab-content {
 	overflow: hidden;
 	.btn-primary, .btn-info {
@@ -407,31 +442,31 @@ legend {
 	}
 }
 
-/*--------- span10: Header Info ---------*/
-.span10 {
-	width: 690px;
-}
-.load-more {
-	margin: 10px 0;
-}
+/*********************************************************
+		Header Info (Span10)
+**********************************************************/
+.span10 {	width: 690px; }
+.load-more { margin: 10px 0; }
 /*--------- Input ---------*/
-form {
-	margin: 0;
-}
+form { margin: 0; }
 input, textarea, uneditable {
 	&.span2 {
 		width: 106px;
 		margin-right: 5px;
 	}
-	&.span5 {
-		margin-bottom: 0;
-	}
+	&.span5 { margin-bottom: 0;	}
 }
-/*--------- MAP ---------*/
+
+/*********************************************************
+		MAP
+**********************************************************/
 .flash-message-success {
 	margin: 0;
 }
-/*--------- span3 ---------*/
+
+/*********************************************************
+		Header Info (Span3)
+**********************************************************/
 .span3 {
 	background-color: white;
 	.nav-list > .active > a, .nav-list > .active > a:hover {
@@ -442,7 +477,10 @@ input, textarea, uneditable {
 		color: #AE1725;
 	}
 }
-/*--------- Edit Account ---------*/
+
+/*********************************************************
+		Edit Account
+**********************************************************/
 #user-edit {
 	background-color: #FBF7EE;
 	.page-header {
@@ -460,11 +498,11 @@ input, textarea, uneditable {
 		}
 	}
 }
-#load-more-button {
-	margin-top: 10px;
-}
+#load-more-button {	margin-top: 10px; }
 
-/*--------- User Create ---------*/
+/*********************************************************
+		User Create
+**********************************************************/
 #user-create {
 	padding: 0 20px;
 	background-color: #fbf7ee;
@@ -479,7 +517,10 @@ input, textarea, uneditable {
 		@include btn;
 	}
 }
-/*--------- page-members-body ---------*/
+
+/*********************************************************
+		Page Member Body
+**********************************************************/
 #page-members {
 	.header-members { margin: 0 5px 0 0; }
 	#showing { line-height: 46px; }
@@ -489,23 +530,16 @@ input, textarea, uneditable {
 			width: 340px;
 			margin: 0 10px 10px 0;
 		}
-		.span {
-			background-color: transparent;
-		}
+		.span { background-color: transparent; }
 	}
 	.span3 { 
 		background-color: transparent;
-		img { 
-			margin-right: 10px;
-		}
-		.page-members-text {
-			margin: 0 5px 0 0;
-		}
+		img { margin-right: 10px; }
+		.page-members-text { margin: 0 5px 0 0; }
 	}
 }
 
 #page-create {
-	background-color: #FBF7EE;
 	padding: 0 20px;
 	.page-header {
 		margin: 0;
@@ -516,25 +550,20 @@ input, textarea, uneditable {
 		margin: 0;
 	}
 }
-hr {
-	border: none;
-}
+hr { border: none; }
 .post-form {
 	padding: 4px;
-
 	textarea {
 		border: none;
 		box-shadow: none;
 		width: 97%;
 	}
-
 	.message-post-form {
 		background-color: #FFFFFF;
 		border: 1px solid #DDDDDD;
 		border-radius: 4px 4px 4px 4px;
 		padding: 2px 2px 10px 2px;
 		position: relative;
-
 		a.close {
 			display: block;
 			position: absolute;
@@ -542,21 +571,15 @@ hr {
 			right: 5px;
 			z-index: 9999;
 		}
-
-		a.close.hide {
-			display: none;
-		}
+		a.close.hide { display: none; }
 	}
-
 	.upload-form {
 		padding: 25px 10px;
 		margin-top: -20px;
 		margin-bottom: 0;
 		border-radius: 4px 4px 4px 4px;
-		// background-color: #F7F7F9;
 		border: 1px solid #ECECF0;
 	}
-
 	.post-button {
 		padding: 4px 4px;
 		margin-top: -20px;
@@ -565,100 +588,33 @@ hr {
 		background-color: #F7F7F9;
 		border: 1px solid #ECECF0;
 		overflow: hidden;
-
-		button {
-			margin: 0;
-		}
+		button { margin: 0; }
 	}
-
 	#previewImg {
 		float: left;
 		margin: 5px 10px 5px 5px;
 		min-height: 53px;
 		min-width: 53px;
-
 		border: 1px solid #ECECF0;
 		padding: 3px;
 	}
-
 	.expanding, .textareaClone {
 		min-height: 3em;
 		max-height: 20em;
 	}
-}/*--------- page-create ---------*/
+}
+
+/*********************************************************
+		Page Create
+**********************************************************/
 #page-create {
-	#map {
-		border: 4px solid white;
-	}
+	#map { border: 4px solid #FBF7EE;	}
 }
-
-@mixin message-base {
-
-	.message-card {
-		background: none repeat scroll 0 0 #FFFFFF;
-		border: 1px solid #DDD;
-		border-radius: 3px 3px 3px 3px;
-		//box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.2);
-		padding: 15px;
-		margin-left: 0;
-		text-rendering: optimizelegibility;
-
-		.message-poster-name {
-			font-weight: bolder;
-		}
-
-		.message-body {
-			margin-top: 12px;
-
-			.item-icon-wrapper {
-				float: left;
-			}
-
-			.item-quantity {
-				font-size: 4em;
-				font-weight: bolder;
-				height: 108px;
-				line-height: 1em;
-				padding: 0;
-			}
-		}
-	}
-
-	.item-icon {
-		width: 128px;
-		height: 128px;
-		display: inline-block;
-		background-size: cover;
-		background-repeat: no-repeat;
-
-		&.item-icon-food {
-			background-image: url(../img/icons/items/item-7.png);
-		}
-
-		&.item-icon-water {
-			background-image: url(../img/icons/items/item-8.png);
-		}
-
-		&.item-icon-man {
-			background-image: url(../img/icons/items/item-3.png);
-		}
-	}
-
-}
-
 .message-need {
 	@include message-base;
-
-	.item-quantity {
-		color: #C00;
-	}
+	.item-quantity { color: #C00;	}
 }
-
 .message-resource {
 	@include message-base;
-
-	.item-quantipage
-ty {
-		color: #009;
-	}
+	.item-quantipage ty { color: #009;	}
 }
