@@ -48,20 +48,20 @@ class PageService {
     }
 
     def getPageAuthority(user, slug) {
-        def author = [:]
-        author.isJoined = user instanceof String? false:isJoined(user.id, slug).isJoined
-        author.isOwner = user instanceof String? false:isOwner(user.id, slug).isOwner
+        def authority = [:]
+        authority.isJoined = user instanceof String? false:isJoined(user.id, slug).isJoined
+        authority.isOwner = user instanceof String? false:isOwner(user.id, slug).isOwner
         
-        author
+        authority
     }
 
     def getPostAuthority(user, postId) {
         def post = Post.get(postId)
-        def author = [:]
-        author.isJoined = user instanceof String? false:isJoined(user.id, post?.page?.slug).isJoined
-        author.isOwner = user instanceof String? false:isOwner(user.id, post?.page?.slug).isOwner
+        def authority = [:]
+        authority.isJoined = user instanceof String? false:isJoined(user.id, post?.page?.slug).isJoined
+        authority.isOwner = user instanceof String? false:isOwner(user.id, post?.page?.slug).isOwner
         
-        author
+        authority
     }
 
     def canDelete(userId, currentUser, isOwner) {
