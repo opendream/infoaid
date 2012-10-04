@@ -3,16 +3,16 @@
 		%a(href="#{Yii::app()->baseUrl.'/user/profile/'}{{post.userId}}")
 			%img(src="#{Yii::app()->baseUrl}{{post.userPicSmall}}")
 	.message-details
+		.message-poster-name
+			%a(href="#{Yii::app()->baseUrl.'/user/profile/'}{{post.userId}}")
+				{{post.createdBy}}
+			%span.description-phrase
+				requests another
+				%span.item-quantity
+					{{post.quantity}}
+				%span.item-name
+					{{post.item.name}}
 		.message-card
-			.message-poster-name
-				%a(href="#{Yii::app()->baseUrl.'/user/profile/'}{{post.userId}}")
-					{{post.createdBy}}
-				%span.description-phrase
-					requests another
-					%span.item-quantity
-						{{post.quantity}}
-					%span.item-name
-						{{post.item.name}}
 			.message-body
 				.item-icon-wrapper
 					%i(class="item-icon item-icon-{{post.item.name}}")
