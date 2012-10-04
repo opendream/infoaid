@@ -74,7 +74,7 @@ angular.module('commentService', ['ngResource']).
 	}).
 	factory('RefreshPost', function (Post, FindPost, RearrangePost) {
 		var RefreshPost = function(scope) {
-			Post.query({slug:scope.slug}, function (newposts) {					 
+			Post(scope.target).query({slug:scope.slug}, function (newposts) {					 
 				RearrangePost(scope, newposts);				
 			});
 		};		

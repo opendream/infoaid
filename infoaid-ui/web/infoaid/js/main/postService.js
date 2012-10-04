@@ -1,7 +1,9 @@
 angular.module('postService', ['ngResource']).
 	factory('Post', function ($resource) {
-		var Post = $resource(baseUrl + '/api/page/:slug/recent_post');
-
+		var Post = function(method='recent_post') {
+			console.log('method', method);
+			return $resource(baseUrl + '/api/page/:slug/' + method);
+		}
 		return Post;
 	});
 
