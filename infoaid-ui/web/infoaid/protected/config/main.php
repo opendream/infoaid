@@ -68,6 +68,7 @@ return array(
 				'user/profile/<userId:\d+>'=>'user/profile',
 
 				'api/post/<id:\d+>/<method:\w+>'=>'api/post',
+				'api/item/<id:\d+>/<method:\w+>'=>'api/item',
 				'api/page/<slug:[^\/]*>/<method:\w+>'=>'api/page',
 				'api/members/<slug:[^\/]*>'=>'api/members',
 				'page/doUploadImagePost'=>'page/doUploadImagePost',

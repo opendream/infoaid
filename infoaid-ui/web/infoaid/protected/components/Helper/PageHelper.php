@@ -30,6 +30,17 @@ class PageHelper
 		}
 	}
 
+	public static function getPageItemsBySlug($slug)
+	{
+		$result = self::getJSON($slug, 'info');
+		if (! $result->status) {
+			return NULL;
+		}
+		else {
+			return $result->items;
+		}
+	}
+
 	public static function getRecentPost($slug, $params)
 	{
 		$result = self::getJSON($slug, 'recent_post', $params);
