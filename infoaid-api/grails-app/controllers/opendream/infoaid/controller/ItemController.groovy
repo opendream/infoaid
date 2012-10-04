@@ -6,6 +6,7 @@ import grails.converters.JSON
 class ItemController {
 
     def itemService
+    def pageService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -131,5 +132,47 @@ class ItemController {
             ret = [message: 'can not enable this item', item: params]
             render ret as JSON
         }
+    }
+
+    def itemHistory() {        
+        def ret = [:]
+        def result = itemService.getItemHistory(params.user, params.slug, params.itemId, params.since, params.until, params.limit)
+        ret.status = 1
+        ret.itemHistory = result.itemHistory.collect {
+            def item = [
+                    id: it.id,
+                    class: it.class.name.tokenize('.')[-1],
+                    name: it.item.name,
+                    message: it.message,
+                    picSmall: it.picSmall,
+                    picOriginal: it.picOriginal,
+                    dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
+                    createdBy: it.createdBy.username,
+                    userPicSmall: it.createdBy.picSmall,
+                    userPicOriginal: it.createdBy.picOriginal,
+                    userId: it.createdBy.id,
+                    conversation: it.conversation,
+                    lastActived: it.lastActived.time,
+                    canDelete: pageService.canDelete(it.createdBy.id, params.user, result.authority.isOwner),
+                    comments: it.previewComments.comments.collect {
+                        [
+                            id: it.id,
+                            message: it.message,
+                            createdBy: it.user.username,
+                            userId: it.user.id,
+                            picOriginal: it.user.picOriginal,
+                            picLarge: it.user.picLarge,
+                            picSmall: it.user.picSmall,
+                            lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm'),
+                            canDelete: pageService.canDelete(it.user.id, params.user, result.authority.isOwner)
+                        ]
+                    }
+                ]
+        }
+
+        ret.total = result.total
+        ret.isJoined = result.authority.isJoined
+        ret.isOwner = result.authority.isOwner
+        render ret as JSON
     }
 }
