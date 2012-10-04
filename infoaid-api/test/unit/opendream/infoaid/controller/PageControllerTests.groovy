@@ -73,8 +73,10 @@ class PageControllerTests {
 
     void testInfo() {
         controller.pageService = new PageService()
-
+        def user = User.findByUsername('nut')
+        params.user = user
         params.slug = 'page-slug'
+
         
         controller.info()
         assert response.json['page']['picSmall'] == 'picSma'
@@ -205,7 +207,8 @@ class PageControllerTests {
         }
 
         controller.pageService = new PageService()
-
+        def user = User.findByUsername('nut')
+        params.user = user
         params.slug = 'page-slug'
         controller.topPost()
         
@@ -223,12 +226,13 @@ class PageControllerTests {
         }
 
         controller.pageService = new PageService()
-
+        def user = User.findByUsername('nut')
+        params.user = user
         params.slug = 'page-slug'
         params.until = '2012-09-12 15:07'
         controller.recentPost()
         
-        assert null == response.json['posts']
+        assert [] == response.json['posts']
 
         response.reset()
         params.slug = 'page-slug'
@@ -523,7 +527,7 @@ class PageControllerTests {
 
         def user1 = User.findByUsername('nut')
         controller.springSecurityService  = [principal:[id:user1.id]]
-
+        params.user = user1
         params.word = ''
         controller.searchPage()
 
@@ -547,10 +551,11 @@ class PageControllerTests {
 
     void testIsOwner() {
         controller.pageService = new PageService()
-
-        params.slug = 'page-slug'
         def user1 = User.findByUsername('nut')
-        controller.springSecurityService  = [principal:[id:user1.id]]
+        params.user = user1
+        params.slug = 'page-slug'
+        
+        //controller.springSecurityService  = [principal:[id:user1.id]]
 
         def result = controller.isOwner()
         assert response.json['isOwner'] == true
@@ -558,8 +563,9 @@ class PageControllerTests {
         response.reset()
 
         def user2 = User.findByUsername('nut2')
+        params.user = user2
         params.userId = user2.id
-        controller.springSecurityService  = [principal:[id:user2.id]]
+        //controller.springSecurityService  = [principal:[id:user2.id]]
 
         result = controller.isOwner()
         assert response.json['isOwner'] == false
@@ -567,10 +573,11 @@ class PageControllerTests {
 
     void testIsJoined() {
         controller.pageService = new PageService()
-
-        params.slug = 'page-slug'
         def user1 = User.findByUsername('nut')
-        controller.springSecurityService  = [principal:[id:user1.id]]
+        params.user = user1
+        params.slug = 'page-slug'
+        
+        //controller.springSecurityService  = [principal:[id:user1.id]]
 
         def result = controller.isJoined()
         assert response.json['isJoined'] == true
@@ -578,19 +585,12 @@ class PageControllerTests {
         response.reset()
 
         def user2 = User.findByUsername('nut2')
+        params.user = user2
         params.slug = 'page-slug'
-        controller.springSecurityService  = [principal:[id:user2.id]]
+        //controller.springSecurityService  = [principal:[id:user2.id]]
 
         result = controller.isJoined()
         assert response.json['isJoined'] == true
-
-        response.reset()
-
-        params.slug = 'page-slug'
-        controller.springSecurityService  = [principal:[id:12345633]]
-
-        result = controller.isJoined()
-        assert response.json['isJoined'] == false
     }
 
     void testPostResource() {

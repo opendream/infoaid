@@ -70,19 +70,23 @@ class PageServiceIntegrationTests {
         pageService.postComment(user.id, post.id, "my comment for top posts")
                 
         def page = Page.findByName("page1")
-        def posts = pageService.getTopPost(page.slug, null, null, null, null)
+        def posts = pageService.getTopPost(user, page.slug, null, null, null, null)
         
-        assert posts.size() == 10
-        assert posts[0].message == 'post1'
+        assert posts.posts.size() == 10
+        assert posts.author.isJoined == true
+        assert posts.author.isOwner == true
+        assert posts.posts[0].message == 'post1'
     }
 
     @Test
     void testGetRecentPost() {
         def page = Page.findByName("page1")
-        def posts = pageService.getRecentPost(page.slug, null, null, new Date()-1, null)
         def user = User.findByUsername('nut')
-        assert posts.size() == 10
-        assert posts[0].createdBy == user
+        def posts = pageService.getRecentPost(user, page.slug, null, null, new Date()-1, null)
+        assert posts.posts.size() == 10
+        assert posts.author.isJoined == true
+        assert posts.author.isOwner == true
+        assert posts.posts[0].createdBy == user
     }
 
     @Test
@@ -100,7 +104,7 @@ class PageServiceIntegrationTests {
 
         def comment11 = Comment.findByMessage('my comment11')
 
-        def resultsComment = pageService.getComments(firstResultPost.id, null, null, null, null)
+        def resultsComment = pageService.getComments(user, firstResultPost.id, null, null, null, null)
 
         assert resultsComment.totalComments == 11
         assert resultsComment.comments[0].message == 'my comment11'
@@ -108,19 +112,19 @@ class PageServiceIntegrationTests {
         assert resultsComment.comments[0].dateCreated.time == comment11.dateCreated.time
 
 
-        resultsComment = pageService.getComments(firstResultPost.id, comment11.id+8 as Long, null, null, null)
+        resultsComment = pageService.getComments(user, firstResultPost.id, comment11.id+8 as Long, null, null, null)
         assert resultsComment.comments.size() == 3
 
-        resultsComment = pageService.getComments(firstResultPost.id, null, comment11.id+8 as Long, null, null)
+        resultsComment = pageService.getComments(user, firstResultPost.id, null, comment11.id+8 as Long, null, null)
         assert resultsComment.comments.size() == 9
 
-        resultsComment = pageService.getComments(firstResultPost.id, null, null, new Date(), null)
+        resultsComment = pageService.getComments(user, firstResultPost.id, null, null, new Date(), null)
         assert resultsComment.comments.size() == 0
 
-        resultsComment = pageService.getComments(firstResultPost.id, null, null, null, new Date())
+        resultsComment = pageService.getComments(user, firstResultPost.id, null, null, null, new Date())
         assert resultsComment.comments.size() == 11
 
-        resultsComment = pageService.getComments(firstResultPost.id, comment11.id+8 as Long, null, null, new Date())
+        resultsComment = pageService.getComments(user, firstResultPost.id, comment11.id+8 as Long, null, null, new Date())
         assert resultsComment.comments.size() == 3
     }
 
@@ -138,7 +142,7 @@ class PageServiceIntegrationTests {
         assert updatedPost.lastActived > previousActived
         assert updatedPost.conversation == 1
 
-        def newComment = pageService.getComments(updatedPost.id, null, null, null, null).comments.last().message
+        def newComment = pageService.getComments(user,updatedPost.id, null, null, null, null).comments.last().message
         assert newComment == message
     }
 

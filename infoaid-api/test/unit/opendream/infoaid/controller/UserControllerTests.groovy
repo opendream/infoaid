@@ -182,7 +182,7 @@ class UserControllerTests {
     }
 
     void testGetPages() {
-        params.id = user.id
+        params.user = user
         controller.getPages()
 
         assert 3 == response.json['pages'].size()
