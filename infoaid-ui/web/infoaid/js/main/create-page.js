@@ -19,7 +19,7 @@ jQuery(document).ready(function ($) {
 
 		var map = L.map('map').setView([lat, lng], zoom);
 
-		L.tileLayer('http://{s}.tile.cloudmade.com/' + API_KEY + '/997/256/{z}/{x}/{y}.png', {
+		L.tileLayer('http://192.168.1.134/osm_tiles2/{z}/{x}/{y}.png', {
 			attribution: "Map data &copy; Opendream Co., Ltd.",
 			maxZoom: 18
 		}).addTo(map);

@@ -8,6 +8,7 @@ import opendream.infoaid.domain.PageUser.Relation
 
 class PageServiceIntegrationTests {
     def pageService
+    def fixtureLoader
     def date
     def number = 0
 
@@ -228,5 +229,92 @@ class PageServiceIntegrationTests {
         assert resultsLimitComment.totalComments == 10
 
         assert resultsLimitComment.comments.last().message == "my comment7"
+    }
+
+    @Test
+    void testGetItemSummary() {
+        def fixture = fixtureLoader.load("pages")
+        fixture.load {
+            food(Item,
+                name: "Food",
+            )
+
+            water(Item,
+                    name: "Water",
+                )
+
+            man(Item,
+                    name: "Man",
+                )
+
+            def date = new Date()
+
+            need1(Need,
+                    message: "food 1",
+                    page: bangkok,
+                    item: food,
+                    quantity: 10,
+                    dateCreated: date,
+                    lastUpdated: date,
+                    lastActived: date,
+                    createdBy: noom,
+                    updatedBy: noom,
+                    expiredDate: date + 100,
+                    status: Post.Status.ACTIVE
+                )
+
+            need2(Need,
+                    message: "food 2",
+                    page: bangkok,
+                    item: food,
+                    quantity: 4,
+                    dateCreated: date,
+                    lastUpdated: date,
+                    lastActived: date,
+                    createdBy: noom,
+                    updatedBy: noom,
+                    expiredDate: date + 100,
+                    status: Post.Status.ACTIVE
+                )
+
+            need3(Need,
+                    message: "water 1",
+                    page: bangkok,
+                    item: water,
+                    quantity: 100,
+                    dateCreated: date,
+                    lastUpdated: date,
+                    lastActived: date,
+                    createdBy: noom,
+                    updatedBy: noom,
+                    expiredDate: date + 100,
+                    status: Post.Status.ACTIVE
+                )
+
+            resource1(Resource,
+                    message: "give food 8",
+                    page: bangkok,
+                    item: food,
+                    quantity: 8,
+                    dateCreated: date,
+                    lastUpdated: date,
+                    lastActived: date,
+                    createdBy: noom,
+                    updatedBy: noom,
+                    expiredDate: date + 100,
+                    status: Post.Status.ACTIVE
+                )
+        }
+        def summary = pageService.getItemSummary(fixture.bangkok)
+
+        assert summary.size() == 2
+
+        def food = summary.find { it.name == "Food" }
+        assert food.need == 14
+        assert food.resource == 8
+
+        def water = summary.find { it.name == "Water" }
+        assert water.need == 100
+        assert water.resource == 0
     }
 }

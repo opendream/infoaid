@@ -12,6 +12,21 @@ class PageAPIAction extends CAction
 		$this->controller->renderJSON(PageHelper::getItemHistory($slug, $params));
 	}
 
+	public function actionInfo($params)
+	{
+		$this->controller->renderJSON(PageHelper::getInfoBySlug($params['slug']));
+	}
+
+	public function actionItems($params)
+	{
+		$items = PageHelper::getPageItemsBySlug($params['slug']);
+		foreach ($items as &$item) {
+			$item->percentSupplyPerDemand = ($item->resource / $item->need) * 100.00;
+			$item->percentDemandPerSupply = 100 - $item->percentSupplyPerDemand;
+		}
+		$this->controller->renderJSON($items);
+	}
+
 	public function runWithParams($params)
 	{
 		if (isset($params['slug']) && isset($params['method'])) {
@@ -24,6 +39,10 @@ class PageAPIAction extends CAction
 
 				case "item_history":
 					return $this->itemHistory($params['slug'], $params);
+					break;
+
+				default:
+					return $this->{'action' . ucfirst($params['method'])}($params);
 					break;
 
 			}

@@ -51,7 +51,8 @@
 				        </ul>
 				    </div>
 				    <div><span class='show-more-members'><?php echo CHtml::link('Show more ..', array('page/members','slug'=>$slug)); ?></span></div>
-				</div>
+				</div>	
+				<?php $this->renderPartial('/item/sidebar'); ?>			
 			</div>
 		</div>	
 </div>

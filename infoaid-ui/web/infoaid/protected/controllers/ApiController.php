@@ -10,7 +10,8 @@ class ApiController extends IAController
 	{
 		return array(
 			'page'=>'application.controllers.api.PageAPIAction',
-			'post'=>'application.controllers.api.PostAPIAction'
+			'post'=>'application.controllers.api.PostAPIAction',
+			'item'=>'application.controllers.api.ItemAPIAction',
 		);
 	}
 

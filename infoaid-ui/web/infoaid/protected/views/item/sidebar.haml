@@ -1,0 +1,10 @@
+#item-sidebar
+	%header
+		%h2 Supply-Demand
+	%ul.item-list.unstyled(ng-controller="ItemSidebarCtrl")
+		%li(ng-repeat="item in items")
+			.item-icon-wrapper
+				%i(class="item-icon item-icon-{{item.name}}")
+			.progress
+				.bar.bar-success(style="width:{{item.percentSupplyPerDemand}}%")
+				.bar.bar-danger(style="width:{{item.percentDemandPerSupply}}%")
