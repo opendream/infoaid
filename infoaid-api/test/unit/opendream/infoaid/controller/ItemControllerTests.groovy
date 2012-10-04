@@ -2,14 +2,19 @@ package opendream.infoaid.controller
 import opendream.infoaid.domain.Item
 import opendream.infoaid.domain.Need
 import opendream.infoaid.domain.Page
+import opendream.infoaid.domain.PageUser
+import opendream.infoaid.domain.Resource
+import opendream.infoaid.domain.Comment
+import opendream.infoaid.domain.User
 import opendream.infoaid.service.ItemService
+import opendream.infoaid.service.PageService
 
 import grails.test.mixin.*
 import org.junit.*
 
 
 @TestFor(ItemController)
-@Mock([Item, Need, Page])
+@Mock([Comment, Item, Need, Page, Resource, PageUser, User])
 class ItemControllerTests {
 
     def itemService
@@ -17,20 +22,23 @@ class ItemControllerTests {
     @Before
     void setup() {
         Page.metaClass.generateSlug = {-> delegate.slug = delegate.name+"-slug"}
-
         Page.metaClass.isDirty = {name -> false}
 
-        itemService = mockFor(ItemService)
+        User.metaClass.encodePassword = { -> 'password'}
+        User.metaClass.isDirty = {password -> false}
 
+        itemService = mockFor(ItemService)
+        def user = new User(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: new Date(), lastUpdated: new Date()).save()
         def page1 = new Page(name: 'page1').save(flush: true)
+        PageUser.createPage(user, page1, PageUser.Relation.OWNER)
         
         def item1 = new Item(name: 'item1Name').save(flush: true)
         def item2 = new Item(name: 'item2Name').save(flush: true)
 
         def need1 = new Need(message: 'need1ja', expiredDate: new Date(), quantity: 11, lastActived: new Date(),
-            createdBy: 'nut1', updatedBy: 'nut11', page: page1, item: item1)
+            createdBy: user, updatedBy: user, page: page1, item: item1)
         def need2 = new Need(message: 'need2ja', expiredDate: new Date(), quantity: 22, lastActived: new Date(),
-            createdBy: 'nut2', updatedBy: 'nut22', page: page1, item: item1)
+            createdBy: user, updatedBy: user, page: page1, item: item1)
 
         item1.needs = [need1, need2]
         item1.save(flush: true)
@@ -211,6 +219,53 @@ class ItemControllerTests {
 
         item = Item.findById(item.id)
         assert item.status == Item.Status.ACTIVE
+    }
+
+    void testGetItemHistory() {
+
+        def date = new Date()
+        def page = Page.findByName('page1')
+        def item = Item.findByName('item1Name')
+        def nut = User.findByUsername('nut')
+
+        2.times {
+            def need = new Need(item: item, lastActived: new Date(), createdBy: nut, updatedBy: nut, expiredDate: new Date() + 7, quantity: 2)
+            page.addToPosts(need)
+        }
+
+        3.times {
+            def resource = new Resource(page: page, item: item, lastActived: date + it +1, createdBy: nut, updatedBy: nut, message: 'message', expiredDate: date+(10+it), quantity: 10+it).save(flush: true)
+            page.addToPosts(resource)
+        }
+        page.save(flush: true)
+
+        def itemService = new ItemService()
+        def pageService = new PageService()
+        itemService.pageService = pageService
+        itemService.grailsApplication = [config:[infoaid:[api:[post:[max:10]]]]]
+        controller.itemService = itemService
+        controller.pageService = pageService
+
+        // params user, slug, itemId, fromId, toId, since, until, limit
+        params.user = [id:nut.id]
+        params.slug = page.slug
+        params.itemId = item.id
+        params.fromId = null
+        params.toId = null
+        params.since = null
+        params.until = null
+        params.limit = null
+
+        controller.itemHistory()
+
+        assert response.json.status == 1
+        assert response.json.total == 7
+        assert true == response.json.isJoined
+        assert true == response.json.isOwner
+        //assert response.json.need.size() == 4
+        //assert response.json.resource.size() == 3
+        //assert response.json.itemHistory.size() == 7
+        assert response.json.itemHistory.last().message == """item1Name 11\nneed1ja"""
     }
 
 }
