@@ -5,6 +5,7 @@ import opendream.infoaid.domain.Page
 import opendream.infoaid.domain.User
 import opendream.infoaid.service.PageService
 import opendream.infoaid.domain.Post
+import opendream.infoaid.domain.PageUser
 
 import grails.test.mixin.*
 import org.junit.*
@@ -13,7 +14,7 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(PostController)
-@Mock([Comment, Page, User, Post, PageService])
+@Mock([Comment, Page, User, Post, PageService, PageUser])
 class PostControllerTests {
 
     def pageService
@@ -35,7 +36,8 @@ class PostControllerTests {
 
         def page1 = new Page(name: "page", lat: "111", lng: "222", dateCreated: date, lastUpdated: date, about: 'this is page 1').save()
         def secondPage = new Page(name: "second-page", lat: "11122", lng: "1234", dateCreated: date, lastUpdated: date, about: 'this is 2nd page').save()
-               
+        
+        PageUser.createPage(user1, page1).save(flush:true) 
         
         def firstPost = new Post(message: 'first post', dateCreated: date, lastUpdated: date, lastActived: date, createdBy: 'nut', updatedBy: 'boy')
         def secondPost = new Post(message: 'second post', dateCreated: date, lastUpdated: date, lastActived: date+1, createdBy: 'nut', updatedBy: 'boy')
@@ -57,38 +59,14 @@ class PostControllerTests {
     }
 
     void testComment() {
-        pageService.demand.getComments(1..1) {user, postId, fromId=null, toId=null, since=null, until=null -> 
-            def max = 50
-            def comments = Comment.createCriteria().list(max: max) {
-                post {
-                    idEq(postId)
-                }
-                if(fromId) {
-                    ge('id', fromId)
-                }
-                if(toId) {
-                    le('id', toId)
-                }
-                if(since) {
-                    ge('dateCreated', since)
-                }
-                if(until) {
-                    le('dateCreated', until)
-                }
-                order('dateCreated', 'asc')
-            }
-
-            [comments: comments, totalComments: comments.totalCount, author : [isOwner: false, isJoined: false]]
-        }
-        pageService.demand.canDelete(1..100) { userId, currentUser, isOwner ->
-            return true
-        }
-        controller.pageService = pageService.createMock()
+        def pageService = new PageService()
+        pageService.grailsApplication = [config:[infoaid:[api:[comment:[limited:10]]]]]
+        controller.pageService = pageService
 
         def post1 = Post.findByMessage('first post')
         params.user = User.findByUsername('nut')
         params.postId = post1.id
-
+        params.user = User.findByUsername('nut')
         controller.comment()
         assert response.json['comments'][0].message == 'comment1'
         assert response.json['comments'][0].picLarge == 'picLar'

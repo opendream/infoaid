@@ -74,7 +74,7 @@ class PageControllerTests {
     void testInfo() {
         controller.pageService = new PageService()
         def user = User.findByUsername('nut')
-        params.user = user
+        params.user = [id:user.id]
         params.slug = 'page-slug'
 
         
@@ -152,7 +152,7 @@ class PageControllerTests {
         params.slug = 'page-slug'
         controller.need()
 
-        assert response.json['needs'][0].message == 'item 9'
+        assert response.json['needs'][0].message == "item 9\nneed1"
         assert response.json['totalNeeds'] == 2
         assert response.json['status'] == 1
     }
@@ -207,14 +207,15 @@ class PageControllerTests {
         }
 
         controller.pageService = new PageService()
+
         def user = User.findByUsername('nut')
-        params.user = user
+        params.user = [id:user.id]
         params.slug = 'page-slug'
         controller.topPost()
         
         assert 4 == response.json['posts'].size()
         assert 'item 10' == response.json['posts'][0].message
-        assert 'item 9' == response.json['posts'][1].message
+        assert "item 9\nneed1" == response.json['posts'][1].message
         assert 'first post' == response.json['posts'][3].message
     }
 
@@ -224,15 +225,17 @@ class PageControllerTests {
             postlist[it].conversation = it
             postlist[it].save()
         }
+        def pageService = new PageService()
+        pageService.grailsApplication = [config:[infoaid:[api:[post:[max:10]]]]]
+        controller.pageService = pageService
 
-        controller.pageService = new PageService()
-        def user = User.findByUsername('nut')
-        params.user = user
+        def user1 = User.findByUsername('nut')
+        params.user = [id:user1.id]
         params.slug = 'page-slug'
         params.until = '2012-09-12 15:07'
         controller.recentPost()
         
-        assert [] == response.json['posts']
+        assert [] == response.json.posts
 
         response.reset()
         params.slug = 'page-slug'
@@ -240,10 +243,10 @@ class PageControllerTests {
         params.until = '2020-09-12 15:07'
         controller.recentPost()
         
-        assert 4 == response.json['posts'].size()
-        assert 'item 10' == response.json['posts'][0].message
-        assert 'item 9' == response.json['posts'][1].message
-        assert 'first post' == response.json['posts'][3].message
+        assert 4 == response.json.posts.size()
+        assert 'item 10' == response.json.posts[0].message
+        assert "item 9\nneed1" == response.json.posts[1].message
+        assert 'first post' == response.json.posts[3].message
     }
 
     void testCreatePage() {
@@ -526,8 +529,9 @@ class PageControllerTests {
         controller.pageService = new PageService()
 
         def user1 = User.findByUsername('nut')
-        controller.springSecurityService  = [principal:[id:user1.id]]
-        params.user = user1
+        //controller.springSecurityService  = [principal:[id:user1.id]]
+        params.user = [id:user1.id]
+
         params.word = ''
         controller.searchPage()
 
@@ -552,10 +556,9 @@ class PageControllerTests {
     void testIsOwner() {
         controller.pageService = new PageService()
         def user1 = User.findByUsername('nut')
-        params.user = user1
+
         params.slug = 'page-slug'
-        
-        //controller.springSecurityService  = [principal:[id:user1.id]]
+        params.user = [id:user1.id]
 
         def result = controller.isOwner()
         assert response.json['isOwner'] == true
@@ -563,9 +566,9 @@ class PageControllerTests {
         response.reset()
 
         def user2 = User.findByUsername('nut2')
-        params.user = user2
-        params.userId = user2.id
-        //controller.springSecurityService  = [principal:[id:user2.id]]
+
+        params.slug = 'page-slug'
+        params.user = [id:user2.id]
 
         result = controller.isOwner()
         assert response.json['isOwner'] == false
@@ -574,10 +577,8 @@ class PageControllerTests {
     void testIsJoined() {
         controller.pageService = new PageService()
         def user1 = User.findByUsername('nut')
-        params.user = user1
         params.slug = 'page-slug'
-        
-        //controller.springSecurityService  = [principal:[id:user1.id]]
+        params.user = [id:user1.id]
 
         def result = controller.isJoined()
         assert response.json['isJoined'] == true
@@ -587,10 +588,18 @@ class PageControllerTests {
         def user2 = User.findByUsername('nut2')
         params.user = user2
         params.slug = 'page-slug'
-        //controller.springSecurityService  = [principal:[id:user2.id]]
+        params.user = [id:user2.id]
 
         result = controller.isJoined()
         assert response.json['isJoined'] == true
+
+        response.reset()
+
+        params.slug = 'page-slug'
+        params.user = [id:12345633]
+        
+        result = controller.isJoined()
+        assert response.json['isJoined'] == false
     }
 
     void testPostResource() {

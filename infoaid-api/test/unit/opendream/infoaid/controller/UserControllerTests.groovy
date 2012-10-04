@@ -94,11 +94,8 @@ class UserControllerTests {
     }
 
     void testUpdateBasicInfo() {
-        userService.demand.updateBasicInfo(1..1) { updateparams -> [username:updateparams.username, firstname:updateparams.firstname, 
-                                                    lastname:updateparams.lastname, email:updateparams.email, telNo:updateparams.telNo]}
-        controller.userService = userService.createMock()
-
-        params.id = user.id
+        controller.userService = new UserService()
+        params.userId = user.id
         params.username = 'admin'
         params.firstname = 'thawatchai'
         params.lastname = 'jong' 
@@ -182,7 +179,7 @@ class UserControllerTests {
     }
 
     void testGetPages() {
-        params.user = user
+        params.user = [id:user.id]
         controller.getPages()
 
         assert 3 == response.json['pages'].size()
