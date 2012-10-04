@@ -119,4 +119,15 @@ class PageHelper
 		return $imageHelper->processUploadedFile($fieldName, $newFilename);
 	}
 
+	public static function getItemHistory($slug, $params)
+	{
+		$result = self::getJSON($slug, 'item_history', $params);
+		if (empty($result) || (isset($result->status) && ! $result->status)) {
+			return array();
+		}
+		else {
+			return isset($result->posts) ? $result->posts : $result;
+		}
+	}
+
 }

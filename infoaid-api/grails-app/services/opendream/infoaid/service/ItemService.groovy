@@ -1,7 +1,11 @@
 package opendream.infoaid.service
 import opendream.infoaid.domain.Item
+import opendream.infoaid.domain.Need
+import opendream.infoaid.domain.Resource
 
 class ItemService {
+    def grailsApplication
+    def pageService
 
     def list(Integer max) {
     	def params = [:]
@@ -75,5 +79,36 @@ class ItemService {
     		throw new RuntimeException("${item.errors}")
     	}
     	[id: item.id, status: item.status]
+    }
+
+    def getItemHistory(user, slug, itemId=null, fromId=null, toId=null, since=null, until=null, limit) {
+        limit = limit?:grailsApplication.config.infoaid.api.post.max
+        def list = Need.createCriteria().list() {
+            page {
+                eq('slug', slug)
+            }
+            maxResults(limit)
+            if(itemId) {
+                item {
+                    eq('id', itemId)
+                }
+            } 
+            if(fromId) {
+                ge('id', fromId)
+            }
+            if(toId) {
+                le('id', toId)
+            }           
+            if(since) {
+                ge('dateCreated', since)
+            }
+            if(until) {
+                le('dateCreated', until)
+            }
+            order('lastActived', 'desc')
+        }
+        def authority = pageService.getPageAuthority(user, slug)
+        //need:list.findAll{it.class==Need}, resources:list.findAll{it.class==Resource}
+        return [itemHistory: list, total:list.size(), authority: authority]
     }
 }

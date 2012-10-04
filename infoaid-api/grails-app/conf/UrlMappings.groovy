@@ -23,6 +23,7 @@ class UrlMappings {
         "/page/$slug/top_members"(controller: "page", action: "topMember")
         "/page/$slug/top_post"(controller: "page", action: "topPost")
         "/page/$slug/update_page"(controller: "page", action: "updatePage")
+        "/page/$slug/item_history"(controller: "page", action: "itemHistory")
         "/page/create_page"(controller: "page"){ action = [POST:"createPage"] }
         "/post/comment"(controller: "page"){action = [POST:"postComment"] }
         "/post/$postId/comments"(controller: "post"){action = [GET:"comment"] }

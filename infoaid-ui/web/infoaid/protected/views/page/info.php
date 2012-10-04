@@ -12,7 +12,7 @@
 		</header>
 		
 		<div class="row">				
-			<div ng-init="slug='<?php echo $slug ?>'"></div>
+			<div ng-init="slug='<?php echo $slug ?>'; target='recent_post';"></div>
 			<div class="span7">
 				<section class="posts" ng-controller="PostListCtrl">
 					<header>
@@ -44,10 +44,14 @@
 				            <li ng-repeat="member in members">
 				                <span>{{member.username}}</span>
 				            </li>
+				            <li><button class="btn" ng-click="loadItem()">
+								<i class="icon icon-plus"></i> Items
+								</button>
+							</li>
 				        </ul>
 				    </div>
 				    <div><span class='show-more-members'><?php echo CHtml::link('Show more ..', array('page/members','slug'=>$slug)); ?></span></div>
-				</div>				
+				</div>
 			</div>
 		</div>	
 </div>

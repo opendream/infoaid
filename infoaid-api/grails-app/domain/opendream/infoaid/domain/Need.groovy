@@ -14,6 +14,6 @@ class Need extends Post {
     }
 
     def beforeInsert() {
-        this.message = "${item.name} $quantity"
+        this.message = "${item.name} ${quantity}" + (message?"\n"+message:'')
     }
 }

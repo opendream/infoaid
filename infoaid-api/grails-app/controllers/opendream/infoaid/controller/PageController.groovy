@@ -8,6 +8,7 @@ import opendream.infoaid.domain.Resource
 
 class PageController {
     def pageService
+    def itemService
     def springSecurityService
 
     def index() { }
@@ -618,8 +619,67 @@ class PageController {
         if(params.until) {
             params.until = new Date().parse("yyyy-MM-dd HH:mm", params.until)
         }
-
+        
         def result = pageService.getResource(params)
         render result as JSON
+    }
+
+    def itemHistory() {        
+        def ret = [:]
+        if(params.since) {
+            params.since = new Date().parse("yyyy-MM-dd HH:mm", params.since)
+        }
+        if(params.until) {
+            params.until = new Date().parse("yyyy-MM-dd HH:mm", params.until)
+        }
+        if(params.limit) {
+            params.limit = params.int('limit')
+        }
+        if(params.itemId) {
+            params.itemId = params.long('itemId')
+        }
+        
+        def result = itemService.getItemHistory(params.user, params.slug, params.itemId, params.fromId, params.toId, params.since, params.until, params.limit)
+        ret.status = 1
+        ret.posts = result.itemHistory.collect {
+            def post = [
+                    id: it.id,
+                    class: it.class.name.tokenize('.')[-1],
+                    name: it.item.name,
+                    message: it.message,
+                    picSmall: it.picSmall,
+                    picOriginal: it.picOriginal,
+                    dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
+                    createdBy: it.createdBy.username,
+                    userPicSmall: it.createdBy.picSmall,
+                    userPicOriginal: it.createdBy.picOriginal,
+                    userId: it.createdBy.id,
+                    conversation: it.conversation,
+                    lastActived: it.lastActived.time,
+                    item: it.item,
+                    quantity: it.quantity,
+                    expiredDate: it.expiredDate,
+                    canDelete: pageService.canDelete(it.createdBy.id, params.user, result.authority.isOwner),
+                    comments: it.previewComments.comments.collect {
+                        [
+                            id: it.id,
+                            message: it.message,
+                            createdBy: it.user.username,
+                            userId: it.user.id,
+                            picOriginal: it.user.picOriginal,
+                            picLarge: it.user.picLarge,
+                            picSmall: it.user.picSmall,
+                            lastUpdated: it.lastUpdated.format('yyyy-MM-dd HH:mm'),
+                            canDelete: pageService.canDelete(it.user.id, params.user, result.authority.isOwner)
+                        ]
+                    }
+                ]
+        }
+
+        ret.total = result.total
+        ret.isJoined = result.authority.isJoined
+        ret.isOwner = result.authority.isOwner
+
+        render ret as JSON
     }
 }

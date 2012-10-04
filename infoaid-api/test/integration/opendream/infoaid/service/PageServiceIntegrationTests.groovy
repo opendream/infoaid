@@ -70,23 +70,24 @@ class PageServiceIntegrationTests {
         pageService.postComment(user.id, post.id, "my comment for top posts")
                 
         def page = Page.findByName("page1")
-        def posts = pageService.getTopPost(user, page.slug, null, null, null, null)
+        def result = pageService.getTopPost(user, page.slug, null, null, null, null)
         
-        assert posts.posts.size() == 10
-        assert posts.author.isJoined == true
-        assert posts.author.isOwner == true
-        assert posts.posts[0].message == 'post1'
+        assert result.posts.size() == 10
+        assert result.posts[0].message == 'post1'
+        assert result.author.isJoined == true
+        assert result.author.isOwner == true
     }
 
     @Test
     void testGetRecentPost() {
         def page = Page.findByName("page1")
         def user = User.findByUsername('nut')
-        def posts = pageService.getRecentPost(user, page.slug, null, null, new Date()-1, null)
-        assert posts.posts.size() == 10
-        assert posts.author.isJoined == true
-        assert posts.author.isOwner == true
-        assert posts.posts[0].createdBy == user
+
+        def result = pageService.getRecentPost(user, page.slug, null, null, new Date()-1, null)        
+        assert result.posts.size() == 10
+        assert result.posts[0].createdBy == user
+        assert result.author.isJoined == true
+        assert result.author.isOwner == true
     }
 
     @Test
@@ -142,7 +143,7 @@ class PageServiceIntegrationTests {
         assert updatedPost.lastActived > previousActived
         assert updatedPost.conversation == 1
 
-        def newComment = pageService.getComments(user,updatedPost.id, null, null, null, null).comments.last().message
+        def newComment = pageService.getComments(user, updatedPost.id, null, null, null, null).comments.last().message
         assert newComment == message
     }
 

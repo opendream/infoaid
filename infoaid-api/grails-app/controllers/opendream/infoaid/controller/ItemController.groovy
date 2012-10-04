@@ -6,6 +6,7 @@ import grails.converters.JSON
 class ItemController {
 
     def itemService
+    def pageService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -131,5 +132,5 @@ class ItemController {
             ret = [message: 'can not enable this item', item: params]
             render ret as JSON
         }
-    }
+    }    
 }
