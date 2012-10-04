@@ -4,10 +4,9 @@ package opendream.infoaid.filter
 
 import grails.test.mixin.*
 
-@Mock(UserFilterFilters)
-class UserFilterFiltersTests {
+@Mock(UserFilters)
+class UserFiltersTests {
 
     void testSomething() {
-        fail "Implement me"
     }
 }

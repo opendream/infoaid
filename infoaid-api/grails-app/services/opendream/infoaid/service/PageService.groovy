@@ -81,7 +81,7 @@ class PageService {
     }
 
     def getRecentPost(user, slug, fromId=null, toId=null, since=null, until=null, max=null) {
-        max = max?:grailsApplication.config.infoaid.api.post.max
+        max = max?:ConfigurationHolder.config.infoaid.api.post.max
         [posts: getPosts(slug, fromId, toId, since, until, max, 'recent'), 
         author: getPageAuthority(user, slug)]
     }
@@ -450,6 +450,11 @@ class PageService {
             if(params.userId) {
                 createdBy {
                     eq('id', params.userId)
+                }
+            }
+            if(params.itemId) {
+                item {
+                    eq('id', params.itemId)
                 }
             }
             if(params.itemName) {

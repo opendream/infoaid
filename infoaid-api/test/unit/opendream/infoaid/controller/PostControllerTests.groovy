@@ -57,7 +57,7 @@ class PostControllerTests {
     }
 
     void testComment() {
-        pageService.demand.getComments(1..1) {postId, fromId=null, toId=null, since=null, until=null -> 
+        pageService.demand.getComments(1..1) {user, postId, fromId=null, toId=null, since=null, until=null -> 
             def max = 50
             def comments = Comment.createCriteria().list(max: max) {
                 post {
@@ -78,12 +78,15 @@ class PostControllerTests {
                 order('dateCreated', 'asc')
             }
 
-            [comments: comments, totalComments: comments.totalCount]
+            [comments: comments, totalComments: comments.totalCount, author : [isOwner: false, isJoined: false]]
+        }
+        pageService.demand.canDelete(1..100) { userId, currentUser, isOwner ->
+            return true
         }
         controller.pageService = pageService.createMock()
 
         def post1 = Post.findByMessage('first post')
-
+        params.user = User.findByUsername('nut')
         params.postId = post1.id
 
         controller.comment()

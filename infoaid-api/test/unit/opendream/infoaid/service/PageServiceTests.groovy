@@ -375,7 +375,7 @@ class PageServiceTests {
         result = service.getResource(params)
         assert result.totalResources == 3
 
-        params = [since: new Date()]
+        params = [since: new Date()+1]
         result = service.getResource(params)
         assert result.totalResources == 0
 
