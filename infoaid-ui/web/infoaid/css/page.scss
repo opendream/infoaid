@@ -14,6 +14,9 @@
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+	border: 1px solid #ccc;
+	padding: 3px;
+	background-color: white;
 }
 
 @mixin message-base {
@@ -21,24 +24,20 @@
 		background: none repeat scroll 0 0 #FFFFFF;
 		border: 1px solid #DDD;
 		border-radius: 3px 3px 3px 3px;
-		//box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.2);
 		padding: 15px;
 		margin-left: 0;
 		text-rendering: optimizelegibility;
-		.message-poster-name {
-			font-weight: bolder;
-		}
+		.message-poster-name { font-weight: bolder; }
 		.message-body {
-			margin-top: 12px;
-			.item-icon-wrapper {
-				float: left;
-			}
+			.item-icon-wrapper { float: left; }
 			.item-quantity {
 				font-size: 4em;
 				font-weight: bolder;
-				height: 108px;
 				line-height: 1em;
 				padding: 0;
+				color: #DA534F;
+				float: left;
+				margin: 35px 0 0 10px;
 			}
 		}
 	}
@@ -48,9 +47,18 @@
 		display: inline-block;
 		background-size: cover;
 		background-repeat: no-repeat;
-		&.item-icon-food { background-image: url(../img/icons/items/item-7.png); }
-		&.item-icon-water {	background-image: url(../img/icons/items/item-8.png);	}
-		&.item-icon-man {	background-image: url(../img/icons/items/item-3.png);	}
+		&.item-icon-rice { background-image: url(../img/icon-09.png); }
+		&.item-icon-food { background-image: url(../img/icon-01.png); }
+		&.item-icon-water {	background-image: url(../img/icon-02.png);	}
+		&.item-icon-man {	background-image: url(../img/icon-03.png);	}
+		&.item-icon-tent {	background-image: url(../img/icon-04.png);	}
+		&.item-icon-shirt { background-image: url(../img/icon-05.png); }
+		&.item-icon-cloth { background-image: url(../img/icon-06.png); }
+		&.item-icon-gas {	background-image: url(../img/icon-07.png);	}
+		&.item-icon-water {	background-image: url(../img/icon-08.png);	}
+		&.item-icon-boat {	background-image: url(../img/icon-10.png);	}
+		&.item-icon-dynamo {	background-image: url(../img/icon-11.png);	}
+		&.item-icon-toilet {	background-image: url(../img/icon-12.png);	}
 	}
 }
 
@@ -99,9 +107,7 @@ body {
 	list-style: none;
 	margin: 10px 0 0;
 	padding: 5px;
-	.ng-pristine {
-		width: 380px;
-	}
+	.ng-pristine { width: 380px; }
 	time {
 		color: #999;
 		font-size: 12px;
@@ -118,9 +124,6 @@ body {
 		img {			
 			width: 40px;
 			height: 40px;
-			padding: 3px;
-			border: 1px solid #ccc;
-			background-color: white;
 			@include img-shadow;
 		}
 	}
@@ -171,6 +174,16 @@ body {
 	ul {
 		list-style: none;
 		li { margin-bottom: 6px; }
+	}
+	/* Post Picture */
+	.img-polaroid {
+		padding: 0;
+		background-color: none;
+		border: none;
+		box-shadow: none;
+		img {
+			@include img-shadow;
+		}
 	}
 }
 .load-more { text-align: center; }
