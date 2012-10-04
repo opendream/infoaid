@@ -19,8 +19,9 @@ class PageController {
         def info = pageService.getInfo(params.slug)
         if(info) {
             ret = [
-                status: 1,
+                status: 1234,
                 page: info,
+                items: pageService.getItemSummary(info),
                 isJoined: user instanceof String? false:pageService.isJoined(user.id, info.slug).isJoined,
                 isOwner: user instanceof String? false:pageService.isOwner(user.id, info.slug).isOwner
             ]

@@ -538,4 +538,31 @@ class PageService {
 
         return ret
     }
+
+    def getItemSummary(page) {
+        Item.list().collect { item ->
+            // Find sum of each item
+
+            // Both Need and Resource share same criteria set.
+            def criteria = {
+                eq("page", page)
+                eq("status", Post.Status.ACTIVE)
+                eq("item", item)
+                projections {
+                    sum("quantity")
+                }
+            }
+
+            def sumResource = Resource.createCriteria().get(criteria) ?: 0
+            def sumNeed = Need.createCriteria().get(criteria) ?: 0
+            // Ugly workaround
+            sumNeed -= sumResource
+
+            [
+                name: item.name,
+                need: sumNeed,
+                resource: sumResource,
+            ]
+        }.findAll { it.need || it.resource }
+    }
 }
