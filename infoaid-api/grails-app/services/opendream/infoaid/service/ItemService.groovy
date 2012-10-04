@@ -81,7 +81,7 @@ class ItemService {
     	[id: item.id, status: item.status]
     }
 
-    def getItemHistory(user, slug, itemId, fromId=null, toId=null, since, until, limit) {
+    def getItemHistory(user, slug, itemId=null, fromId=null, toId=null, since=null, until=null, limit) {
         limit = limit?:grailsApplication.config.infoaid.api.post.max
         def list = Need.createCriteria().list() {
             page {
