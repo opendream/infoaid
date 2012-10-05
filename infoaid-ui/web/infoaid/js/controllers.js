@@ -118,7 +118,6 @@ function MemberCtrl($scope, $http, SharedService, Post, PostsBroadcast) {
 
 function SidebarCtrl($scope, $http, SharedService) {  
     $http.get(baseUrl + '/api/getPages').success(function(data) {
-        console.log(data);
         $scope.pages = data.pages;
     });
 

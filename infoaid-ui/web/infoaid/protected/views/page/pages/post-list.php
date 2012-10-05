@@ -25,9 +25,11 @@
 							<time class="timeago" datetime="{{comment.lastUpdated}}"
 								title="{{comment.lastUpdated}}">
 								{{comment.lastUpdated}}
-							</time>			
-							-				
-							<a ng-click="deleteComment(comment)" type="button" ng-show="comment.canDelete">delete</a>
+							</time>
+							<span ng-show="comment.canDelete">
+								-				
+								<a ng-click="deleteComment(comment)" type="button">delete</a>
+							</span>
 						</div>
 					</div>
 					<div class="clear"></div>					
