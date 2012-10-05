@@ -35,7 +35,6 @@
 				font-weight: bolder;
 				line-height: 1em;
 				padding: 0;
-				color: #DA534F;
 				float: left;
 				margin: 35px 0 0 10px;
 			}
@@ -124,7 +123,11 @@ body {
 		img {			
 			width: 40px;
 			height: 40px;
-			@include img-shadow;
+			border: none;
+			box-shadow: none;
+			padding: none;
+			border-radius: 20px;
+			/* @include img-shadow; */
 		}
 	}
 	.message-details {
@@ -305,6 +308,7 @@ legend {
 }
 #s2id_requestPost {	margin: 0 5px 0 0; }
 #s2id_resourcePost { margin: 0 5px 0 0; }
+
 /*********************************************************
 		Request & I have
 **********************************************************/
@@ -325,7 +329,6 @@ legend {
 }
 .message-need .item-quantity { color: #DA534F; }
 
-
 /*********************************************************
 		Page Sidebar
 **********************************************************/
@@ -343,7 +346,10 @@ legend {
 		margin-bottom: 10px;
 		img {
 			margin-right: 10px;
-			padding: 5px;
+			border: none;
+			box-shadow: none;
+			border-radius: 25px;
+/* 			padding: 5px; */
 		}
 	}
 	#page-sidebar-places {
