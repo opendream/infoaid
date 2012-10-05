@@ -67,7 +67,6 @@ function PostListCtrl($scope, Post, RearrangePost, PostsBroadcast) {
     $scope.posts = Post($scope.target).query({slug: slug});
 
     $scope.loadMore = function () {
-        console.log($scope.target);
         Post($scope.target).query({
             slug: slug,
             until: lastRowDateCreated(),
@@ -129,7 +128,6 @@ function MemberCtrl($scope, $http, SharedService, Post, PostsBroadcast) {
 
 function SidebarCtrl($scope, $http, SharedService) {  
     $http.get(baseUrl + '/api/getPages').success(function(data) {
-        console.log(data);
         $scope.pages = data.pages;
     });
 
