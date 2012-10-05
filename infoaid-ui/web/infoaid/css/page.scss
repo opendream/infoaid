@@ -41,25 +41,30 @@
 			}
 		}
 	}
-	.item-icon {
-		width: 128px;
-		height: 128px;
-		display: inline-block;
-		background-size: cover;
-		background-repeat: no-repeat;
-		&.item-icon-rice { background-image: url(../img/icon-09.png); }
-		&.item-icon-food { background-image: url(../img/icon-01.png); }
-		&.item-icon-water {	background-image: url(../img/icon-02.png);	}
-		&.item-icon-man {	background-image: url(../img/icon-03.png);	}
-		&.item-icon-tent {	background-image: url(../img/icon-04.png);	}
-		&.item-icon-shirt { background-image: url(../img/icon-05.png); }
-		&.item-icon-cloth { background-image: url(../img/icon-06.png); }
-		&.item-icon-gas {	background-image: url(../img/icon-07.png);	}
-		&.item-icon-water {	background-image: url(../img/icon-08.png);	}
-		&.item-icon-boat {	background-image: url(../img/icon-10.png);	}
-		&.item-icon-dynamo {	background-image: url(../img/icon-11.png);	}
-		&.item-icon-toilet {	background-image: url(../img/icon-12.png);	}
-	}
+}
+
+@mixin item-icon-base {
+	width: 128px;
+	height: 128px;
+	display: inline-block;
+	background-size: cover;
+	background-repeat: no-repeat;
+	// &.item-icon-rice { background-image: url(../img/icon-09.png); }
+	// &.item-icon-food { background-image: url(../img/icon-01.png); }
+	// &.item-icon-water {	background-image: url(../img/icon-02.png);	}
+	// &.item-icon-man {	background-image: url(../img/icon-03.png);	}
+	// &.item-icon-tent {	background-image: url(../img/icon-04.png);	}
+	// &.item-icon-shirt { background-image: url(../img/icon-05.png); }
+	// &.item-icon-cloth { background-image: url(../img/icon-06.png); }
+	// &.item-icon-gas {	background-image: url(../img/icon-07.png);	}
+	// &.item-icon-water {	background-image: url(../img/icon-08.png);	}
+	// &.item-icon-boat {	background-image: url(../img/icon-10.png);	}
+	// &.item-icon-dynamo {	background-image: url(../img/icon-11.png);	}
+	// &.item-icon-toilet {	background-image: url(../img/icon-12.png);	}
+}
+
+.item-icon {
+	@include item-icon-base;
 }
 
 
@@ -623,11 +628,28 @@ hr { border: none; }
 #page-create {
 	#map { border: 4px solid #FBF7EE;	}
 }
+
 .message-need {
 	@include message-base;
 	.item-quantity { color: #C00;	}
 }
 .message-resource {
 	@include message-base;
-	.item-quantipage ty { color: #009;	}
+	.item-quantity { color: #009;	}
+}
+
+#item-sidebar {
+
+	.item-icon-wrapper {
+		float: left;
+		margin-right: 8px;
+	}
+
+	.item-icon {
+		@include item-icon-base;
+
+		image-rendering: optimizeQuality;
+		width: 24px;
+		height: 24px;
+	}
 }

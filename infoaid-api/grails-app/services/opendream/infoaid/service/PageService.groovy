@@ -564,6 +564,7 @@ class PageService {
             sumNeed -= sumResource
 
             [
+                id: item.id,
                 name: item.name,
                 need: sumNeed,
                 resource: sumResource,

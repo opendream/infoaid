@@ -4,7 +4,8 @@ class PageController extends IAController
 {
 
 	public $styles = array(
-		'page.scss', 'select2/select2.css',
+		'page.scss',
+		'select2/select2.css',
 	);
 
 	public function actions()

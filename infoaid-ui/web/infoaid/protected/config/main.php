@@ -276,5 +276,46 @@ return array(
 				),
 			),
 		),
+
+		'item' => array(
+			'icon' => array(
+				'food' => array(
+					'synonyms' => array(
+						'rice', 'ข้าว', 'อาหาร', 'ถุงยังชีพ'
+					),
+					'icon' => 'img/icon-09.png',
+				),
+				'tent' => array(
+					'synonyms' => array(
+						'เต้นท์',
+					),
+					'icon' => 'img/icon-01.png',
+				),
+				'clothes' => array(
+					'synonyms' => array(
+						'เสื้อผ้า', 'เสื้อ',
+					),
+					'icon' => 'img/icon-02.png',
+				),
+				'gas' => array(
+					'synonyms' => array(
+						'ก๊าซ', 'ก๊าซหุงต้ม',
+					),
+					'icon' => 'img/icon-04.png',
+				),
+				'fuel' => array(
+					'synonyms' => array(
+						'นำ้มัน', 'นำ้มันเชื้อเพลิง',
+					),
+					'icon' => 'img/icon-05.png',
+				),
+				'water' => array(
+					'synonyms' => array(
+						'นำ้', 'น้ำดื่ม',
+					),
+					'icon' => 'img/icon-07.png',
+				),
+			),
+		),
 	),
 );

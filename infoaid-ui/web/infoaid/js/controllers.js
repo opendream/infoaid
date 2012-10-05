@@ -66,23 +66,11 @@ function PostListCtrl($scope, Post, RearrangePost, PostsBroadcast) {
     };
     $scope.posts = Post($scope.target).query({slug: slug});
 
-    $scope.loadMore = function () {
-        console.log($scope.target);
-        Post($scope.target).query({
-            slug: slug,
-            until: lastRowDateCreated(),
-            limit: 10
-        }, function (posts) {
-            RearrangePost($scope, posts);            
-        });
-    };
-
     $scope.$on('postsBroadcast', function() {
-        if($scope.target != PostsBroadcast.target) {
-            $scope.target = PostsBroadcast.target;
+        if ($scope.target) {
             $scope.posts = [];
-        } 
-        RearrangePost($scope, PostsBroadcast.posts);         
+        }
+        RearrangePost($scope, PostsBroadcast.posts);      
     });
 }
 
@@ -110,7 +98,7 @@ function MemberCtrl($scope, $http, SharedService, Post, PostsBroadcast) {
         return 0;
     }
     
-    $scope.loadItem = function() {
+    $scope.loadItem = function(id) {
         if($scope.target == 'item_history'){
             $scope.target = 'recent_post';
         } else {
@@ -118,6 +106,7 @@ function MemberCtrl($scope, $http, SharedService, Post, PostsBroadcast) {
         }
 
         Post($scope.target).query({
+            itemId: id,
             slug: $scope.slug,
             until: '',
             limit: 10

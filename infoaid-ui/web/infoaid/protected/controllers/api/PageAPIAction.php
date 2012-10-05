@@ -19,12 +19,7 @@ class PageAPIAction extends CAction
 
 	public function actionItems($params)
 	{
-		$items = PageHelper::getPageItemsBySlug($params['slug']);
-		foreach ($items as &$item) {
-			$item->percentSupplyPerDemand = ($item->resource / $item->need) * 100.00;
-			$item->percentDemandPerSupply = 100 - $item->percentSupplyPerDemand;
-		}
-		$this->controller->renderJSON($items);
+		$this->controller->renderJSON(PageHelper::getProcessedItemsBySlug($params['slug']));
 	}
 
 	public function runWithParams($params)

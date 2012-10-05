@@ -141,4 +141,40 @@ class PageHelper
 		}
 	}
 
+	public static function getItemClass($itemName) {
+		static $iconSet;
+		if (! isset($iconSet)) {
+			$iconSet = Yii::app()->params['item']['icon'];
+		}
+
+		foreach ($iconSet as $name => $config) {
+			if ($name == $itemName || in_array($itemName, $config['synonyms'])) {
+				return $name;
+			}
+		}
+	}
+
+	public static function getProcessedItemsBySlug($slug)
+	{
+		$items = self::getPageItemsBySlug($slug);
+		foreach ($items as &$item) {
+			$item->class = self::getItemClass($item->name);
+			$item->percentSupplyPerDemand = ($item->resource / $item->need) * 100.00;
+			$item->percentDemandPerSupply = 100 - $item->percentSupplyPerDemand;
+		}
+		return $items;
+	}
+
+	public static function generateCSSForItemIcon()
+	{
+		$iconSet = Yii::app()->params['item']['icon'];
+		$cssString = "";
+		foreach ($iconSet as $name => $config) {
+			$iconUrl = Yii::app()->baseUrl ."/". $config['icon'];
+			$cssString .= " .item-icon-$name { background-image: url($iconUrl); } ";
+		}
+
+		return $cssString;
+	}
+
 }

@@ -72,12 +72,14 @@ angular.module('commentService', ['ngResource']).
 		};		
 		return RearrangePost;
 	}).
-	factory('RefreshPost', function (Post, FindPost, RearrangePost) {
+	factory('RefreshPost', function (Post, FindPost, RearrangePost, PostsBroadcast) {
 		var RefreshPost = function(scope) {
-			Post(scope.target).query({slug:scope.slug}, function (newposts) {					 
-				RearrangePost(scope, newposts);				
+			Post(scope.target).query({slug:scope.slug}, function (newposts) {
+				RearrangePost(scope, newposts);
+				PostsBroadcast.prepForBroadcast('recent_post', newposts);	
 			});
-		};		
+		};
+
 		return RefreshPost;
 	}).
 	factory('PostResource', function ($resource) {

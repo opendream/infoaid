@@ -1,10 +1,14 @@
+:php
+	Yii::app()->clientScript->registerCSS('item-icon', PageHelper::generateCSSForItemIcon());
+
 #item-sidebar
 	%header
 		%h2 Supply-Demand
 	%ul.item-list.unstyled(ng-controller="ItemSidebarCtrl")
-		%li(ng-repeat="item in items")
+		%li.infoaid-item(ng-repeat="item in items", data-name="{{item.name}}")
 			.item-icon-wrapper
-				%i(class="item-icon item-icon-{{item.name}}")
+				%a(href="" ng-click="loadItem(item.id)")
+					%i(class="item-icon item-icon-{{item.class}}")
 			.progress
-				.bar.bar-success(style="width:{{item.percentSupplyPerDemand}}%")
-				.bar.bar-danger(style="width:{{item.percentDemandPerSupply}}%")
+				.bar.bar-success.bar-supply(data-percent-supply="{{item.percentSupplyPerDemand}}" data-supply="{{item.resource}}")
+				.bar.bar-danger.bar-demand(data-percent-demand="{{item.percentDemandPerSupply}}" data-demand="{{item.need}}")
