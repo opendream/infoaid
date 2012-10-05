@@ -148,8 +148,8 @@ class PageController extends IAController
 
 		$page = new stdClass();
 		if ($_POST['op'] == 'create') {
-			$this->doCreatePage($page);
-			$this->redirect("/page/$slug");
+			$page = $this->doCreatePage($page);
+			$this->redirect("/page/{$page->slug}");
 		}
 
 		$this->render('form_edit', array(
