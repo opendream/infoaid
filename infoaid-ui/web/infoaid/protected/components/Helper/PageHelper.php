@@ -170,8 +170,11 @@ class PageHelper
 		$iconSet = Yii::app()->params['item']['icon'];
 		$cssString = "";
 		foreach ($iconSet as $name => $config) {
-			$iconUrl = Yii::app()->baseUrl ."/". $config['icon'];
-			$cssString .= " .item-icon-$name { background-image: url($iconUrl); } ";
+			$iconNormalUrl = Yii::app()->baseUrl ."/". $config['icon']['normal'];
+			$iconSmallUrl = Yii::app()->baseUrl ."/". $config['icon']['small'];
+
+			$cssString .= " .item-icon-$name { background-image: url($iconNormalUrl); } ";
+			$cssString .= " .item-icon-28-$name { background-image: url($iconSmallUrl); } ";
 		}
 
 		return $cssString;

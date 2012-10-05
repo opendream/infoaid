@@ -93,8 +93,7 @@ var ItemSidebarCtrl = function ($scope, $element, PageItem, Post, PostsBroadcast
 						demand = $('.bar-demand', progress)
 					;
 
-					supply.attr('data-percent-supply', item.percentSupplyPerDemand)
-						.popover('setContent');
+					supply.attr('data-percent-supply', item.percentSupplyPerDemand);
 					demand.attr('data-percent-demand', item.percentDemandPerSupply);
 
 					animateProgressBar(supply, item.percentSupplyPerDemand);

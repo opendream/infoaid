@@ -646,6 +646,11 @@ hr { border: none; }
 
 #item-sidebar {
 
+	h2 {
+		padding: 0;
+		background-color: transparent;
+	}
+
 	.item-icon-wrapper {
 		float: left;
 		margin-right: 8px;

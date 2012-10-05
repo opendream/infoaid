@@ -283,37 +283,55 @@ return array(
 					'synonyms' => array(
 						'rice', 'ข้าว', 'อาหาร', 'ถุงยังชีพ'
 					),
-					'icon' => 'img/icon-09.png',
+					'icon' => array(
+						'normal' => 'img/icon-09.png',
+						'small' => 'img/icon28-09.png',
+					),
 				),
 				'tent' => array(
 					'synonyms' => array(
 						'เต้นท์',
 					),
-					'icon' => 'img/icon-01.png',
+					'icon' => array(
+						'normal' => 'img/icon-01.png',
+						'small' => 'img/icon28-01.png',
+					),
 				),
 				'clothes' => array(
 					'synonyms' => array(
 						'เสื้อผ้า', 'เสื้อ',
 					),
-					'icon' => 'img/icon-02.png',
+					'icon' => array(
+						'normal' => 'img/icon-02.png',
+						'small' => 'img/icon28-02.png',
+					),
 				),
 				'gas' => array(
 					'synonyms' => array(
 						'ก๊าซ', 'ก๊าซหุงต้ม',
 					),
-					'icon' => 'img/icon-04.png',
+					'icon' => array(
+						'normal' => 'img/icon-04.png',
+						'small' => 'img/icon28-04.png',
+					),
 				),
 				'fuel' => array(
 					'synonyms' => array(
 						'นำ้มัน', 'นำ้มันเชื้อเพลิง',
 					),
-					'icon' => 'img/icon-05.png',
+					'icon' => array(
+						'normal' => 'img/icon-05.png',
+						'small' => 'img/icon28-05.png',
+					),
 				),
 				'water' => array(
 					'synonyms' => array(
 						'นำ้', 'น้ำดื่ม',
 					),
-					'icon' => 'img/icon-07.png',
+					'icon' => array(
+						'normal' => 'img/icon-07.png',
+						'small' => 'img/icon28-07.png',
+					),
 				),
 			),
 		),
