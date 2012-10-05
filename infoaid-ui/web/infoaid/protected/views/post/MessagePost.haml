@@ -13,7 +13,8 @@
 		.meta
 			%time.timeago(datetime="{{post.dateCreated}}")
 				{{post.dateCreated}}
-			=" - "
-			%a(ng-click="deletePost(post)" type="button"  ng-show="post.canDelete")
-				delete
+			%span(ng-show="post.canDelete")
+				=" - "
+				%a(ng-click="deletePost(post)" type="button")
+					delete
 	.clear
