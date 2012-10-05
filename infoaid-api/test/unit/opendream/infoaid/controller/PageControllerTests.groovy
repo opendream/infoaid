@@ -6,6 +6,7 @@ import opendream.infoaid.domain.Page
 import opendream.infoaid.domain.User
 import opendream.infoaid.domain.PageUser
 import opendream.infoaid.service.PageService
+import opendream.infoaid.service.ItemService
 import opendream.infoaid.domain.Post
 import opendream.infoaid.domain.Item
 import opendream.infoaid.domain.Item.Status
@@ -69,6 +70,8 @@ class PageControllerTests {
         new PageUser(page: page1, user: user1, relation: PageUser.Relation.OWNER, conversation: 1).save()
         new PageUser(page: page1, user: user2, relation: PageUser.Relation.MEMBER, conversation: 2).save()
         new PageUser(page: secondPage, user: user1, relation: PageUser.Relation.OWNER, conversation: 1).save()
+
+        def water = new Item(name: 'water', status: Status.ACTIVE).save(flush:true)
     }
 
     void testInfo() {
@@ -509,7 +512,7 @@ class PageControllerTests {
         controller.pageService = new PageService()
         def user = User.findByUsername('nut')
         def page = Page.findBySlug('page-slug')
-        def item = new Item(name: 'water').save(flush: true)
+        def item = Item.findByName('water')
 
         params.userId = user.id
         params.slug = page.slug
@@ -753,5 +756,52 @@ class PageControllerTests {
         controller.getResource()
         assert response.json['status'] == 1
         assert response.json['totalResources'] == 2
+    }
+
+    void testGetItemHistory() {        
+        def date = new Date()
+        def page = Page.findByName('page')
+        def item = Item.findByName('water')
+        def nut = User.findByUsername('nut')
+
+        2.times {
+            def need = new Need(item: item, lastActived: new Date(), createdBy: nut, updatedBy: nut, expiredDate: new Date() + 7, quantity: 2)
+            page.addToPosts(need)
+        }
+
+        3.times {
+            def resource = new Resource(item: item, lastActived: date + it +1, createdBy: nut, updatedBy: nut, message: 'message', expiredDate: date+(10+it), quantity: 10+it)
+            page.addToPosts(resource)
+        }
+        page.save(failOnError:true, flush: true)
+
+        def itemService = new ItemService()
+        def pageService = new PageService()
+        itemService.pageService = pageService
+        itemService.grailsApplication = [config:[infoaid:[api:[post:[max:10]]]]]
+        controller.itemService = itemService
+        controller.pageService = pageService
+
+        // params user, slug, itemId, fromId, toId, since, until, limit
+        params.user = [id:nut.id]
+        params.slug = page.slug
+        params.itemId = item.id
+        params.fromId = null
+        params.toId = null
+        params.since = null
+        params.until = null
+        params.limit = null
+
+        controller.itemHistory()
+
+        assert response.json.status == 1
+        assert response.json.total == 5
+        assert true == response.json.isJoined
+        assert true == response.json.isOwner
+        //assert response.json.need.size() == 4
+        //assert response.json.resource.size() == 3
+        //assert response.json.itemHistory.size() == 7
+        assert response.json.posts.last().message == """water 2"""
+        assert response.json.posts.first().message == """water 12\nmessage"""
     }
 }
