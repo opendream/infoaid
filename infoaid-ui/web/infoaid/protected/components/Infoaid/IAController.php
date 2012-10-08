@@ -43,6 +43,8 @@ class IAController extends CController
 	public function beforeRender($view)
 	{
 		parent::beforeRender($view);
+		$this->runModule('beforeBeforeRender');
+
 		$this->injectLocale();
 
 		if ($this->jquery == TRUE) {

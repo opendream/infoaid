@@ -266,14 +266,14 @@ return array(
 				
 				'size' => array(
 					'original' => array(
-						'width' => '400',
-						'height' => '400',
+						'width' => '1024',
+						'height' => '768',
 						'suffix' => '_o',
 					),
 
 					'large' => array(
-						'width' => '160',
-						'height' => '160',
+						'width' => '400',
+						'height' => '400',
 						'suffix' => '_l',
 					),
 

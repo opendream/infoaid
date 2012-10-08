@@ -2,8 +2,15 @@
 
 class PageModule
 {
+	public function beforeBeforeRender($mainController)
+	{
+		$mainController->scripts[] = 'colorbox/jquery.colorbox.js';
+		$mainController->styles[] = '/js/colorbox/colorbox.css';
+	}
+
 	public function afterBeforeRender($mainController)
 	{
+
 		Yii::app()->clientScript
 			->registerScript(
 				'template',

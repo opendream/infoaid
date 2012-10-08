@@ -10,3 +10,6 @@
 [submodule "infoaid-ui/modules/ExpandingTextareas"]
 	path = infoaid-ui/modules/ExpandingTextareas
 	url = git://github.com/bgrins/ExpandingTextareas.git
+[submodule "infoaid-ui/modules/colorbox"]
+	path = infoaid-ui/modules/colorbox
+	url = git://github.com/jackmoore/colorbox.git
