@@ -42,7 +42,9 @@
 				    <div ng-controller="MemberCtrl">               
 				        <ul class="unstyled">
 				            <li ng-repeat="member in members">
-				                <img class="img-circle top-member-sidebar" src="{{baseUrl + member.picSmall}}" />
+				            	<a class="avatar" href="{{baseUrl + '/user/profile/' + member.id}}" title="{{member.firstname}} {{member.lastname}}">
+				                	<img class="img-circle top-member-sidebar" src="{{baseUrl + member.picSmall}}" />
+				                </a>
 				            </li>
 				        </ul>
 				    </div>
