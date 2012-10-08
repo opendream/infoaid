@@ -2,6 +2,7 @@
 		All @mixin
 **********************************************************/
 @mixin btn {
+/*
 	background-color: #AE1724;
 	background-image: linear-gradient(to bottom, #E6515E, #AE1724);
 	background-image: -webkit-linear-gradient(top, #E6515E, #AE1724);
@@ -9,6 +10,7 @@
 	background-image: -moz-linear-gradient(top, #E6515E, #AE1724);
 	color: white;
 	text-shadow: none;
+*/
 }
 @mixin img-shadow {
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -79,9 +81,7 @@ h1, h2 {
 	font-size: 20px;
 }
 h2 {
-	padding: 20px;
 	margin: 0;
-	background-color: #FBF7EE;
 	font-size: 18px;
 }
 .error {
@@ -103,6 +103,57 @@ body {
 		border-top: 1px solid #ccc;
 	}
 }
+.page-sidebar {	
+	width: 215px;
+	padding: 10px;
+	margin: 20px 10px;
+	.page-sidebar-profile, 
+	.ul-list { padding-left: 0; }
+}
+.span10 {
+	margin: 20px 0;
+	padding: 10px 0;
+	width: 665px;
+}
+
+/* Form */
+.btn-joinus { 
+	margin: 0 auto;
+	display: block;
+	width: 60px;
+}
+.btn-inverse {
+	margin-right: 20px;
+}
+.ng-dirty {
+	width: 355px;
+	margin: 0;
+}
+
+/*--------- Member sidebar ---------*/
+.span2 {
+	width: 165px;
+	margin-right: 20px;
+	margin-left: 0;
+}
+
+/*--------- Page Post by member ---------*/
+.span5 { 
+	margin: 0;
+	.expanding {
+		width: 435px !important;
+	} 
+}
+
+/*--------- Page Post Middle ---------*/
+.span7 {
+	width: 440px;
+	margin-left: 0;
+	padding-right: 0px;
+}
+
+.row { margin-left: 0; }
+.nav-pills { margin-bottom: 10px; }
 
 /*********************************************************
 		Page Post, Update Status
@@ -111,7 +162,8 @@ body {
 	list-style: none;
 	margin: 10px 0 0;
 	padding: 5px;
-	.ng-pristine { width: 380px; }
+	width: 430px;
+	.ng-pristine { width: 355px; }
 	time {
 		color: #999;
 		font-size: 12px;
@@ -137,7 +189,7 @@ body {
 	}
 	.message-details {
 		margin-left: 50px;
-		padding: 0 0 0 12px;
+		padding: 0;
 		.message-body { padding: 0; }
 		.message-picture-preview {
 			margin-top: 12px;
@@ -201,12 +253,7 @@ body {
 	margin: 0;
 	width: 480px;
 }
-.span7 { 
-	width: 480px; 
-	margin-left: 0;
-	padding-right: 20px;
-}
-.span10 { width: 740px; }
+/* .span10 { width: 740px; } */
 legend {
 	margin-bottom: 0px; 
 	text-indent: 0 !important;
@@ -220,19 +267,21 @@ legend {
 	margin-bottom: 10px;
 }
 .navbar-inner {
+/*
 	background: #ae1725;
 	a {
 		color: white;
 	}
+*/
 }
 .navbar {
 	.brand {
-		color: white;
+/* 		color: white; */
 		text-shadow: none;
 	}
 	.nav.actions, .nav.pull-right {
 		a {
-			color: white;
+/* 			color: white; */
 			text-shadow: none;
 			padding: 10px 10px 10px;
 			&:hover {
@@ -339,14 +388,18 @@ legend {
 **********************************************************/
 .page-sidebar {
 	* {
+/*
 		padding: 0;
 		margin: 0;
+*/
 	}
-	width: 190px;
+	/*
+width: 190px;
 	padding-left: 20px;
 	padding-right: 20px;
 	margin-right: 0;
 	margin-top: 10px;
+*/
 	#page-sidebar-profile {
 		margin-bottom: 10px;
 		img {
@@ -434,6 +487,7 @@ legend {
 }
 .btn-primary, .btn-info {
 	padding: 9px 14px;
+/*
 	background-color: #AE1724;
 	background-image: linear-gradient(to bottom, #E6515E, #AE1724);
 	background-image: -webkit-linear-gradient(top, #E6515E, #AE1724);
@@ -442,6 +496,7 @@ legend {
 	&:hover, &:active, &.active, &.disabled, &[disabled] {
 		background-color: #AE1724;
 	}
+*/
 }
 
 /*********************************************************
@@ -469,7 +524,7 @@ legend {
 /*********************************************************
 		Header Info (Span10)
 **********************************************************/
-.span10 {	width: 690px; }
+/* .span10 {	width: 690px; } */
 .load-more { margin: 10px 0; }
 /*--------- Input ---------*/
 form { margin: 0; }
