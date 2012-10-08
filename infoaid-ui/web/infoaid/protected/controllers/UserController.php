@@ -50,6 +50,7 @@ class UserController extends IAController
 			Yii::app()->end();
 		}
 
+		$defaultAvatar = UserHelper::defaultAvatar();
 		$resultCreate = API::getJSON('user/create', array(
 			'username'=>$_POST['username'],
 			'password'=>$_POST['password'],
@@ -57,8 +58,10 @@ class UserController extends IAController
 			'lastname'=>$_POST['lastname'],
 			'email'=>$_POST['email'],
 			'telNo'=>$_POST['tel'],
-			)
-		);
+			'picOriginal'=>$defaultAvatar['original'],
+			'picLarge'=>$defaultAvatar['large'],
+			'picSmall'=>$defaultAvatar['small'],
+		));
 		if($resultCreate->id != null) {
 			Yii::app()->user->setFlash('createSuccess', 'Register Success');
 			$this->redirect(array('front/index'));

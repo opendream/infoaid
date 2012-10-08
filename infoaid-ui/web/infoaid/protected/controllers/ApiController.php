@@ -52,8 +52,11 @@ class ApiController extends IAController
 	}
 
 	public function actionMembers($slug) {
-		$resultNeeds = API::getJSON('page/'.urlencode($slug).'/top_members');
-		$this->renderJSON($resultNeeds);
+		$result = API::getJSON('page/'.urlencode($slug).'/top_members');
+		foreach ($result->topMembers as &$member) {
+			UserHelper::assignDefaultAvatar($member);
+		}
+		$this->renderJSON($result);
 	}
 
 	public function actionComment($postId, $message) {

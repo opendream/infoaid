@@ -75,8 +75,9 @@ function PostListCtrl($scope, Post, RearrangePost, PostsBroadcast) {
 }
 
 function MemberCtrl($scope, $http, SharedService, Post, PostsBroadcast) {  
+    var limit = InfoAid.settings.pageSidebarTopMemberLimit;
     $http.get(baseUrl + '/api/members/'+$scope.slug).success(function(data) {
-        $scope.members = data.topMembers;
+        $scope.members = data.topMembers.slice(0, limit);
     });
 
     $scope.$on('isJoinedBroadcast', function() {
@@ -84,7 +85,7 @@ function MemberCtrl($scope, $http, SharedService, Post, PostsBroadcast) {
             var i = findMember(SharedService.userId);
             $scope.members.splice(i, 1);
         } else {
-           $scope.members.unshift(SharedService.user);
+           $scope.members.unshift(SharedService.user).slice(0, limit);
         }
     });
 

@@ -66,6 +66,8 @@ class IAController extends CController
 				->registerScriptFile(Yii::app()->baseUrl .'/js/timeago.js');
 		}
 
+		$this->injectJSConfig();
+
 		foreach ($this->scripts as $script) {
 			Yii::app()->clientScript
 				->registerScriptFile(Yii::app()->baseUrl .'/js/'. $script);
@@ -147,6 +149,16 @@ class IAController extends CController
 					->registerScript($key,$messages,CClientScript::POS_HEAD);
 			}
 		}
+	}
+
+	public function injectJSConfig()
+	{
+		$config = json_encode(Yii::app()->params['global']);
+
+		$js = "window.InfoAid={settings:{}};jQuery.extend(InfoAid.settings, $config)";
+
+		Yii::app()->clientScript
+			->registerScript('infoaid-settings',$js,CClientScript::POS_HEAD);
 	}
 
 	public function loadModule($module)

@@ -17,9 +17,10 @@ class UserService {
         }
         def user = new User()
         user.properties['username', 'password', 'firstname', 'lastname', 'email', 'telNo', 'accountExpired', 'accountLocked', 'passwordExpired'] = userparams
-        user.picSmall = '/media/profiles/profile_default_Small.png'
-        user.picOriginal = '/media/profiles/profile_default_Original.png'
-        user.picLarge = '/media/profiles/profile_default_large.png'
+
+        user.picSmall = userparams['picSmall'] ?: null
+        user.picOriginal = userparams['picOriginal'] ?: null
+        user.picLarge = userparams['picLarge'] ?: null
         if(!user.save()) {
             log.error user.errors
             throw new RuntimeException("${user.errors}")
