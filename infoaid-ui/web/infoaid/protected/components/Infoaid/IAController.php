@@ -16,7 +16,9 @@ class IAController extends CController
 		'timeago',
 	);
 
-	private $modules = array();
+	private $modules = array(
+		'JRejectModule',
+	);
 	private $_modules = array();
 
 	protected $_app;
@@ -185,7 +187,10 @@ class IAController extends CController
 	public function runModule($context)
 	{
 		foreach ($this->modules as $module) {
-			$this->_modules[$module]->$context($this);
+			$module = $this->_modules[$module];
+			if (method_exists($module, $context)) {
+				$module->$context($this);
+			}
 		}
 	}
 
