@@ -192,6 +192,15 @@ return array(
 
 		'global' => array(
 			'pageSidebarTopMemberLimit' => 6,
+
+			'browser_warning'=>array(
+				'reject' => array(
+					'all' => false,
+					'msie5' => true,
+					'msie6' => true,
+				),
+				'imagePath' => '/js/jReject/images/',
+			),
 		),
 
 		'profile' => array(
@@ -344,6 +353,8 @@ return array(
 					),
 				),
 			),
+
+			// another settings.
 		),
 	),
 );
