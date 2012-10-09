@@ -72,6 +72,7 @@
 /*********************************************************
 		Structure
 **********************************************************/
+body { background: #333; }
 a { color: #999; }
 h1, h2, h3, h4, h5, h6 {
 	font-family: 'Helvetica neue', 'Helvetica,Arial', 'sans-serif';
@@ -301,6 +302,9 @@ legend + .control-group {
 	.navbar-text {
 		margin-right: 10px;
 	}
+}
+.dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a {
+	background: #999;
 }
 
 /*********************************************************
