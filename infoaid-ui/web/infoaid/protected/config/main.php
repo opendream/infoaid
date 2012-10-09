@@ -200,7 +200,6 @@ return array(
 					'msie6' => true,
 					'msie7' => true,
 					'msie8' => true,
-					'msie9' => true,
 				),
 				'imagePath' => '/js/jReject/images/',
 			),
