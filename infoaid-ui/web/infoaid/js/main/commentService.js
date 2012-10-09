@@ -220,6 +220,7 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 				slug: $scope.slug,
 				message: $scope.message,
 				picOriginal: $('#picOriginal').val(),
+				picLarge: $('#picLarge').val(),
 				picSmall: $('#picSmall').val()
 			};
 			
@@ -228,6 +229,7 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 				$scope.message = '';
 				$('#previewImg').html('');
 				$('#picSmall').val('');
+				$('#picLarge').val('');
 		        $('#picOriginal').val('');
 			});							
 		}

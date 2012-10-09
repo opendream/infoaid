@@ -11,6 +11,7 @@ class Post {
     Page page
     Integer conversation = 0
     String picOriginal
+    String picLarge
     String picSmall
 
     public enum Status {
@@ -27,6 +28,7 @@ class Post {
         status inList: Status.list()
         message blank: false, nullable: false
         picOriginal nullable: true
+        picLarge nullable: true
         picSmall nullable: true
     }
 

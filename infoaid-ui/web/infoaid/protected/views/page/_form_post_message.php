@@ -28,6 +28,7 @@
 		      	    	<a class="close hide" title="Clear form, delete text you just typed">&times;</a>
 		        		<textarea name="inputMsg" ng-model="message" ng-maxlength="140" type="text" class="expanding span5" placeholder="Type info..."></textarea>
 		        		<input name="picSmall" ng-model="picSmall" type="hidden" id="picSmall" />
+		        		<input name="picLarge" ng-model="picLarge" type="hidden" id="picLarge" />
 			      		<input name="picOriginal" ng-model="picOriginal" type="hidden" id="picOriginal" />
 		        	</form>
 

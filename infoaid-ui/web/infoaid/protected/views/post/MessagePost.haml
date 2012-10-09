@@ -10,7 +10,7 @@
 			{{post.message}}
 		.message-picture-preview.img-polaroid(ng-show="post.picOriginal.length")
 			%a.colorbox(id="pic-{{post.id}}" href="#{Yii::app()->baseUrl}{{post.picOriginal}}")
-				%img(src="#{Yii::app()->baseUrl}{{post.picOriginal}}")
+				%img(src="#{Yii::app()->baseUrl}{{post.picLarge}}")
 		.meta
 			%time.timeago(datetime="{{post.dateCreated}}")
 				{{post.dateCreated}}

@@ -303,14 +303,14 @@ class PageService {
         return [user: user, page: page, post: need]
     }
 
-    def createMessagePost(userId, slug, message, picOriginal, picSmall) {
+    def createMessagePost(userId, slug, message, picOriginal, picLarge, picSmall) {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
         def pageUser = PageUser.findByUserAndPage(user, page)
         if(pageUser) {
             def date = new Date()
             def messagePost = new MessagePost(lastActived: date, createdBy: user, updatedBy: user, expiredDate: date+14, message: message, 
-                picOriginal: picOriginal, picSmall: picSmall)
+                picOriginal: picOriginal, picLarge: picLarge, picSmall: picSmall)
             page.addToPosts(messagePost)
             if(page.save(failOnError: true, flush: true)) {
                 pageUser.conversation++

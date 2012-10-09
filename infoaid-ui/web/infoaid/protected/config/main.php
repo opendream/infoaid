@@ -266,9 +266,10 @@ return array(
 				
 				'size' => array(
 					'original' => array(
-						'width' => '1024',
-						'height' => '768',
+						'width' => '4048',
+						'height' => '4048',
 						'suffix' => '_o',
+						'no_adaptive_resize' => true,
 					),
 
 					'large' => array(
