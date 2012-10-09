@@ -60,7 +60,6 @@
 
 				<?php endif; ?>
 
-				<hr />
 
 				<div class="control-group">
 				    <div class="controls">

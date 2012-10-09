@@ -72,11 +72,9 @@
 /*********************************************************
 		Structure
 **********************************************************/
-body {
-/*
-	background: url('../img/bg-infoaid.png') repeat;
-	background-color: #f0eede;
-*/
+a { color: #999; }
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Helvetica neue', 'Helvetica,Arial', 'sans-serif';
 }
 h1, h2 {
 	margin: 0;
@@ -154,13 +152,20 @@ body {
 .row { margin-left: 0; }
 .nav-pills { margin-bottom: 10px; }
 /*--------- User Edit ---------*/
-.user-edit-wrapper { padding: 20px !important; }
+.user-edit-wrapper { 
+	padding: 20px !important; 
+	.span3 {
+		border: 1px dashed #ccc;
+		background-color: transparent;
+	}
+}
 .span9 {
 	.page-header {
 		padding-top: 0px;
 	}
 }
 .help-block { font-size: 13px; }
+
 /*********************************************************
 		Page Post, Update Status
 **********************************************************/
@@ -184,19 +189,21 @@ body {
 		min-width: 43px;
 		margin-right: 0;
 		img {			
-			width: 40px;
-			height: 40px;
+			width: 46px;
+			height: 46px;
 			border: none;
 			box-shadow: none;
 			padding: none;
-			border-radius: 20px;
+			border-radius: 23px;
 			/* @include img-shadow; */
 		}
 	}
 	.message-details {
-		margin-left: 50px;
+		margin-left: 60px;
 		padding: 0;
-		.message-body { padding: 10px; }
+		.message-body { 
+			padding: 10px 0; 
+		}
 		.message-picture-preview {
 			margin-top: 12px;
 		}
@@ -232,10 +239,13 @@ body {
 			margin: 4px 0;
 		}
 	}
-	li {
+	li.ng-scope {
 		border-bottom: 1px dashed #ccc;
 		margin-bottom: 18px;
 		&:last-child { border-bottom: none; }
+		li.thumbnail {
+			border: 1px solid #ccc;
+		}
 	}
 	ul {
 		list-style: none;
@@ -244,7 +254,7 @@ body {
 	/* Post Picture */
 	.img-polaroid {
 		padding: 0;
-		background-color: none;
+		background-color: none !important;
 		border: none;
 		box-shadow: none;
 		img {
@@ -264,6 +274,10 @@ legend {
 	margin-bottom: 0px; 
 	text-indent: 0 !important;
 	font-size: 18px;
+	border-bottom: none;
+}
+legend + .control-group {
+	margin-top: 10px;
 }
 
 /*********************************************************
@@ -272,13 +286,8 @@ legend {
 .nav {
 	margin-bottom: 10px;
 }
-.navbar-inner {
-/*
-	background: #ae1725;
-	a {
-		color: white;
-	}
-*/
+.nav-list > .active > a, .nav-list > .active > a:hover {
+	background-color: #999;
 }
 .navbar {
 	.brand {
@@ -349,6 +358,9 @@ legend {
 	.message-body {
 		margin-top: 0;
 		padding: 5px;
+		box-shadow: 1px 1px 3px #DDD;
+		-webkit-box-shadow: 1px 1px 3px #DDD;
+		-mox-box-shadow: 1px 1px 3px #DDD;
 	}
 	.item-quantity {
 		padding: 0;
@@ -430,7 +442,7 @@ width: 190px;
 	.page-header {
 		margin: 0 0 2px;
 		width: 920px;
-		border-bottom: none;
+		border-bottom: 1px dashed #ccc;
 		.page-name { font-size: 14px; }
 		.page-household-population { font-size: 13px; }
 		.page-lat-lng { font-size: 13px; }
@@ -520,22 +532,6 @@ input, textarea, uneditable {
 }
 
 /*********************************************************
-		Header Info (Span3)
-**********************************************************/
-/*
-.span3 {
-	background-color: white;
-	.nav-list > .active > a, .nav-list > .active > a:hover {
-		background-color: #AE1725;
-	}
-	.nav > li > a:hover {
-		background-color: #EED9D9;
-		color: #AE1725;
-	}
-}
-*/
-
-/*********************************************************
 		Edit Account
 **********************************************************/
 #user-edit {
@@ -596,6 +592,9 @@ input, textarea, uneditable {
 	}
 }
 
+/*********************************************************
+		Page Create
+**********************************************************/
 #page-create {
 	padding: 0 20px;
 	.page-header {
@@ -605,6 +604,7 @@ input, textarea, uneditable {
 	.form-actions { 
 		background-color: transparent;
 		margin: 0;
+		border-top: none;
 	}
 }
 hr { border: none; }
@@ -665,7 +665,7 @@ hr { border: none; }
 		Page Create
 **********************************************************/
 #page-create {
-	#map { border: 4px solid #FBF7EE;	}
+	#map { border: 1px dashed white;	}
 }
 
 .message-need {
