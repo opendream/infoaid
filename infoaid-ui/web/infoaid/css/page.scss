@@ -114,7 +114,7 @@ body {
 .span10 {
 	margin: 20px 0;
 	padding: 10px 0;
-	width: 665px;
+	width: 671px;
 }
 
 /* Form */
@@ -127,12 +127,7 @@ body {
 	margin-right: 20px;
 }
 
-/*--------- Member sidebar ---------*/
-.span2 {
-	width: 165px;
-	margin-right: 20px;
-	margin-left: 0;
-}
+
 
 /*--------- Page Post by member ---------*/
 .span5 { 
@@ -202,7 +197,7 @@ body {
 		margin-left: 60px;
 		padding: 0;
 		.message-body { 
-			padding: 10px 0; 
+/* 			padding: 10px 0;  */
 		}
 		.message-picture-preview {
 			margin-top: 12px;
@@ -357,7 +352,7 @@ legend + .control-group {
 	}
 	.message-body {
 		margin-top: 0;
-		padding: 5px;
+		padding: 10px;
 		box-shadow: 1px 1px 3px #DDD;
 		-webkit-box-shadow: 1px 1px 3px #DDD;
 		-mox-box-shadow: 1px 1px 3px #DDD;
@@ -416,11 +411,12 @@ width: 190px;
 		Sidebar right : Member (Span2)
 **********************************************************/
 .span2 {
+	width: 165px;
 	padding: 0 20px;
 	border: 1px dashed #ccc;
 	float: right;
-	margin-right: 20px;
 	margin-left: 0;
+	margin-right: 10px;
 	#members {
 		padding: 0 0 10px;
 		h2 {
@@ -433,6 +429,7 @@ width: 190px;
 		a { padding-left: 17px; }
 	}
 }
+
 
 /*********************************************************
 		Search Page
