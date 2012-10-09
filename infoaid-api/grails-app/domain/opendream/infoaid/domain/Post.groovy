@@ -26,13 +26,14 @@ class Post {
 
     static constraints = {
         status inList: Status.list()
-        message blank: false, nullable: false
+        message blank: false, nullable: true, size: 1..5000
         picOriginal nullable: true
         picLarge nullable: true
         picSmall nullable: true
     }
 
     static mapping = {
+        message sqlType: 'text'
         sort lastActived: "desc"
     }
 

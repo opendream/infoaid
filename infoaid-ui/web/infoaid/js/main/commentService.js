@@ -12,7 +12,9 @@ angular.module('commentService', ['ngResource']).
 		return DeleteComment;
 	}).
 	factory('PostMessage', function ($resource) {
-		var PostMessage = $resource(baseUrl + '/api/postMessage');
+		var PostMessage = $resource(baseUrl + '/api/postMessage', {}, {
+			'get' : { method: 'post' }
+		});
 		return PostMessage;
 	}).
 	factory('DeletePost', function ($resource) {
