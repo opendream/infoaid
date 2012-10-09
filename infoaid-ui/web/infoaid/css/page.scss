@@ -26,7 +26,7 @@
 		background: none repeat scroll 0 0 #FFFFFF;
 		border: 1px solid #DDD;
 		border-radius: 3px 3px 3px 3px;
-		padding: 15px;
+/* 		padding: 15px; */
 		margin-left: 0;
 		text-rendering: optimizelegibility;
 		.message-poster-name { font-weight: bolder; }
@@ -73,8 +73,10 @@
 		Structure
 **********************************************************/
 body {
+/*
 	background: url('../img/bg-infoaid.png') repeat;
 	background-color: #f0eede;
+*/
 }
 h1, h2 {
 	margin: 0;
@@ -92,12 +94,12 @@ h2 {
 /*--------- Page ---------*/
 #page {
 	border: 1px solid #ccc;
+	background: url('../img/bg-infoaid.png') repeat;
+	background-color: #f0eede;
 }
 /*--------- Join page ---------*/
 .page-header-join-leave { margin-right: 10px; }
 body {
-	
-	a, .btn-link { color: #AE1725; }
 	#footer {
 		margin: 0;
 		border-top: 1px solid #ccc;
@@ -107,6 +109,7 @@ body {
 	width: 215px;
 	padding: 10px;
 	margin: 20px 10px;
+	border: 1px dashed #ccc;
 	.page-sidebar-profile, 
 	.ul-list { padding-left: 0; }
 }
@@ -124,10 +127,6 @@ body {
 }
 .btn-inverse {
 	margin-right: 20px;
-}
-.ng-dirty {
-	width: 355px;
-	margin: 0;
 }
 
 /*--------- Member sidebar ---------*/
@@ -154,7 +153,14 @@ body {
 
 .row { margin-left: 0; }
 .nav-pills { margin-bottom: 10px; }
-
+/*--------- User Edit ---------*/
+.user-edit-wrapper { padding: 20px !important; }
+.span9 {
+	.page-header {
+		padding-top: 0px;
+	}
+}
+.help-block { font-size: 13px; }
 /*********************************************************
 		Page Post, Update Status
 **********************************************************/
@@ -190,7 +196,7 @@ body {
 	.message-details {
 		margin-left: 50px;
 		padding: 0;
-		.message-body { padding: 0; }
+		.message-body { padding: 10px; }
 		.message-picture-preview {
 			margin-top: 12px;
 		}
@@ -227,7 +233,7 @@ body {
 		}
 	}
 	li {
-		border-bottom: 1px solid #DDD;
+		border-bottom: 1px dashed #ccc;
 		margin-bottom: 18px;
 		&:last-child { border-bottom: none; }
 	}
@@ -280,29 +286,8 @@ legend {
 		text-shadow: none;
 	}
 	.nav.actions, .nav.pull-right {
-		a {
-/* 			color: white; */
-			text-shadow: none;
-			padding: 10px 10px 10px;
-			&:hover {
-				color: #AE1725;
-				background-color: white;
-			}
-		}
 		.dropdown {
-			&.open {
-				a {
-					background: white;
-					color: #ae1725;
-				}
-			}
 			.dropdown-menu {
-				a {
-					&:hover {
-						background: #AE1725;
-						color: white;
-					}
-				}
 			}
 		}
 	}
@@ -310,17 +295,7 @@ legend {
 		a { padding: 10px 15px 10px; }
 	}
 	.navbar-text {
-		color: white;
 		margin-right: 10px;
-	}
-	.dropdown {
-		a {
-			color: #AE1725;
-			&:hover {
-				color: white;
-				background: #AE1725;
-			}
-		}
 	}
 }
 
@@ -328,11 +303,11 @@ legend {
 	 Page Info
 **********************************************************/
 .page-header {
-	background-color: #fbf7ee;
+	background: none;
 	border-bottom: none;
 	.page-household-population, .page-lat-lng {
 		margin-top: 0;
-		font-size: 14px;
+		font-size: 13px;
 	}
 }
 .page-name {
@@ -430,7 +405,7 @@ width: 190px;
 **********************************************************/
 .span2 {
 	padding: 0 20px;
-	border: 1px solid #EEE;
+	border: 1px dashed #ccc;
 	float: right;
 	margin-right: 20px;
 	margin-left: 0;
@@ -455,10 +430,11 @@ width: 190px;
 	.page-header {
 		margin: 0 0 2px;
 		width: 920px;
-		background-color: #fbf7ee;
 		border-bottom: none;
-		.page-name { font-size: 16px; }
-		.page-household-population { font-size: 14px; }
+		.page-name { font-size: 14px; }
+		.page-household-population { font-size: 13px; }
+		.page-lat-lng { font-size: 13px; }
+		.page-needs { font-size: 13px; }
 	}
 }
 
@@ -546,6 +522,7 @@ input, textarea, uneditable {
 /*********************************************************
 		Header Info (Span3)
 **********************************************************/
+/*
 .span3 {
 	background-color: white;
 	.nav-list > .active > a, .nav-list > .active > a:hover {
@@ -556,12 +533,13 @@ input, textarea, uneditable {
 		color: #AE1725;
 	}
 }
+*/
 
 /*********************************************************
 		Edit Account
 **********************************************************/
 #user-edit {
-	background-color: #FBF7EE;
+/* 	background-color: #FBF7EE; */
 	.page-header {
 		margin-bottom: 0;
 	}
@@ -725,4 +703,10 @@ img.top-member-sidebar {
 	margin: 0 4px 4px 0;
 	width: 40px;
 	height: 40px;
+}
+
+.page-info {
+	.page-header {
+		border: 1px dashed #ccc;
+	}
 }
