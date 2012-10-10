@@ -18,7 +18,7 @@ class FrontPageController {
                 lat: it.lat,
                 lng: it.lng,                
                 //needs: pageService.getLimitNeeds(it.slug, 5).needs.collect {
-                need: it.items.collect {
+                needs: it.items.collect {
                     [
                         item: it.name,
                         quantity: it.need
@@ -27,6 +27,7 @@ class FrontPageController {
             ]
             
         }
+        
         ret.pages = pages
         ret.totalPages = pages.size()
         
