@@ -3,6 +3,7 @@ package opendream.infoaid.controller
 import grails.test.mixin.*
 import org.junit.*
 import opendream.infoaid.domain.Page
+import opendream.infoaid.domain.PageSummary
 import opendream.infoaid.domain.User
 import opendream.infoaid.domain.PageUser
 import opendream.infoaid.service.PageService
@@ -18,7 +19,7 @@ import opendream.infoaid.domain.Resource
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(PageController)
-@Mock([Page, PageService, User, PageUser, MessagePost, Post, Item, Need, Comment, Resource])
+@Mock([Page, PageService, User, PageUser, MessagePost, Post, Item, Need, Comment, Resource, PageSummary])
 class PageControllerTests {
     def pageService
     def date
@@ -427,6 +428,9 @@ class PageControllerTests {
 
     void testDisablePageEnablePage() {
         def page = Page.findBySlug('page-slug')
+        pageService = new PageService()
+        pageService.createOrUpdatePageSummary(page)
+        controller.pageService = pageService
         assert page.status == Page.Status.ACTIVE
         params.slug = 'page-slug'
 
@@ -473,9 +477,11 @@ class PageControllerTests {
 
     void testDisablePost() {
         // param nut , postId
-        controller.pageService = new PageService()
         def user = User.findByUsername('nut')
         def post = Post.findByMessage('first post')
+        pageService = new PageService()
+        pageService.createOrUpdatePageSummary(post.page)
+        controller.pageService = pageService
 
         params.userId = user.id
         params.postId = post.id
@@ -509,10 +515,13 @@ class PageControllerTests {
 
     void testPostNeed() {
         // param nut , page-slug
-        controller.pageService = new PageService()
         def user = User.findByUsername('nut')
         def page = Page.findBySlug('page-slug')
         def item = Item.findByName('water')
+        pageService = new PageService()
+        pageService.grailsApplication = [config:[infoaid:[api:[need:[max:5]]]]]
+        pageService.createOrUpdatePageSummary(page)
+        controller.pageService = pageService
 
         params.userId = user.id
         params.slug = page.slug
@@ -606,7 +615,11 @@ class PageControllerTests {
     }
 
     void testPostResource() {
-        controller.pageService = new PageService()
+        def page = Page.findBySlug('page-slug')
+        pageService = new PageService()
+        pageService.grailsApplication = [config:[infoaid:[api:[need:[max:5]]]]]
+        pageService.createOrUpdatePageSummary(page)
+        controller.pageService = pageService
 
         def user1 = User.findByUsername('nut')
         def item1 = Item.findByName('item')

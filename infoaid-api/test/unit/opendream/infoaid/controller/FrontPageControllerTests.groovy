@@ -11,7 +11,7 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(FrontPageController)
-@Mock([Page, User, PageUser, Post, Item, Need, Comment])
+@Mock([Page, User, PageUser, Post, Item, Need, Comment, PageSummary])
 class FrontPageControllerTests {
     def pageService
     def date
@@ -23,6 +23,7 @@ class FrontPageControllerTests {
         Page.metaClass.isDirty = {name -> false}
         User.metaClass.encodePassword = { -> 'password'}
         User.metaClass.isDirty = {password -> false}
+        PageSummary.metaClass.isDirty = {hasNeed -> true}
         pageService = mockFor(PageService)
 
         def user1 = new User(username: "nut", password: "nut", firstname: 'firstname', lastname: 'lastname', dateCreated: date, lastUpdated: date).save()
@@ -65,38 +66,28 @@ class FrontPageControllerTests {
     }
 
     void testInfo() {
+        pageService = new PageService()
+        pageService.grailsApplication = [config:[infoaid:[api:[need:[max:5]]]]]
         def page2 = new Page(name: "page2", lat: "latPage2", lng: "lngPage2", dateCreated: date, lastUpdated: date, slug: 'slug2', about: 'this is page 2').save()
-        /*pageService.demand.getSummaryInfo(1..1) { -> 
-            Page.findAllByStatus(Page.Status.ACTIVE)
-        }*/
-        pageService.demand.getActiveNeedPage(1..1) { -> 
-            def pages = Need.createCriteria().list() {
-                eq('status', Post.Status.ACTIVE)
-                projections {
-                    distinct('page')
-                }
-            }
-            pages
-        }
+        pageService.createOrUpdatePageSummary(page2)
 
-        pageService.demand.getLimitNeeds(1..2) {slug, max -> 
-            def page = Page.findBySlug(slug)
-            def needs = Need.createCriteria().list(max: max, sort: 'dateCreated', order: 'desc') {
-                eq('status', Post.Status.ACTIVE)
-                eq('page', page)
-            }
+        def page = Page.findByName('page')
+        pageService.createOrUpdatePageSummary(page)
+        pageService.addPageSummaryItems(page, [[id: 1, name: 'a', need: 10, resource: 10]])
 
-            [needs: needs, totalNeeds: needs.totalCount]
-        }
+        page = Page.findByName('second-page')
+        pageService.createOrUpdatePageSummary(page)
+        pageService.addPageSummaryItems(page, [[id: 1, name: 'a', need: 30, resource: 10]])
 
-        controller.pageService = pageService.createMock()
-        //controller.pageService = new PageService()
+        controller.pageService = pageService
 
         controller.info()
+
         println response.json
         Page.list().each {
             println " page ${it.name}"
         }
+
         assert 3 == Page.count()
         assert 2 == response.json['totalPages']
         assert '111' == response.json['pages'][0].lat

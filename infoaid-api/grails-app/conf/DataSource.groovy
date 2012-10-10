@@ -27,28 +27,48 @@ environments {
             username = "infoaid"
             password = "infoaid"           
         }
+        grails {
+            mongo {
+                host = "localhost"
+                port = 27017
+                username = "infoaid"
+                password = "openpubyesroti!"
+                databaseName = "infoaid"
+            }
+        }       
     }
     test {
         dataSource {
             dbCreate = "create-drop"
             url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
         }
+        grails {
+            mongo {
+                host = "localhost"
+                port = 27017
+                username = "infoaid"
+                password = "openpubyesroti!"
+                databaseName = "infoaid-test"
+            }
+        }        
     }
     production {
         dataSource {
             dbCreate = "update"
-            url = "jdbc:h2:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
-            pooled = true
-            properties {
-               maxActive = -1
-               minEvictableIdleTimeMillis=1800000
-               timeBetweenEvictionRunsMillis=1800000
-               numTestsPerEvictionRun=3
-               testOnBorrow=true
-               testWhileIdle=true
-               testOnReturn=true
-               validationQuery="SELECT 1"
-            }
+            driverClassName = "org.postgresql.Driver"
+            dialect = net.sf.hibernate.dialect.PostgreSQLDialect
+            url="jdbc:postgresql://localhost:5432/infoaid"
+            username = "infoaid"
+            password = "infoaid"
+        }
+        grails {
+        mongo {
+            host = "localhost"
+            port = 27017
+            username = "infoaid"
+            password = "openpubyesroti!"
+            databaseName = "infoaid"
         }
     }
+    }     
 }

@@ -52,6 +52,9 @@ class PageServiceIntegrationTests {
     @After
     void tearDown() {
         // Tear down logic here
+        PageSummary.list().each {
+            it.delete(flush:true)
+        }
     }
 
     @Test
@@ -305,7 +308,7 @@ class PageServiceIntegrationTests {
                     status: Post.Status.ACTIVE
                 )
         }
-        def summary = pageService.getItemSummary(fixture.bangkok)
+        def summary = pageService.getItemSummary(fixture.bangkok)        
 
         assert summary.size() == 2
 
@@ -316,5 +319,15 @@ class PageServiceIntegrationTests {
         def water = summary.find { it.name == "Water" }
         assert water.need == 100
         assert water.resource == 0
+
+        pageService.createOrUpdatePageSummary(fixture.bangkok)
+        def pageSummary = pageService.addPageSummaryItems(fixture.bangkok, summary)
+        assert 2 == pageSummary.items.size()
+        food = pageSummary.items.find {it.name == 'Food'}
+        assert 14 == food.need
+        assert 8 == food.resource
+        water = pageSummary.items.find {it.name == 'Water'}
+        assert 100 == water.need
+        assert 0 == water.resource
     }
 }
