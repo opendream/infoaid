@@ -147,6 +147,7 @@ class PageHelper
 			$iconSet = Yii::app()->params['item']['icon'];
 		}
 
+		$itemName = strtolower(trim($itemName));
 		foreach ($iconSet as $name => $config) {
 			if ($name == $itemName || in_array($itemName, $config['synonyms'])) {
 				return $name;

@@ -1,20 +1,3 @@
-/*angular.module('pageSearchService', ['ngResource']).
-        factory('Page', function ($resource) {
-            //var Page = $resource('<?php echo $this->createUrl("api/pageSearch"); ?>');
-            var Page = $resource(baseUrl + "api/pageSearch");            
-
-            return Page;
-        });
-
-, function ($routeProvider) {
-        $routeProvider.
-            when('/', {
-                controller: HeaderCtrl,
-                templateUrl: baseUrl + '/page/headers'
-            }).
-            otherwise({redirectTo: '/'});
-    }*/
-
 angular.module('page', ['pageSearchService', 'headerService']);
 
     function searchController($scope, Page) {
@@ -75,21 +58,22 @@ angular.module('page', ['pageSearchService', 'headerService']);
             }
         }
 
-        $scope.loadMore = function() {
-            angular.element('#load-more-button').hide();
-            var target = document.getElementById('loading');
-            var spinner = new Spinner(opts).spin(target);
+        $scope.loadMore = function(event) {
+            var button = $(event.currentTarget);
+            button.button('loading');
+
             Page.query({
                 word: $scope.word,
                 offset: $scope.pages.length
             }, function (pages) {
-                if(pages.length != 0) {
-                    angular.element('#load-more-button').show();  
+                if(pages.length == 0) {
+                    $('#load-more-button').hide();  
                 }
                 angular.forEach(pages, function (page) {
                     $scope.pages.push(page);
                 });
-                spinner.stop();
+
+                button.button('reset');
             });
         };
 

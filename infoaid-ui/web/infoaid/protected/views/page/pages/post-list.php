@@ -48,8 +48,8 @@
 <div class="clear"></div>
 
 <div class="load-more" ng-show="posts.length">
-	<button class="btn" ng-click="loadMore()">
-		<i class="icon icon-plus"></i> Load more
+	<button class="btn" ng-click="loadMore($event)">
+		<i class="icon icon-arrow-down"></i> Load more
 	</button>
 </div>
 <script>

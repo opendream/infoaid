@@ -55,7 +55,7 @@
 						        </div>
 						    </div>						    
 						    <div id="page-header-join-leave-{{page.id}}" class="page-header-join-leave">
-						        <button class='btn' ng-click="handleClick()" ng-show="<?php echo Yii::app()->user->getId();?>">{{page.isJoined | JoinLabel}}</button>        
+						        <button class='btn' ng-click="handleClick($event)" ng-show="<?php echo Yii::app()->user->getId(); ?>" data-joined-text="{{1 | JoinLabel}}" data-leaved-text="{{0 | JoinLabel}}" ng-init="slug=page.slug">{{page.isJoined | JoinLabel}}</button>        
 						    </div>
 						    <div id="join-leave-page-loading-{{page.id}}"></div>    
 						</div>
@@ -67,11 +67,10 @@
 		<div id='result-search-error'></div>
 		
 		<div class="load-more" id="load-more" ng-show="pages.length">
-			<button id="load-more-button" class="btn" ng-click="loadMore()">
-				<i class="icon icon-plus"></i> Load more
+			<button id="load-more-button" class="btn" ng-click="loadMore($event)">
+				<i class="icon icon-arrow-down"></i> Load more
 			</button>
 		</div>
-		<div id="loading" class="ajax-loading"></div>
 	</div>
 </div>
 <script>
