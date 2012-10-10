@@ -30,9 +30,9 @@ class PageSummary {
     }
 
     def beforeUpdate() {
-        //if (isDirty('hasNeed')) {
+        if (isDirty('items')) {
             this.hasNeed = checkNeed()
-        //}
+        }
     }
 
     protected Boolean checkNeed() {
