@@ -132,3 +132,27 @@ function getFlash($type)
 {
   return user()->getFlash($type);
 }
+
+function csrf_token()
+{
+  return Yii::app()->getRequest()->getCsrfToken();
+}
+
+function csrf_token_form()
+{
+  $token = csrf_token();
+  $token_name = Yii::app()->getRequest()->csrfTokenName;
+  echo "<input type=\"hidden\" name=\"$token_name\" value=\"$token\" />";
+}
+
+function get_post_csrf_token()
+{
+  return $_POST['csrf_token'];
+}
+
+function check_csrf_token()
+{
+  if (csrf_token() !== get_post_csrf_token()) {
+    throw new CHttpException(400,Yii::t('yii','The CSRF token could not be verified.'));
+  }
+}

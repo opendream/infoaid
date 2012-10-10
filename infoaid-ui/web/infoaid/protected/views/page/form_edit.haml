@@ -5,6 +5,7 @@
 	#{$this->renderPartial('/_flash')}
 
 	%form.form-horizontal{:method => "POST", :enctype => "multipart/form-data"}
+		#{csrf_token_form()}
 		%legend
 			Basic Information
 		.control-group

@@ -6,6 +6,12 @@ class ApiController extends IAController
 
 	public $angular = FALSE;
 
+	public function init()
+	{
+		parent::init();
+		Yii::app()->getRequest()->enableCsrfValidation = false;
+	}
+
 	public function actions()
 	{
 		return array(
