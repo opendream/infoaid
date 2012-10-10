@@ -629,7 +629,6 @@ class PageService {
             items.sort { a, b -> b.need - a.need}
             pageSummary.items = items.subList(0,limit)
         } else {
-            println items
             pageSummary.items = items
         }        
         pageSummary.save(failOnError: true, flush: true)
