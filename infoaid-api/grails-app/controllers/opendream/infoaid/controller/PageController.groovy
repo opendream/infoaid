@@ -457,7 +457,7 @@ class PageController {
     }
 
     def postNeed() {
-        def ret
+        def ret = [:]
         def slug = params.slug
         def itemId = params.itemId
         def quantity = params.quantity
@@ -470,11 +470,13 @@ class PageController {
         }
         
         def result = pageService.createNeed(userId, slug, itemId, quantity, message)
-        ret = [post: [id :result.post.id, message: result.post.message,
-        item: [id: result.post.item.id, name: result.post.item.name], quantity: result.post.quantity,
-        createdBy: result.post.createdBy, lastActived: result.post.lastActived], 
-        user: result.user.username, page: result.page.name, slug: result.page.slug]
-        ret.status = 1
+        if(result.status == 1) {
+            ret = [post: [id :result.post.id, message: result.post.message,
+            item: [id: result.post.item.id, name: result.post.item.name], quantity: result.post.quantity,
+            createdBy: result.post.createdBy, lastActived: result.post.lastActived], 
+            user: result.user.username, page: result.page.name, slug: result.page.slug]
+        }
+        ret.status = result.status
         ret.message = "user: ${result.user.username} posted request ${result.post.item.name}, quantity: ${result.post.quantity} in page: ${result.page.name}"
         render ret as JSON
     }
@@ -504,17 +506,27 @@ class PageController {
 
     def disablePage() {
         def slug = params.slug
-        def page = pageService.disablePage(slug)
-        def ret = [status:1, page:[slug:page.slug, name:page.name, 
-                    lat: page.lat, lng: page.lng, status:page.status.toString()]]
+        def result = pageService.disablePage(slug)
+        def ret = [:]
+        if(result.status==1) {
+            ret = [status: result.status, page:[slug:result.page.slug, name:result.page.name, 
+                    lat: result.page.lat, lng: result.page.lng, status:result.page.status.toString()]]
+        } else {
+            ret = [status: result.status, message: result.message]
+        }
         render ret as JSON
     }
 
     def enablePage() {
         def slug = params.slug
-        def page = pageService.enablePage(slug)
-        def ret = [status:1, page:[slug:page.slug, name:page.name, 
-                    lat: page.lat, lng: page.lng, status:page.status.toString()]]
+        def result = pageService.enablePage(slug)
+        def ret = [:] 
+        if(result.status==1) {
+            ret = [status: result.status, page:[slug:result.page.slug, name:result.page.name, 
+                    lat: result.page.lat, lng: result.page.lng, status:result.page.status.toString()]]
+        } else {
+            ret = [status: result.status, message: result.message]
+        }
         render ret as JSON
     }
 

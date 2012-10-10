@@ -9,6 +9,7 @@ import opendream.infoaid.domain.User
 import opendream.infoaid.domain.Need
 import opendream.infoaid.domain.MessagePost
 import opendream.infoaid.domain.Resource
+import opendream.infoaid.domain.PageSummary
 
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
@@ -139,14 +140,16 @@ class PageService {
             household: household, population: population, about: about, 
             picOriginal: picOriginal, picSmall: picSmall, picLarge: picLarge)
         try {
-            page.save(failOnError: true, flush: true)
+            if(page.save(failOnError: true, flush: true)) {
+                def user = User.get(userId)
+                PageUser.createPage(user, page)
+                createOrUpdatePageSummary(page)                
+            }
         }
         catch (e) {
             log.error e
             throw e
-        }
-        def user = User.get(userId)
-        PageUser.createPage(user, page)
+        }        
         page
     }
 
@@ -210,14 +213,23 @@ class PageService {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
 
-        page.users.each {
+        if( (PageUser.findByPageAndUser(page, user)) && (isOwner(userId, slug).isOwner==true) ) {
+            page.status = Page.Status.INACTIVE
+            if(page.save(failOnError:true, flush:true)) {
+                removePageSummary(page)
+            } else {
+                    return false
+            }
+        }
+
+        /*page.users.each { // have to refactor // todo PageSummary update
             if((it.user == user) && (it.relation == PageUser.Relation.OWNER)) {
                 page.status = Page.Status.INACTIVE
                 if(!page.save()) {
                     return false
                 }
             }
-        }
+        }*/
     }
 
     def getAllNeeds(slug) {
@@ -287,7 +299,7 @@ class PageService {
         }
     }
 
-    def createNeed(userId, slug, itemId, quantity, message = "") {
+    def createNeed(userId, slug, itemId, quantity, message = "") {// todo PageSummary update
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
         def item = Item.get(itemId)
@@ -299,8 +311,14 @@ class PageService {
         def date = new Date()
         def need = new Need(lastActived: date, createdBy: user, updatedBy: user, expiredDate: date+14, message: message, item: item, quantity: quantity)
         page.addToPosts(need)
-        page.save(failOnError: true, flush: true)
-        return [user: user, page: page, post: need]
+
+        if(page.save(failOnError: true, flush: true)) {
+            def items = getItemSummary(page)
+            addPageSummaryItems(page, items)
+            return [status:1, user: user, page: page, post: need]
+        } else {
+            return [status:0, user: user, page: page, post: need]
+        }        
     }
 
     def createMessagePost(userId, slug, message, picOriginal, picLarge, picSmall) {
@@ -329,7 +347,7 @@ class PageService {
         Page.findAllByStatus(Page.Status.ACTIVE)
     }
 
-    def updatePage(slug, data) {
+    def updatePage(slug, data) { // todo PageSummary update
         def page = Page.findBySlug(slug)
         if(!page) {
             return [status: 0, message: 'Page not found', data: data]
@@ -343,36 +361,43 @@ class PageService {
         }
         page.properties['name', 'lat', 'lng', 'location', 'status', 'household', 'population', 'about', 'version', 
         'picOriginal', 'picSmall', 'picLarge'] = data
-        if(!page.save()) {
+        if(page.save(failOnError: true, flash: true)) {
+            createOrUpdatePageSummary(page)
+            return [status: 1, message: 'This page was updated', data: data]
+        } else {
             return [status: 0, message: 'Cannot update this page', data: data]
-        }
-        return [status: 1, message: 'This page was updated', data: data]
+        }        
     }
 
-    def disablePage(slug) {
+    def disablePage(slug) { // todo PageSummary update
         def page = Page.findBySlug(slug)
         if(!page) { // page not found
             return
         }
 
         page.status = Page.Status.INACTIVE
-        if(!page.save()) { // process not complete
-            return
-        }
-        page
+        if(page.save(failOnError: true, flash: true)) { // process not complete
+            removePageSummary(page)
+            return [status:1, page: page, message: "${page.name} is disabled"]
+        } else {
+            return [status:0, message: "can not disabled ${page.name}"]
+        }        
     }
 
-    def enablePage(slug) {
+    def enablePage(slug) { // todo PageSummary update
         def page = Page.findBySlug(slug)
         if(!page) {
             return
         }
 
         page.status = Page.Status.ACTIVE
-        if(!page.save()) {
-            return
+        if(page.save(failOnError:true, flash:true)) {
+            createOrUpdatePageSummary(page)
+            return [status:1, page: page, message: "${page.name} is enabled"]
+        } else {
+            return [status:0, message: "can not enable ${page.name}"]
         }
-        page
+        
     }
 
     def getActiveNeedPage() {
@@ -424,14 +449,21 @@ class PageService {
         } 
     }
 
-    def disablePost(userId, postId) {    
+    def disablePost(userId, postId) { // todo PageSummary update
         def post = Post.get(postId)  
         if(post?.createdBy?.id != userId) {
-            [status:0, message:'unauthorized user or not found post']
-        } else {  
-            post.status = Post.Status.INACTIVE
-            post.save(failOnError: true, flush:true) 
-            [status:1, message:"post ${postId} is deleted", id:postId] 
+            return [status:0, message:'unauthorized user or not found post']
+        }
+
+        post.status = Post.Status.INACTIVE
+        if(post.save(failOnError: true, flush:true)) { 
+            if(post instanceof Need) {           
+                def items = getItemSummary(post.page)
+                addPageSummaryItems(post.page, items)
+            }
+            return [status:1, message:"post ${postId} is deleted", id:postId] 
+        } else {
+            return [status:0, message:'can not delete post ${postId}']
         }
     }
 
@@ -541,6 +573,9 @@ class PageService {
         ret.post.previousSumQuantity = previousSumQuantity
         ret.pageUser = pageUser
 
+        def items = getItemSummary(page)
+        addPageSummaryItems(page, items)
+
         return ret
     }
 
@@ -570,5 +605,37 @@ class PageService {
                 resource: sumResource,
             ]
         }.findAll { it.need || it.resource }
+    }
+
+    def createOrUpdatePageSummary(page) {
+        def pageSummary = PageSummary.findByPageId(page.id)
+        if(!pageSummary) {
+            pageSummary = new PageSummary()
+            pageSummary.pageId = page.id
+        }
+        pageSummary.properties['name', 'lat', 'lng', 'dateCreated', 'lastUpdated', 'slug', 'household', 'population'] = page.properties
+        pageSummary.save(failOnError: true, flush: true)
+    }   
+
+    def removePageSummary(page) {
+        def pageSummary = PageSummary.findByPageId(page.id)
+        pageSummary.delete(failOnError: true, flush: true)
+    }
+
+    def addPageSummaryItems(page, items) {
+        def limit = grailsApplication.config.infoaid.api.need.max
+        def pageSummary = PageSummary.findByPageId(page.id)
+        if(items?.size()>limit) {
+            items.sort { a, b -> b.need - a.need}
+            pageSummary.items = items.subList(0,limit)
+        } else {
+            pageSummary.items = items
+        }        
+        pageSummary.save(failOnError: true, flush: true)
+    }
+
+    def reloadPageSummary(page) {
+        def items = getItemSummary(page)
+        addPageSummaryItems(page, items)
     }
 }
