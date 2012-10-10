@@ -625,7 +625,7 @@ class PageService {
     def addPageSummaryItems(page, items) {
         def limit = grailsApplication.config.infoaid.api.need.max
         def pageSummary = PageSummary.findByPageId(page.id)
-        if(items.size()>limit) {
+        if(items?.size()>limit) {
             items.sort { a, b -> b.need - a.need}
             pageSummary.items = items.subList(0,limit)
         } else {
