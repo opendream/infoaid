@@ -12,7 +12,9 @@ angular.module('commentService', ['ngResource']).
 		return DeleteComment;
 	}).
 	factory('PostMessage', function ($resource) {
-		var PostMessage = $resource(baseUrl + '/api/postMessage');
+		var PostMessage = $resource(baseUrl + '/api/postMessage', {}, {
+			'get' : { method: 'post' }
+		});
 		return PostMessage;
 	}).
 	factory('DeletePost', function ($resource) {
@@ -220,6 +222,7 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 				slug: $scope.slug,
 				message: $scope.message,
 				picOriginal: $('#picOriginal').val(),
+				picLarge: $('#picLarge').val(),
 				picSmall: $('#picSmall').val()
 			};
 			
@@ -228,6 +231,7 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 				$scope.message = '';
 				$('#previewImg').html('');
 				$('#picSmall').val('');
+				$('#picLarge').val('');
 		        $('#picOriginal').val('');
 			});							
 		}
@@ -235,14 +239,18 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 
 	$scope.postRequest = function() {
 		var options = {
-				slug: $scope.slug,
-				itemId: $scope.request, 
-				quantity: $scope.qty
-			};
+			slug: $scope.slug,
+			itemId: $scope.request, 
+			quantity: $scope.qty
+		};
 		PostRequest.get(options, function (ret) {	
-				RefreshPost($scope);;	
-				$scope.request = '';
-				$scope.qty = '';			
+			RefreshPost($scope);
+
+			// Get element and clear value.
+			var el = $('select[ng-model="request"]');
+			el.select2('val', '');
+			$scope.request = '';
+			$scope.qty = '';	
 		});
 	}
 
@@ -254,6 +262,10 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 			};
 		PostResource.get(options, function (ret) {
 			RefreshPost($scope);
+
+			// Get element and clear value.
+			var el = $('select[ng-model="resource"]');
+			el.select2('val', '');
 			$scope.resource = '';
 			$scope.resourceQty = '';
 		});

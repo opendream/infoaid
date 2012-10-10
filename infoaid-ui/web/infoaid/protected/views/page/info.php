@@ -42,11 +42,16 @@
 				    <div ng-controller="MemberCtrl">               
 				        <ul class="unstyled">
 				            <li ng-repeat="member in members">
-				                <span>{{member.username}}</span>
+				            	<a class="avatar" href="{{baseUrl + '/user/profile/' + member.id}}" title="{{member.firstname}} {{member.lastname}}">
+				                	<img class="img-circle top-member-sidebar" src="{{baseUrl + member.picSmall}}" />
+				                </a>
 				            </li>
 				        </ul>
 				    </div>
-				    <div><span class='show-more-members'><?php echo CHtml::link('Show more ..', array('page/members','slug'=>$slug)); ?></span></div>
+				    <div class="clear"></div>
+				    <div ng-show="">
+				    	<span class='show-more-members'><?php echo CHtml::link('Show more ..', array('page/members','slug'=>$slug)); ?></span>
+				    </div>
 				</div>	
 				<?php $this->renderPartial('/item/sidebar'); ?>			
 			</div>

@@ -201,6 +201,7 @@ class PageController {
                     class: it.class.name.tokenize('.')[-1],
                     message: it.message,
                     picSmall: it.picSmall,
+                    picLarge: it.picLarge,
                     picOriginal: it.picOriginal,
                     dateCreated: it.dateCreated.format('yyyy-MM-dd HH:mm'),
                     createdBy: it.createdBy.username,
@@ -435,13 +436,15 @@ class PageController {
         def slug = params.slug
         def message = params.message
         def picOriginal = params.picOriginal
+        def picLarge = params.picLarge
         def picSmall = params.picSmall
+        println params
 
-        def result = pageService.createMessagePost(userId, slug, message, picOriginal, picSmall)
+        def result = pageService.createMessagePost(userId, slug, message, picOriginal, picLarge, picSmall)
         if(result) {
             ret = [post: [id :result.post.id, message: result.post.message,
             createdBy: result.post.createdBy, dateCreated: result.post.dateCreated, 
-            lastActived: result.post.lastActived, picOriginal: result.post.picOriginal, picSmall: result.post.picSmall], user: result.user.username, 
+            lastActived: result.post.lastActived, picOriginal: result.post.picOriginal, picSmall: result.post.picSmall, picLarge: result.post.picLarge], user: result.user.username, 
             page: result.page.name, slug: result.page.slug]
             ret.status = 1
             ret.message = "user: ${result.user.username} posted message in page: ${result.page.name}"

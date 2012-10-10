@@ -190,10 +190,30 @@ return array(
 
 		'allowed_language' => array('en', 'th'),
 
+		'global' => array(
+			'pageSidebarTopMemberLimit' => 6,
+
+			'browser_warning'=>array(
+				'reject' => array(
+					'all' => false,
+					'msie5' => true,
+					'msie6' => true,
+					'msie7' => true,
+					'msie8' => true,
+				),
+				'imagePath' => '/js/jReject/images/',
+			),
+		),
+
 		'profile' => array(
 			'photo' => array(
 				'prefixUrl' => '/media/profiles/',
 				'destinationDir' => dirname(__FILE__).'/../../media/profiles/',
+				'defaultAvatar' => array(
+					'original' => '/media/profiles/profile_default_original.png',
+					'large' => '/media/profiles/profile_default_large.png',
+					'small' => '/media/profiles/profile_default_small.png',
+				),
 
 				'size' => array(
 					'original' => array(
@@ -257,14 +277,15 @@ return array(
 				
 				'size' => array(
 					'original' => array(
-						'width' => '400',
-						'height' => '400',
+						'width' => '4048',
+						'height' => '4048',
 						'suffix' => '_o',
+						'no_adaptive_resize' => true,
 					),
 
 					'large' => array(
-						'width' => '160',
-						'height' => '160',
+						'width' => '400',
+						'height' => '400',
 						'suffix' => '_l',
 					),
 
@@ -334,6 +355,8 @@ return array(
 					),
 				),
 			),
+
+			// another settings.
 		),
 	),
 );

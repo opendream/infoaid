@@ -52,8 +52,11 @@ class ApiController extends IAController
 	}
 
 	public function actionMembers($slug) {
-		$resultNeeds = API::getJSON('page/'.urlencode($slug).'/top_members');
-		$this->renderJSON($resultNeeds);
+		$result = API::getJSON('page/'.urlencode($slug).'/top_members');
+		foreach ($result->topMembers as &$member) {
+			UserHelper::assignDefaultAvatar($member);
+		}
+		$this->renderJSON($result);
 	}
 
 	public function actionComment($postId, $message) {
@@ -67,8 +70,8 @@ class ApiController extends IAController
 		$this->renderJSON($resultJson);
 	}
 
-	public function actionPostMessage($slug, $message, $picOriginal, $picSmall) {
-		$params = array('message'=>$message, 'picOriginal'=>$picOriginal, 'picSmall'=>$picSmall);
+	public function actionPostMessage($slug, $message, $picOriginal, $picLarge, $picSmall) {
+		$params = array('message'=>$message, 'picOriginal'=>$picOriginal, 'picLarge'=>$picLarge, 'picSmall'=>$picSmall);
 		$resultJson = API::post('page/'.urlencode($slug).'/post_message/', $params, 'json');
 		$this->renderJSON($resultJson);
 	}

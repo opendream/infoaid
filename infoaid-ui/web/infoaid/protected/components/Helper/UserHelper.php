@@ -113,4 +113,41 @@ class UserHelper
 			throw new CHttpException(415, $result);
 		}
 	}
+
+	public static function defaultAvatar($size = null)
+	{
+		$config = Yii::app()->params['profile']['photo']['defaultAvatar'];
+
+		if (is_string($size)) {
+			return $config[$size];
+		}
+		else {
+			return $config;
+		}
+	}
+
+	public static function assignDefaultAvatar(&$userObject)
+	{
+		$userObject = (object)$userObject;
+
+		$config = self::defaultAvatar();
+		$userObject->picOriginal = self::defaultAvatarIfAvatarNotExists($userObject->picOriginal, 'original');
+		$userObject->picLarge = self::defaultAvatarIfAvatarNotExists($userObject->picLarge, 'large');
+		$userObject->picSmall = self::defaultAvatarIfAvatarNotExists($userObject->picSmall, 'small');
+	}
+
+	public static function defaultAvatarIfAvatarNotExists($path, $size)
+	{
+		static $cache;
+
+		if (! isset($cache[$path])) {
+			if (! file_exists(Yii::app()->basePath . '/..' . $path)) {
+				$path = self::defaultAvatar($size);
+			}
+
+			$cache[$path] = $path;
+		}
+
+		return $cache[$path];
+	}
 }

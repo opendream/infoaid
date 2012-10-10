@@ -24,4 +24,16 @@ angular
 				}
 			}
 		};
+	})
+	.directive('colorbox', function () {
+		return {
+			restrict: 'C',
+			link: function ($scope, $element, $attrs) {
+				$element.colorbox({
+					scalePhotos: true,
+					maxWidth: '90%',
+					maxHeight: '90%'
+				});
+			}
+		};
 	});

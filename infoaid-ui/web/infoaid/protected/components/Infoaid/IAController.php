@@ -16,7 +16,9 @@ class IAController extends CController
 		'timeago',
 	);
 
-	private $modules = array();
+	private $modules = array(
+		'JRejectModule',
+	);
 	private $_modules = array();
 
 	protected $_app;
@@ -43,6 +45,8 @@ class IAController extends CController
 	public function beforeRender($view)
 	{
 		parent::beforeRender($view);
+		$this->runModule('beforeBeforeRender');
+
 		$this->injectLocale();
 
 		if ($this->jquery == TRUE) {
@@ -65,6 +69,8 @@ class IAController extends CController
 			Yii::app()->clientScript
 				->registerScriptFile(Yii::app()->baseUrl .'/js/timeago.js');
 		}
+
+		$this->injectJSConfig();
 
 		foreach ($this->scripts as $script) {
 			Yii::app()->clientScript
@@ -149,6 +155,16 @@ class IAController extends CController
 		}
 	}
 
+	public function injectJSConfig()
+	{
+		$config = json_encode(Yii::app()->params['global']);
+
+		$js = "window.InfoAid={settings:{}};jQuery.extend(InfoAid.settings, $config)";
+
+		Yii::app()->clientScript
+			->registerScript('infoaid-settings',$js,CClientScript::POS_HEAD);
+	}
+
 	public function loadModule($module)
 	{
 		$this->modules[$module] = $module;
@@ -171,7 +187,10 @@ class IAController extends CController
 	public function runModule($context)
 	{
 		foreach ($this->modules as $module) {
-			$this->_modules[$module]->$context($this);
+			$module = $this->_modules[$module];
+			if (method_exists($module, $context)) {
+				$module->$context($this);
+			}
 		}
 	}
 

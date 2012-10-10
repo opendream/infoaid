@@ -38,15 +38,17 @@ $(function () {
 	    done: function (e, data) {
 	    	// Clear error
 	    	$('.alert', $uploadform).hide();
-	        var imgSmall = data.result.small
-	        var imgOriginal = data.result.original
+	        var imgSmall = data.result.small;
+	        var imgLarge = data.result.large;
+	        var imgOriginal = data.result.original;
 	        $('#previewImg').html("<img src="+baseUrl+imgSmall.url+">");
-	        $('#picSmall').val(imgSmall.url)
-	        $('#picOriginal').val(imgOriginal.url)
+	        $('#picSmall').val(imgSmall.url);
+	        $('#picLarge').val(imgLarge.url);
+	        $('#picOriginal').val(imgOriginal.url);
 	    },
 	    fail: function (e, data) {
 	    	var $span = $('span', $uploadform),
-	    		$previewImg = $('#previewImg')
+	    		$previewImg = $('#previewImg');
 	    	;
 
 	    	$previewImg.html('');

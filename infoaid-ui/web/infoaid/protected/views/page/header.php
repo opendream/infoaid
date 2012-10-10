@@ -60,6 +60,7 @@
                     }
                 ?>
             </span>
+            <?php echo '&nbsp'; ?>
             <span>
                 <?php
                     if($post->lng == null) {

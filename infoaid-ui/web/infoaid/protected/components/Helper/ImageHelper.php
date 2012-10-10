@@ -132,6 +132,7 @@ class ImageHelper
 			$width = $config['width'];
 			$height = $config['height'];
 			$suffix = $config['suffix'];
+			$adaptiveResize = ! (bool) $config[''];
 
 			$destname = $filename . $suffix .'.png';
 			$destpath = $dir .'/'. $destname;
@@ -139,7 +140,12 @@ class ImageHelper
 			try {
 				$thumb = Yii::app()->phpThumb->create($filepath);
 
-				$thumb->adaptiveResize($width, $height);
+				if ($adaptiveResize) {
+					$thumb->adaptiveResize($width, $height);
+				}
+				else {
+					$thumb->resize($width, $height);
+				}
 				$thumb->save($destpath, 'png');
 
 				$processed[$name] = $destpath;
