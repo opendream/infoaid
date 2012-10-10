@@ -86,12 +86,14 @@ h2 {
 	font-size: 18px;
 }
 .flash-message-error { margin: 0; }
+
 /*--------- Page ---------*/
 #page {
 	border: 1px solid #ccc;
 	background: url('../img/bg-infoaid.png') repeat;
 	background-color: #f0eede;
 }
+
 /*--------- Join page ---------*/
 .page-header-join-leave { margin-right: 10px; }
 body {
@@ -281,23 +283,27 @@ legend + .control-group {
 }
 .navbar {
 	.brand {
-		padding-top: 0;
+		padding-top: 20px;
 		font-size: 40px;
 	}
 	.nav.actions, .nav.pull-right {
-		.dropdown {
-			.dropdown-menu {
+		a { 
+			padding: 30px 15px 10px;
+			&:active, &:hover {
+				color: #555;
+				text-decoration: none;
+				background-color: #E5E5E5;
+				-webkit-box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
+				-moz-box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
+				box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.125);
 			}
 		}
-	}
-	.nav.actions {
-		a { padding: 10px 15px 10px; }
 	}
 	.navbar-text {
 		margin-right: 10px;
 	}
 	.navbar-inner {
-		padding: 20px 20px 0;
+		padding:  0 20px;
 	}
 }
 .dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a {
