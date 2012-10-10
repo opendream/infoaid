@@ -85,10 +85,6 @@ h2 {
 	margin: 0;
 	font-size: 18px;
 }
-.error {
-	padding: 0 20px 20px;
-	background-color: #FBF7EE;
-}
 .flash-message-error { margin: 0; }
 /*--------- Page ---------*/
 #page {
@@ -101,7 +97,8 @@ h2 {
 body {
 	#footer {
 		margin: 0;
-		border-top: 1px solid #ccc;
+		padding: 20px;
+		border-top: 1px dashed #ccc;
 	}
 }
 .page-sidebar {	
@@ -111,9 +108,10 @@ body {
 	border: 1px dashed #ccc;
 	.page-sidebar-profile, 
 	.ul-list { padding-left: 0; }
+	.img-polaroid { padding: 0; }
 }
 .span10 {
-	margin: 20px 0;
+	margin: 20px 0 10px;
 	padding: 10px 0;
 	width: 671px;
 }
@@ -190,16 +188,12 @@ body {
 			border: none;
 			box-shadow: none;
 			padding: none;
-			border-radius: 23px;
-			/* @include img-shadow; */
+			border-radius: 23px; 	
 		}
 	}
 	.message-details {
 		margin-left: 60px;
 		padding: 0;
-		.message-body { 
-/* 			padding: 10px 0;  */
-		}
 		.message-picture-preview {
 			margin-top: 12px;
 		}
@@ -287,8 +281,8 @@ legend + .control-group {
 }
 .navbar {
 	.brand {
-/* 		color: white; */
-		text-shadow: none;
+		padding-top: 0;
+		font-size: 40px;
 	}
 	.nav.actions, .nav.pull-right {
 		.dropdown {
@@ -301,6 +295,9 @@ legend + .control-group {
 	}
 	.navbar-text {
 		margin-right: 10px;
+	}
+	.navbar-inner {
+		padding: 20px 20px 0;
 	}
 }
 .dropdown-menu li > a:hover, .dropdown-menu li > a:focus, .dropdown-submenu:hover > a {
@@ -319,25 +316,20 @@ legend + .control-group {
 	}
 }
 .page-name {
-	a {	color: #AE1725; }
+	a {	font-size: 15px; }
 }
 .nav-pills {
 	li {
 		a { 
+			font-size: 14px;
 			text-shadow: none;
-			font-size: 13px;
-			color: #AE1725; 
 			&:hover {
-				color: #AE1725;
 			}
 		}
 		&.active {
 			a {
-				border-radius: 13px;
-				background-color: #FAE7AF;
-				color: #AE1725;
+				border-radius: 5px;
 				&:hover {
-					background-color: #E8B58B;
 				}
 			}
 		}
@@ -451,11 +443,11 @@ width: 190px;
 	}
 }
 
+
 /*********************************************************
 		Login Page
 **********************************************************/
 #user-login {
-	background-color: #FBF7EE;
 	.page-header {
 		margin: 0;
 		h1 { padding: 0 20px; }
@@ -559,13 +551,13 @@ input, textarea, uneditable {
 **********************************************************/
 #user-create {
 	padding: 0 20px;
-	background-color: #fbf7ee;
 	.page-header {
 		margin: 0;
 	}
 	.form-actions {
 		background-color: transparent;
 		margin-bottom: 0;
+		border-top: none;
 	}
 	.btn {
 		@include btn;
@@ -710,4 +702,18 @@ img.top-member-sidebar {
 	.page-header {
 		border: 1px dashed #ccc;
 	}
+}
+
+.nav-pills > {
+	&.active > a, &.active > a:hover {
+		color: #999;
+		background-color: #EEE;
+	}
+}
+.btn-link {
+	color: #999;
+}
+
+.label-info, .badge-info {
+	background: #999;
 }
