@@ -216,14 +216,19 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
         $scope.isjoined = SharedService.isJoined;
     });
 
-	$scope.postMessage = function() {
-		if ($scope.message) {	
+	$scope.postMessage = function(event) {
+		var button = $('.post-button button');
+
+		if ($scope.message) {
+			button.button('loading');
+
 			var options = {
 				slug: $scope.slug,
 				message: $scope.message,
 				picOriginal: $('#picOriginal').val(),
 				picLarge: $('#picLarge').val(),
-				picSmall: $('#picSmall').val()
+				picSmall: $('#picSmall').val(),
+				csrf_token: $('.message-post-form input[name="csrf_token"]').val()
 			};
 			
 			PostMessage.get(options, function (ret) {
@@ -233,6 +238,8 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 				$('#picSmall').val('');
 				$('#picLarge').val('');
 		        $('#picOriginal').val('');
+
+		        button.button('reset');
 			});							
 		}
 	}

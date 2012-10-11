@@ -1,7 +1,4 @@
 <?php
-	$session = new CHttpSession;
-	$session->open();
-	//$userId = 8185;
 	$userId = Yii::app()->user->getId();
 	$totalLoad = $_GET['totalLoad'];
     $members = PageHelper::getMembers($slug, $totalLoad);
@@ -67,37 +64,30 @@
     }
 
 ?>
-<header class="info" ng-app='member'>
-	<div>
-		<?php $this->renderPartial('sidebar', array(
-							'userId' => $userId						
-						)); ?>
-	</div>
+<div ng-app="member">
+
+<?php $this->renderPartial('sidebar', array(
+	'userId' => $userId						
+)); ?>
+
+<header class="info">
 	<div>
 		<?php $this->renderPartial('header', array('slug'=>$slug, 'id'=>$page->id)); ?>
 	</div>
 </header>
 <div class='flash-message'>
-	<?php
-		if( Yii::app()->user->hasFlash('error') ) {
-	?>
+	<?php if( Yii::app()->user->hasFlash('error') ): ?>
 	<span class="alert alert-error">
-		<?php
-				echo Yii::app()->user->getFlash('error');
-			}
-		?>
+		<?php echo Yii::app()->user->getFlash('error'); ?>
 	</span>
-	<?php
-		if( Yii::app()->user->hasFlash('success') ) {
-	?>
+	<?php endif; ?>
+	<?php if( Yii::app()->user->hasFlash('success') ): ?>
 	<span class="alert alert-success">
-		<?php
-				echo Yii::app()->user->getFlash('success');
-			}
-		?>
+		<?php echo Yii::app()->user->getFlash('success'); ?>
 	</span>
+	<?php endif; ?>
 </div>
-<div id="page-members" ng-app="member" class="page-members" ng-controller="memberController">
+<div id="page-members" class="page-members" ng-controller="memberController">
 	<header>
 		<h1 class="header-members">Members</h1><div id='showing'>(Showing <?php echo $totalLoad;?> members)</div>
 	</header>
@@ -108,16 +98,14 @@
 				}
 			?>
 	</div>
-
-
 	
 	<div class="load-more" id="load-more">
-		<button class="btn" ng-click="loadMore()" id="load-more-button">
-			<i class="icon icon-plus"></i> Load more
+		<button class="btn" ng-click="loadMore($event)" id="load-more-button">
+			<i class="icon icon-arrow-down"></i> Load more
 		</button>
-		<div id="loading" class="ajax-loading"></div>
 	</div>
 
+</div>
 </div>
 <script>
 	angular.module('memberService', ['ngResource']).
@@ -134,26 +122,7 @@
 
 	angular.module('member', ['memberService', 'headerService']);
 
-	
-
 	function memberController($scope, Member, Relation) {
-		var opts = {
-		  lines: 13, // The number of lines to draw
-		  length: 7, // The length of each line
-		  width: 4, // The line thickness
-		  radius: 10, // The radius of the inner circle
-		  corners: 1, // Corner roundness (0..1)
-		  rotate: 0, // The rotation offset
-		  color: '#000', // #rgb or #rrggbb
-		  speed: 1, // Rounds per second
-		  trail: 60, // Afterglow percentage
-		  shadow: false, // Whether to render a shadow
-		  hwaccel: false, // Whether to use hardware acceleration
-		  className: 'spinner', // The CSS class to assign to the spinner
-		  zIndex: 2e9, // The z-index (defaults to 2000000000)
-		  top: 'auto', // Top position relative to parent in px
-		  left: 'auto' // Left position relative to parent in px
-		};
 
 		$scope.totalLoad = parseInt('<?php echo $totalLoad; ?>');
 
@@ -208,10 +177,10 @@
 	    	return ret;
 	    }
 	    
-		$scope.loadMore = function() {
-			var target = document.getElementById('loading');
-			var spinner = new Spinner(opts).spin(target);
-			$('#load-more-button').hide();
+		$scope.loadMore = function(event) {
+			var button = angular.element(event.currentTarget);
+			button.button('loading');
+
 			Member.query({
 				slug: '<?php echo $slug; ?>',
 				offset: $scope.totalLoad
@@ -236,7 +205,8 @@
 					ret = '';
 					$('#showing').html('(Showing ' + $scope.totalLoad + ' members)');
 				}
-				spinner.stop();
+				
+				button.button('reset');
 			});
 		};
 	}

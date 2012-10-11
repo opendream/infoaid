@@ -71,24 +71,10 @@
                 ?>
             </span>
         </div>
-        <div>
-            <span class='page-needs'>
-                <b>Need :</b>
-                    <?php
-                        if($needs->status == 0 || $needs->needs == null) {
-                            echo ' ?';
-                        } else {
-                            foreach($needs->needs as $el) {
-                                echo ' '.$el->message.' ';
-                            }    
-                        }
-                    ?>
-            </span>
-        </div>
     </div>
     
     <div id="page-header-join-leave-<?php echo $post->id; ?>" class="page-header-join-leave">
-        <button class='btn' ng-click="handleClick()" ng-show="userId">{{isjoined | JoinLabel}}</button>        
+        <button class='btn' ng-click="handleClick($event)" ng-show="userId" data-joined-text="{{1 | JoinLabel}}" data-leaved-text="{{0 | JoinLabel}}">{{isjoined | JoinLabel}}</button>        
     </div>
     <div id="join-leave-page-loading-<?php echo $post->id?>"></div>    
 </div>

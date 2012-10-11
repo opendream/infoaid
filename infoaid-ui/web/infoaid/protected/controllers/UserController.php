@@ -20,53 +20,44 @@ class UserController extends IAController
 
 	public function actionDoCreate()
 	{
+		check_csrf_token();
+
 		$password = $_POST['password'];
 		$rePassword = $_POST['re-password'];
 		$passwordLength = strlen($password);
 		
 		if($password != $rePassword) {
 			Yii::app()->user->setFlash('error', "Please type same password and repeat password");
-			$this->render('create', array(
-				'username'=>$_POST['username'],
-				'password'=>$_POST['password'],
-				'firstname'=>$_POST['firstname'],
-				'lastname'=>$_POST['lastname'],
-				'email'=>$_POST['email'],
-				'tel'=>$_POST['tel'],
-				)
-			);
-			Yii::app()->end();
+			$error = true;
+			
 		} else if($passwordLength < 7 || $passwordLength > 20) {
 			Yii::app()->user->setFlash('error', "Password must have 7 to 20 character");
-			$this->render('create', array(
+			$error = true;
+		}
+
+		if (! $error) {
+			$defaultAvatar = UserHelper::defaultAvatar();
+			$resultCreate = API::getJSON('user/create', array(
 				'username'=>$_POST['username'],
 				'password'=>$_POST['password'],
 				'firstname'=>$_POST['firstname'],
 				'lastname'=>$_POST['lastname'],
 				'email'=>$_POST['email'],
-				'tel'=>$_POST['tel'],
-				)
-			);
-			Yii::app()->end();
+				'telNo'=>$_POST['tel'],
+				'picOriginal'=>$defaultAvatar['original'],
+				'picLarge'=>$defaultAvatar['large'],
+				'picSmall'=>$defaultAvatar['small'],
+			));
+			if($resultCreate->id != null) {
+				Yii::app()->user->setFlash('createSuccess', 'Register Success');
+				$this->redirect(array('front/index'));
+			} else {
+				Yii::app()->user->setFlash('error', $resultCreate->message);
+				$error = true;
+			}
 		}
 
-		$defaultAvatar = UserHelper::defaultAvatar();
-		$resultCreate = API::getJSON('user/create', array(
-			'username'=>$_POST['username'],
-			'password'=>$_POST['password'],
-			'firstname'=>$_POST['firstname'],
-			'lastname'=>$_POST['lastname'],
-			'email'=>$_POST['email'],
-			'telNo'=>$_POST['tel'],
-			'picOriginal'=>$defaultAvatar['original'],
-			'picLarge'=>$defaultAvatar['large'],
-			'picSmall'=>$defaultAvatar['small'],
-		));
-		if($resultCreate->id != null) {
-			Yii::app()->user->setFlash('createSuccess', 'Register Success');
-			$this->redirect(array('front/index'));
-		} else {
-			Yii::app()->user->setFlash('error', $resultCreate->message);
+		if ($error) {
 			$this->render('create', array(
 				'username'=>$_POST['username'],
 				'password'=>$_POST['password'],
@@ -89,7 +80,7 @@ class UserController extends IAController
 		$info = UserHelper::basicInfo($userId);
 
 		if(! $info->id) {
-			//throw new CHttpException(404, 'The specified account cannot be found.');
+			throw new CHttpException(404, 'The specified account cannot be found.');
 		}
 
 		$section_map = array(
@@ -109,6 +100,8 @@ class UserController extends IAController
 	public function actionDoEdit($section='account')
 	{
 		$userId = Yii::app()->user->getId();
+
+		check_csrf_token();
 
 		$info = UserHelper::basicInfo($userId);
 
@@ -246,8 +239,10 @@ class UserController extends IAController
 	}
 
 	public function actionLogin()
-	{
+	{		
 		if (! empty($_POST)) {
+			check_csrf_token();
+			
 			$username = trim($_POST['username']);
 			$password = $_POST['password'];
 

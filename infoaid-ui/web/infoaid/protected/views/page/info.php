@@ -1,11 +1,10 @@
 <div id="page-<?php echo $page->id; ?>" class="page-info" ng-app="post">
 
+		<?php $this->renderPartial('sidebar', array(
+			'userId' => user()->getId()						
+		)); ?>
+
 		<header class="info">
-			<div>
-				<?php $this->renderPartial('sidebar', array(
-							'userId' => user()->getId()						
-						)); ?>
-			</div>
 			<div>
 				<?php $this->renderPartial('header', array('slug'=>$slug,'id'=>$page->id)); ?>
 			</div>
@@ -49,7 +48,7 @@
 				        </ul>
 				    </div>
 				    <div class="clear"></div>
-				    <div ng-show="">
+				    <div>
 				    	<span class='show-more-members'><?php echo CHtml::link('Show more ..', array('page/members','slug'=>$slug)); ?></span>
 				    </div>
 				</div>	

@@ -24,12 +24,14 @@
 	        <div class="tab-pane active" id="tabInfo">
 
 	        	<div class="post-form">
-		      	    <form ng-submit="postMessage()" class="message-post-form">
+		      	    <form ng-submit="postMessage($event)" class="message-post-form">
 		      	    	<a class="close hide" title="Clear form, delete text you just typed">&times;</a>
 		        		<textarea name="inputMsg" ng-model="message" ng-maxlength="5000" type="text" class="expanding span5" placeholder="Type info..."></textarea>
 		        		<input name="picSmall" ng-model="picSmall" type="hidden" id="picSmall" />
 		        		<input name="picLarge" ng-model="picLarge" type="hidden" id="picLarge" />
 			      		<input name="picOriginal" ng-model="picOriginal" type="hidden" id="picOriginal" />
+
+			      		<?php csrf_token_form(); ?>
 		        	</form>
 
 		        	<div class="upload-form-wrapper hide">
@@ -45,7 +47,7 @@
 				      	</form>
 
 				      	<div class="post-button">
-					      	<button ng-click="postMessage()" class="btn btn-inverse pull-right">
+					      	<button ng-click="postMessage($event)" class="btn btn-inverse pull-right" data-loading-text="Posting ..." ng-disabled="!message.length">
 				      			Post
 				      		</button>
 				      	</div>

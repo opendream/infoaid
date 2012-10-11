@@ -1,7 +1,6 @@
 angular.module('postService', ['ngResource']).
 	factory('Post', function ($resource) {
 		var Post = function(method) {
-			console.log('method', method);
 			return $resource(baseUrl + '/api/page/:slug/' + method);
 		}
 		return Post;

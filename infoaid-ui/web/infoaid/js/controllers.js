@@ -64,7 +64,24 @@ function PostListCtrl($scope, Post, RearrangePost, PostsBroadcast) {
         var mm = date.getMinutes();
         return yyyy+'-'+m+'-'+dd+' '+hh+':'+mm;        
     };
+
     $scope.posts = Post($scope.target).query({slug: slug});
+
+    $scope.loadMore = function (event) {
+        // Toggle loading state.
+        var button = angular.element(event.currentTarget);
+        button.button('loading');
+
+        Post($scope.target).query({
+            slug: slug,
+            until: lastRowDateCreated(),
+            limit: 10
+        }, function (posts) {
+            RearrangePost($scope, posts); 
+
+            button.button('reset');
+        });
+    };
 
     $scope.$on('postsBroadcast', function() {
         if ($scope.target) {
@@ -85,7 +102,8 @@ function MemberCtrl($scope, $http, SharedService, Post, PostsBroadcast) {
             var i = findMember(SharedService.userId);
             $scope.members.splice(i, 1);
         } else {
-           $scope.members.unshift(SharedService.user).slice(0, limit);
+           $scope.members.unshift(SharedService.user);
+           $scope.members.slice(0, limit);
         }
     });
 
@@ -142,18 +160,22 @@ function SidebarCtrl($scope, $http, SharedService) {
     }
 }
 
-function HeaderCtrl($scope, JoinPage, LeavePage, SharedService) {    
+function HeaderCtrl($scope, $compile, JoinPage, LeavePage, SharedService) {    
 
-    $scope.handleClick = function() {
+    $scope.handleClick = function(event) {
+        var button = $(event.currentTarget);
+        button.button('loading');
+
         var options = {
-                slug: $scope.slug
-            };
+            slug: $scope.slug
+        };
 
         if($scope.isjoined==1) { //leave page
             LeavePage.get(options, function (ret) {   
                 if(ret.status==1) {
                     $scope.isjoined = 0; 
                     SharedService.prepForBroadcast(0, ret.slug, null, ret.userId);
+                    button.button('leaved');
                 }
             });
         } else { // join page
@@ -161,8 +183,9 @@ function HeaderCtrl($scope, JoinPage, LeavePage, SharedService) {
                 if(ret.status==1) {
                     $scope.isjoined = 1;                     
                     SharedService.prepForBroadcast(1, ret.slug, ret.page, ret.user.id, ret.user);
+                    button.button('joined');
                 }
             });
-        }        
+        }      
     }
 }

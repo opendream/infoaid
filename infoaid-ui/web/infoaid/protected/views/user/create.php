@@ -18,6 +18,8 @@
 		<form class="form-horizontal" method='post' action='doCreate'
 			enctype="multipart/form-data">
 
+			<?php csrf_token_form(); ?>
+
 			<?php $this->renderPartial('_form_account'); ?>
 			
 			<?php $this->renderPartial('_form_personal'); ?>

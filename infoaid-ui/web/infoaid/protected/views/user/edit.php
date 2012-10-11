@@ -14,19 +14,7 @@
 			<h1>Edit <?php echo $section_name; ?></h1>
 		</header>
 
-		<div class="flash-message">
-			<?php if( Yii::app()->user->hasFlash('error') ): ?>
-				<div class="alert alert-error">
-					<?php echo Yii::app()->user->getFlash('error'); ?>
-				</div>
-			<?php endif; ?>
-
-			<?php if( Yii::app()->user->hasFlash('success') ): ?>
-				<div class="alert alert-success">
-					<?php echo Yii::app()->user->getFlash('success'); ?>
-				</div>
-			<?php endif; ?>
-		</div>
+		<?php $this->renderPartial('/_flash'); ?>
 
 		<div id='form-edit'>
 			<?php if ($section == 'password'): ?>
@@ -36,6 +24,8 @@
 			<?php else: ?>
 				<form class="form-horizontal" method='POST' action='<?php echo $this->createUrl("user/doEdit/$section"); ?>'>
 			<?php endif; ?>
+
+				<?php csrf_token_form(); ?>
 
 
 				<input type="hidden" name="section" value="<?php echo $section; ?>" />

@@ -173,6 +173,11 @@ return array(
 			'options'=>array(),
 		),
 
+		'request' => array(
+			'enableCsrfValidation' => false,
+			'csrfTokenName' => 'csrf_token',
+		),
+
 	),
 
 	// application-level parameters that can be accessed
