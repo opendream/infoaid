@@ -24,7 +24,7 @@ class MessagePostTests extends DomainTestTemplate {
 
         def messagePost = new MessagePost()
 
-        verifyNotNull(messagePost, 'message')
+        verifyPass(messagePost, 'message')
         
         messagePost.message = ''
         verifyNotBlank(messagePost, 'message')
