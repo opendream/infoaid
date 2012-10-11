@@ -12,6 +12,10 @@
 		</form>
 		
 		<div id='result-search'>
+			<div id="searching-div" ng-show="loading"></div>
+			<div id='nothing-found' ng-hide="loading || pages.length">
+				No page found
+			</div>
 			<ul class="unstyled" ng-controller="HeaderCtrl">
 				<div>
 					<li ng-repeat="page in pages" >
