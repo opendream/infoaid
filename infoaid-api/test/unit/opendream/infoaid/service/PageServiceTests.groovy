@@ -273,7 +273,7 @@ class PageServiceTests {
 
         def pageUser = new PageUser(page: page, user: user1, relation: PageUser.Relation.MEMBER).save(flush: true)
 
-        def result = service.createMessagePost(1, 'page1-slug', message, 'picOri', 'picSma')
+        def result = service.createMessagePost(1, 'page1-slug', message, 'picOri','picLar', 'picSma')
         def pageUserAfterCreateMessagePost = PageUser.get(1)
         assert pageUserAfterCreateMessagePost.conversation == 1
 
