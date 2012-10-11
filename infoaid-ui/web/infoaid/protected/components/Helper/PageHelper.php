@@ -48,7 +48,12 @@ class PageHelper
 			return array();
 		}
 		else {
-			return isset($result->posts) ? $result->posts : $result;
+			$posts = isset($result->posts) ? $result->posts : $result;
+			foreach ($posts as $key => &$post) {
+				$post->item->class = self::getItemClass($post->item->name);
+			}
+
+			return $posts;
 		}
 	}
 

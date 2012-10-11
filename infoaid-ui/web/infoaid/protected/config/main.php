@@ -311,8 +311,6 @@ return array(
 					),
 					'icon' => array(
 						'id' => '09',
-						'normal' => 'img/icon-09.png',
-						'small' => 'img/icon28-09.png',
 					),
 				),
 				'tent' => array(
@@ -321,8 +319,6 @@ return array(
 					),
 					'icon' => array(
 						'id' => '01',
-						'normal' => 'img/icon-01.png',
-						'small' => 'img/icon28-01.png',
 					),
 				),
 				'clothes' => array(
@@ -331,8 +327,6 @@ return array(
 					),
 					'icon' => array(
 						'id' => '02',
-						'normal' => 'img/icon-02.png',
-						'small' => 'img/icon28-02.png',
 					),
 				),
 				'gas' => array(
@@ -341,8 +335,6 @@ return array(
 					),
 					'icon' => array(
 						'id' => '04',
-						'normal' => 'img/icon-04.png',
-						'small' => 'img/icon28-04.png',
 					),
 				),
 				'fuel' => array(
@@ -351,8 +343,6 @@ return array(
 					),
 					'icon' => array(
 						'id' => '05',
-						'normal' => 'img/icon-05.png',
-						'small' => 'img/icon28-05.png',
 					),
 				),
 				'water' => array(
@@ -361,8 +351,6 @@ return array(
 					),
 					'icon' => array(
 						'id' => '07',
-						'normal' => 'img/icon-07.png',
-						'small' => 'img/icon28-07.png',
 					),
 				),
 				'boat' => array(
