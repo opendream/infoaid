@@ -239,10 +239,10 @@ class UserController extends IAController
 	}
 
 	public function actionLogin()
-	{
-		check_csrf_token();
-		
+	{		
 		if (! empty($_POST)) {
+			check_csrf_token();
+			
 			$username = trim($_POST['username']);
 			$password = $_POST['password'];
 
