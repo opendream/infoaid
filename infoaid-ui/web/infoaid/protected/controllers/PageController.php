@@ -31,7 +31,6 @@ class PageController extends IAController
 		$this->scripts[] = 'expanding.js';
 		$this->scripts[] = 'controllers.js';
 		$this->scripts[] = 'main/item.js';
-
 		$result = PageHelper::getInfoBySlug($slug);
 		if ($result) {
 			$this->render('info', array(

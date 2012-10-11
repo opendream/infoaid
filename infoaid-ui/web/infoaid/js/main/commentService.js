@@ -216,6 +216,15 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
         $scope.isjoined = SharedService.isJoined;
     });
 
+    $scope.selectNeed = function (event, id) {
+    	var target = $(event.currentTarget);
+    	$scope.request = $('input[type="radio"]', target).val();
+    	$scope.requestItemName = target.attr('data-item-name');
+    	$scope.requestItemClass = target.attr('data-item-class');
+
+    	$('button.close', id).click();
+    };
+
 	$scope.postMessage = function(event) {
 		var button = $('.post-button button');
 

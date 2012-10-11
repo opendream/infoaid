@@ -1,12 +1,27 @@
 $(document).ready(function() { 
-	$("#requestPost").select2({
-		placeholder: "Select a Need",
-		allowClear: true
-	});
-	$("#resourcePost").select2({
-		placeholder: "Select a Resource",
-		allowClear: true
-	});
+
+	var selectTemplate = function (state) {
+		console.log(state);
+		return "" +
+		"<div class=\"item-select\">" +
+			'<i class="item-icon item-icon-28-' + state.class + '"></i>' +
+			'<span class="item-name">' + state.text + '</span>' +
+		"</div>";
+	};
+
+	// $("#requestPost").select2({
+	// 	placeholder: "Select a Need",
+	// 	allowClear: true,
+	// 	formatSelection: selectTemplate,
+	// 	formatResult: selectTemplate
+	// });
+	// $("#resourcePost").select2({
+	// 	placeholder: "Select a Resource",
+	// 	allowClear: true
+	// });
+
+	// $('#requestPost').ddslick({
+	// });
 });
 
 $(function () {

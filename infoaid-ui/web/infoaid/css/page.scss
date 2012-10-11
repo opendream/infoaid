@@ -50,6 +50,7 @@
 	display: inline-block;
 	background-size: cover;
 	background-repeat: no-repeat;
+	vertical-align: middle;
 	// &.item-icon-rice { background-image: url(../img/icon-09.png); }
 	// &.item-icon-food { background-image: url(../img/icon-01.png); }
 	// &.item-icon-water {	background-image: url(../img/icon-02.png);	}
@@ -694,9 +695,77 @@ hr { border: none; }
 	.item-icon {
 		@include item-icon-base;
 
+		background-size: contain;
 		image-rendering: optimizeQuality;
 		width: 24px;
 		height: 24px;
+	}
+}
+
+.item-icon-24 {
+	@include item-icon-base;
+
+	background-size: contain;
+	image-rendering: optimizeQuality;
+	width: 24px;
+	height: 24px;
+}
+
+.item-icon-64 {
+	@include item-icon-base;
+
+	background-size: contain;
+	image-rendering: optimizeQuality;
+	width: 64px;
+	height: 64px;
+}
+
+#div-show-selected-need {
+	width: 200px;
+	overflow: hidden;
+	float: left;
+	padding: 3px 0;
+
+	a.btn {
+		padding: 5px;
+	}
+}
+
+.need-quantity {
+	margin: 6px 3px;
+}
+
+#select-need-modal {
+	width: 700px;
+	margin-left: -300px;
+
+	.modal-body {
+		li {
+			float: left;
+			font-size: 1.2em;
+			font-weight: bold;
+			margin-right: 10px;
+			padding: 4px;
+			width: 200px;
+			overflow: hidden;
+			border: 1px dashed;
+			border-color: #FFF;
+			border-radius: 4px;
+
+			&:hover {
+				border-color: #CCC;
+			}
+
+			label {
+				cursor: pointer;
+				display: block;
+				text-decoration: none;
+			}
+		}
+	}
+	.item-icon-64 {
+		vertical-align: middle;
+		margin-right: 16px;
 	}
 }
 

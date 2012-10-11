@@ -187,7 +187,7 @@ return array(
 		'adminEmail'=>'webmaster@example.com',
 		
 		'api'=>array(
-			'server'=>'http://192.168.1.129:8080/infoaid-api/',
+			'server'=>'http://127.0.0.1:8080/infoaid-api/',
 			//'port'=>8080,
 			'log_request'=>true,
 			'debug_rest'=>false,
@@ -310,6 +310,7 @@ return array(
 						'rice', 'ข้าว', 'อาหาร', 'ถุงยังชีพ'
 					),
 					'icon' => array(
+						'id' => '09',
 						'normal' => 'img/icon-09.png',
 						'small' => 'img/icon28-09.png',
 					),
@@ -319,6 +320,7 @@ return array(
 						'เต้นท์',
 					),
 					'icon' => array(
+						'id' => '01',
 						'normal' => 'img/icon-01.png',
 						'small' => 'img/icon28-01.png',
 					),
@@ -328,6 +330,7 @@ return array(
 						'เสื้อผ้า', 'เสื้อ',
 					),
 					'icon' => array(
+						'id' => '02',
 						'normal' => 'img/icon-02.png',
 						'small' => 'img/icon28-02.png',
 					),
@@ -337,6 +340,7 @@ return array(
 						'ก๊าซ', 'ก๊าซหุงต้ม',
 					),
 					'icon' => array(
+						'id' => '04',
 						'normal' => 'img/icon-04.png',
 						'small' => 'img/icon28-04.png',
 					),
@@ -346,6 +350,7 @@ return array(
 						'นำ้มัน', 'นำ้มันเชื้อเพลิง',
 					),
 					'icon' => array(
+						'id' => '05',
 						'normal' => 'img/icon-05.png',
 						'small' => 'img/icon28-05.png',
 					),
@@ -355,8 +360,57 @@ return array(
 						'นำ้', 'น้ำดื่ม',
 					),
 					'icon' => array(
+						'id' => '07',
 						'normal' => 'img/icon-07.png',
 						'small' => 'img/icon28-07.png',
+					),
+				),
+				'boat' => array(
+					'synonyms' => array(
+						'เรือ',
+					),
+					'icon' => array(
+						'id' => '08',
+					),
+				),
+				'man' => array(
+					'synonyms' => array(
+						'คน',
+					),
+					'icon' => array(
+						'id' => '03',
+					),
+				),
+				'electricity' => array(
+					'synonyms' => array(
+						'ไฟฟ้า',
+					),
+					'icon' => array(
+						'id' => '06',
+					),
+				),
+				'medicine' => array(
+					'synonyms' => array(
+						'ยา',
+					),
+					'icon' => array(
+						'id' => '10',
+					),
+				),
+				'water-closet' => array(
+					'synonyms' => array(
+						'ห้องน้ำ', 'Water Closet'
+					),
+					'icon' => array(
+						'id' => '11',
+					),
+				),
+				'pump' => array(
+					'synonyms' => array(
+						'เครื่องสูบน้ำ', 'Water Pump'
+					),
+					'icon' => array(
+						'id' => '12',
 					),
 				),
 			),

@@ -8,7 +8,7 @@
 		%li.infoaid-item(ng-repeat="item in items", data-name="{{item.name}}")
 			.item-icon-wrapper
 				%a(href="" ng-click="loadItem(item.id)")
-					%i(class="item-icon item-icon-28-{{item.class}}")
+					%i(class="item-icon item-icon-24-{{item.class}}")
 			.progress
 				.bar.bar-success.bar-supply(data-percent-supply="{{item.percentSupplyPerDemand}}" data-supply="{{item.resource}}")
 				.bar.bar-danger.bar-demand(data-percent-demand="{{item.percentDemandPerSupply}}" data-demand="{{item.need}}")

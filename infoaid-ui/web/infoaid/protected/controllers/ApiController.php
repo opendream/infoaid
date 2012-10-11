@@ -89,6 +89,9 @@ class ApiController extends IAController
 
 	public function actionItems() {
 		$resultJson = API::getJSON('item/allItems');
+		foreach ($resultJson as &$item) {
+			$item->class = PageHelper::getItemClass($item->name);
+		}
 		$this->renderJSON($resultJson);
 	}
 

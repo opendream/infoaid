@@ -147,9 +147,8 @@ class PageHelper
 			$iconSet = Yii::app()->params['item']['icon'];
 		}
 
-		$itemName = strtolower(trim($itemName));
 		foreach ($iconSet as $name => $config) {
-			if ($name == $itemName || in_array($itemName, $config['synonyms'])) {
+			if ($name == strtolower(trim($itemName)) || in_array($itemName, $config['synonyms'])) {
 				return $name;
 			}
 		}
@@ -171,11 +170,11 @@ class PageHelper
 		$iconSet = Yii::app()->params['item']['icon'];
 		$cssString = "";
 		foreach ($iconSet as $name => $config) {
-			$iconNormalUrl = Yii::app()->baseUrl ."/". $config['icon']['normal'];
-			$iconSmallUrl = Yii::app()->baseUrl ."/". $config['icon']['small'];
-
-			$cssString .= " .item-icon-$name { background-image: url($iconNormalUrl); } ";
-			$cssString .= " .item-icon-28-$name { background-image: url($iconSmallUrl); } ";
+			$sizes = array('', '24', '64');
+			foreach ($sizes as $size) {
+				$sizeString = $size ? ('-'. $size) : '';
+				$cssString .= " .item-icon$sizeString-$name { background-image: url(". Yii::app()->baseUrl . "/img/icon$size-". $config['icon']['id'] .".png); } ";
+			}
 		}
 
 		return $cssString;

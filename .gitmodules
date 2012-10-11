@@ -16,3 +16,6 @@
 [submodule "infoaid-ui/modules/jReject"]
 	path = infoaid-ui/modules/jReject
 	url = git://github.com/TurnWheel/jReject.git
+[submodule "infoaid-ui/modules/ddslick"]
+	path = infoaid-ui/modules/ddslick
+	url = git://github.com/DoersGuild/ddslick.git
