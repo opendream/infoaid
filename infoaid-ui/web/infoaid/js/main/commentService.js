@@ -225,6 +225,15 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
     	$('button.close', id).click();
     };
 
+    $scope.selectResource = function (event, id) {
+    	var target = $(event.currentTarget);
+    	$scope.resource = $('input[type="radio"]', target).val();
+    	$scope.resourceItemName = target.attr('data-item-name');
+    	$scope.resourceItemClass = target.attr('data-item-class');
+
+    	$('button.close', id).click();
+    };
+
 	$scope.postMessage = function(event) {
 		var button = $('.post-button button');
 

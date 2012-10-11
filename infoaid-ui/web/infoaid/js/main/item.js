@@ -103,6 +103,12 @@ var ItemSidebarCtrl = function ($scope, $element, PageItem, Post, PostsBroadcast
 					$scope.items.push(item);
 				}
 			});
+
+			angular.forEach($scope.items, function (item) {
+				if (-1 === (foundIndex = inArray(resp, item))) {
+					$scope.items.splice(foundIndex, 1);
+				}
+			});
 		});
 	});
 };

@@ -720,7 +720,7 @@ hr { border: none; }
 	height: 64px;
 }
 
-#div-show-selected-need {
+#div-show-selected-need, #div-show-selected-resource {
 	width: 200px;
 	overflow: hidden;
 	float: left;
@@ -731,11 +731,11 @@ hr { border: none; }
 	}
 }
 
-.need-quantity {
+.need-quantity, .resource-quantity {
 	margin: 6px 3px;
 }
 
-#select-need-modal {
+#select-need-modal, #select-resource-modal {
 	width: 700px;
 	margin-left: -300px;
 

@@ -103,12 +103,48 @@
 	      	</div>
 	      	<div class="tab-pane" id="tabResource">
 	      	    <form validate ng-submit="postResource()" class="form-inline">
-		      		<select class="span3" id="resourcePost" ng-model="resource" 
-		      		ng-options="i.id as i.name for i in items" required>
-		  	  	        <option value=""></option>		        
-			  	    </select>      		
-		        	<input class="span2" ng-model='resourceQty' type="text" required placeholder="Quantity.."></input>
-		        	<input class="btn btn-mini btn-primary" type="submit" id="submitResource" value="Post" />  
+
+		      		<div ng-init="resource=''"></div>
+	      			<div ng-init="resourceItemName=''"></div>
+	      			<div ng-init="resourceItemClass=''"></div>
+
+			  	    <div id="div-show-selected-resource">
+				  	    <a href="#select-resource-modal" class="span2 btn" role="button" data-toggle="modal">
+				  	    	<span ng-show="!resource.length">
+				  	    		<i class="icon icon-tags"></i> Select a Resource ...
+				  	    	</span>
+
+				  	    	<span ng-show="resource.length">
+						  		<i class="item-icon item-icon-24 item-icon-24-{{resourceItemClass}}"></i>
+		  	    				{{resourceItemName}}
+						  	</span>
+				  	   	</a>
+				  	</div>
+
+			  	    <div id="select-resource-modal" class="modal hide fade">
+			  	    	<div class="modal-header">
+			  	    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			  	    		<h3>Which resource do you want to give?</h3>
+			  	    	</div>
+			  	    	<div class="modal-body">
+			  	    		<ul class="unstyled">
+			  	    			<li ng-repeat="item in items">
+			  	    				<label class="resource-item-link" ng-click="selectResource($event, '#select-resource-modal')" data-item-class="{{item.class}}" data-item-name="{{item.name}}">
+				  	    				<i class="item-icon item-icon-64 item-icon-64-{{item.class}}"></i>
+				  	    				{{item.name}}
+				  	    				<input class="hide" type="radio" name="resource" value="{{item.id}}" />
+				  	    			</label>
+			  	    			</li>
+			  	    		</ul>
+			  	    	</div>
+			  	    </div>
+
+		        	<input class="span2 resource-quantity" ng-model='resourceQty' type="text" required placeholder="Quantity.."></input>
+
+		        	<div class="form-actions">
+		        		<input class="btn btn-success pull-right" type="submit" id="submitResource" value="Post" />  
+		        	</div>
+
 		        	<a href="#myModal" openDialog role="button" class="btn  btn-mini btn-primary" data-toggle="modal" ng-hide="true">Add Item</a>
 		        </form>        	  
 	      	</div>
