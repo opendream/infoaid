@@ -71,20 +71,6 @@
                 ?>
             </span>
         </div>
-        <div>
-            <span class='page-needs'>
-                <b>Need :</b>
-                    <?php
-                        if($needs->status == 0 || $needs->needs == null) {
-                            echo ' ?';
-                        } else {
-                            foreach($needs->needs as $el) {
-                                echo ' '.$el->message.' ';
-                            }    
-                        }
-                    ?>
-            </span>
-        </div>
     </div>
     
     <div id="page-header-join-leave-<?php echo $post->id; ?>" class="page-header-join-leave">
