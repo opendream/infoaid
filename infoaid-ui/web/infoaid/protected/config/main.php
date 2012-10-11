@@ -312,6 +312,16 @@ return array(
 					'icon' => array(
 						'id' => '09',
 					),
+					'unit' => array(
+						'base' => 'Kilogram',
+						'abbr' => 'kg',
+						'variants' => array(
+							'box' => array(
+								'name' => 'Box',
+								'multiplier' => 0.3,
+							),
+						),
+					),
 				),
 				'tent' => array(
 					'synonyms' => array(
