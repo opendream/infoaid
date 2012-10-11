@@ -702,6 +702,16 @@ hr { border: none; }
 	}
 }
 
+.item-icon-19 {
+	@include item-icon-base;
+
+	background-size: contain;
+	image-rendering: optimizeQuality;
+	width: 19px;
+	height: 19px;
+	vertical-align: text-bottom;
+}
+
 .item-icon-24 {
 	@include item-icon-base;
 

@@ -69,7 +69,7 @@
 				  	    	</span>
 
 				  	    	<span ng-show="request.length">
-						  		<i class="item-icon item-icon-24 item-icon-24-{{requestItemClass}}"></i>
+						  		<i class="item-icon item-icon-19 item-icon-24-{{requestItemClass}}"></i>
 		  	    				{{requestItemName}}
 						  	</span>
 				  	   	</a>
@@ -115,7 +115,7 @@
 				  	    	</span>
 
 				  	    	<span ng-show="resource.length">
-						  		<i class="item-icon item-icon-24 item-icon-24-{{resourceItemClass}}"></i>
+						  		<i class="item-icon item-icon-19 item-icon-24-{{resourceItemClass}}"></i>
 		  	    				{{resourceItemName}}
 						  	</span>
 				  	   	</a>
