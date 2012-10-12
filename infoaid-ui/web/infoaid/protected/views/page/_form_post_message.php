@@ -95,6 +95,8 @@
 
 		        	<input class="span2 need-quantity" ng-model='qty' type="text" required placeholder="Quantity.."></input>
 
+		        	<select class="select-unit" ng-show="request.length" ng-model="needUnit" ng-options="unit.name for unit in needUnits"></select>
+
 		        	<div class="form-actions">
 		        		<button class="btn btn-danger pull-right" type="submit" id="submit">Request</button>
 		        	</div>

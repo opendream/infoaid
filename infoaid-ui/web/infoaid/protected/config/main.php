@@ -306,6 +306,7 @@ return array(
 		'item' => array(
 			'icon' => array(
 				'food' => array(
+					'name' => 'Food',
 					'synonyms' => array(
 						'rice', 'ข้าว', 'อาหาร', 'ถุงยังชีพ'
 					),
@@ -316,99 +317,257 @@ return array(
 						'base' => 'Kilogram',
 						'abbr' => 'kg',
 						'variants' => array(
+							'kilogram' => array(
+								'name' => 'Kilogram',
+								'multiplier' => 1,
+							),
 							'box' => array(
 								'name' => 'Box',
 								'multiplier' => 0.3,
+							),
+							'bag' => array(
+								'name' => 'Life bag',
+								'multiplier' => 2,
 							),
 						),
 					),
 				),
 				'tent' => array(
+					'name' => 'Tent',
 					'synonyms' => array(
 						'เต้นท์',
 					),
 					'icon' => array(
 						'id' => '01',
 					),
+					'unit' => array(
+						'base' => 'Tent',
+						'abbr' => '',
+						'variants' => array(
+							'tent' => array(
+								'name' => 'Tent',
+								'multiplier' => 1,
+							),
+						),
+					),
 				),
 				'clothes' => array(
+					'name' => 'Clothes',
 					'synonyms' => array(
 						'เสื้อผ้า', 'เสื้อ',
 					),
 					'icon' => array(
 						'id' => '02',
 					),
+					'unit' => array(
+						'base' => 'Set',
+						'abbr' => '',
+						'variants' => array(
+							'clothes' => array(
+								'name' => 'Set',
+								'multiplier' => 1,
+							),
+						),
+					),
 				),
 				'gas' => array(
+					'name' => 'Gas',
 					'synonyms' => array(
 						'ก๊าซ', 'ก๊าซหุงต้ม',
 					),
 					'icon' => array(
 						'id' => '04',
 					),
+					'unit' => array(
+						'base' => 'Litre',
+						'abbr' => 'l',
+						'variants' => array(
+							'litre' => array(
+								'name' => 'Litre',
+								'multiplier' => 1,
+							),
+							'tank' => array(
+								'name' => 'Tank',
+								'multiplier' => 20,
+							),
+							'gallon' => array(
+								'name' => 'Gallon',
+								'multiplier' => 5,
+							),
+						),
+					),
 				),
 				'fuel' => array(
+					'name' => 'Fuel',
 					'synonyms' => array(
 						'นำ้มัน', 'นำ้มันเชื้อเพลิง',
 					),
 					'icon' => array(
 						'id' => '05',
 					),
+					'unit' => array(
+						'base' => 'Litre',
+						'abbr' => 'l',
+						'variants' => array(
+							'litre' => array(
+								'name' => 'Litre',
+								'multiplier' => 1,
+							),
+							'tank' => array(
+								'name' => 'Tank',
+								'multiplier' => 20,
+							),
+							'gallon' => array(
+								'name' => 'Gallon',
+								'multiplier' => 5,
+							),
+						),
+					),
 				),
 				'water' => array(
+					'name' => 'Water',
 					'synonyms' => array(
 						'นำ้', 'น้ำดื่ม',
 					),
 					'icon' => array(
 						'id' => '07',
 					),
+					'unit' => array(
+						'base' => 'Litre',
+						'abbr' => 'l',
+						'variants' => array(
+							'litre' => array(
+								'name' => 'Litre',
+								'multiplier' => 1,
+							),
+							'tank' => array(
+								'name' => 'Tank',
+								'multiplier' => 20,
+							),
+							'gallon' => array(
+								'name' => 'Gallon',
+								'multiplier' => 5,
+							),
+						),
+					),
 				),
 				'boat' => array(
+					'name' => 'Boat',
 					'synonyms' => array(
 						'เรือ',
 					),
 					'icon' => array(
 						'id' => '08',
 					),
+					'unit' => array(
+						'base' => 'Boat',
+						'abbr' => '',
+						'variants' => array(
+							'boat' => array(
+								'name' => 'Boat',
+								'multiplier' => 1,
+							),
+						),
+					),
 				),
 				'man' => array(
+					'name' => 'Man',
 					'synonyms' => array(
 						'คน',
 					),
 					'icon' => array(
 						'id' => '03',
 					),
+					'unit' => array(
+						'base' => 'Man',
+						'plural' => 'Men',
+						'abbr' => '',
+						'variants' => array(
+							'man' => array(
+								'name' => 'Man',
+								'multiplier' => 1,
+							),
+						),
+					),
 				),
 				'electricity' => array(
+					'name' => 'Electricity',
 					'synonyms' => array(
 						'ไฟฟ้า',
 					),
 					'icon' => array(
 						'id' => '06',
 					),
+					'unit' => array(
+						'base' => 'Watt/hour',
+						'abbr' => 'wph',
+						'variants' => array(
+							'wph' => array(
+								'name' => 'Watt/hour',
+								'multiplier' => 1,
+							),
+							'man' => array(
+								'name' => '1 man',
+								'multiplier' => 50,
+							),
+						),
+					),
 				),
 				'medicine' => array(
+					'name' => 'Medicine',
 					'synonyms' => array(
 						'ยา',
 					),
 					'icon' => array(
 						'id' => '10',
 					),
+					'unit' => array(
+						'base' => 'Set',
+						'abbr' => '',
+						'variants' => array(
+							'set' => array(
+								'name' => 'Set',
+								'multiplier' => 1,
+							),
+						),
+					),
 				),
 				'water-closet' => array(
+					'name' => 'Water Closet',
 					'synonyms' => array(
 						'ห้องน้ำ', 'Water Closet'
 					),
 					'icon' => array(
 						'id' => '11',
 					),
+					'unit' => array(
+						'base' => 'Set',
+						'abbr' => '',
+						'variants' => array(
+							'set' => array(
+								'name' => 'Set',
+								'multiplier' => 1,
+							),
+						),
+					),
 				),
 				'pump' => array(
+					'name' => 'Water Pump',
 					'synonyms' => array(
 						'เครื่องสูบน้ำ', 'Water Pump'
 					),
 					'icon' => array(
 						'id' => '12',
+					),
+					'unit' => array(
+						'base' => 'Set',
+						'abbr' => '',
+						'variants' => array(
+							'set' => array(
+								'name' => 'Set',
+								'multiplier' => 1,
+							),
+						),
 					),
 				),
 			),

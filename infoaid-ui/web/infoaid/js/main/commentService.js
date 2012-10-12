@@ -212,6 +212,9 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 		});
 	}
 
+	$scope.needUnits = InfoAid.settings.icon;
+	$scope.resourceUnits = InfoAid.settings.icon;
+
 	$scope.$on('isJoinedBroadcast', function() {
         $scope.isjoined = SharedService.isJoined;
     });
@@ -221,6 +224,11 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
     	$scope.request = $('input[type="radio"]', target).val();
     	$scope.requestItemName = target.attr('data-item-name');
     	$scope.requestItemClass = target.attr('data-item-class');
+
+    	var config = InfoAid.settings.icon[$scope.requestItemClass];
+    	$scope.needUnits = config.unit.variants;
+    	$scope.needUnitConfig = config.unit;
+    	console.log($scope.needUnits);
 
     	$('button.close', id).click();
     };
@@ -266,7 +274,7 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 		var options = {
 			slug: $scope.slug,
 			itemId: $scope.request, 
-			quantity: $scope.qty
+			quantity: $scope.qty * $scope.needUnit,
 		};
 		PostRequest.get(options, function (ret) {	
 			RefreshPost($scope);
@@ -276,6 +284,7 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 			el.select2('val', '');
 			$scope.request = '';
 			$scope.qty = '';	
+			$scope.needUnit = '';
 		});
 	}
 
