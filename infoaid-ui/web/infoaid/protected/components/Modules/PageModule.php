@@ -10,6 +10,11 @@ class PageModule
 
 	public function afterBeforeRender($mainController)
 	{
+		$config = json_encode(Yii::app()->params['item']);
+		$js = "jQuery.extend(InfoAid.settings, $config)";
+		Yii::app()->clientScript
+			->registerScript('item-config',$js,CClientScript::POS_HEAD);
+
 
 		Yii::app()->clientScript
 			->registerScript(

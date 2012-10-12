@@ -19,9 +19,6 @@ $(document).ready(function() {
 	// 	placeholder: "Select a Resource",
 	// 	allowClear: true
 	// });
-
-	// $('#requestPost').ddslick({
-	// });
 });
 
 $(function () {
