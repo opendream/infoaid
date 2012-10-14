@@ -26,7 +26,7 @@
 						        <div class="page-picture" ng-switch on="page.picSmall">
 						        	<a href="<?php echo Yii::app()->baseUrl; ?>/page/{{page.slug}}">
 						        		<img ng-switch-when="null" src="<?php echo Yii::app()->baseUrl; ?>/media/pages/page_default_small.jpg" class="img-polaroid"></img>
-						        		<img ng-switch-default src="<?php echo Yii::app()->baseUrl; ?>/{{page.picSmall}}" class="img-polaroid"></img>
+						        		<img ng-switch-default src="<?php echo Yii::app()->baseUrl; ?>{{page.picSmall}}" class="img-polaroid"></img>
 						        	</a>            
 						        </div>
 						    </div>
