@@ -21,10 +21,11 @@ class UserService {
         user.picSmall = userparams['picSmall'] ?: null
         user.picOriginal = userparams['picOriginal'] ?: null
         user.picLarge = userparams['picLarge'] ?: null
-        if(!user.save()) {
-            log.error user.errors
+        if(!user.validate()) {
+            //log.error user.errors
             throw new RuntimeException("${user.errors}")
         }
+        user.save(failOnError:true, flush:true)
         def roleUser = ConfigurationHolder.config.infoaid.api.user.role
 
         def role = Role.findByAuthority(roleUser)

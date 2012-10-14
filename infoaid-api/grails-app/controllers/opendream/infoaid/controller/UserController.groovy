@@ -13,6 +13,7 @@ class UserController {
             def user = userService.create(params)
             render user as JSON
         } catch (e) {
+            log.error e
             def resp = [message: 'can not create new user', user: params]
             render resp as JSON
         }

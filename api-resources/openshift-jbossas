@@ -1,0 +1,49 @@
+How to deploy Grails in Openshift
+
+1. git pull project from openshift-git
+
+2. To support url encoding with utf-8
+
+In standalone.xml (.config/config/)
+
+Add 
+    <system-properties>
+        <!-- URI Properties -->
+        <property name="org.apache.catalina.connector.URI_ENCODING" value="UTF-8"/>
+        <property name="org.apache.catalina.connector.USE_BODY_ENCODING_FOR_QUERY_STRING" value="true"/>
+    </system-properties>
+    
+After 
+<extensions>
+.
+.
+.
+</extensions>
+
+
+3. Grails workaround
+Add In hibernate {}
+    validator.apply_to_ddl = false
+    validator.autoregister_listeners = false
+    
+4. Remove 
+dataSource {
+    pooled = true
+    driverClassName = "org.h2.Driver"
+    username = "sa"
+    password = ""
+}
+
+5. Create jboss-classloading.xml && jboss-scanning.xml
+    or use jboss plugin (generate-jboss-deploy 6 [for as 6 and 7])
+    
+6. Pack war (for jbossas)
+grails -Dgrails.project.war.osgi.headers=false war target/ROOT.war
+
+7. remove pom.xml and src/
+
+8. copy ROOT.war to deployments/
+
+9. git push
+
+
