@@ -137,7 +137,10 @@ function MemberCtrl($scope, $http, SharedService, Post, PostsBroadcast) {
 
 function SidebarCtrl($scope, $http, SharedService) {  
     $http.get(baseUrl + '/api/getPages').success(function(data) {
-        $scope.pages = data.pages;
+        if(data.status==1)
+            $scope.pages = data.pages;
+        else
+            $scope.pages = new Array();
     });
 
     $scope.$on('isJoinedBroadcast', function() {
