@@ -89,12 +89,12 @@
 			  	    	</div>
 			  	    </div>
 
-		        	<input class="span2 need-quantity" ng-model='qty' type="text" required placeholder="Quantity.."></input>
+		        	<input class="span2 need-quantity" ng-model='qty' type="number" required placeholder="Quantity.." pattern="[0-9]+" ng-disabled="!requestItem.id" />
 
 		        	<select class="input-small select-unit" ng-show="requestItem.id" ng-model="units.selectedNeedUnit" ng-options="u.name for u in units.need"></select>
 
 		        	<div class="form-actions">
-		        		<button class="btn btn-danger pull-right" type="submit" id="submit">Request</button>
+		        		<button class="btn btn-danger pull-right" type="submit" id="submit" ng-disabled="!requestItem.id || !qty || qty==0 || !units.selectedNeedUnit">Request</button>
 		        	</div>
 		        	<a href="#myModal" openDialog role="button" class="btn  btn-mini btn-primary" data-toggle="modal" ng-hide="true">Add Item</a>    		
 		        </form>        	  
@@ -133,12 +133,12 @@
 			  	    	</div>
 			  	    </div>
 
-		        	<input class="span2 resource-quantity" ng-model='resourceQty' type="text" required placeholder="Quantity.."></input>
+		        	<input class="span2 resource-quantity" ng-model='resourceQty' type="number" required placeholder="Quantity.." ng-disabled="!resourceItem.id" />
 
 		        	<select class="input-small select-unit" ng-show="resourceItem.id" ng-model="units.selectedResourceUnit" ng-options="u.name for u in units.resource"></select>
 
 		        	<div class="form-actions">
-		        		<input class="btn btn-success pull-right" type="submit" id="submitResource" value="Post" />  
+		        		<button class="btn btn-success pull-right" id="submitResource" ng-disabled="!resourceItem.id || !resourceQty || resourceQty==0 || !units.selectedResourceUnit">Give</button>  
 		        	</div>
 
 		        	<a href="#myModal" openDialog role="button" class="btn  btn-mini btn-primary" data-toggle="modal" ng-hide="true">Add Item</a>
