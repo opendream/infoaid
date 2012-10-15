@@ -87,7 +87,7 @@
 	</span>
 	<?php endif; ?>
 </div>
-<div id="page-members" class="page-members" ng-controller="memberController">
+<div id="page-members" class="page-members span10" ng-controller="memberController">
 	<header>
 		<h1 class="header-members">Members</h1><div id='showing'>(Showing <?php echo $totalLoad;?> members)</div>
 	</header>
