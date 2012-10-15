@@ -125,8 +125,8 @@ function CommentCtrl($scope, Comment, DeletePost, PostComment, DeleteComment, Po
 	}
 
 	$scope.$on('isJoinedBroadcast', function() {
-        $scope.isjoined = SharedService.isJoined;
-    });
+		$scope.isjoined = SharedService.isJoined;
+	});
 
 	$scope.loadMore = function(id) {
 		var options = {
@@ -202,7 +202,7 @@ function CommentCtrl($scope, Comment, DeletePost, PostComment, DeleteComment, Po
 	}
 }
 
-function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshPost, PostResource, SharedService) {
+function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshPost, PostResource, SharedService, Unit) {
 	$scope.items = [];
 	if($scope.items.length===0) {
 		Items.query(function(ret) {
@@ -212,35 +212,68 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 		});
 	}
 
-	$scope.needUnits = InfoAid.settings.icon;
-	$scope.resourceUnits = InfoAid.settings.icon;
+	$scope.requestItem = {};
+	$scope.resourceItem = {};
+	$scope.units = {
+		need: [],
+		resource: [],
+		selectedNeedUnit: '',
+		selectedResourceUnit: ''
+	};
 
 	$scope.$on('isJoinedBroadcast', function() {
-        $scope.isjoined = SharedService.isJoined;
-    });
+		$scope.isjoined = SharedService.isJoined;
+	});
 
-    $scope.selectNeed = function (event, id) {
-    	var target = $(event.currentTarget);
-    	$scope.request = $('input[type="radio"]', target).val();
-    	$scope.requestItemName = target.attr('data-item-name');
-    	$scope.requestItemClass = target.attr('data-item-class');
+	$scope.selectNeed = function (item, modalId) {
+		$scope.requestItem = item;
 
-    	var config = InfoAid.settings.icon[$scope.requestItemClass];
-    	$scope.needUnits = config.unit.variants;
-    	$scope.needUnitConfig = config.unit;
-    	console.log($scope.needUnits);
+		var units = Unit.get($scope.requestItem.class),
+			unitConfig = Unit.getConfig($scope.requestItem.class)
+		;
 
-    	$('button.close', id).click();
-    };
+		$scope.units.need = [];
+		angular.forEach(units, function (unit, index) {
 
-    $scope.selectResource = function (event, id) {
-    	var target = $(event.currentTarget);
-    	$scope.resource = $('input[type="radio"]', target).val();
-    	$scope.resourceItemName = target.attr('data-item-name');
-    	$scope.resourceItemClass = target.attr('data-item-class');
+			if (unit.name === unitConfig.unit.base) {
+				$scope.units.selectedNeedUnit = unit;
+			}
+			else {
+				unit.name = unit.name + " (" + unit.multiplier + " " + unitConfig.unit.base + ")";
+			}
 
-    	$('button.close', id).click();
-    };
+			$scope.units.need.push(unit);
+
+		});
+
+
+		$('button.close', modalId).click();
+	};
+
+	$scope.selectResource = function (item, modalId) {
+		$scope.resourceItem = item;
+
+		var units = Unit.get($scope.resourceItem.class),
+			unitConfig = Unit.getConfig($scope.resourceItem.class)
+		;
+
+		$scope.units.resource = [];
+		angular.forEach(units, function (unit, index) {
+
+			if (unit.name === unitConfig.unit.base) {
+				$scope.units.selectedResourceUnit = unit;
+			}
+			else {
+				unit.name = unit.name + " (" + unit.multiplier + " " + unitConfig.unit.base + ")";
+			}
+
+			$scope.units.resource.push(unit);
+
+		});
+
+
+		$('button.close', modalId).click();
+	};
 
 	$scope.postMessage = function(event) {
 		var button = $('.post-button button');
@@ -263,9 +296,9 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 				$('#previewImg').html('');
 				$('#picSmall').val('');
 				$('#picLarge').val('');
-		        $('#picOriginal').val('');
+				$('#picOriginal').val('');
 
-		        button.button('reset');
+				button.button('reset');
 			});							
 		}
 	}
@@ -273,53 +306,50 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 	$scope.postRequest = function() {
 		var options = {
 			slug: $scope.slug,
-			itemId: $scope.request, 
-			quantity: $scope.qty * $scope.needUnit,
+			itemId: $scope.requestItem.id, 
+			quantity: $scope.qty * $scope.units.selectedNeedUnit.multiplier,
 		};
 		PostRequest.get(options, function (ret) {	
 			RefreshPost($scope);
 
 			// Get element and clear value.
-			var el = $('select[ng-model="request"]');
-			el.select2('val', '');
-			$scope.request = '';
+			$scope.requestItem = {};
 			$scope.qty = '';	
-			$scope.needUnit = '';
+			$scope.units.selectedNeedUnit = '';
 		});
 	}
 
 	$scope.postResource = function() {
 		var options = {
-				slug: $scope.slug,
-				itemId: $scope.resource,
-				quantity: $scope.resourceQty
-			};
+			slug: $scope.slug,
+			itemId: $scope.resourceItem.id,
+			quantity: $scope.resourceQty * $scope.units.selectedResourceUnit.multiplier,
+		};
 		PostResource.get(options, function (ret) {
 			RefreshPost($scope);
 
 			// Get element and clear value.
-			var el = $('select[ng-model="resource"]');
-			el.select2('val', '');
-			$scope.resource = '';
+			$scope.resourceItem = {};
 			$scope.resourceQty = '';
+			$scope.units.selectedResourceUnit = '';
 		});
 	}
 }
 
 function ModalCtrl($scope, CreateItem) {
    $scope.setModel = function(data) {
-   		var options = {
+		var options = {
 			newItem: data
 		};
-   		var element = angular.element('#myModal');
-   		CreateItem.get(options, function (ret) {
-   			$scope.newItem = '';							
+		var element = angular.element('#myModal');
+		CreateItem.get(options, function (ret) {
+			$scope.newItem = '';							
 		});
-        element.modal('hide');        
+		element.modal('hide');        
    }
 
    $scope.removeNewItem = function() {
-   		$scope.newItem = '';
-        element.modal('hide');
+		$scope.newItem = '';
+		element.modal('hide');
    }   
 }

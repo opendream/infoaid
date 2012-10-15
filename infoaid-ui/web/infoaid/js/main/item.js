@@ -2,6 +2,15 @@ angular.module('itemService', ['ngResource']).
 	factory('PageItem', function ($resource) {
 		var PageItem = $resource(baseUrl + '/api/page/:slug/items');
 		return PageItem;
+	}).
+	factory('Unit', function ($resource) {
+		var Unit = {};
+		var list = InfoAid.settings.icon;
+		Unit.getConfig = function (index) { return list[index]; };
+		Unit.get = function (index) { return list[index].unit.variants; };
+		Unit.size = function () { return list.length; };
+
+		return Unit;
 	});
 
 angular.module('itemSidebar', ['itemService'])
