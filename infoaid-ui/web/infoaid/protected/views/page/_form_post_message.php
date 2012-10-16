@@ -93,6 +93,8 @@
 
 		        	<select class="input-small select-unit" ng-show="requestItem.id" ng-model="units.selectedNeedUnit" ng-options="u.name for u in units.need"></select>
 
+		        	<select class="select-unit" ng-show="request.length" ng-model="needUnit" ng-options="unit.name for unit in needUnits"></select>
+
 		        	<div class="form-actions">
 		        		<button class="btn btn-danger pull-right" type="submit" id="submit" ng-disabled="!requestItem.id || !qty || qty==0 || !units.selectedNeedUnit">Request</button>
 		        	</div>
