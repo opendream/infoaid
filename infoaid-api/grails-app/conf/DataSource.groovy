@@ -8,6 +8,8 @@ hibernate {
     cache.use_second_level_cache = true
     cache.use_query_cache = false
     cache.region.factory_class = 'net.sf.ehcache.hibernate.EhCacheRegionFactory'
+    validator.apply_to_ddl = false
+    validator.autoregister_listeners = false
 }
 // environment specific settings
 environments {
@@ -57,17 +59,17 @@ environments {
             dbCreate = "update"
             driverClassName = "org.postgresql.Driver"
             dialect = net.sf.hibernate.dialect.PostgreSQLDialect
-            url="jdbc:postgresql://localhost:5432/infoaid"
-            username = "infoaid"
-            password = "infoaid"
+            url="jdbc:postgresql://127.3.92.129:5432/infoaidapi"
+            username = "admin"
+            password = "hdkCCz-zuQCZ"
         }
         grails {
         mongo {
-            host = "localhost"
+            host = "127.3.92.129"
             port = 27017
-            username = "infoaid"
-            password = "openpubyesroti!"
-            databaseName = "infoaid"
+            username = "admin"
+            password = "3fE7DWqihc1r"
+            databaseName = "infoaidapi"
         }
     }
     }     
