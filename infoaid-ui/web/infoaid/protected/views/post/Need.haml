@@ -20,6 +20,9 @@
 					%span.quantity-sign +
 					{{post.quantity}}
 				.clear
+		.additionals
+			.progress.progress-striped
+				.bar.bar-success(style="width:65%")
 		.meta
 			%time.timeago(datetime="{{post.dateCreated}}")
 				{{post.dateCreated}}
