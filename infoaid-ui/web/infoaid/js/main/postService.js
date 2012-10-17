@@ -7,7 +7,7 @@ angular.module('postService', ['ngResource']).
 	});
 
 angular
-	.module('post', ['postService', 'commentService', 'time', 'headerService', 'itemSidebar'])
+	.module('post', ['postService', 'commentService', 'time', 'headerService', 'itemSidebar', 'delete'])
 	.directive('post', function ($compile) {
 		return {
 			restrict: 'A',

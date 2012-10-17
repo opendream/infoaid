@@ -28,6 +28,6 @@
 				{{post.dateCreated}}
 			%span(ng-show="post.canDelete")
 				=" - "
-				%a(ng-click="deletePost(post)" type="button")
+				%a.button-delete(ng-click="deletePost(post)")
 					delete
 
