@@ -82,7 +82,7 @@
 					),
 				),
 			)); ?>
-			
+
 			<p class="navbar-text pull-right">Log in as </p>
 			<?php endif; ?>
 		</div> <!-- navbar inner -->
