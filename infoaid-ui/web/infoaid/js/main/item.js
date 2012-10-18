@@ -7,7 +7,22 @@ angular.module('itemService', ['ngResource']).
 		var Unit = {};
 		var list = InfoAid.settings.icon;
 		Unit.getConfig = function (index) { return list[index]; };
-		Unit.get = function (index) { return list[index].unit.variants; };
+		Unit.get = function (index) {
+			var variants = list[index].unit.variants;
+
+			angular.forEach(variants, function (unit) {
+				var baseUnitName = Unit.getConfig(index).unit.base;
+
+				if (baseUnitName != unit.name) {
+					unit.descriptiveName = unit.name + " (" + unit.multiplier + " " + baseUnitName + ")";
+				}
+				else {
+					unit.descriptiveName = unit.name;
+				}
+			});
+
+			return variants;
+		};
 		Unit.size = function () { return list.length; };
 
 		return Unit;
@@ -103,10 +118,14 @@ var ItemSidebarCtrl = function ($scope, $element, PageItem, Post, PostsBroadcast
 					;
 
 					supply.attr('data-percent-supply', item.percentSupplyPerDemand);
+					supply.attr('data-supply', item.resource);
 					demand.attr('data-percent-demand', item.percentDemandPerSupply);
+					demand.attr('data-demand', item.need);
 
 					animateProgressBar(supply, item.percentSupplyPerDemand);
 					animateProgressBar(demand, item.percentDemandPerSupply);
+
+					$element.popover('setContent');
 				}
 				else {
 					$scope.items.push(item);

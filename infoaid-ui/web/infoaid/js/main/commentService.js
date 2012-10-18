@@ -226,51 +226,54 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 	});
 
 	$scope.selectNeed = function (item, modalId) {
-		$scope.requestItem = item;
+		if ($scope.requestItem.id != item.id) {
+			$scope.requestItem = item;
 
-		var units = Unit.get($scope.requestItem.class),
-			unitConfig = Unit.getConfig($scope.requestItem.class)
-		;
+			var units = Unit.get($scope.requestItem.class),
+				unitConfig = Unit.getConfig($scope.requestItem.class)
+			;
 
-		$scope.units.need = [];
-		angular.forEach(units, function (unit, index) {
+			$scope.units.need = [];
+			angular.forEach(units, function (unit, index) {
 
-			if (unit.name === unitConfig.unit.base) {
-				$scope.units.selectedNeedUnit = unit;
-			}
-			else {
-				unit.name = unit.name + " (" + unit.multiplier + " " + unitConfig.unit.base + ")";
-			}
+				if (unit.name === unitConfig.unit.base) {
+					$scope.units.selectedNeedUnit = unit;
+				}
 
-			$scope.units.need.push(unit);
+				$scope.units.need.push(unit);
 
-		});
+			});
 
+			$scope.qty = '';
+		}
 
 		$('button.close', modalId).click();
 	};
 
 	$scope.selectResource = function (item, modalId) {
-		$scope.resourceItem = item;
+		if ($scope.resourceItem.id != item.id) {
+			$scope.resourceItem = item;
 
-		var units = Unit.get($scope.resourceItem.class),
-			unitConfig = Unit.getConfig($scope.resourceItem.class)
-		;
+			var units = Unit.get($scope.resourceItem.class),
+				unitConfig = Unit.getConfig($scope.resourceItem.class)
+			;
 
-		$scope.units.resource = [];
-		angular.forEach(units, function (unit, index) {
+			$scope.units.resource = [];
+			angular.forEach(units, function (unit, index) {
 
-			if (unit.name === unitConfig.unit.base) {
-				$scope.units.selectedResourceUnit = unit;
-			}
-			else {
-				unit.name = unit.name + " (" + unit.multiplier + " " + unitConfig.unit.base + ")";
-			}
+				if (unit.name === unitConfig.unit.base) {
+					$scope.units.selectedResourceUnit = unit;
+				}
+				else {
+					unit.name = unit.name + " (" + unit.multiplier + " " + unitConfig.unit.base + ")";
+				}
 
-			$scope.units.resource.push(unit);
+				$scope.units.resource.push(unit);
 
-		});
+			});
 
+			$scope.resourceQty = '';
+		}
 
 		$('button.close', modalId).click();
 	};
