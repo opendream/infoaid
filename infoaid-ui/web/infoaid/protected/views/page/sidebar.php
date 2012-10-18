@@ -4,7 +4,7 @@
     	$resultUserInfo = API::getJSON("user/$userId/basic_info");
 	}    
 ?>
-<div id='page-sidebar' class='page-sidebar'>
+<div id='page-sidebar' class='page-sidebar' ng-app='headerService'>
 	<div id='page-sidebar-joinus'>
 		<?php
 			if($userId == null) {
