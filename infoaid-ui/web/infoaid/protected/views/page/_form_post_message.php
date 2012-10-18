@@ -123,10 +123,10 @@
 			  	    	<div class="modal-body">
 			  	    		<ul class="unstyled">
 			  	    			<li ng-repeat="item in items">
-			  	    				<label class="resource-item-link">
+			  	    				<label class="resource-item-link" ng-click="selectResource(item, '#select-resource-modal')">
 				  	    				<i class="item-icon item-icon-64 item-icon-64-{{item.class}}"></i>
 				  	    				{{item.name}}
-				  	    				<input class="hide" type="radio" name="resource" value="{{item.id}}" ng-model="resourceItem" ng-change="selectResource(item, '#select-resource-modal')" />
+				  	    				<input class="hide" type="radio" name="resource" value="{{item.id}}" ng-model="resourceItem" />
 				  	    			</label>
 			  	    			</li>
 			  	    		</ul>
