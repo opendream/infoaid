@@ -1,0 +1,30 @@
+login openshift
+info@opendream.co.th
+gfkgvkgv'qwer
+
+url: http://infoaidapi-opendream.rhcloud.com/
+
+repo: git clone ssh://8a763d2d563f4781b3d174ff084c1003@infoaidapi-opendream.rhcloud.com/~/git/infoaidapi.git/
+
+-----------------------------------------------------------------
+
+PostgreSQL 8.4 database.
+   
+   Root User: admin
+   Root Password: qT75FANA6gRe
+   Database Name: infoaidapi
+
+Connection URL: postgresql://127.4.72.1:5432/
+
+
+-----------------------------------------------------------------
+
+MongoDB 2.0 database.
+
+   Root User: admin
+   Root Password: kBVW-rFxDQua
+   Database Name: infoaidapi
+
+Connection URL: mongodb://127.4.72.1:27017/
+
+

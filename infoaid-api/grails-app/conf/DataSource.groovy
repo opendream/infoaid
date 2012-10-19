@@ -59,16 +59,16 @@ environments {
             dbCreate = "update"
             driverClassName = "org.postgresql.Driver"
             dialect = net.sf.hibernate.dialect.PostgreSQLDialect
-            url="jdbc:postgresql://127.3.92.129:5432/infoaidapi"
+            url="jdbc:postgresql://127.4.72.1:5432/infoaidapi"
             username = "admin"
-            password = "hdkCCz-zuQCZ"
+            password = "qT75FANA6gRe"
         }
         grails {
         mongo {
-            host = "127.3.92.129"
+            host = "127.4.72.1"
             port = 27017
             username = "admin"
-            password = "3fE7DWqihc1r"
+            password = "kBVW-rFxDQua"
             databaseName = "infoaidapi"
         }
     }
