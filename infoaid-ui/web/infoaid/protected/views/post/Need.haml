@@ -1,4 +1,4 @@
-.message-content.message-need(ng-clock='')
+.message-content.message-need(ng-cloak='')
 	.message-poster-avatar
 		%a(href="#{Yii::app()->baseUrl.'/user/profile/'}{{post.userId}}")
 			%img(src="#{Yii::app()->baseUrl}{{post.userPicSmall}}")
@@ -20,11 +20,13 @@
 					%span.quantity-sign +
 					{{post.quantity}}
 				.clear
+			:php
+				$this->renderPartial('/post/summary');
 		.meta
 			%time.timeago(datetime="{{post.dateCreated}}")
 				{{post.dateCreated}}
 			%span(ng-show="post.canDelete")
 				=" - "
-				%a(ng-click="deletePost(post)" type="button")
+				%a.button-delete(ng-click="deletePost(post)")
 					delete
 

@@ -355,21 +355,49 @@ legend + .control-group {
 	.message-card {
 		padding: 0;
 		margin-top: 10px;
+		box-shadow: 1px 1px 3px #DDD;
+		-webkit-box-shadow: 1px 1px 3px #DDD;
+		-mox-box-shadow: 1px 1px 3px #DDD;
 	}
 	.message-body {
 		margin-top: 0;
 		padding: 10px;
-		box-shadow: 1px 1px 3px #DDD;
-		-webkit-box-shadow: 1px 1px 3px #DDD;
-		-mox-box-shadow: 1px 1px 3px #DDD;
 	}
 	.item-quantity {
 		padding: 0;
 		color: #8FC13E;
 	}
-	.message-body { margin-top: 0; }
+
+	.latest-summary {
+		border-top: 1px dashed #CCCCCC;
+		padding: 12px;
+
+		.summary-number {
+			.count {
+				float: left;
+				color: #999;
+
+				.resource-count {
+					color: #339922;
+				}
+
+				.need-count {
+					color: #CC0000;
+				}
+			}
+			.percent {
+				float: right;
+			}
+		}
+
+		.progress {
+			margin-bottom: 10px;
+		}
+	}
 }
 .message-need .item-quantity { color: #DA534F; }
+.message-need .latest-summary .percent { color: #CC0000; }
+.message-resource .latest-summary .percent { color: #339922; }
 
 /*********************************************************
 		Page Sidebar
@@ -819,4 +847,12 @@ img.top-member-sidebar {
 	padding: 16px 16px 16px 3px;
 	width: 100%;
 	height: 35px;
+}
+
+.profile-header {
+	.img-polaroid {
+		width: 160px;
+		height: 160px;
+		display: inline-block;
+	}
 }

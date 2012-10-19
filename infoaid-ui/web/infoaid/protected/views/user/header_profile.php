@@ -1,7 +1,7 @@
 <?php
 	$user = UserHelper::basicInfo($userId);
 ?>
-<div id="user-header-<?php echo $userId; ?>" class="page-header span10">
+<div id="user-header-<?php echo $userId; ?>" class="page-header profile-header span10">
 	<div id="user-header-left-<?php echo $userId; ?>">
 		<div id="user-header-left-pic-<?php echo $userId; ?>" class="user-header-picture">
 			<?php 

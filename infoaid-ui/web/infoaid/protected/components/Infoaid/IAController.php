@@ -6,7 +6,9 @@ class IAController extends CController
 	
 	public $angular = TRUE;
 
-	public $scripts = array();
+	public $scripts = array(
+		'main/delete.js',
+	);
 
 	public $styles = array(
 		'page.scss',

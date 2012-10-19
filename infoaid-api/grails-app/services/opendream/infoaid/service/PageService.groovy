@@ -313,7 +313,7 @@ class PageService {
         page.addToPosts(need)
 
         if(page.save(failOnError: true, flush: true)) {
-            def items = getItemSummary(page)
+            def items = getPageAllItemSummary(page)
             addPageSummaryItems(page, items)
             return [status:1, user: user, page: page, post: need]
         } else {
@@ -458,7 +458,7 @@ class PageService {
         post.status = Post.Status.INACTIVE
         if(post.save(failOnError: true, flush:true)) { 
             if(post instanceof Need) {           
-                def items = getItemSummary(post.page)
+                def items = getPageAllItemSummary(post.page)
                 addPageSummaryItems(post.page, items)
             }
             return [status:1, message:"post ${postId} is deleted", id:postId] 
@@ -573,37 +573,48 @@ class PageService {
         ret.post.previousSumQuantity = previousSumQuantity
         ret.pageUser = pageUser
 
-        def items = getItemSummary(page)
+        def items = getPageAllItemSummary(page)
         addPageSummaryItems(page, items)
 
         return ret
     }
 
-    def getItemSummary(page) {
+    def getItemSummary(page, item, till_this_post = null) {
+
+        // Both Need and Resource share same criteria set.
+        def criteria = {
+            eq("page", page)
+            eq("status", Post.Status.ACTIVE)
+            eq("item", item)
+            
+            if (till_this_post) {
+                le("dateCreated", till_this_post?.dateCreated)
+            }
+            
+            projections {
+                sum("quantity")
+            }
+        }
+
+        def sumResource = Resource.createCriteria().get(criteria) ?: 0
+        def sumNeed = Need.createCriteria().get(criteria) ?: 0
+        // Ugly workaround
+        sumNeed -= sumResource
+
+        [
+            id: item.id,
+            name: item.name,
+            need: sumNeed,
+            resource: sumResource,
+            percentSupplyPerDemand: sumNeed ? (sumResource / sumNeed) * 100 : 0,
+            percentDemandPerSupply: sumResource ? (sumNeed / sumResource) * 100 : 0,
+        ]
+    }
+
+    def getPageAllItemSummary(page) {
         Item.list().collect { item ->
             // Find sum of each item
-
-            // Both Need and Resource share same criteria set.
-            def criteria = {
-                eq("page", page)
-                eq("status", Post.Status.ACTIVE)
-                eq("item", item)
-                projections {
-                    sum("quantity")
-                }
-            }
-
-            def sumResource = Resource.createCriteria().get(criteria) ?: 0
-            def sumNeed = Need.createCriteria().get(criteria) ?: 0
-            // Ugly workaround
-            sumNeed -= sumResource
-
-            [
-                id: item.id,
-                name: item.name,
-                need: sumNeed,
-                resource: sumResource,
-            ]
+            getItemSummary(page, item)
         }.findAll { it.need || it.resource }
     }
 
@@ -625,17 +636,24 @@ class PageService {
     def addPageSummaryItems(page, items) {
         def limit = grailsApplication.config.infoaid.api.need.max
         def pageSummary = PageSummary.findByPageId(page.id)
+
+        def tmpItems = items.collect {
+            it.remove('percentDemandPerSupply')
+            it.remove('percentSupplyPerDemand')
+            it
+        }
+
         if(items?.size()>limit) {
-            items.sort { a, b -> b.need - a.need}
-            pageSummary.items = items.subList(0,limit)
+            tmpItems.sort { a, b -> b.need - a.need}
+            pageSummary.items = tmpItems.subList(0,limit)
         } else {
-            pageSummary.items = items
+            pageSummary.items = tmpItems
         }        
         pageSummary.save(failOnError: true, flush: true)
     }
 
     def reloadPageSummary(page) {
-        def items = getItemSummary(page)
+        def items = getPageAllItemSummary(page)
         addPageSummaryItems(page, items)
     }
 }

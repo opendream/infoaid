@@ -78,11 +78,11 @@
 			  	    	</div>
 			  	    	<div class="modal-body">
 			  	    		<ul class="unstyled">
-			  	    			<li ng-repeat="item in items">
+			  	    			<li ng-repeat="item in items" ng-click="selectNeed(item, '#select-need-modal')">
 			  	    				<label class="need-item-link">
 				  	    				<i class="item-icon item-icon-64 item-icon-64-{{item.class}}"></i>
 				  	    				{{item.name}}
-				  	    				<input class="hide" type="radio" name="request" value="{{item.id}}" ng-model="requestItem" ng-change="selectNeed(item, '#select-need-modal')" />
+				  	    				<input class="hide" type="radio" name="request" value="{{item.id}}" ng-model="requestItem" />
 				  	    			</label>
 			  	    			</li>
 			  	    		</ul>
@@ -91,9 +91,7 @@
 
 		        	<input class="span2 need-quantity" ng-model='qty' type="number" required placeholder="Quantity.." pattern="[0-9]+" ng-disabled="!requestItem.id" />
 
-		        	<select class="input-small select-unit" ng-show="requestItem.id" ng-model="units.selectedNeedUnit" ng-options="u.name for u in units.need"></select>
-
-		        	<select class="select-unit" ng-show="request.length" ng-model="needUnit" ng-options="unit.name for unit in needUnits"></select>
+		        	<select class="input-small select-unit" ng-show="requestItem.id" ng-model="units.selectedNeedUnit" ng-options="u.descriptiveName for u in units.need"></select>
 
 		        	<div class="form-actions">
 		        		<button class="btn btn-danger pull-right" type="submit" id="submit" ng-disabled="!requestItem.id || !qty || qty==0 || !units.selectedNeedUnit">Request</button>
@@ -125,10 +123,10 @@
 			  	    	<div class="modal-body">
 			  	    		<ul class="unstyled">
 			  	    			<li ng-repeat="item in items">
-			  	    				<label class="resource-item-link">
+			  	    				<label class="resource-item-link" ng-click="selectResource(item, '#select-resource-modal')">
 				  	    				<i class="item-icon item-icon-64 item-icon-64-{{item.class}}"></i>
 				  	    				{{item.name}}
-				  	    				<input class="hide" type="radio" name="resource" value="{{item.id}}" ng-model="resourceItem" ng-change="selectResource(item, '#select-resource-modal')" />
+				  	    				<input class="hide" type="radio" name="resource" value="{{item.id}}" ng-model="resourceItem" />
 				  	    			</label>
 			  	    			</li>
 			  	    		</ul>
@@ -137,7 +135,7 @@
 
 		        	<input class="span2 resource-quantity" ng-model='resourceQty' type="number" required placeholder="Quantity.." ng-disabled="!resourceItem.id" />
 
-		        	<select class="input-small select-unit" ng-show="resourceItem.id" ng-model="units.selectedResourceUnit" ng-options="u.name for u in units.resource"></select>
+		        	<select class="input-small select-unit" ng-show="resourceItem.id" ng-model="units.selectedResourceUnit" ng-options="u.descriptiveName for u in units.resource"></select>
 
 		        	<div class="form-actions">
 		        		<button class="btn btn-success pull-right" id="submitResource" ng-disabled="!resourceItem.id || !resourceQty || resourceQty==0 || !units.selectedResourceUnit">Give</button>  

@@ -272,6 +272,9 @@ class UserController extends IAController
 
 	public function actionProfile($userId)
 	{
+		$this->scripts[] = 'controllers.js';
+		$this->scripts[] = 'main/commentService.js';
+
 		$this->render('profile', array('userId'=>$userId));
 	}
 }

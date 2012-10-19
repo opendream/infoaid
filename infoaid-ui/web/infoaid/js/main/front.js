@@ -1,16 +1,18 @@
 jQuery(function ($) {
-	var latCenter = 13.760061108392179,
-		lngCenter = 100.48919677734375,
-		API_KEY   = "195ef107c4e041cfaa584ae805a58030",
-		zoom      = 13,
+	var config    = InfoAid.settings.map,
+		latCenter = config.default_latlng.lat,
+		lngCenter = config.default_latlng.lng,
+		zoom      = config.default_zoom,
 		url       = baseUrl + '/api/frontPageInfo'
 	;
 
 	var map = L.map('map').setView([latCenter, lngCenter], zoom);
 
-	L.tileLayer('http://192.168.1.134/osm_tiles2/{z}/{x}/{y}.png', {
-		attribution: "Map data &copy; Opendream Co., Ltd.",
-		maxZoom: 18
+	L.tileLayer(config.server, {
+		key: config.api_key,
+		styleId: config.style_id,
+		attribution: config.attribution,
+		maxZoom: config.max_zoom
 	}).addTo(map);
 
 	var autoNS = function() {

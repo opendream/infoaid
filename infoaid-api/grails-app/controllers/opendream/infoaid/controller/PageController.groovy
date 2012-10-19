@@ -22,7 +22,7 @@ class PageController {
             ret = [
                 status: 1,
                 page: info,
-                items: pageService.getItemSummary(info),
+                items: pageService.getPageAllItemSummary(info),
                 isJoined: user instanceof String? false:pageService.isJoined(user.id, info.slug).isJoined,
                 isOwner: user instanceof String? false:pageService.isOwner(user.id, info.slug).isOwner
             ]
@@ -194,6 +194,7 @@ class PageController {
         }
 
         def page = pageService.getRecentPost(params.user, params.slug, params.fromId, params.toId, since, until, params.max)
+        def pageInfo = pageService.getInfo(params.slug)
         if(page) {
             ret.posts = page.posts.collect{
                 def post = [
@@ -227,6 +228,7 @@ class PageController {
                 ]
                 if (it instanceof Need || it instanceof Resource) {
                     post.item = it.item
+                    post.itemSummary = pageService.getItemSummary(pageInfo, it.item, it)
                     post.quantity = it.quantity
                     post.expiredDate = it.expiredDate
                 }

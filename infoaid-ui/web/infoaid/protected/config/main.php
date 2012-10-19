@@ -209,6 +209,19 @@ return array(
 				),
 				'imagePath' => '/js/jReject/images/',
 			),
+
+			'map' => array(
+				'server' => 'http://{s}.tile.cloudmade.com/{key}/997/256/{z}/{x}/{y}.png',
+				'api_key' => "195ef107c4e041cfaa584ae805a58030",
+				'style_id' => 997,
+				'default_zoom' => 13,
+				'max_zoom' => 18,
+				'default_latlng' => array(
+					'lat' => 13.760061108392179,
+					'lng' => 100.48919677734375,
+				),
+				'attribution' => "Map data &copy; Opendream Co., Ltd.",
+			),
 		),
 
 		'profile' => array(
