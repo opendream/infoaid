@@ -72,6 +72,7 @@
 							'class' => 'dropdown-menu',
 						),
 						'items' => array(
+							array('label' => 'Me', 'url' => '/user/profile/'. Yii::app()->user->getId()),
 							array('label' => 'Edit Profile', 'url' => '/user/edit'),
 							array('label' => 'Create Page', 'url' => '/page/create'),
 							array(
