@@ -1,0 +1,14 @@
+.latest-summary
+	.summary-number
+		.count
+			Resource / Request :
+			%span.resource-count
+				{{post.itemSummary.resource}}
+			=' / '
+			%span.need-count
+				{{post.itemSummary.need}}
+		.percent.pull-right
+			{{post.itemSummary.percentSupplyPerDemand.toFixed(0)}}%
+		.clear
+	.progress.progress-striped
+		.bar.bar-success(style="width:{{post.itemSummary.percentSupplyPerDemand}}%")

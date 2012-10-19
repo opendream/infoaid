@@ -236,7 +236,7 @@ class PageServiceIntegrationTests {
     }
 
     @Test
-    void testGetItemSummary() {
+    void testGetPageAllItemSummary() {
         def fixture = fixtureLoader.load("pages")
         fixture.load {
             food(Item,
@@ -309,7 +309,7 @@ class PageServiceIntegrationTests {
                     status: Post.Status.ACTIVE
                 )
         }
-        def summary = pageService.getItemSummary(fixture.bangkok)        
+        def summary = pageService.getPageAllItemSummary(fixture.bangkok)        
 
         assert summary.size() == 2
 
