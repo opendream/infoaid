@@ -227,7 +227,13 @@ class PageController {
                     }
                 ]
                 if (it instanceof Need || it instanceof Resource) {
-                    post.item = it.item
+                    post.item = [
+                        class: it.item.class,
+                        id: it.item.id,
+                        dateCreated: it.item.dateCreated,
+                        lastUpdated: it.item.lastUpdated,
+                        name: it.item.name,
+                    ]
                     post.itemSummary = pageService.getItemSummary(pageInfo, it.item, it)
                     post.quantity = it.quantity
                     post.expiredDate = it.expiredDate
@@ -239,6 +245,7 @@ class PageController {
             ret.isJoined = page.author.isJoined
             ret.isOwner = page.author.isOwner
         }
+        println ret as JSON
         render ret as JSON
     }
 
