@@ -245,7 +245,6 @@ class PageController {
             ret.isJoined = page.author.isJoined
             ret.isOwner = page.author.isOwner
         }
-        println ret as JSON
         render ret as JSON
     }
 
