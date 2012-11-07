@@ -93,8 +93,8 @@
 
 		        	<select class="input-small select-unit" ng-show="requestItem.id" ng-model="units.selectedNeedUnit" ng-options="u.descriptiveName for u in units.need"></select>
 
-		        	<div class="form-actions">
-		        		<button class="btn btn-danger pull-right" type="submit" id="submit" ng-disabled="!requestItem.id || !qty || qty==0 || !units.selectedNeedUnit">Request</button>
+		        	<div class="form-actions post-request-button">
+		        		<button class="btn btn-danger pull-right" type="submit" id="submit" ng-disabled="!requestItem.id || !qty || qty==0 || !units.selectedNeedUnit" data-loading-text="Posting ...">Request</button>
 		        	</div>
 		        	<a href="#myModal" openDialog role="button" class="btn  btn-mini btn-primary" data-toggle="modal" ng-hide="true">Add Item</a>    		
 		        </form>        	  
@@ -133,12 +133,12 @@
 			  	    	</div>
 			  	    </div>
 
-		        	<input class="span2 resource-quantity" ng-model='resourceQty' type="number" required placeholder="Quantity.." ng-disabled="!resourceItem.id" />
+		        	<input class="span2 resource-quantity" ng-model='resourceQty' type="number" required placeholder="Quantity.." pattern="[0-9]+" ng-disabled="!resourceItem.id" />
 
 		        	<select class="input-small select-unit" ng-show="resourceItem.id" ng-model="units.selectedResourceUnit" ng-options="u.descriptiveName for u in units.resource"></select>
 
-		        	<div class="form-actions">
-		        		<button class="btn btn-success pull-right" id="submitResource" ng-disabled="!resourceItem.id || !resourceQty || resourceQty==0 || !units.selectedResourceUnit">Give</button>  
+		        	<div class="form-actions post-resource-button">
+		        		<button class="btn btn-success pull-right" id="submitResource" ng-disabled="!resourceItem.id || !resourceQty || resourceQty==0 || !units.selectedResourceUnit" data-loading-text="Posting ...">Give</button>  
 		        	</div>
 
 		        	<a href="#myModal" openDialog role="button" class="btn  btn-mini btn-primary" data-toggle="modal" ng-hide="true">Add Item</a>

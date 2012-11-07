@@ -220,6 +220,8 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 		selectedNeedUnit: '',
 		selectedResourceUnit: ''
 	};
+	$scope.requesting = false;
+	$scope.giving = false;
 
 	$scope.$on('isJoinedBroadcast', function() {
 		$scope.isjoined = SharedService.isJoined;
@@ -307,27 +309,38 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 	}
 
 	$scope.postRequest = function() {
+		var button = $('.post-request-button button');
 		var options = {
 			slug: $scope.slug,
 			itemId: $scope.requestItem.id, 
 			quantity: $scope.qty * $scope.units.selectedNeedUnit.multiplier,
 		};
-		PostRequest.get(options, function (ret) {	
+
+		$scope.requesting = true;
+		button.button('loading');
+		PostRequest.get(options, function (ret) {
 			RefreshPost($scope);
 
 			// Get element and clear value.
 			$scope.requestItem = {};
 			$scope.qty = '';	
 			$scope.units.selectedNeedUnit = '';
+
+			$scope.requesting = false;
+			button.button('reset');
 		});
 	}
 
 	$scope.postResource = function() {
+		var button = $('.post-resource-button button');
 		var options = {
 			slug: $scope.slug,
 			itemId: $scope.resourceItem.id,
 			quantity: $scope.resourceQty * $scope.units.selectedResourceUnit.multiplier,
 		};
+
+		$scope.giving = true;
+		button.button('loading');
 		PostResource.get(options, function (ret) {
 			RefreshPost($scope);
 
@@ -335,6 +348,9 @@ function PostMessageCtrl($scope, PostMessage, PostRequest, Post, Items, RefreshP
 			$scope.resourceItem = {};
 			$scope.resourceQty = '';
 			$scope.units.selectedResourceUnit = '';
+
+			$scope.giving = false;
+			button.button('reset');
 		});
 	}
 }

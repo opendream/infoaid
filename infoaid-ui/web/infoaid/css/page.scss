@@ -399,6 +399,12 @@ legend + .control-group {
 			}
 			.percent {
 				float: right;
+				.miss {
+					color: #CC0000;
+				}
+				.over {
+					color: #339922;
+				}
 			}
 		}
 
