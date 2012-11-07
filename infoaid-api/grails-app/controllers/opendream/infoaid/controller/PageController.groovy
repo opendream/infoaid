@@ -10,6 +10,7 @@ class PageController {
     def pageService
     def itemService
     def springSecurityService
+    def markdownService
 
     def index() { }
 
@@ -197,10 +198,12 @@ class PageController {
         def pageInfo = pageService.getInfo(params.slug)
         if(page) {
             ret.posts = page.posts.collect{
+                def markdownConf = [autoLinks: true]
                 def post = [
                     id: it.id,
                     class: it.class.name.tokenize('.')[-1],
                     message: it.message,
+                    messageWithLinks: markdownService.markdown(it.message, markdownConf),
                     picSmall: it.picSmall,
                     picLarge: it.picLarge,
                     picOriginal: it.picOriginal,

@@ -233,6 +233,10 @@ class PageControllerTests {
         pageService.grailsApplication = [config:[infoaid:[api:[post:[max:10]]]]]
         controller.pageService = pageService
 
+        def markdownProcessCount = 0
+        def markdownService = [markdown: { text, conf -> ++markdownProcessCount }]
+        controller.markdownService = markdownService
+
         def user1 = User.findByUsername('nut')
         params.user = [id:user1.id]
         params.slug = 'page-slug'
@@ -251,6 +255,8 @@ class PageControllerTests {
         assert 'item 10' == response.json.posts[0].message
         assert "item 9\nneed1" == response.json.posts[1].message
         assert 'first post' == response.json.posts[3].message
+        assert 4 == markdownProcessCount
+
     }
 
     void testCreatePage() {

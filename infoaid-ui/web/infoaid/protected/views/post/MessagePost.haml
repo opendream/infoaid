@@ -6,8 +6,7 @@
 		.message-poster-name
 			%a(href="#{Yii::app()->baseUrl.'/user/profile/'}{{post.userId}}")
 				{{post.createdBy}}
-		.message-body
-			{{post.message}}
+		.message-body(ng-bind-html-unsafe="post.messageWithLinks")
 		.message-picture-preview.img-polaroid(ng-show="post.picOriginal.length")
 			%a.colorbox(id="pic-{{post.id}}" href="#{Yii::app()->baseUrl}{{post.picOriginal}}")
 				%img(src="#{Yii::app()->baseUrl}{{post.picLarge}}")
