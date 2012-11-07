@@ -9,7 +9,7 @@
 				{{post.itemSummary.need}}
 		.percent.pull-right
 			%span.miss(ng-show="post.itemSummary.percentSupplyPerDemand.toFixed(0) <= 100")
-				Miss {{post.itemSummary.percentSupplyPerDemand.toFixed(0)}}%
+				{{post.itemSummary.percentSupplyPerDemand.toFixed(0)}}%
 			%span.over(ng-show="post.itemSummary.percentSupplyPerDemand.toFixed(0) > 100")
 				Over {{post.itemSummary.percentSupplyPerDemand.toFixed(0) - 100}}%
 		.clear
