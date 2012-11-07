@@ -233,9 +233,20 @@ class PageControllerTests {
         pageService.grailsApplication = [config:[infoaid:[api:[post:[max:10]]]]]
         controller.pageService = pageService
 
-        def markdownProcessCount = 0
-        def markdownService = [markdown: { text, conf -> ++markdownProcessCount }]
+        def markdownProcessCount = 0, sanitizerProcessCount = 0
+        def markdownService = [
+            markdown: { text, conf ->
+                ++markdownProcessCount
+            }
+        ]
+         def markupSanitizerService = [
+            sanitize: { text ->
+                ++sanitizerProcessCount
+                [cleanString: text]
+            }
+        ]
         controller.markdownService = markdownService
+        controller.markupSanitizerService = markupSanitizerService
 
         def user1 = User.findByUsername('nut')
         params.user = [id:user1.id]
@@ -256,6 +267,7 @@ class PageControllerTests {
         assert "item 9\nneed1" == response.json.posts[1].message
         assert 'first post' == response.json.posts[3].message
         assert 4 == markdownProcessCount
+        assert 4 == sanitizerProcessCount
 
     }
 

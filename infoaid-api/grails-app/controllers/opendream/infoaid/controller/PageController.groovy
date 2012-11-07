@@ -6,11 +6,13 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import opendream.infoaid.domain.Need
 import opendream.infoaid.domain.Resource
 
+import org.grails.plugins.sanitizer.MarkupSanitizerResult
+
 class PageController {
     def pageService
     def itemService
     def springSecurityService
-    def markdownService
+    def markdownService, markupSanitizerService
 
     def index() { }
 
@@ -203,7 +205,7 @@ class PageController {
                     id: it.id,
                     class: it.class.name.tokenize('.')[-1],
                     message: it.message,
-                    messageWithLinks: markdownService.markdown(it.message, markdownConf),
+                    messageRendered: markdownService.markdown(markupSanitizerService.sanitize(it.message).cleanString, markdownConf),
                     picSmall: it.picSmall,
                     picLarge: it.picLarge,
                     picOriginal: it.picOriginal,
