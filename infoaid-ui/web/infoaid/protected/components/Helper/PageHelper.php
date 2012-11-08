@@ -43,6 +43,8 @@ class PageHelper
 
 	public static function getRecentPost($slug, $params)
 	{
+		$iconSet = self::getIconSet();
+
 		$result = self::getJSON($slug, 'recent_post', $params);
 		if (empty($result) || (isset($result->status) && ! $result->status)) {
 			return array();
@@ -51,6 +53,9 @@ class PageHelper
 			$posts = isset($result->posts) ? $result->posts : $result;
 			foreach ($posts as $key => &$post) {
 				$post->item->class = self::getItemClass($post->item->name);
+				$post->item->baseUnit = $iconSet[$post->item->class]['unit']['base'];
+				$post->item->countable = $iconSet[$post->item->class]['unit']['countable'];
+				$post->item->plural = $iconSet[$post->item->class]['unit']['plural'];
 			}
 
 			return $posts;
@@ -151,11 +156,17 @@ class PageHelper
 		}
 	}
 
-	public static function getItemClass($itemName) {
+	public static function getIconSet() {
 		static $iconSet;
 		if (! isset($iconSet)) {
 			$iconSet = Yii::app()->params['item']['icon'];
 		}
+
+		return $iconSet;
+	}
+
+	public static function getItemClass($itemName) {
+		$iconSet = self::getIconSet();
 
 		foreach ($iconSet as $name => $config) {
 			if ($name == strtolower(trim($itemName)) || in_array($itemName, $config['synonyms'])) {

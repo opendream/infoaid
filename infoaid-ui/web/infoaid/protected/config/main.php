@@ -329,6 +329,8 @@ return array(
 					),
 					'unit' => array(
 						'base' => 'Kilogram',
+						'plural' => 'Kilograms',
+						'countable' => false,
 						'abbr' => 'kg',
 						'variants' => array(
 							'kilogram' => array(
@@ -356,6 +358,8 @@ return array(
 					),
 					'unit' => array(
 						'base' => 'Tent',
+						'plural' => 'Tents',
+						'countable' => true,
 						'abbr' => '',
 						'variants' => array(
 							'tent' => array(
@@ -375,6 +379,8 @@ return array(
 					),
 					'unit' => array(
 						'base' => 'Set',
+						'plural' => 'Sets',
+						'countable' => false,
 						'abbr' => '',
 						'variants' => array(
 							'clothes' => array(
@@ -394,6 +400,8 @@ return array(
 					),
 					'unit' => array(
 						'base' => 'Litre',
+						'plural' => 'Litres',
+						'countable' => false,
 						'abbr' => 'l',
 						'variants' => array(
 							'litre' => array(
@@ -421,6 +429,8 @@ return array(
 					),
 					'unit' => array(
 						'base' => 'Litre',
+						'plural' => 'Litres',
+						'countable' => false,
 						'abbr' => 'l',
 						'variants' => array(
 							'litre' => array(
@@ -448,6 +458,8 @@ return array(
 					),
 					'unit' => array(
 						'base' => 'Litre',
+						'plural' => 'Litres',
+						'countable' => false,
 						'abbr' => 'l',
 						'variants' => array(
 							'litre' => array(
@@ -475,6 +487,8 @@ return array(
 					),
 					'unit' => array(
 						'base' => 'Boat',
+						'plural' => 'Boats',
+						'countable' => true,
 						'abbr' => '',
 						'variants' => array(
 							'boat' => array(
@@ -494,6 +508,7 @@ return array(
 					),
 					'unit' => array(
 						'base' => 'Man',
+						'countable' => true,
 						'plural' => 'Men',
 						'abbr' => '',
 						'variants' => array(
@@ -514,6 +529,8 @@ return array(
 					),
 					'unit' => array(
 						'base' => 'Watt/hour',
+						'plural' => 'Watts/hour',
+						'countable' => false,
 						'abbr' => 'wph',
 						'variants' => array(
 							'wph' => array(
@@ -537,6 +554,8 @@ return array(
 					),
 					'unit' => array(
 						'base' => 'Set',
+						'plural' => 'Sets',
+						'countable' => false,
 						'abbr' => '',
 						'variants' => array(
 							'set' => array(
@@ -556,6 +575,8 @@ return array(
 					),
 					'unit' => array(
 						'base' => 'Set',
+						'plural' => 'Sets',
+						'countable' => true,
 						'abbr' => '',
 						'variants' => array(
 							'set' => array(
@@ -575,6 +596,8 @@ return array(
 					),
 					'unit' => array(
 						'base' => 'Set',
+						'plural' => 'Sets',
+						'countable' => true,
 						'abbr' => '',
 						'variants' => array(
 							'set' => array(

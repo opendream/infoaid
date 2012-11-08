@@ -1,5 +1,18 @@
 .latest-summary
-	.summary-number
+	.summary-text
+		%span(ng-switch='' on="post.item.countable")
+			%span(ng-switch-when="true")
+				%ng-pluralize{:count => "post.itemSummary.need", :when => "{'0' : 'No need required', 'one' : '1 {{post.item.name | lowercase}} is needed', 'other' : '{} {{post.item.plural | lowercase}} are needed'}"}
+			%span(ng-switch-when="false")
+				%ng-pluralize{:count => "post.itemSummary.need", :when => "{'0' : 'No need required', 'one' : '1 {{post.item.baseUnit | lowercase}} of {{post.item.name | lowercase}} is needed', 'other' : '{} {{post.item.plural | lowercase}} of {{post.item.name | lowercase}} is needed'}"}
+		%span(ng-show="post.itemSummary.need > post.itemSummary.resource")
+			, now lack
+			%ng-pluralize{:count => "post.itemSummary.need - post.itemSummary.resource", :when => "{'0': '', 'one': '1 {{post.item.baseUnit | lowercase}}', 'other': '{} {{post.item.plural | lowercase}}'}"}
+		%span(ng-show="post.itemSummary.need < post.itemSummary.resource")
+			, now exceed
+			%ng-pluralize{:count => "post.itemSummary.resource - post.itemSummary.need", :when => "{'0': '', 'one': '1 {{post.item.baseUnit | lowercase}}', 'other': '{} {{post.item.plural | lowercase}}'}"}
+		.
+	.summary-number.hide
 		.count
 			Resource / Request :
 			%span.resource-count
@@ -13,5 +26,5 @@
 			%span.over(ng-show="post.itemSummary.percentSupplyPerDemand.toFixed(0) > 100")
 				Over {{post.itemSummary.percentSupplyPerDemand.toFixed(0) - 100}}%
 		.clear
-	.progress.progress-striped
+	.progress.progress-striped.hide
 		.bar.bar-success(style="width:{{post.itemSummary.percentSupplyPerDemand}}%")
