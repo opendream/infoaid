@@ -36,6 +36,9 @@ class UrlMappings {
         "/user/$userId/basic_info"(controller: "user"){ action = [GET:"showBasicInfo", PUT:"updateBasicInfo"] }
         "/user/$userId/joining"(controller: "user", action: "getPages")
         "/user/$userId/password"(controller: "user"){ action = [PUT:"updatePassword"] }
+        "/user/$userId/expertises"(controller: "user") {
+                action = [POST:"updateExpertises"]
+        }
         "/"(view:"/index")
         "500"(view:'/error')
         }

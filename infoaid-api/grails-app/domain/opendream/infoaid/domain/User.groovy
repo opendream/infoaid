@@ -22,6 +22,8 @@ class User {
 	Date dateCreated
     Date lastUpdated
 
+    static hasMany = [expertises: Expertise]
+
 	static constraints = {
 		username blank: false, unique: true
 		password blank: false

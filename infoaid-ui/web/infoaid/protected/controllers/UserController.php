@@ -87,6 +87,8 @@ class UserController extends IAController
 			'account' => 'Account',
 			'password' => 'Password',
 			'photo' => 'Profile Photo',
+			'expertise' => 'Area of Expertise',
+			'causes' => 'Causes',
 		);
 
 		$this->render('edit', array(
@@ -118,6 +120,9 @@ class UserController extends IAController
 				break;
 			case 'photo':
 				$this->actionDoEditPhoto($info);
+				break;
+			case 'expertise':
+				$this->actionDoEditExpertise($info);
 				break;
 		}
 	}
@@ -236,6 +241,31 @@ class UserController extends IAController
 		}
 		
 		$this->redirect($editPhotoUrl);
+	}
+
+	public function actionDoEditExpertise($info) 
+	{
+		$editExpertiseUrl = $this->createUrl('/user/edit/expertise');
+
+		$expertises = $_POST['expertises'];
+		foreach ($expertises as &$expertise) {
+			$expertise = urlencode($expertise);
+		}
+		$params = array(
+			'expertises' => $expertises,
+		);
+		$params = json_encode($params);
+		API::set_header('Content-Type', 'application/json');
+
+		$result = API::post('user/'. $info->id .'/expertises', $params, 'json', $options);
+		if ($result && $result->status) {
+			flash('Successfully update your expertises.');
+		}
+		else {
+			flash('Fail to update your expertises.');
+		}
+
+		$this->redirect($editExpertiseUrl);
 	}
 
 	public function actionLogin()

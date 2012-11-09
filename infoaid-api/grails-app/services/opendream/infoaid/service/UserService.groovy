@@ -3,7 +3,9 @@ package opendream.infoaid.service
 import opendream.infoaid.domain.User
 import opendream.infoaid.domain.Role
 import opendream.infoaid.domain.UserRole
+import opendream.infoaid.domain.Expertise
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
+import java.net.URLDecoder
 
 class UserService {
     def springSecurityService
@@ -39,9 +41,16 @@ class UserService {
     def getBasicInfo(userId) {
         def user = User.get(userId)
         if(user) {
+            def expertises = user.expertises.collect {
+                [
+                    id: it.id,
+                    name: it.name,
+                    description: it.description
+                ]
+            }
             [status:1, id:user.id, username:user.username, firstname:user.firstname, 
             lastname:user.lastname, email:user.email, telNo:user.telNo, 
-            picOriginal:user.picOriginal, picLarge:user.picLarge, picSmall:user.picSmall]
+            picOriginal:user.picOriginal, picLarge:user.picLarge, picSmall:user.picSmall, expertises: expertises]
         } else {
             [status:0, message:'user not found']
         }
@@ -89,6 +98,69 @@ class UserService {
             throw new RuntimeException("${user.errors}")
         }
         return [message: "password is updated"]
+    }
+
+    def updateExpertises(id, expertises) {
+        def user = User.get(id),
+            updatedExpertises = [],
+            currentExpertises = []
+
+        expertises.each {
+            updatedExpertises.push(it)
+        }
+        user.expertises.each {
+            currentExpertises.push(it.name)
+        }
+
+        // NOT WORK : Cannot remove expertise
+        // def newExpertises = updatedExpertises - currentExpertises
+        // def removedExpertises = currentExpertises - updatedExpertises
+        // 
+        // revokeExpertise(user.id, removedExpertises)
+        // newExpertises.each {
+        //    assignExpertise(user.id, it)
+        // }
+
+        user.expertises = []
+        user.expertises = getExpertise(updatedExpertises)
+        user.save()
+    }
+
+    def getExpertise(expertise, createIfNotExists = false) {
+        if (expertise instanceof Expertise || expertise[0] instanceof Expertise) {
+            return expertise
+        }
+
+        if (expertise instanceof String) {
+            expertise = [expertise]
+        }
+
+        expertise.collect {
+            if (it instanceof String) {
+                it = Expertise.findByName(URLDecoder.decode(it))
+            }
+
+            if (! it && false) {
+                it = new Expertise(name: it)
+                it.save()
+            }
+
+            it
+        }
+    }
+
+    def assignExpertise(id, expertise) {
+        def user = User.get(id)
+        expertise = getExpertise(expertise, true)
+        expertise.addToUsers(user).save()
+    }
+
+    def revokeExpertise(id, expertise) {
+        def user = User.get(id)
+
+        expertise = getExpertise(expertise, true)
+        user.expertises = user.expertises - expertise
+        user.save(failOnError: true)
     }
 
 }

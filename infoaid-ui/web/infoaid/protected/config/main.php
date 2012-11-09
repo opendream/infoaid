@@ -611,5 +611,33 @@ return array(
 
 			// another settings.
 		),
+
+		'expertises' => array(
+			array('name' => "Accounting", "description" => "Accounting (Accountant, Controller, CPA)"),
+			array('name' => "Advertising", "description" => "Advertising (Brand Manager, Creative Director, Advertising Executive)"),
+			array('name' => "Brand Strategy", "description" => "Brand Strategy (Brand Strategist, Creative Director, Marketing Director/Manager, Product Manager)"),
+			array('name' => "Business Strategy", "description" => "Business Strategy (Senior Business Analyst, Strategic Planning Analyst, Management Consultant, Business Development Director)"),
+			array('name' => "Communications", "description" => "Communications (Public Relations Specialist/Manager, Corporate Communications Director)"),
+			array('name' => "Copywriting", "description" => "Copywriting (Copywriter, Writer, Communications Manager)"),
+			array('name' => "Design", "description" => "Design (Creative Director, Graphic Designer/Artist, Desktop Publisher, Visual Web Designer, UX / UI Designer, Web Designer)"),
+			array('name' => "Entrepreneurship", "description" => "Entrepreneurship (Entrepreneur, CEO, Company Founder)"),
+			array('name' => "Event Planning", "description" => "Event Planning (Event Planner)"),
+			array('name' => "Finance", "description" => "Finance (Financial/Investment Analyst, Management Consultant, Investment Banker, Private Equity/Hedge Fund Analyst)"),
+			array('name' => "Fundraising", "description" => "Fundraising (Development Director, Grantwriter, Director/Manager of Business Development, Crowdfunding/Social Media Specialist)"),
+			array('name' => "Human Resources", "description" => "Human Resources (Human Resources Manager, Recruiter, Compensation Analyst)"),
+			array('name' => "Legal", "description" => "Legal (Attorney, General Counsel, Solicitor, Paralegal)"),
+			array('name' => "Marketing", "description" => "Marketing (Marketing Manager/Director, Marketing Analyst)"),
+			array('name' => "Multimedia", "description" => "Multimedia (Video Production Manager, Director, Videographer, Multimedia Designer/Specialist, Multimedia Illustrator)"),
+			array('name' => "Online Marketing", "description" => "Online Marketing (Digital Marketing Specialist, Social Marketing Manager, Online Marketing Analyst, SEO/SEM Specialist)"),
+			array('name' => "Photography", "description" => "Photography (Photographer)"),
+			array('name' => "Public Relations", "description" => "Public Relations (Public Relations Specialist/Manager, Communications Manager, Event Planner)"),
+			array('name' => "Sales & Business Development", "description" => "Sales & Business Development (Business Development Director/Associate, Sales Manager/Executive)"),
+			array('name' => "Social Media", "description" => "Social Media (Social Media Specialist, Digital Community Manager, Social Marketing Specialist/Manager, Online Marketing Analyst/Manager)"),
+			array('name' => "Strategic Communications", "description" => "Strategic Communications (Public Relations Specialist, Corporate Communications Manager)"),
+			array('name' => "Strategic Marketing", "description" => "Strategic Marketing (VP of Marketing, Brand Strategist, Product Manager)"),
+			array('name' => "Strategy", "description" => "Strategy (Senior Business Analyst, Stategic Planning Analyst, Management Consultant, Director of Strategy)"),
+			array('name' => "Technology", "description" => "Technology (Software Engineer, IT Architect, Systems Administrator/Engineer, Database Analyst, Web Designer, Blogger)"),
+			array('name' => "Writing", "description" => "Writing (Creative Writer, Copywriter, Blogger)"),
+		),
 	),
 );

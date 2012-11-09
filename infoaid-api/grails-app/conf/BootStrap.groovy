@@ -52,6 +52,51 @@ class BootStrap {
         }
     }
 
+    def initExpertise = {
+        def expertise_list = [
+            [name: "Accounting", description: "Accounting (Accountant, Controller, CPA)"],
+            [name: "Advertising", description: "Advertising (Brand Manager, Creative Director, Advertising Executive)"],
+            [name: "Brand Strategy", description: "Brand Strategy (Brand Strategist, Creative Director, Marketing Director/Manager, Product Manager)"],
+            [name: "Business Strategy", description: "Business Strategy (Senior Business Analyst, Strategic Planning Analyst, Management Consultant, Business Development Director)"],
+            [name: "Communications", description: "Communications (Public Relations Specialist/Manager, Corporate Communications Director)"],
+            [name: "Copywriting", description: "Copywriting (Copywriter, Writer, Communications Manager)"],
+            [name: "Design", description: "Design (Creative Director, Graphic Designer/Artist, Desktop Publisher, Visual Web Designer, UX / UI Designer, Web Designer)"],
+            [name: "Entrepreneurship", description: "Entrepreneurship (Entrepreneur, CEO, Company Founder)"],
+            [name: "Event Planning", description: "Event Planning (Event Planner)"],
+            [name: "Finance", description: "Finance (Financial/Investment Analyst, Management Consultant, Investment Banker, Private Equity/Hedge Fund Analyst)"],
+            [name: "Fundraising", description: "Fundraising (Development Director, Grantwriter, Director/Manager of Business Development, Crowdfunding/Social Media Specialist)"],
+            [name: "Human Resources", description: "Human Resources (Human Resources Manager, Recruiter, Compensation Analyst)"],
+            [name: "Legal", description: "Legal (Attorney, General Counsel, Solicitor, Paralegal)"],
+            [name: "Marketing", description: "Marketing (Marketing Manager/Director, Marketing Analyst)"],
+            [name: "Multimedia", description: "Multimedia (Video Production Manager, Director, Videographer, Multimedia Designer/Specialist, Multimedia Illustrator)"],
+            [name: "Online Marketing", description: "Online Marketing (Digital Marketing Specialist, Social Marketing Manager, Online Marketing Analyst, SEO/SEM Specialist)"],
+            [name: "Photography", description: "Photography (Photographer)"],
+            [name: "Public Relations", description: "Public Relations (Public Relations Specialist/Manager, Communications Manager, Event Planner)"],
+            [name: "Sales & Business Development", description: "Sales & Business Development (Business Development Director/Associate, Sales Manager/Executive)"],
+            [name: "Social Media", description: "Social Media (Social Media Specialist, Digital Community Manager, Social Marketing Specialist/Manager, Online Marketing Analyst/Manager)"],
+            [name: "Strategic Communications", description: "Strategic Communications (Public Relations Specialist, Corporate Communications Manager)"],
+            [name: "Strategic Marketing", description: "Strategic Marketing (VP of Marketing, Brand Strategist, Product Manager)"],
+            [name: "Strategy", description: "Strategy (Senior Business Analyst, Stategic Planning Analyst, Management Consultant, Director of Strategy)"],
+            [name: "Technology", description: "Technology (Software Engineer, IT Architect, Systems Administrator/Engineer, Database Analyst, Web Designer, Blogger)"],
+            [name: "Writing", description: "Writing (Creative Writer, Copywriter, Blogger)"]
+        ]
+
+        expertise_list.each { item ->
+            def expertise = Expertise.createCriteria().get {
+                eq('name', item.name)
+            }
+
+            if (! expertise) {
+                expertise = new Expertise()
+            }
+
+            expertise.name = item.name
+            expertise.description = item.description
+
+            expertise.save()
+        }
+    }
+
     def destroy = {
     }
 }

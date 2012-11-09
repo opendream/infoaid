@@ -874,3 +874,13 @@ img.top-member-sidebar {
 		display: inline-block;
 	}
 }
+
+.fieldset-expertise {
+	.expertise-list {
+		label {
+			width: 30%;
+			float: left;
+			display: block;
+		}
+	}
+}

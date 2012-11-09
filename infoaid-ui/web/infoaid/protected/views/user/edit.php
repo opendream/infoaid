@@ -48,6 +48,13 @@
 						'no_legend' => true,
 					)); ?>
 
+				<?php elseif ($section == 'expertise'): ?>
+					<?php $this->renderPartial('_form_expertise', array(
+						'user' => $user,
+						'no_legend' => true,
+						'expertises' => Yii::app()->params['expertises'],
+					)); ?>
+
 				<?php endif; ?>
 
 

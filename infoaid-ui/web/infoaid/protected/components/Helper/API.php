@@ -67,13 +67,19 @@ class API
 		);
 	}
 
+	public static function set_header($name, $value)
+	{
+		$rest = self::getRESTObject();
+		$rest->set_header($name, $value);
+	}
+
 	public static function isMethodAllowed($method)
 	{
 		return in_array($method, self::getAllowedMethod());
 	}
 
 	public static function call($method, $uri, $params = array(),
-		$format = NULL)
+		$format = NULL, $options = array())
 	{
 		$rest = self::getRESTObject();
 
@@ -98,6 +104,9 @@ class API
 		$rest->http_auth = 'Basic';
 
 		if (self::isMethodAllowed($method)) {
+			foreach ($options as $key => $option) {
+				$rest->option($key, $option);
+			}
 			$result = $rest->$method($uri, $params, $format);
 
 			$api_params = param('api');
@@ -137,13 +146,13 @@ class API
 		return self::get($uri, $params, 'json');
 	}
 
-	public static function post($uri, $params = array(), $format = NULL)
+	public static function post($uri, $params = array(), $format = NULL, $options = array())
 	{
-		return self::call('post', $uri, $params, $format);
+		return self::call('post', $uri, $params, $format, $options);
 	}
 
-	public static function postJSON($uri, $params = array())
+	public static function postJSON($uri, $params = array(), $options = array())
 	{
-		return self::call('post', $uri, $params, 'json');
+		return self::call('post', $uri, $params, 'json', $options);
 	}
 }

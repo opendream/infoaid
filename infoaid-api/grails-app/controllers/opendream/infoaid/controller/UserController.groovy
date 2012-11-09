@@ -47,6 +47,23 @@ class UserController {
         }
     }
 
+    def updateExpertises() {
+        def result
+        def expertises = JSON.parse(request.reader.text).expertises
+        println expertises
+
+        try {
+            userService.updateExpertises(params.userId, expertises)
+            result = [status: 1]
+        }
+        catch (e) {
+            println "Fail to update expertise on user: ${params.userId}, Error is ${e}"
+            result = [status: 0]
+        }
+
+        render result as JSON
+    }
+
     def getPages() {
         def ret = [:]
         ret.status = 0
