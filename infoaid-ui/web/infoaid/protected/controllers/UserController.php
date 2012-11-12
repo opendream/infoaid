@@ -18,6 +18,25 @@ class UserController extends IAController
 		$this->render('create');
 	}
 
+	private function getExpertisesID($expertises)
+	{
+		$server_expertises = UserHelper::availableExpertises();
+		$temp1 = array();
+		foreach ($server_expertises as $expertise) {
+			$temp1[$expertise->id] = $expertise->name;
+		}
+
+		$temp2 = array();
+		foreach ($expertises as $expertise) {
+			$found_index = array_search($expertise, $temp1);
+			if ($found_index !== FALSE) {
+				$temp2[] = $found_index;
+			}
+		}
+
+		return $temp2;
+	}
+
 	public function actionDoCreate()
 	{
 		check_csrf_token();
@@ -35,6 +54,10 @@ class UserController extends IAController
 			$error = true;
 		}
 
+		// Get expertise with its ID.
+		$expertises = $this->getExpertisesID($_POST['expertises']);
+		$expertises = implode('+', $expertises);
+
 		if (! $error) {
 			$defaultAvatar = UserHelper::defaultAvatar();
 			$resultCreate = API::getJSON('user/create', array(
@@ -47,6 +70,7 @@ class UserController extends IAController
 				'picOriginal'=>$defaultAvatar['original'],
 				'picLarge'=>$defaultAvatar['large'],
 				'picSmall'=>$defaultAvatar['small'],
+				'expertises'=>$expertises,
 			));
 			if($resultCreate->id != null) {
 				Yii::app()->user->setFlash('createSuccess', 'Register Success');
@@ -305,6 +329,9 @@ class UserController extends IAController
 		$this->scripts[] = 'controllers.js';
 		$this->scripts[] = 'main/commentService.js';
 
-		$this->render('profile', array('userId'=>$userId));
+		$this->render('profile', array(
+			'userId'=>$userId,
+			'user' => UserHelper::basicInfo($userId),
+		));
 	}
 }

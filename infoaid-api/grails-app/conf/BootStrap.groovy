@@ -2,6 +2,7 @@ import opendream.infoaid.domain.User
 import opendream.infoaid.domain.Role
 import opendream.infoaid.domain.UserRole
 import opendream.infoaid.domain.Item
+import opendream.infoaid.domain.Requestmap
 
 class BootStrap {
 
@@ -18,13 +19,26 @@ class BootStrap {
             }
 
             initItem()
+
+            initRequestMap()
         }
 
         production {
             initItem()
+
+            initRequestMap()
         }
 
     }
+
+    def initRequestMap = {
+        // - user/availableExpertises
+        def conf = Requestmap.findByUrl('user/availableExpertises') ?: new Requestmap()
+        conf.url = '/user/availableExpertises'
+        conf.configAttribute = 'IS_AUTHENTICATED_ANONYMOUSLY'
+        conf.save()
+    }
+
     def initItem = {
         def item_list = Item.list()
         item_list.each {

@@ -1,4 +1,5 @@
 :php
+	$expertises = Yii::app()->params['expertises'];
 	$user_expertises = array();
 	foreach ($user->expertises as $user_expertise) {
 		$user_expertises[] = $user_expertise->name;
@@ -8,6 +9,7 @@
 
 	- if (! $no_legend)
 		%legend Area of Expertise
+		%p Please select only those areas where you have experience.
 
 	.expertise-list
 		- foreach ($expertises as $index => $expertise)

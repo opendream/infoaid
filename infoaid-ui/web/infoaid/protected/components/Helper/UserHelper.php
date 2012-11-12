@@ -19,6 +19,17 @@ class UserHelper
 		return API::getJSON('user/showBasicInfo', array('userId' => $id));
 	}
 
+	public static function availableExpertises()
+	{
+		$result = API::getJSON('user/availableExpertises');
+		if ($result->status == 1) {
+			return $result->expertises;
+		}
+		else {
+			return array();
+		}
+	}
+
 	public static function authenticate($username, $password)
 	{
 		API::$http_user = $username;

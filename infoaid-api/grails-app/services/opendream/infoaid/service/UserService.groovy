@@ -121,10 +121,14 @@ class UserService {
         //    assignExpertise(user.id, it)
         // }
 
-        user.expertises = []
-        user.expertises = getExpertise(updatedExpertises)
+        user.expertises = [] as SortedSet
+        user.expertises = getExpertise(updatedExpertises) as SortedSet
         println user.expertises
         user.save()
+    }
+
+    def availableExpertises() {
+        return Expertise.list()
     }
 
     def getExpertise(expertise, createIfNotExists = false) {

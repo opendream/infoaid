@@ -19,6 +19,7 @@ class User {
 	boolean accountExpired
 	boolean accountLocked
 	boolean passwordExpired
+	SortedSet expertises
 	Date dateCreated
     Date lastUpdated
 

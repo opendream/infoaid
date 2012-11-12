@@ -33,6 +33,7 @@ class UrlMappings {
         "/home/$userId/top-post"(controller: "home", action: "topPost")
         "/front_page/info"(controller: "frontPage", action: "info")
         "/user/create"(controller: "user", action: "create")
+        "/user/availableExpertises"(controller: "user", action: "availableExpertises")
         "/user/$userId/basic_info"(controller: "user"){ action = [GET:"showBasicInfo", PUT:"updateBasicInfo"] }
         "/user/$userId/joining"(controller: "user", action: "getPages")
         "/user/$userId/password"(controller: "user"){ action = [PUT:"updatePassword"] }

@@ -24,6 +24,8 @@
 			
 			<?php $this->renderPartial('_form_personal'); ?>
 
+			<?php $this->renderPartial('_form_expertise'); ?>
+
 			<div class="form-actions">
 				<button type="submit" class="btn">Register</button>
 			</div>

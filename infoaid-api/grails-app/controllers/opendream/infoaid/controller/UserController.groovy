@@ -1,6 +1,7 @@
 package opendream.infoaid.controller
 
 import opendream.infoaid.domain.User
+import opendream.infoaid.domain.Expertise
 
 import grails.converters.JSON
 
@@ -9,11 +10,21 @@ class UserController {
     def springSecurityService
 
     def create() {
+        def tmp = params.expertises
+
         try { 
+            def expertises = tmp.split(/\+/).collect {
+                Expertise.get(it)
+            } as SortedSet
+            params.expertises = []
+
             def user = userService.create(params)
+            user.expertises = expertises
+            user.save()
             render user as JSON
         } catch (e) {
             log.error e
+            params.expertises = tmp
             def resp = [message: 'can not create new user', user: params]
             render resp as JSON
         }
@@ -45,6 +56,28 @@ class UserController {
             result = [status: 0, message: 'can not update password', user: params]
             render result as JSON
         }
+    }
+
+    def availableExpertises() {
+        def result
+        try {
+            result = [
+                status: 1,
+                expertises: userService.availableExpertises().collect {
+                    [
+                        id: it.id,
+                        name: it.name,
+                        description: it.description,
+                    ]
+                },
+            ]
+        }
+        catch (e) {
+            println "Error: ${e}"
+            result = [status: 0]
+        }
+
+        render result as JSON;
     }
 
     def updateExpertises() {
