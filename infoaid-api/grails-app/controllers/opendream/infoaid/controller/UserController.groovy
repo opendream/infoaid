@@ -50,7 +50,6 @@ class UserController {
     def updateExpertises() {
         def result
         def expertises = JSON.parse(request.reader.text).expertises
-        println expertises
 
         try {
             userService.updateExpertises(params.userId, expertises)

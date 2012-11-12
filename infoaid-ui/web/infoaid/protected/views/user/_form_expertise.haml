@@ -1,0 +1,26 @@
+:php
+	$user_expertises = array();
+	foreach ($user->expertises as $user_expertise) {
+		$user_expertises[] = $user_expertise->name;
+	}
+
+%fieldset.form-group.fieldset-expertise
+
+	- if (! $no_legend)
+		%legend Area of Expertise
+
+	.expertise-list
+		- foreach ($expertises as $index => $expertise)
+			:php
+				$mod3 = '';
+				if (! ($index % 3)) $mod3 = 'clear';
+
+				$checked = false;
+				if (in_array($expertise['name'], $user_expertises)) $checked = true;
+
+			%label(title="#{$expertise['description']}" class="checkbox #{$mod3}")
+				- if ($checked)
+					%input(type="checkbox" value="#{$expertise['name']}" name="expertises[]" checked="checked")
+				- else
+					%input(type="checkbox" value="#{$expertise['name']}" name="expertises[]")
+				= $expertise['name']

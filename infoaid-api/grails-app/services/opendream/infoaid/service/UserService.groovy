@@ -123,6 +123,7 @@ class UserService {
 
         user.expertises = []
         user.expertises = getExpertise(updatedExpertises)
+        println user.expertises
         user.save()
     }
 
@@ -140,25 +141,20 @@ class UserService {
                 it = Expertise.findByName(URLDecoder.decode(it))
             }
 
-            if (! it && false) {
-                it = new Expertise(name: it)
-                it.save()
-            }
-
             it
-        }
+        }.findAll { it }
     }
 
     def assignExpertise(id, expertise) {
         def user = User.get(id)
-        expertise = getExpertise(expertise, true)
+        expertise = getExpertise(expertise)
         expertise.addToUsers(user).save()
     }
 
     def revokeExpertise(id, expertise) {
         def user = User.get(id)
 
-        expertise = getExpertise(expertise, true)
+        expertise = getExpertise(expertise)
         user.expertises = user.expertises - expertise
         user.save(failOnError: true)
     }

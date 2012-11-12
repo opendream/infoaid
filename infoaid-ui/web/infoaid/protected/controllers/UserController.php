@@ -259,10 +259,10 @@ class UserController extends IAController
 
 		$result = API::post('user/'. $info->id .'/expertises', $params, 'json', $options);
 		if ($result && $result->status) {
-			flash('Successfully update your expertises.');
+			flash('Successfully update your expertises.', 'success');
 		}
 		else {
-			flash('Fail to update your expertises.');
+			flash('Fail to update your expertises.', 'error');
 		}
 
 		$this->redirect($editExpertiseUrl);
