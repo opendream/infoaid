@@ -48,7 +48,7 @@ class PageUser implements Serializable {
 
     static PageUser setRelation(User user, Page page, String relation) {
         def relationEnum
-        if(relation == 'Owner') {
+        if(relation.tr( 'A-Z', 'a-z') == 'owner') {
             relationEnum = Relation.OWNER
         } else {
             relationEnum = Relation.MEMBER

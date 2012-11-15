@@ -202,7 +202,17 @@ class PageService {
         def user = User.get(userId)
         def page = Page.findBySlug(slug)
         try {
+            def owner_list = PageUser.findAllByPageAndRelation(page, PageUser.Relation.OWNER)
+            def pageUser = PageUser.findByPageAndUser(page, user)
+            println owner_list
+            println pageUser.relation
+            println relation.tr('A-Z', 'a-z')
+            if (owner_list.size() <= 1 && pageUser.relation == PageUser.Relation.OWNER && relation.tr('A-Z', 'a-z') == 'member') {
+                return false
+            }
+
             PageUser.setRelation(user, page, relation)
+            return true
         } catch (e) {
             log.error e
             throw e
