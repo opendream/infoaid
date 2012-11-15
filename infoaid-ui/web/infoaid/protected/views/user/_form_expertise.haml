@@ -1,15 +1,16 @@
 :php
-	$expertises = Yii::app()->params['expertises'];
+	$expertises = UserHelper::availableExpertises();
 	$user_expertises = array();
 	foreach ($user->expertises as $user_expertise) {
-		$user_expertises[] = $user_expertise->name;
+		$user_expertises[] = $user_expertise->id;
 	}
 
 %fieldset.form-group.fieldset-expertise
 
 	- if (! $no_legend)
 		%legend Area of Expertise
-		%p Please select only those areas where you have experience.
+		
+	%p Please select only those areas where you have experience.
 
 	.expertise-list
 		- foreach ($expertises as $index => $expertise)
@@ -17,8 +18,9 @@
 				$mod3 = '';
 				if (! ($index % 3)) $mod3 = 'clear';
 
+				$expertise = (array)$expertise;
 				$checked = false;
-				if (in_array($expertise['name'], $user_expertises)) $checked = true;
+				if (in_array($expertise['id'], $user_expertises)) $checked = true;
 
 			%label(title="#{$expertise['description']}" class="checkbox #{$mod3}")
 				- if ($checked)

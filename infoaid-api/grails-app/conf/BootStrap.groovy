@@ -3,6 +3,8 @@ import opendream.infoaid.domain.Role
 import opendream.infoaid.domain.UserRole
 import opendream.infoaid.domain.Item
 import opendream.infoaid.domain.Requestmap
+import opendream.infoaid.domain.Expertise
+import opendream.infoaid.domain.Cause
 
 class BootStrap {
 
@@ -19,13 +21,15 @@ class BootStrap {
             }
 
             initItem()
-
+            initExpertise()
+            initCause()
             initRequestMap()
         }
 
         production {
             initItem()
-
+            initExpertise()
+            initCause()
             initRequestMap()
         }
 
@@ -35,6 +39,12 @@ class BootStrap {
         // - user/availableExpertises
         def conf = Requestmap.findByUrl('user/availableExpertises') ?: new Requestmap()
         conf.url = '/user/availableExpertises'
+        conf.configAttribute = 'IS_AUTHENTICATED_ANONYMOUSLY'
+        conf.save()
+
+        // - user/availableCauses
+        conf = Requestmap.findByUrl('user/availableCauses') ?: new Requestmap()
+        conf.url = '/user/availableCauses'
         conf.configAttribute = 'IS_AUTHENTICATED_ANONYMOUSLY'
         conf.save()
     }
@@ -108,6 +118,47 @@ class BootStrap {
             expertise.description = item.description
 
             expertise.save()
+        }
+    }
+
+    def initCause = {
+        def cause_list = [
+            [name: "Animal Rights"],
+            [name: "Food"],
+            [name: "Media and Public Debate"],
+            [name: "Arts and Culture"],
+            [name: "Health"],
+            [name: "Microfinance"],
+            [name: "Children"],
+            [name: "Housing & Homelessness"],
+            [name: "Poverty Alleviation"],
+            [name: "Community and Service"],
+            [name: "Human Rights"],
+            [name: "Religion"],
+            [name: "Democracy and Politics"],
+            [name: "Humanitarian Relief"],
+            [name: "Science & Technology"],
+            [name: "Education"],
+            [name: "I Just Want To Do Good"],
+            [name: "Senior Citizens Issues"],
+            [name: "Environment"],
+            [name: "International Affairs"],
+            [name: "Women's Issues"],
+        ]
+
+        cause_list.each { item ->
+            def cause = Cause.createCriteria().get {
+                eq('name', item.name)
+            }
+
+            if (! cause) {
+                cause = new Cause()
+            }
+
+            cause.name = item.name
+            cause.description = item.description
+
+            cause.save()
         }
     }
 

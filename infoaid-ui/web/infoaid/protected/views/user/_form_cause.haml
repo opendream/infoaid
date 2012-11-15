@@ -1,0 +1,30 @@
+:php
+	$causes = UserHelper::availableCauses();
+	$user_causes = array();
+	foreach ($user->causes as $user_cause) {
+		$user_causes[] = $user_cause->id;
+	}
+
+%fieldset.form-group.fieldset-cause
+
+	- if (! $no_legend)
+		%legend Interest
+	
+	%p Let us know which causes you care about most.
+
+	.cause-list
+		- foreach ($causes as $index => $cause)
+			:php
+				$mod3 = '';
+				if (! ($index % 3)) $mod3 = 'clear';
+
+				$cause = (array)$cause;
+				$checked = false;
+				if (in_array($cause['id'], $user_causes)) $checked = true;
+
+			%label(title="#{$cause['description']}" class="checkbox #{$mod3}")
+				- if ($checked)
+					%input(type="checkbox" value="#{$cause['name']}" name="causes[]" checked="checked")
+				- else
+					%input(type="checkbox" value="#{$cause['name']}" name="causes[]")
+				= $cause['name']

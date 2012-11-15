@@ -20,10 +20,11 @@ class User {
 	boolean accountLocked
 	boolean passwordExpired
 	SortedSet expertises
+	SortedSet causes
 	Date dateCreated
     Date lastUpdated
 
-    static hasMany = [expertises: Expertise]
+    static hasMany = [expertises: Expertise, causes: Cause]
 
 	static constraints = {
 		username blank: false, unique: true

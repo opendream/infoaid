@@ -52,7 +52,12 @@
 					<?php $this->renderPartial('_form_expertise', array(
 						'user' => $user,
 						'no_legend' => true,
-						'expertises' => Yii::app()->params['expertises'],
+					)); ?>
+
+				<?php elseif ($section == 'cause'): ?>
+					<?php $this->renderPartial('_form_cause', array(
+						'user' => $user,
+						'no_legend' => true,
 					)); ?>
 
 				<?php endif; ?>

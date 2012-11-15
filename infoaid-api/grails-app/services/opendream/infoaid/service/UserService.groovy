@@ -4,6 +4,7 @@ import opendream.infoaid.domain.User
 import opendream.infoaid.domain.Role
 import opendream.infoaid.domain.UserRole
 import opendream.infoaid.domain.Expertise
+import opendream.infoaid.domain.Cause
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import java.net.URLDecoder
 
@@ -48,9 +49,22 @@ class UserService {
                     description: it.description
                 ]
             }
-            [status:1, id:user.id, username:user.username, firstname:user.firstname, 
-            lastname:user.lastname, email:user.email, telNo:user.telNo, 
-            picOriginal:user.picOriginal, picLarge:user.picLarge, picSmall:user.picSmall, expertises: expertises]
+
+            def causes = user.causes.collect {
+                [
+                    id: it.id,
+                    name: it.name,
+                    description: it.description
+                ]
+            }
+
+            [
+                status: 1, id:user.id, username:user.username,
+                firstname:user.firstname, lastname:user.lastname,
+                email:user.email, telNo:user.telNo, picOriginal:user.picOriginal,
+                picLarge:user.picLarge, picSmall:user.picSmall,
+                expertises: expertises, causes: causes
+            ]
         } else {
             [status:0, message:'user not found']
         }
@@ -123,12 +137,50 @@ class UserService {
 
         user.expertises = [] as SortedSet
         user.expertises = getExpertise(updatedExpertises) as SortedSet
-        println user.expertises
+        user.save()
+    }
+
+    def updateCauses(id, causes) {
+        def user = User.get(id),
+            updatedCauses = [],
+            currentCauses = []
+
+        causes.each {
+            updatedCauses.push(it)
+        }
+        user.causes.each {
+            currentCauses.push(it.name)
+        }
+
+        user.causes = [] as SortedSet
+        user.causes = getCause(updatedCauses) as SortedSet
         user.save()
     }
 
     def availableExpertises() {
         return Expertise.list()
+    }
+
+    def availableCauses() {
+        return Cause.list()
+    }
+
+    def getCause(cause, createIfNotExists = false) {
+        if (cause instanceof Cause || cause[0] instanceof Cause) {
+            return cause
+        }
+
+        if (cause instanceof String) {
+            cause = [cause]
+        }
+
+        cause.collect {
+            if (it instanceof String) {
+                it = Cause.findByName(URLDecoder.decode(it))
+            }
+
+            it
+        }.findAll { it }
     }
 
     def getExpertise(expertise, createIfNotExists = false) {

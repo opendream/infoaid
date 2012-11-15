@@ -17,3 +17,24 @@
 	}
 
 }
+
+.user-profile {
+	padding-top: 16px;
+
+	.row {
+		.span9 {
+			width: 680px;
+		}
+	}
+
+	#page-sidebar {
+		margin: 0;
+		padding: 8px;
+		width: auto;
+	}
+
+	.profile-header {
+		margin-top: 0;
+		padding-top: 0;
+	}
+}

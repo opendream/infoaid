@@ -19,11 +19,40 @@ class UserHelper
 		return API::getJSON('user/showBasicInfo', array('userId' => $id));
 	}
 
+	public static function getThingsID($availableThings, $things)
+	{
+		$temp1 = array();
+		foreach ($availableThings as $thing) {
+			$temp1[$thing->id] = $thing->name;
+		}
+
+		$temp2 = array();
+		foreach ($things as $thing) {
+			$found_index = array_search($thing, $temp1);
+			if ($found_index !== FALSE) {
+				$temp2[] = $found_index;
+			}
+		}
+
+		return $temp2;
+	}
+
 	public static function availableExpertises()
 	{
 		$result = API::getJSON('user/availableExpertises');
 		if ($result->status == 1) {
 			return $result->expertises;
+		}
+		else {
+			return array();
+		}
+	}
+
+	public static function availableCauses()
+	{
+		$result = API::getJSON('user/availableCauses');
+		if ($result->status == 1) {
+			return $result->causes;
 		}
 		else {
 			return array();

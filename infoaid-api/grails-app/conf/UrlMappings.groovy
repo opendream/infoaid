@@ -40,6 +40,9 @@ class UrlMappings {
         "/user/$userId/expertises"(controller: "user") {
                 action = [POST:"updateExpertises"]
         }
+        "/user/$userId/causes"(controller: "user") {
+                action = [POST:"updateCauses"]
+        }
         "/"(view:"/index")
         "500"(view:'/error')
         }

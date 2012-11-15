@@ -4,7 +4,7 @@
 		<legend>Account</legend>
 	<?php endif; ?>
 
-	<?php $this->renderPartial('_form_user_email'); ?>
+	<?php $this->renderPartial('_form_user_email', array('user' => $user)); ?>
 
 	<div class="control-group">
 		<label class="control-label" for="input-password">Password</label>

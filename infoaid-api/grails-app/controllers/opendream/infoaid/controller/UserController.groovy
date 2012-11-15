@@ -2,6 +2,7 @@ package opendream.infoaid.controller
 
 import opendream.infoaid.domain.User
 import opendream.infoaid.domain.Expertise
+import opendream.infoaid.domain.Cause
 
 import grails.converters.JSON
 
@@ -10,21 +11,29 @@ class UserController {
     def springSecurityService
 
     def create() {
-        def tmp = params.expertises
+        def expertiseTmp = params.expertises,
+            causeTmp = params.causes
 
         try { 
-            def expertises = tmp.split(/\+/).collect {
+            def expertises = expertiseTmp.split(/\+/).collect {
                 Expertise.get(it)
             } as SortedSet
             params.expertises = []
 
+            def causes = causeTmp.split(/\+/).collect {
+                Cause.get(it)
+            } as SortedSet
+            params.causes = []
+
             def user = userService.create(params)
             user.expertises = expertises
+            user.causes = causes
             user.save()
             render user as JSON
         } catch (e) {
             log.error e
-            params.expertises = tmp
+            params.expertises = expertiseTmp
+            params.causes = causeTmp
             def resp = [message: 'can not create new user', user: params]
             render resp as JSON
         }
@@ -56,6 +65,28 @@ class UserController {
             result = [status: 0, message: 'can not update password', user: params]
             render result as JSON
         }
+    }
+
+    def availableCauses() {
+        def result
+        try {
+            result = [
+                status: 1,
+                causes: userService.availableCauses().collect {
+                    [
+                        id: it.id,
+                        name: it.name,
+                        description: it.description,
+                    ]
+                },
+            ]
+        }
+        catch (e) {
+            println "Error: ${e}"
+            result = [status: 0]
+        }
+
+        render result as JSON;
     }
 
     def availableExpertises() {
@@ -90,6 +121,22 @@ class UserController {
         }
         catch (e) {
             println "Fail to update expertise on user: ${params.userId}, Error is ${e}"
+            result = [status: 0]
+        }
+
+        render result as JSON
+    }
+
+    def updateCauses() {
+        def result
+        def causes = JSON.parse(request.reader.text).causes
+
+        try {
+            userService.updateCauses(params.userId, causes)
+            result = [status: 1]
+        }
+        catch (e) {
+            println "Fail to update cause on user: ${params.userId}, Error is ${e}"
             result = [status: 0]
         }
 

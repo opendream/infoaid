@@ -18,25 +18,6 @@ class UserController extends IAController
 		$this->render('create');
 	}
 
-	private function getExpertisesID($expertises)
-	{
-		$server_expertises = UserHelper::availableExpertises();
-		$temp1 = array();
-		foreach ($server_expertises as $expertise) {
-			$temp1[$expertise->id] = $expertise->name;
-		}
-
-		$temp2 = array();
-		foreach ($expertises as $expertise) {
-			$found_index = array_search($expertise, $temp1);
-			if ($found_index !== FALSE) {
-				$temp2[] = $found_index;
-			}
-		}
-
-		return $temp2;
-	}
-
 	public function actionDoCreate()
 	{
 		check_csrf_token();
@@ -55,8 +36,12 @@ class UserController extends IAController
 		}
 
 		// Get expertise with its ID.
-		$expertises = $this->getExpertisesID($_POST['expertises']);
+		$expertises = UserHelper::getThingsID(UserHelper::availableExpertises(), $_POST['expertises']);
 		$expertises = implode('+', $expertises);
+
+		// Get cause with its ID.
+		$causes = UserHelper::getThingsID(UserHelper::availableCauses(), $_POST['causes']);
+		$causes = implode('+', $causes);
 
 		if (! $error) {
 			$defaultAvatar = UserHelper::defaultAvatar();
@@ -71,6 +56,7 @@ class UserController extends IAController
 				'picLarge'=>$defaultAvatar['large'],
 				'picSmall'=>$defaultAvatar['small'],
 				'expertises'=>$expertises,
+				'causes'=>$causes,
 			));
 			if($resultCreate->id != null) {
 				Yii::app()->user->setFlash('createSuccess', 'Register Success');
@@ -82,6 +68,20 @@ class UserController extends IAController
 		}
 
 		if ($error) {
+			// Reform things (expertise, causes)
+			$_expertises = explode('+', $expertises);
+			foreach ($_expertises as &$expertise) {
+				$expertise = (object)array(
+					'id' => $expertise,
+				);
+			}
+			$_causes = explode('+', $causes);
+			foreach ($_causes as &$cause) {
+				$cause = (object)array(
+					'id' => $cause,
+				);
+			}
+
 			$this->render('create', array(
 				'username'=>$_POST['username'],
 				'password'=>$_POST['password'],
@@ -89,8 +89,16 @@ class UserController extends IAController
 				'lastname'=>$_POST['lastname'],
 				'email'=>$_POST['email'],
 				'tel'=>$_POST['tel'],
-				)
-			);
+				'user' => (object)array(
+					'username' => $_POST['username'],
+					'email' => $_POST['email'],
+					'firstname' => $_POST['firstname'],
+					'lastname' => $_POST['lastname'],
+					'tel' => $_POST['tel'],
+					'expertises' => $_expertises,
+					'causes' => $_causes,
+				),
+			));
 			Yii::app()->end();
 		}
 	}
@@ -112,7 +120,7 @@ class UserController extends IAController
 			'password' => 'Password',
 			'photo' => 'Profile Photo',
 			'expertise' => 'Area of Expertise',
-			'causes' => 'Causes',
+			'cause' => 'Causes',
 		);
 
 		$this->render('edit', array(
@@ -146,7 +154,10 @@ class UserController extends IAController
 				$this->actionDoEditPhoto($info);
 				break;
 			case 'expertise':
-				$this->actionDoEditExpertise($info);
+				$this->actionDoEditThing($info, 'expertise', 'expertises');
+				break;
+			case 'cause':
+				$this->actionDoEditThing($info, 'cause', 'causes');
 				break;
 		}
 	}
@@ -267,29 +278,29 @@ class UserController extends IAController
 		$this->redirect($editPhotoUrl);
 	}
 
-	public function actionDoEditExpertise($info) 
+	public function actionDoEditThing($user_info, $thing_name, $field_name) 
 	{
-		$editExpertiseUrl = $this->createUrl('/user/edit/expertise');
+		$editThingUrl = $this->createUrl('/user/edit/'. $thing_name);
 
-		$expertises = $_POST['expertises'];
-		foreach ($expertises as &$expertise) {
-			$expertise = urlencode($expertise);
+		$things = $_POST[$field_name];
+		foreach ($things as &$thing) {
+			$thing = urlencode($thing);
 		}
 		$params = array(
-			'expertises' => $expertises,
+			$field_name => $things,
 		);
 		$params = json_encode($params);
 		API::set_header('Content-Type', 'application/json');
 
-		$result = API::post('user/'. $info->id .'/expertises', $params, 'json', $options);
+		$result = API::post('user/'. $user_info->id .'/'. $field_name, $params, 'json');
 		if ($result && $result->status) {
-			flash('Successfully update your expertises.', 'success');
+			flash("Successfully update your $field_name.", 'success');
 		}
 		else {
-			flash('Fail to update your expertises.', 'error');
+			flash("Fail to update your $field_name.", 'error');
 		}
 
-		$this->redirect($editExpertiseUrl);
+		$this->redirect($editThingUrl);
 	}
 
 	public function actionLogin()

@@ -875,8 +875,8 @@ img.top-member-sidebar {
 	}
 }
 
-.fieldset-expertise {
-	.expertise-list {
+.fieldset-expertise, .fieldset-cause {
+	.expertise-list, .cause-list {
 		label {
 			width: 30%;
 			float: left;
@@ -885,7 +885,7 @@ img.top-member-sidebar {
 	}
 }
 
-.user-expertises {
+.user-expertises, .user-causes {
 	.span2 {
 		float: left;
 	}
@@ -896,11 +896,11 @@ img.top-member-sidebar {
 		padding: 16px;
 	}
 
-	.expertise-name {
+	.expertise-name, .cause-name {
 		font-size: 16px;
 		font-weight: bold;
 	}
-	.expertise-description {
+	.expertise-description, .cause-description {
 		font-size: 10px;
 	}
 }

@@ -1,4 +1,4 @@
 package opendream.infoaid.domain
 
-class Expertise extends Thing {
+class Cause extends Thing {
 }

@@ -20,11 +20,13 @@
 
 			<?php csrf_token_form(); ?>
 
-			<?php $this->renderPartial('_form_account'); ?>
+			<?php $this->renderPartial('_form_account', array('user' => $user)); ?>
 			
-			<?php $this->renderPartial('_form_personal'); ?>
+			<?php $this->renderPartial('_form_personal', array('user' => $user)); ?>
 
-			<?php $this->renderPartial('_form_expertise'); ?>
+			<?php $this->renderPartial('_form_expertise', array('user' => $user)); ?>
+
+			<?php $this->renderPartial('_form_cause', array('user' => $user)); ?>
 
 			<div class="form-actions">
 				<button type="submit" class="btn">Register</button>
