@@ -26,5 +26,5 @@
 			%span.over(ng-show="post.itemSummary.percentSupplyPerDemand.toFixed(0) > 100")
 				Over {{post.itemSummary.percentSupplyPerDemand.toFixed(0) - 100}}%
 		.clear
-	.progress.progress-striped.hide
+	.progress.progress-striped
 		.bar.bar-success(style="width:{{post.itemSummary.percentSupplyPerDemand}}%")
